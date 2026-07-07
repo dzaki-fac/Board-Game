@@ -10,7 +10,7 @@ class HistoryController extends Controller
     {
         $histories = Loan::with('game')
             ->where('status', '!=', 'borrowed')
-            ->latest()
+            ->latest('returned_at')
             ->paginate(10);
 
         return inertia('History/Index', [

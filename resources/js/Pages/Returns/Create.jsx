@@ -24,7 +24,7 @@ export default function Create({ loans }) {
         returned_at: nowLocal,
         return_condition: "good",
         missing_components: [],
-        fine_amount: "",
+        fine_amount: null,
         return_notes: "",
         status: "returned",
     })
@@ -248,8 +248,8 @@ export default function Create({ loans }) {
                                         </legend>
                                         <input
                                             type="number"
-                                            value={data.fine_amount}
-                                            onChange={(e) => setData("fine_amount", e.target.value)}
+                                            value={data.fine_amount ?? ""}
+                                            onChange={(e) => setData("fine_amount", e.target.value === "" ? null : e.target.value)}
                                             className="input input-bordered w-full"
                                             placeholder="Enter fine amount if any"
                                             min="0"
