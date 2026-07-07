@@ -2,17 +2,27 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Game;
+use App\Models\Loan;
+use Database\Factories\LoanFactory;
 use Illuminate\Database\Seeder;
 
 class LoanSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        \App\Models\Loan::factory(50)->create();
+        LoanFactory::resetCopyCounts();
+
+        Loan::factory(50)->create();
+
+        $borrowedCounts = Loan::where('status', 'borrowed')
+            ->selectRaw('game_id, COUNT(*) as count')
+            ->groupBy('game_id')
+            ->pluck('count', 'game_id');
+
+        foreach ($borrowedCounts as $gameId => $count) {
+            Game::where('id', $gameId)->decrement('available_copies', $count);
+        }
 
         $this->command->info('50 dummy loan records seeded successfully.');
     }
