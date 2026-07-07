@@ -1,11 +1,10 @@
 <?php
 
+use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AuthenticatedSessionController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
-
-Route::resource('posts', PostController::class)->except('index');
 
 Route::get('/', [PostController::class, 'index']);
 
@@ -18,6 +17,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     Route::middleware('auth:admin')->group(function () {
+        Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
+
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
         Route::get('accounts', [AdminAccountController::class, 'index'])->name('accounts.index');
