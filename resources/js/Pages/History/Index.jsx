@@ -1,0 +1,449 @@
+import { Head, Link } from "@inertiajs/react"
+import { useMemo, useState } from "react"
+
+function formatDateTime(date) {
+    if (!date) return "-"
+    return new Date(date).toLocaleDateString("id-ID", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+    })
+}
+
+function statusBadge(status) {
+    const map = {
+        borrowed: "badge-primary",
+        returned: "badge-success",
+        not_returned: "badge-warning",
+        damaged: "badge-neutral",
+        lost: "badge-error",
+        pending: "badge-ghost",
+    }
+    const cls = map[status] || "badge-ghost"
+    return (
+        <span className={`badge badge-sm capitalize ${cls}`}>
+            {status.replace(/_/g, " ")}
+        </span>
+    )
+}
+
+function conditionBadge(condition) {
+    const map = {
+        good: "badge-success",
+        minor_damage: "badge-warning",
+        damaged: "badge-error",
+        missing_parts: "badge-warning",
+        lost: "badge-error",
+    }
+    if (!condition) {
+        return <span className="badge badge-sm badge-ghost">-</span>
+    }
+    const cls = map[condition] || "badge-ghost"
+    return (
+        <span className={`badge badge-sm capitalize ${cls}`}>
+            {condition.replace(/_/g, " ")}
+        </span>
+    )
+}
+
+export default function Index({ histories, stats }) {
+    const [search, setSearch] = useState("")
+    const [statusFilter, setStatusFilter] = useState("")
+
+    const filtered = useMemo(() => {
+        const data = histories.data || []
+        return data.filter((loan) => {
+            const query = search.toLowerCase()
+            if (
+                query &&
+                !loan.borrower_name.toLowerCase().includes(query) &&
+                !loan.game.name.toLowerCase().includes(query)
+            ) {
+                return false
+            }
+
+            if (statusFilter && loan.status !== statusFilter) {
+                return false
+            }
+
+            return true
+        })
+    }, [histories.data, search, statusFilter])
+
+    const statCards = [
+        {
+            title: "Total Records",
+            value: stats.total,
+            desc: "All borrowing records",
+            color: "text-blue-600",
+        },
+        {
+            title: "Returned",
+            value: stats.returned,
+            desc: "Completed returns",
+            color: "text-emerald-600",
+        },
+        {
+            title: "Not Returned",
+            value: stats.not_returned,
+            desc: "Not returned after due",
+            color: "text-amber-600",
+        },
+        {
+            title: "Damaged / Lost",
+            value: stats.damaged_lost,
+            desc: "Needs attention",
+            color: "text-red-600",
+        },
+    ]
+
+    function handleExport() {
+        const csv = [
+            [
+                "Loan ID",
+                "Borrower",
+                "Board Game",
+                "Borrowed At",
+                "Returned At",
+                "Status",
+                "Condition",
+                "Fine",
+            ].join(","),
+            ...filtered.map((loan) =>
+                [
+                    loan.id,
+                    `"${loan.borrower_name}"`,
+                    `"${loan.game.name}"`,
+                    formatDateTime(loan.borrowed_at),
+                    formatDateTime(loan.returned_at),
+                    loan.status,
+                    loan.return_condition || "-",
+                    loan.fine_amount || "-",
+                ].join(","),
+            ),
+        ].join("\n")
+
+        const blob = new Blob([csv], { type: "text/csv" })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = "loan-history.csv"
+        a.click()
+        URL.revokeObjectURL(url)
+    }
+
+    return (
+        <>
+            <Head title="Loan History" />
+
+            <div className="p-4 lg:p-6 space-y-6">
+                {/* Page Header */}
+                <div>
+                    <h1 className="text-2xl font-bold text-gray-900">Riwayat Peminjaman</h1>
+                    <p className="text-sm text-gray-500 mt-1">
+                        View and manage all board game borrowing records
+                    </p>
+                </div>
+
+                {/* Stat Cards */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    {statCards.map((card) => (
+                        <div
+                            key={card.title}
+                            className="stats shadow border border-gray-100 bg-white rounded-xl"
+                        >
+                            <div className="stat">
+                                <div className="stat-title text-gray-500 text-xs font-medium uppercase tracking-wider">
+                                    {card.title}
+                                </div>
+                                <div className={`stat-value text-3xl font-bold ${card.color}`}>
+                                    {card.value}
+                                </div>
+                                <div className="stat-desc text-gray-400 text-xs">{card.desc}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Filters Card */}
+                <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                    <div className="card-body p-6">
+                        <h2 className="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                            {/* Search */}
+                            <div>
+                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
+                                    Search
+                                </label>
+                                <div className="relative">
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                                        />
+                                    </svg>
+                                    <input
+                                        type="text"
+                                        value={search}
+                                        onChange={(e) => setSearch(e.target.value)}
+                                        placeholder="Search history by game or borrower"
+                                        className="input input-bordered input-sm pl-9 w-full"
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Status Filter */}
+                            <div>
+                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
+                                    Status
+                                </label>
+                                <select
+                                    value={statusFilter}
+                                    onChange={(e) => setStatusFilter(e.target.value)}
+                                    className="select select-bordered select-sm w-full"
+                                >
+                                    <option value="">All</option>
+                                    <option value="returned">Returned</option>
+                                    <option value="not_returned">Not Returned</option>
+                                    <option value="damaged">Damaged</option>
+                                    <option value="lost">Lost</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        {/* Export Button */}
+                        <div className="mt-4 flex justify-end">
+                            <button
+                                onClick={handleExport}
+                                className="btn btn-primary btn-sm gap-2"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    />
+                                </svg>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* History Table Card */}
+                <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                    <div className="card-body p-0">
+                        <div className="px-6 py-4 border-b border-gray-100">
+                            <h2 className="text-lg font-semibold text-gray-900">
+                                Borrowing Records
+                            </h2>
+                        </div>
+
+                        {histories.data.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center py-16 text-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-12 w-12 text-gray-300 mb-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={1}
+                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                    />
+                                </svg>
+                                <p className="text-gray-400 text-sm">
+                                    Belum ada riwayat peminjaman
+                                </p>
+                            </div>
+                        ) : filtered.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center py-16 text-center">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-12 w-12 text-gray-300 mb-4"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={1}
+                                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
+                                    />
+                                </svg>
+                                <p className="text-gray-400 text-sm">
+                                    No records match your filters
+                                </p>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="overflow-x-auto">
+                                    <table className="table">
+                                        <thead>
+                                            <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                                                <th className="px-6 py-3 font-medium">Loan ID</th>
+                                                <th className="px-6 py-3 font-medium">Borrower</th>
+                                                <th className="px-6 py-3 font-medium">Board Game</th>
+                                                <th className="px-6 py-3 font-medium">Borrowed At</th>
+                                                <th className="px-6 py-3 font-medium">Returned At</th>
+                                                <th className="px-6 py-3 font-medium">Status</th>
+                                                <th className="px-6 py-3 font-medium">Condition</th>
+                                                <th className="px-6 py-3 font-medium">Fine</th>
+                                                <th className="px-6 py-3 font-medium text-right">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {filtered.map((loan) => (
+                                                <tr
+                                                    key={loan.id}
+                                                    className="hover:bg-gray-50 transition-colors border-b border-gray-100"
+                                                >
+                                                    <td className="px-6 py-4">
+                                                        <span className="text-sm font-mono text-gray-500">
+                                                            #{loan.id}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <span className="font-medium text-gray-900">
+                                                            {loan.borrower_name}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4 text-gray-700">
+                                                        {loan.game.name}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                                        {formatDateTime(loan.borrowed_at)}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                                        {formatDateTime(loan.returned_at)}
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        {statusBadge(loan.status)}
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        {conditionBadge(loan.return_condition)}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-sm text-gray-500">
+                                                        {loan.fine_amount
+                                                            ? `Rp ${Number(loan.fine_amount).toLocaleString("id-ID")}`
+                                                            : "-"}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-right">
+                                                        <div className="flex items-center justify-end gap-1">
+                                                            <Link
+                                                                href={`/admin/loans/${loan.id}`}
+                                                                className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-blue-600"
+                                                                title="Detail"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="h-4 w-4"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke="currentColor"
+                                                                >
+                                                                    <path
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        strokeWidth={2}
+                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                                                    />
+                                                                    <path
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        strokeWidth={2}
+                                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                                                    />
+                                                                </svg>
+                                                            </Link>
+                                                            <Link
+                                                                href={`/admin/loans/${loan.id}/print`}
+                                                                className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-gray-700"
+                                                                title="Print"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="h-4 w-4"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke="currentColor"
+                                                                >
+                                                                    <path
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        strokeWidth={2}
+                                                                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+                                                                    />
+                                                                </svg>
+                                                            </Link>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {/* Pagination */}
+                                {histories.links && histories.links.length > 3 && (
+                                    <div className="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100">
+                                        {histories.links.map((link, i) =>
+                                            link.url ? (
+                                                <Link
+                                                    key={i}
+                                                    href={link.url}
+                                                    preserveScroll
+                                                    className={`btn btn-sm min-w-9 ${
+                                                        link.active
+                                                            ? "btn-primary"
+                                                            : "btn-ghost text-gray-600"
+                                                    }`}
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: link.label,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <span
+                                                    key={i}
+                                                    className="btn btn-sm btn-ghost min-w-9 text-gray-300 pointer-events-none"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: link.label,
+                                                    }}
+                                                />
+                                            ),
+                                        )}
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}

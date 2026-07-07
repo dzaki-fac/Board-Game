@@ -5,7 +5,7 @@ export default function Home({posts}) {
   console.log(posts)
   return (
     <>
-      <h1 className="title">Landing Page</h1>
+      <h1 className="title">Landing Halo</h1>
       
       <div>
         {posts.data.map(post => (
