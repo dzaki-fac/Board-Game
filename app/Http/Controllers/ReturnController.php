@@ -25,7 +25,8 @@ class ReturnController extends Controller
             'loan_id' => ['required', 'exists:loans,id'],
             'returned_at' => ['required', 'date'],
             'return_condition' => ['required', 'string', 'in:good,minor_damage,damaged,missing_parts,lost'],
-            'missing_components' => ['nullable', 'string'],
+            'missing_components' => ['nullable', 'array'],
+            'missing_components.*' => ['string'],
             'fine_amount' => ['nullable', 'numeric', 'min:0'],
             'return_notes' => ['nullable', 'string'],
             'status' => ['required', 'string', 'in:returned,not_returned,damaged,lost'],
@@ -33,11 +34,15 @@ class ReturnController extends Controller
 
         $loan = Loan::findOrFail($validated['loan_id']);
 
+        $missingComponents = ! empty($validated['missing_components'])
+            ? json_encode($validated['missing_components'], JSON_UNESCAPED_UNICODE)
+            : null;
+
         $updateData = [
             'returned_at' => $validated['returned_at'],
             'status' => $validated['status'],
             'return_condition' => $validated['return_condition'],
-            'missing_components' => $validated['missing_components'],
+            'missing_components' => $missingComponents,
             'fine_amount' => $validated['fine_amount'],
             'notes' => $validated['return_notes'],
         ];

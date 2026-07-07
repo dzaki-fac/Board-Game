@@ -1,5 +1,6 @@
 import { Head, Link, useForm } from "@inertiajs/react"
-import { useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
+import { parseKomponen } from "../../utils/parseKomponen"
 
 function formatDateTime(date) {
     if (!date) return "-"
@@ -14,13 +15,15 @@ function formatDateTime(date) {
 }
 
 export default function Create({ loans }) {
-    const today = new Date().toISOString().split("T")[0]
+    const now = new Date()
+    const today = now.toISOString().split("T")[0]
+    const nowLocal = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16)
 
     const { data, setData, post, processing, errors } = useForm({
         loan_id: "",
-        returned_at: today,
+        returned_at: nowLocal,
         return_condition: "good",
-        missing_components: "",
+        missing_components: [],
         fine_amount: "",
         return_notes: "",
         status: "returned",
@@ -30,6 +33,25 @@ export default function Create({ loans }) {
         if (!data.loan_id) return null
         return loans.find((l) => l.id === Number(data.loan_id)) || null
     }, [data.loan_id, loans])
+
+    const components = useMemo(() => {
+        if (!selectedLoan?.game?.komponen) return []
+        return parseKomponen(selectedLoan.game.komponen)
+    }, [selectedLoan])
+
+    const [checked, setChecked] = useState([])
+
+    useEffect(() => {
+        setChecked(components.map(() => true))
+    }, [components])
+
+    const missingComponents = useMemo(() => {
+        return components.filter((_, i) => !checked[i])
+    }, [components, checked])
+
+    useEffect(() => {
+        setData("missing_components", missingComponents.length > 0 ? missingComponents : [])
+    }, [missingComponents])
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -47,6 +69,17 @@ export default function Create({ loans }) {
         return "returned"
     }
 
+    function toggleComponent(index) {
+        setChecked((prev) => {
+            const next = [...prev]
+            next[index] = !next[index]
+            return next
+        })
+    }
+
+    const returnedCount = checked.filter(Boolean).length
+    const totalCount = components.length
+
     return (
         <>
             <Head title="Return Form" />
@@ -61,7 +94,7 @@ export default function Create({ loans }) {
                         </p>
                     </div>
                     <Link
-                                            href="/admin/loans"
+                        href="/admin/loans"
                         className="btn btn-ghost btn-sm gap-2 text-gray-600"
                     >
                         <svg
@@ -114,13 +147,65 @@ export default function Create({ loans }) {
                                         )}
                                     </fieldset>
 
+                                    {/* Board Game Components Checklist */}
+                                    {components.length > 0 && (
+                                        <fieldset className="fieldset">
+                                            <legend className="fieldset-legend text-sm font-medium text-gray-700">
+                                                Board Game Components
+                                                <span className="text-gray-400 font-normal ml-1">
+                                                    (uncheck missing items)
+                                                </span>
+                                            </legend>
+                                            <div
+                                                className="border border-gray-200 rounded-lg p-4 max-h-80 overflow-y-auto"
+                                                style={{
+                                                    display: "grid",
+                                                    gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                                                    gap: "0.5rem",
+                                                }}
+                                            >
+                                                {components.map((component, index) => (
+                                                    <label
+                                                        key={index}
+                                                        className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
+                                                            checked[index]
+                                                                ? "bg-green-50 border border-green-200"
+                                                                : "bg-red-50 border border-red-200"
+                                                        }`}
+                                                    >
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={checked[index]}
+                                                            onChange={() => toggleComponent(index)}
+                                                            className="checkbox checkbox-sm"
+                                                        />
+                                                        <span
+                                                            className={`text-sm ${
+                                                                checked[index]
+                                                                    ? "text-gray-700"
+                                                                    : "text-red-700 line-through"
+                                                            }`}
+                                                        >
+                                                            {component}
+                                                        </span>
+                                                    </label>
+                                                ))}
+                                            </div>
+                                            {missingComponents.length > 0 && (
+                                                <p className="text-xs text-red-500 mt-2">
+                                                    {missingComponents.length} component{missingComponents.length > 1 ? "s" : ""} marked as missing
+                                                </p>
+                                            )}
+                                        </fieldset>
+                                    )}
+
                                     {/* Returned At */}
                                     <fieldset className="fieldset">
                                         <legend className="fieldset-legend text-sm font-medium text-gray-700">
                                             Returned At
                                         </legend>
                                         <input
-                                            type="date"
+                                            type="datetime-local"
                                             value={data.returned_at}
                                             onChange={(e) => setData("returned_at", e.target.value)}
                                             className="input input-bordered w-full"
@@ -151,26 +236,6 @@ export default function Create({ loans }) {
                                         {errors.return_condition && (
                                             <p className="text-red-500 text-xs mt-1">
                                                 {errors.return_condition}
-                                            </p>
-                                        )}
-                                    </fieldset>
-
-                                    {/* Missing Components */}
-                                    <fieldset className="fieldset">
-                                        <legend className="fieldset-legend text-sm font-medium text-gray-700">
-                                            Missing Components
-                                            <span className="text-gray-400 font-normal ml-1">(optional)</span>
-                                        </legend>
-                                        <input
-                                            type="text"
-                                            value={data.missing_components}
-                                            onChange={(e) => setData("missing_components", e.target.value)}
-                                            className="input input-bordered w-full"
-                                            placeholder="Example: 1 dice missing, 2 cards missing"
-                                        />
-                                        {errors.missing_components && (
-                                            <p className="text-red-500 text-xs mt-1">
-                                                {errors.missing_components}
                                             </p>
                                         )}
                                     </fieldset>
@@ -240,7 +305,7 @@ export default function Create({ loans }) {
                                     {/* Form Buttons */}
                                     <div className="flex items-center gap-3 pt-2">
                                         <Link
-                        href="/admin/loans"
+                                            href="/admin/loans"
                                             className="btn btn-ghost"
                                         >
                                             Cancel
@@ -354,6 +419,46 @@ export default function Create({ loans }) {
                                                 {selectedLoan.game.name}
                                             </span>
                                         </div>
+
+                                        {totalCount > 0 && (
+                                            <>
+                                                <div className="border-t border-gray-100 my-1"></div>
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500">Total Components</span>
+                                                    <span className="text-sm font-medium text-gray-900">
+                                                        {totalCount}
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500">Returned</span>
+                                                    <span className="text-sm font-medium text-green-600">
+                                                        {returnedCount}
+                                                    </span>
+                                                </div>
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500">Missing</span>
+                                                    <span className={`text-sm font-medium ${
+                                                        missingComponents.length > 0
+                                                            ? "text-red-600"
+                                                            : "text-gray-500"
+                                                    }`}>
+                                                        {missingComponents.length}
+                                                    </span>
+                                                </div>
+                                                {missingComponents.length > 0 && (
+                                                    <div>
+                                                        <p className="text-xs text-gray-500 mb-1">Missing Items</p>
+                                                        <ul className="text-xs text-red-600 list-disc list-inside space-y-0.5">
+                                                            {missingComponents.map((item, i) => (
+                                                                <li key={i}>{item}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                                <div className="border-t border-gray-100 my-1"></div>
+                                            </>
+                                        )}
+
                                         <div className="flex justify-between items-center">
                                             <span className="text-xs text-gray-500">Returned Date</span>
                                             <span className="text-sm text-gray-700">
@@ -381,12 +486,12 @@ export default function Create({ loans }) {
                                                     getFinalStatus() === "returned"
                                                         ? "badge-success"
                                                         : getFinalStatus() === "not_returned"
-                                                          ? "badge-warning"
-                                                          : getFinalStatus() === "damaged"
-                                                            ? "badge-error"
-                                                            : getFinalStatus() === "lost"
-                                                              ? "badge-error"
-                                                              : "badge-ghost"
+                                                            ? "badge-warning"
+                                                            : getFinalStatus() === "damaged"
+                                                                ? "badge-error"
+                                                                : getFinalStatus() === "lost"
+                                                                    ? "badge-error"
+                                                                    : "badge-ghost"
                                                 }`}
                                             >
                                                 {getFinalStatus().replace(/_/g, " ")}

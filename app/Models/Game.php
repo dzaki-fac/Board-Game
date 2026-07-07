@@ -13,6 +13,7 @@ class Game extends Model
     protected $fillable = [
         'name',
         'description',
+        'komponen',
         'total_copies',
         'available_copies',
     ];
