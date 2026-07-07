@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Game;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class GameSeeder extends Seeder
 {
@@ -12,7 +11,14 @@ class GameSeeder extends Seeder
     {
         Game::truncate();
 
-        $boardGames = DB::table('board_games')->orderBy('id')->get();
+        $filePath = __DIR__ . '/board_games_data.json';
+
+        if (! file_exists($filePath)) {
+            $this->command->error('board_games_data.json not found. Run "php artisan db:seed --class=BoardGameExportSeeder" first.');
+            return;
+        }
+
+        $boardGames = json_decode(file_get_contents($filePath));
 
         foreach ($boardGames as $boardGame) {
             Game::create([
