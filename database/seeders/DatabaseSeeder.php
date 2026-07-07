@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Loan;
 use App\Models\Post;
 use Database\Seeders\BoardGameSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -21,5 +21,12 @@ class DatabaseSeeder extends Seeder
         Post::factory(30)->create();
 
         $this->call(BoardGameSeeder::class);
+
+        Loan::truncate();
+
+        $this->call([
+            GameSeeder::class,
+            LoanSeeder::class,
+        ]);
     }
 }

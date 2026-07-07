@@ -1,11 +1,11 @@
 import { Link } from "@inertiajs/react";
 
 const navItems = [
-    { label: "Home", href: "/" },
+    { label: "Home", href: "/admin" },
     { label: "Board Games", href: "/admin/games" },
-    { label: "Peminjaman", href: "/loans" },
-    { label: "Pengembalian", href: "/returns" },
-    { label: "Riwayat Peminjaman", href: "/history" },
+    { label: "Peminjaman", href: "/admin/loans" },
+    { label: "Pengembalian", href: "/admin/returns" },
+    { label: "Riwayat Peminjaman", href: "/admin/history" },
     { label: "Accounts", href: "/admin/accounts" },
 ];
 
@@ -79,8 +79,8 @@ export default function Layout({ children }) {
                         {navItems.map((item) => {
                             const isActive =
                                 typeof window !== "undefined" &&
-                                (item.href === "/"
-                                    ? window.location.pathname === "/"
+                                (item.href === "/admin"
+                                    ? window.location.pathname === "/admin"
                                     : window.location.pathname.startsWith(
                                           item.href,
                                       ));
