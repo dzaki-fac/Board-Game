@@ -30,6 +30,6 @@ class Peminjaman extends Model
 
     public function boardgame()
     {
-        return $this->belongsTo(Boardgame::class);
+        return $this->belongsTo(BoardGame::class, 'boardgame_id');
     }
 }

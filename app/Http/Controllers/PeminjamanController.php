@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePeminjamanRequest;
-use App\Models\Boardgame;
+use App\Models\BoardGame;
 use App\Models\Peminjaman;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -13,9 +13,9 @@ class PeminjamanController extends Controller
     public function create()
     {
         return inertia('Peminjaman/Form', [
-            'boardgames' => Boardgame::where('stok', '>', 0)
-                ->orderBy('judul')
-                ->get(['id', 'judul', 'kode_katalog', 'kategori', 'stok']),
+            'boardgames' => BoardGame::where('jumlah', '>', 0)
+                ->orderBy('nama')
+                ->get(['id', 'nama', 'kode', 'jumlah']),
         ]);
     }
 

@@ -31,9 +31,8 @@ export default function Form({ boardgames = [] }) {
     const q = search.toLowerCase();
     return bgList.filter(
       (bg) =>
-        bg.judul?.toLowerCase().includes(q) ||
-        bg.kode_katalog?.toLowerCase().includes(q) ||
-        bg.kategori?.toLowerCase().includes(q)
+        bg.nama?.toLowerCase().includes(q) ||
+        bg.kode?.toLowerCase().includes(q)
     );
   }, [search, bgList]);
 
@@ -140,12 +139,12 @@ export default function Form({ boardgames = [] }) {
                           onChange={(e) => setData("boardgame_id", e.target.value)}
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate">{bg.judul}</p>
+                          <p className="font-medium truncate">{bg.nama}</p>
                           <p className="text-xs text-slate-500 truncate">
-                            {bg.kode_katalog}{bg.kategori ? ` — ${bg.kategori}` : ""}
+                            {bg.kode}
                           </p>
                         </div>
-                        <span className="badge badge-outline badge-sm">Stok: {bg.stok}</span>
+                        <span className="badge badge-outline badge-sm">Stok: {bg.jumlah}</span>
                       </label>
                     ))
                   )}
@@ -155,9 +154,8 @@ export default function Form({ boardgames = [] }) {
 
             {selected && (
               <div className="mt-3 p-3 bg-base-200 rounded-box text-sm">
-                <span className="font-medium">Dipilih:</span> {selected.judul}
-                <span className="ml-2 text-slate-500">({selected.kode_katalog})</span>
-                {selected.kategori && <span className="ml-2 badge badge-sm">{selected.kategori}</span>}
+                <span className="font-medium">Dipilih:</span> {selected.nama}
+                <span className="ml-2 text-slate-500">({selected.kode})</span>
               </div>
             )}
           </div>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('peminjaman', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('boardgame_id')->constrained('boardgames')->cascadeOnDelete();
+            $table->foreignId('boardgame_id')->constrained('board_games')->cascadeOnDelete();
             $table->enum('status', ['menunggu', 'dipinjam', 'dikembalikan', 'ditolak'])->default('menunggu');
             $table->date('tanggal_pinjam');
             $table->date('jam_pinjam');
