@@ -75,7 +75,7 @@ class PeminjamanController extends Controller
 
         Game::where('id', $peminjaman->boardgame_id)->decrement('available_copies');
 
-        return back()->with('success', 'Permohonan disetujui.');
+        return redirect()->route('loans.index')->with('success', 'Permohonan disetujui.');
     }
 
     public function tolak(Peminjaman $peminjaman)
