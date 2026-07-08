@@ -19,23 +19,18 @@ class DatabaseSeeder extends Seeder
         Admin::truncate();
         $this->call([
             AdminSeeder::class,
+            
+            BoardGameSeeder::class,
+            // LoanSeeder::class,
+            PermohonanSeeder::class,
         ]);
-        // $this->call(BoardGameSeeder::class);
+
+        // Loan::truncate();
+        // $this->call(LoanSeeder::class);
+
         // $this->call([
-        //     AdminSeeder::class,
+        //     GameSeeder::class,
+            
         // ]);
-
-        // Post::factory(30)->create();
-
-        BoardGame::truncate();
-        $this->call(BoardGameSeeder::class);
-        
-
-        Loan::truncate();
-
-        $this->call([
-            GameSeeder::class,
-            LoanSeeder::class,
-        ]);
     }
 }

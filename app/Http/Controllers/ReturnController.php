@@ -58,7 +58,7 @@ class ReturnController extends Controller
         $loan->update($updateData);
 
         if (in_array($validated['status'], ['returned', 'not_returned'])) {
-            BoardGame::where('id', $loan->game_id)->increment('available_copies');
+            BoardGame::where('id', $loan->boardgame_id)->increment('available_copies');
         }
 
         return to_route('loans.index');

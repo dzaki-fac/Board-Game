@@ -38,9 +38,9 @@ class LoanController extends Controller
             'status' => 'returned',
         ]);
 
-        BoardGame::where('id', $loan->game_id)->increment('available_copies');
+        BoardGame::where('id', $loan->boardgame_id)->increment('available_copies');
 
-        Permohonan::where('boardgame_id', $loan->game_id)
+        Permohonan::where('boardgame_id', $loan->boardgame_id)
             ->where('status', 'dipinjam')
             ->update(['status' => 'dikembalikan']);
 

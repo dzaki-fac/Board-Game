@@ -6,8 +6,6 @@ use App\Http\Requests\StorePermohonanRequest;
 use App\Models\BoardGame;
 use App\Models\Loan;
 use App\Models\Permohonan;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PermohonanController extends Controller
@@ -18,7 +16,7 @@ class PermohonanController extends Controller
             ->select(['board_games.id', 'board_games.nama', 'board_games.kode'])
             ->selectSub(function ($query) {
                 $query->from('loans')
-                    ->whereColumn('loans.game_id', 'board_games.id')
+                    ->whereColumn('loans.boardgame_id', 'board_games.id')
                     ->whereNull('loans.returned_at')
                     ->where('loans.status', '!=', 'returned')
                     ->select(DB::raw('COUNT(*)'));
@@ -42,10 +40,7 @@ class PermohonanController extends Controller
 
     public function store(StorePermohonanRequest $request)
     {
-        $user = Auth::user() ?? User::first() ?? User::factory()->create(['name' => $request->nama, 'email' => $request->nim . '@guest.com']);
-
         Permohonan::create([
-            'user_id' => $user->id,
             'nama' => $request->nama,
             'nim' => $request->nim,
             'boardgame_id' => $request->boardgame_id,
@@ -65,7 +60,7 @@ class PermohonanController extends Controller
         $ditolak = Permohonan::where('status', 'ditolak')->count();
 
         return inertia('Peminjaman/Permohonan', [
-            'permohonan' => Permohonan::with(['user', 'boardgame'])
+            'permohonan' => Permohonan::with('boardgame')
                 ->orderByRaw("CASE WHEN status = 'ditolak' THEN 1 ELSE 0 END")
                 ->latest('created_at')
                 ->paginate(10),
@@ -84,7 +79,7 @@ class PermohonanController extends Controller
         $borrowedAt = $permohonan->getRawOriginal('tanggal_pinjam') . ' ' . $permohonan->jam_pinjam;
 
         Loan::create([
-            'game_id' => $permohonan->boardgame_id,
+            'boardgame_id' => $permohonan->boardgame_id,
             'borrower_name' => $permohonan->nama,
             'borrower_nim' => $permohonan->nim,
             'borrowed_at' => $borrowedAt,
@@ -92,7 +87,7 @@ class PermohonanController extends Controller
             'notes' => $permohonan->catatan,
         ]);
 
-        BoardGame::where('id', $permohonan->boardgame_id)->decrement('available_copies');
+        $permohonan->boardgame->decrement('available_copies');
 
         return redirect()->route('loans.index')->with('success', 'Permohonan disetujui.');
     }

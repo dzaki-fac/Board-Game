@@ -34,7 +34,7 @@ class LoanFactory extends Factory
             : 'borrowed';
 
         return [
-            'game_id' => $game->id,
+            'boardgame_id' => $game->id,
             'borrower_name' => fake()->name(),
             'borrowed_at' => $borrowedAt,
             'returned_at' => $isReturned
