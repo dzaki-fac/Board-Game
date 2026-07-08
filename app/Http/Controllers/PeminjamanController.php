@@ -79,21 +79,50 @@ class PeminjamanController extends Controller
 
     public function setujui(Peminjaman $peminjaman)
     {
-        $peminjaman->update(['status' => 'dipinjam']);
-        $peminjaman->boardgame()->decrement('jumlah');
+        try {
+            DB::transaction(function () use ($peminjaman) {
+                $peminjaman = Peminjaman::lockForUpdate()->findOrFail($peminjaman->id);
 
-        $borrowedAt = $peminjaman->getRawOriginal('tanggal_pinjam') . ' ' . $peminjaman->jam_pinjam;
+                $boardGame = BoardGame::where('id', $peminjaman->boardgame_id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
 
-        Loan::create([
-            'game_id' => $peminjaman->boardgame_id,
-            'borrower_name' => $peminjaman->nama,
-            'borrower_nim' => $peminjaman->nim,
-            'borrowed_at' => $borrowedAt,
-            'status' => 'borrowed',
-            'notes' => $peminjaman->catatan,
-        ]);
+                $activeBorrowed = Loan::where('game_id', $boardGame->id)
+                    ->whereNull('returned_at')
+                    ->where('status', '!=', 'returned')
+                    ->count();
 
-        Game::where('id', $peminjaman->boardgame_id)->decrement('available_copies');
+                $availableCopies = $boardGame->jumlah - $activeBorrowed;
+
+                if ($availableCopies <= 0) {
+                    throw new \Exception('Tidak ada salinan tersedia untuk board game ini.');
+                }
+
+                $peminjaman->update(['status' => 'dipinjam']);
+
+                $borrowedAt = $peminjaman->getRawOriginal('tanggal_pinjam') . ' ' . $peminjaman->jam_pinjam;
+
+                Loan::create([
+                    'game_id' => $peminjaman->boardgame_id,
+                    'borrower_name' => $peminjaman->nama,
+                    'borrower_nim' => $peminjaman->nim,
+                    'borrowed_at' => $borrowedAt,
+                    'status' => 'borrowed',
+                    'notes' => $peminjaman->catatan,
+                ]);
+
+                $remainingCopies = $availableCopies - 1;
+
+                if ($remainingCopies <= 0) {
+                    Peminjaman::where('boardgame_id', $boardGame->id)
+                        ->where('id', '!=', $peminjaman->id)
+                        ->where('status', 'menunggu')
+                        ->update(['status' => 'ditolak']);
+                }
+            });
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => $e->getMessage()]);
+        }
 
         return redirect()->route('loans.index')->with('success', 'Permohonan disetujui.');
     }

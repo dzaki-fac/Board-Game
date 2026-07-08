@@ -1,6 +1,9 @@
-import { Link, router } from "@inertiajs/react";
+import { Link, router, usePage } from "@inertiajs/react";
 
 export default function Permohonan({ permohonan, total, total_menunggu, total_disetujui, total_ditolak }) {
+  const { props } = usePage();
+  const flash = props.flash || {};
+  const errors = props.errors || {};
   function setujui(id) {
     router.patch(`/admin/permohonan/${id}/setujui`, {}, { preserveScroll: true });
   }
@@ -32,6 +35,22 @@ export default function Permohonan({ permohonan, total, total_menunggu, total_di
           <div className="stat-value text-3xl text-error">{total_ditolak}</div>
         </div>
       </div>
+
+      {flash.success && (
+        <div className="px-4 mb-4">
+          <div className="alert alert-success shadow-sm">
+            <span>{flash.success}</span>
+          </div>
+        </div>
+      )}
+
+      {errors.error && (
+        <div className="px-4 mb-4">
+          <div className="alert alert-error shadow-sm">
+            <span>{errors.error}</span>
+          </div>
+        </div>
+      )}
 
       <div className="p-4 overflow-x-auto">
         <table className="table">
