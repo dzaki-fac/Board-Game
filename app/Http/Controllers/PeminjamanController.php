@@ -14,10 +14,24 @@ class PeminjamanController extends Controller
 {
     public function create()
     {
+        $borrowedIds = Peminjaman::where('status', 'dipinjam')->pluck('boardgame_id')->unique();
+
+        $boardgames = BoardGame::where('jumlah', '>', 0)
+            ->orderBy('nama')
+            ->get(['id', 'nama', 'kode', 'jumlah'])
+            ->map(function ($bg) use ($borrowedIds) {
+                $isBorrowed = $borrowedIds->contains($bg->id);
+                return [
+                    'id' => $bg->id,
+                    'nama' => $bg->nama,
+                    'kode' => $bg->kode,
+                    'availability_status' => $isBorrowed ? 'borrowed' : 'available',
+                    'availability_label' => $isBorrowed ? 'Sedang dipinjam' : 'Tersedia',
+                ];
+            });
+
         return inertia('Peminjaman/Form', [
-            'boardgames' => BoardGame::where('jumlah', '>', 0)
-                ->orderBy('nama')
-                ->get(['id', 'nama', 'kode', 'jumlah']),
+            'boardgames' => $boardgames,
         ]);
     }
 

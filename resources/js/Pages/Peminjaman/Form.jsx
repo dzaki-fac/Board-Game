@@ -121,32 +121,44 @@ export default function Form({ boardgames = [] }) {
                   {filtered.length === 0 ? (
                     <div className="p-4 text-center text-slate-400">Board game tidak ditemukan</div>
                   ) : (
-                    filtered.map((bg) => (
-                      <label
-                        key={bg.id}
-                        className={`flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200 transition-colors ${
-                          data.boardgame_id == bg.id
-                            ? "bg-primary/10 border-l-4 border-primary"
-                            : "border-l-4 border-transparent"
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="boardgame_id"
-                          className="radio radio-primary radio-sm"
-                          value={bg.id}
-                          checked={data.boardgame_id == bg.id}
-                          onChange={(e) => setData("boardgame_id", e.target.value)}
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="font-medium truncate">{bg.nama}</p>
-                          <p className="text-xs text-slate-500 truncate">
-                            {bg.kode}
-                          </p>
-                        </div>
-                        <span className="badge badge-outline badge-sm">Stok: {bg.jumlah}</span>
-                      </label>
-                    ))
+                    filtered.map((bg) => {
+                      const isBorrowed = bg.availability_status === "borrowed";
+                      return (
+                        <label
+                          key={bg.id}
+                          className={`flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200 transition-colors ${
+                            data.boardgame_id == bg.id
+                              ? "bg-primary/10 border-l-4 border-primary"
+                              : "border-l-4 border-transparent"
+                          } ${isBorrowed ? "opacity-60" : ""}`}
+                        >
+                          <input
+                            type="radio"
+                            name="boardgame_id"
+                            className="radio radio-primary radio-sm"
+                            value={bg.id}
+                            checked={data.boardgame_id == bg.id}
+                            onChange={(e) => setData("boardgame_id", e.target.value)}
+                            disabled={isBorrowed}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium truncate">{bg.nama}</p>
+                            <p className="text-xs text-slate-500 truncate">
+                              {bg.kode}
+                            </p>
+                          </div>
+                          <span
+                            className={`badge badge-sm ${
+                              isBorrowed
+                                ? "badge-warning"
+                                : "badge-success"
+                            }`}
+                          >
+                            {bg.availability_label}
+                          </span>
+                        </label>
+                      );
+                    })
                   )}
                 </div>
               </div>
