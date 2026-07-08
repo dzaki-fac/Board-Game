@@ -14,7 +14,7 @@ class PeminjamanController extends Controller
 {
     public function create()
     {
-        $borrowedIds = Peminjaman::where('status', 'dipinjam')->pluck('boardgame_id')->unique();
+        $borrowedIds = Loan::where('status', 'borrowed')->pluck('game_id')->unique();
 
         $boardgames = BoardGame::orderBy('nama')
             ->get(['id', 'nama', 'kode'])
