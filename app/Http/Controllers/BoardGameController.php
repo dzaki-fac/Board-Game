@@ -44,7 +44,7 @@ class BoardGameController extends Controller
 
         BoardGame::create($validated);
 
-        return redirect('/games')->with('success', 'Board game berhasil ditambahkan.');
+        return redirect('/admin/games')->with('success', 'Board game berhasil ditambahkan.');
     }
 
     /**
@@ -74,7 +74,7 @@ class BoardGameController extends Controller
 
         $boardGame->update($validated);
 
-        return redirect('/games')->with('success', 'Board game berhasil diperbarui.');
+        return redirect('/admin/games')->with('success', 'Board game berhasil diperbarui.');
     }
 
     /**
@@ -84,6 +84,6 @@ class BoardGameController extends Controller
     {
         $boardGame->delete();
 
-        return redirect('/games')->with('success', 'Board game berhasil dihapus.');
+        return redirect('/admin/games')->with('success', 'Board game berhasil dihapus.');
     }
 }

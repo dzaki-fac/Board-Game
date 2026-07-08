@@ -25,6 +25,7 @@ export default function Edit({ boardgame }) {
         satuan: boardgame.satuan,
         link_foto: boardgame.link_foto ?? '',
         lantai: boardgame.lantai,
+        komponen: boardgame.komponen ?? '',
     })
 
     const [komponenList, setKomponenList] = useState(parseKomponen(boardgame.komponen))
@@ -51,14 +52,14 @@ export default function Edit({ boardgame }) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        put(`/games/${boardgame.id}`)
+        put(`/admin/games/${boardgame.id}`)
     }
 
     return (
         <div className="p-6 max-w-3xl mx-auto">
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold text-slate-900">Edit Board Game</h1>
-                <Link href="/games" className="btn btn-ghost btn-sm">
+                <Link href="/admin/games" className="btn btn-ghost btn-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     Kembali
                 </Link>
@@ -145,7 +146,7 @@ export default function Edit({ boardgame }) {
                     <button type="submit" disabled={processing} className="btn btn-primary btn-sm">
                         {processing ? 'Menyimpan...' : 'Simpan'}
                     </button>
-                    <Link href="/games" className="btn btn-ghost btn-sm">Batal</Link>
+                    <Link href="/admin/games" className="btn btn-ghost btn-sm">Batal</Link>
                 </div>
             </form>
         </div>
