@@ -20,6 +20,8 @@ class DatabaseSeeder extends Seeder
 
         Post::factory(30)->create();
 
+        $this->call(BoardGameSeeder::class);
+
         // User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
