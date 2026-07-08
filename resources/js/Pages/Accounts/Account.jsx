@@ -146,7 +146,7 @@ export default function Account({ admins }) {
                                 </td>
                                 <td>{admin.email}</td>
                                 <td>
-                                    <span className={`badge badge-sm ${admin.role === "superadmin" ? "badge-warning" : "badge-info"}`}>
+                                    <span className={`badge badge-sm rounded ${admin.role === "superadmin" ? "bg-amber-100 text-amber-700 border-amber-200" : "bg-sky-100 text-sky-700 border-sky-200"}`}>
                                         {admin.role === "superadmin" ? "Superadmin" : "Admin"}
                                     </span>
                                 </td>
