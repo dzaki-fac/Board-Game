@@ -9,17 +9,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('board_games', function (Blueprint $table) {
-            $table->integer('available_copies')->default(0)->after('jumlah');
-        });
+        if (! Schema::hasColumn('board_games', 'available_copies')) {
+            Schema::table('board_games', function (Blueprint $table) {
+                $table->integer('available_copies')->default(0)->after('jumlah');
+            });
 
-        DB::statement('UPDATE board_games SET available_copies = jumlah');
+            DB::statement('UPDATE board_games SET available_copies = jumlah');
+        }
     }
 
     public function down(): void
     {
-        Schema::table('board_games', function (Blueprint $table) {
-            $table->dropColumn('available_copies');
-        });
+        if (Schema::hasColumn('board_games', 'available_copies')) {
+            Schema::table('board_games', function (Blueprint $table) {
+                $table->dropColumn('available_copies');
+            });
+        }
     }
 };
