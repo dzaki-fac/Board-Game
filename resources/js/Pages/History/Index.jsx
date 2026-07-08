@@ -1,5 +1,7 @@
 import { Head, Link } from "@inertiajs/react"
 import { useMemo, useState } from "react"
+import BadgeStatus from "../../Components/BadgeStatus"
+import BadgeCondition from "../../Components/BadgeCondition"
 
 function formatDateTime(date) {
     if (!date) return "-"
@@ -13,45 +15,10 @@ function formatDateTime(date) {
     })
 }
 
-function statusBadge(status) {
-    const map = {
-        borrowed: "badge-primary",
-        returned: "badge-success",
-        not_returned: "badge-warning",
-        damaged: "badge-neutral",
-        lost: "badge-error",
-        pending: "badge-ghost",
-    }
-    const cls = map[status] || "badge-ghost"
-    return (
-        <span className={`badge badge-sm capitalize ${cls}`}>
-            {status.replace(/_/g, " ")}
-        </span>
-    )
-}
-
-function conditionBadge(condition) {
-    const map = {
-        good: "badge-success",
-        minor_damage: "badge-warning",
-        damaged: "badge-error",
-        missing_parts: "badge-warning",
-        lost: "badge-error",
-    }
-    if (!condition) {
-        return <span className="badge badge-sm badge-ghost">-</span>
-    }
-    const cls = map[condition] || "badge-ghost"
-    return (
-        <span className={`badge badge-sm capitalize ${cls}`}>
-            {condition.replace(/_/g, " ")}
-        </span>
-    )
-}
-
 export default function Index({ histories, stats }) {
     const [search, setSearch] = useState("")
     const [statusFilter, setStatusFilter] = useState("")
+    const [open, setOpen] = useState(false)
 
     const filtered = useMemo(() => {
         const data = histories.data || []
@@ -93,9 +60,9 @@ export default function Index({ histories, stats }) {
             color: "text-amber-600",
         },
         {
-            title: "Damaged / Lost",
-            value: stats.damaged_lost,
-            desc: "Needs attention",
+            title: "Lost",
+            value: stats.lost,
+            desc: "Items marked as lost",
             color: "text-red-600",
         },
     ]
@@ -209,17 +176,64 @@ export default function Index({ histories, stats }) {
                                 <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
                                     Status
                                 </label>
-                                <select
-                                    value={statusFilter}
-                                    onChange={(e) => setStatusFilter(e.target.value)}
-                                    className="select select-bordered select-sm w-full"
-                                >
-                                    <option value="">All</option>
-                                    <option value="returned">Returned</option>
-                                    <option value="not_returned">Not Returned</option>
-                                    <option value="damaged">Damaged</option>
-                                    <option value="lost">Lost</option>
-                                </select>
+                                <div className="relative">
+                                    <button
+                                        type="button"
+                                        onClick={() => setOpen((prev) => !prev)}
+                                        className="flex items-center gap-2 w-full h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                    >
+                                        {statusFilter ? (
+                                            <BadgeStatus value={statusFilter} />
+                                        ) : (
+                                            <span className="text-gray-500">All</span>
+                                        )}
+                                        <svg
+                                            className={`w-4 h-4 ml-auto text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        >
+                                            <polyline points="6 9 12 15 18 9" />
+                                        </svg>
+                                    </button>
+                                    {open && (
+                                        <>
+                                            <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
+                                            <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg py-1">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => { setStatusFilter(""); setOpen(false) }}
+                                                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${!statusFilter ? "bg-indigo-50" : ""}`}
+                                                >
+                                                    <span className="text-gray-500">All</span>
+                                                    {!statusFilter && (
+                                                        <svg className="w-4 h-4 ml-auto text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                            <polyline points="20 6 9 17 4 12" />
+                                                        </svg>
+                                                    )}
+                                                </button>
+                                                {["returned", "not_returned", "lost"].map((opt) => (
+                                                    <button
+                                                        key={opt}
+                                                        type="button"
+                                                        onClick={() => { setStatusFilter(opt); setOpen(false) }}
+                                                        className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${statusFilter === opt ? "bg-indigo-50" : ""}`}
+                                                    >
+                                                        <BadgeStatus value={opt} />
+                                                        {statusFilter === opt && (
+                                                            <svg className="w-4 h-4 ml-auto text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                                <polyline points="20 6 9 17 4 12" />
+                                                            </svg>
+                                                        )}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
@@ -343,10 +357,10 @@ export default function Index({ histories, stats }) {
                                                         {formatDateTime(loan.returned_at)}
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        {statusBadge(loan.status)}
+                                                        <BadgeStatus value={loan.status} />
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        {conditionBadge(loan.return_condition)}
+                                                        <BadgeCondition value={loan.return_condition} />
                                                     </td>
                                                     <td className="px-6 py-4 text-sm text-gray-500">
                                                         {loan.fine_amount

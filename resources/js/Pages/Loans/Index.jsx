@@ -1,4 +1,4 @@
-import { Link, router, Head } from "@inertiajs/react"
+import { Link, Head } from "@inertiajs/react"
 import { useMemo, useState } from "react"
 
 function formatDateTime(date) {
@@ -30,12 +30,6 @@ export default function Index({ loans, stats }) {
         loan.game.name.toLowerCase().includes(q)
     )
   }, [loans.data, search])
-
-  function handleReturn(loanId) {
-    if (confirm("Confirm return?")) {
-      router.patch(`/admin/loans/${loanId}/return`)
-    }
-  }
 
   const statCards = [
     { title: "Pinjaman Aktif", value: stats.total, desc: "Currently borrowed", color: "text-indigo-600" },
@@ -118,22 +112,6 @@ export default function Index({ loans, stats }) {
                               >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                               </Link>
-                              <Link
-                                href={`/admin/loans/${loan.id}/edit`}
-                                className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-amber-600"
-                                title="Edit"
-                              >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                              </Link>
-                              {loan.status === "borrowed" && (
-                                <button
-                                  onClick={() => handleReturn(loan.id)}
-                                  className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-emerald-600"
-                                  title="Return"
-                                >
-                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                                </button>
-                              )}
                             </div>
                           </td>
                         </tr>

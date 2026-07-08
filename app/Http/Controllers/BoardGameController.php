@@ -18,6 +18,14 @@ class BoardGameController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(BoardGame $boardGame)
+    {
+        return inertia('Boardgame/Show', ['boardgame' => $boardGame]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
@@ -37,14 +45,18 @@ class BoardGameController extends Controller
             'penerbit' => 'nullable|string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
-            'link_foto' => 'nullable|string|max:255',
+            'link_foto' => 'nullable|array',
+            'link_foto.*' => 'nullable|string|max:255',
             'komponen' => 'required|string',
+            'barang_hilang' => 'nullable|array',
+            'barang_hilang.*.jumlah' => 'nullable|integer|min:1',
+            'barang_hilang.*.nama' => 'nullable|string|max:255',
             'lantai' => 'required|integer',
         ]);
 
         BoardGame::create($validated);
 
-        return redirect('/games')->with('success', 'Board game berhasil ditambahkan.');
+        return redirect('/admin/games')->with('success', 'Board game berhasil ditambahkan.');
     }
 
     /**
@@ -67,14 +79,18 @@ class BoardGameController extends Controller
             'penerbit' => 'nullable|string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
-            'link_foto' => 'nullable|string|max:255',
+            'link_foto' => 'nullable|array',
+            'link_foto.*' => 'nullable|string|max:255',
             'komponen' => 'required|string',
+            'barang_hilang' => 'nullable|array',
+            'barang_hilang.*.jumlah' => 'nullable|integer|min:1',
+            'barang_hilang.*.nama' => 'nullable|string|max:255',
             'lantai' => 'required|integer',
         ]);
 
         $boardGame->update($validated);
 
-        return redirect('/games')->with('success', 'Board game berhasil diperbarui.');
+        return redirect('/admin/games')->with('success', 'Board game berhasil diperbarui.');
     }
 
     /**
@@ -84,6 +100,6 @@ class BoardGameController extends Controller
     {
         $boardGame->delete();
 
-        return redirect('/games')->with('success', 'Board game berhasil dihapus.');
+        return redirect('/admin/games')->with('success', 'Board game berhasil dihapus.');
     }
 }
