@@ -1,5 +1,5 @@
-import { Head, Link } from "@inertiajs/react"
-import { useMemo, useState } from "react"
+import { Head, Link, router } from "@inertiajs/react"
+import { useEffect, useRef, useState } from "react"
 
 function formatDateTime(date) {
     if (!date) return "-"
@@ -49,29 +49,28 @@ function conditionBadge(condition) {
     )
 }
 
-export default function Index({ histories, stats }) {
-    const [search, setSearch] = useState("")
-    const [statusFilter, setStatusFilter] = useState("")
+export default function Index({ histories, stats, filters }) {
+    const [search, setSearch] = useState(filters?.search || "")
+    const [statusFilter, setStatusFilter] = useState(filters?.status || "")
+    const debounceRef = useRef(null)
+    const isInitialMount = useRef(true)
 
-    const filtered = useMemo(() => {
-        const data = histories.data || []
-        return data.filter((loan) => {
-            const query = search.toLowerCase()
-            if (
-                query &&
-                !loan.borrower_name.toLowerCase().includes(query) &&
-                !loan.game.name.toLowerCase().includes(query)
-            ) {
-                return false
-            }
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false
+            return
+        }
 
-            if (statusFilter && loan.status !== statusFilter) {
-                return false
-            }
-
-            return true
-        })
-    }, [histories.data, search, statusFilter])
+        clearTimeout(debounceRef.current)
+        debounceRef.current = setTimeout(() => {
+            router.get("/admin/history", { search, status: statusFilter }, {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            })
+        }, 400)
+        return () => clearTimeout(debounceRef.current)
+    }, [search, statusFilter])
 
     const statCards = [
         {
@@ -112,7 +111,7 @@ export default function Index({ histories, stats }) {
                 "Condition",
                 "Fine",
             ].join(","),
-            ...filtered.map((loan) =>
+            ...(histories.data || []).map((loan) =>
                 [
                     loan.id,
                     `"${loan.borrower_name}"`,
@@ -278,7 +277,7 @@ export default function Index({ histories, stats }) {
                                     Belum ada riwayat peminjaman
                                 </p>
                             </div>
-                        ) : filtered.length === 0 ? (
+                        ) : histories.data.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-16 text-center">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -318,7 +317,7 @@ export default function Index({ histories, stats }) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {filtered.map((loan) => (
+                                            {(histories.data || []).map((loan) => (
                                                 <tr
                                                     key={loan.id}
                                                     className="hover:bg-gray-50 transition-colors border-b border-gray-100"

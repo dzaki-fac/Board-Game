@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HistoryController;
@@ -10,6 +11,8 @@ Route::redirect('/', '/admin');
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [PostController::class, 'index']);
+
+    Route::get('/games', [GameController::class, 'index'])->name('games.index');
 
     Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
     Route::patch('/loans/{loan}/return', [LoanController::class, 'return'])->name('loans.return');
