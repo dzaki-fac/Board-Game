@@ -2,20 +2,26 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Game;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
 class GameSeeder extends Seeder
 {
     public function run(): void
     {
-        \App\Models\Game::truncate();
+        Game::truncate();
 
-        $boardGames = DB::table('board_games')->get();
+        $filePath = __DIR__ . '/board_games_data.json';
+
+        if (! file_exists($filePath)) {
+            $this->command->error('board_games_data.json not found. Run "php artisan db:seed --class=BoardGameExportSeeder" first.');
+            return;
+        }
+
+        $boardGames = json_decode(file_get_contents($filePath));
 
         foreach ($boardGames as $boardGame) {
-            \App\Models\Game::create([
+            Game::create([
                 'name' => $boardGame->nama,
                 'description' => 'Publisher: ' . ($boardGame->penerbit ?: '-') . ' | Code: ' . $boardGame->kode . ' | Floor: ' . $boardGame->lantai,
                 'komponen' => $boardGame->komponen,
@@ -24,6 +30,6 @@ class GameSeeder extends Seeder
             ]);
         }
 
-        $this->command->info(count($boardGames) . ' board games seeded successfully from board_games table.');
+        $this->command->info(count($boardGames) . ' board games seeded successfully.');
     }
 }

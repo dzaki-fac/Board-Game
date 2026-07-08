@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Game;
 use App\Models\Loan;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -11,21 +12,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class LoanFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    private static array $gameLoanCounts = [];
+
     public function definition(): array
     {
         $today = '2026-07-07';
         $borrowedAt = Carbon::instance(fake()->dateTimeBetween("{$today} 07:00:00", "{$today} 19:00:00"));
-        $isReturned = fake()->boolean(60);
-
-        $statuses = ['borrowed', 'returned', 'not_returned', 'damaged', 'lost'];
-        $status = $isReturned
-            ? fake()->randomElement(['returned', 'not_returned'])
-            : fake()->randomElement(['borrowed']);
 
         $conditions = ['good', 'minor_damage', 'damaged', 'missing_parts', 'lost'];
 
@@ -35,8 +27,14 @@ class LoanFactory extends Factory
             $maxReturn = $cap;
         }
 
+        [$game, $isReturned] = $this->pickGame();
+
+        $status = $isReturned
+            ? fake()->randomElement(['returned', 'not_returned'])
+            : 'borrowed';
+
         return [
-            'game_id' => \App\Models\Game::inRandomOrder()->first()?->id ?? 1,
+            'game_id' => $game->id,
             'borrower_name' => fake()->name(),
             'borrowed_at' => $borrowedAt,
             'returned_at' => $isReturned
@@ -52,5 +50,36 @@ class LoanFactory extends Factory
                 ? fake()->randomFloat(2, 5000, 100000)
                 : null,
         ];
+    }
+
+    private function pickGame(): array
+    {
+        if (empty(self::$gameLoanCounts)) {
+            self::$gameLoanCounts = Game::pluck('available_copies', 'id')->toArray();
+        }
+
+        $availableForBorrow = array_keys(array_filter(self::$gameLoanCounts, fn ($count) => $count > 0));
+
+        if (empty($availableForBorrow)) {
+            $gameId = fake()->randomElement(array_keys(self::$gameLoanCounts));
+            return [Game::find($gameId), true];
+        }
+
+        $isReturned = fake()->boolean(60);
+
+        if ($isReturned) {
+            $gameId = fake()->randomElement(array_keys(self::$gameLoanCounts));
+            return [Game::find($gameId), true];
+        }
+
+        $gameId = fake()->randomElement($availableForBorrow);
+        self::$gameLoanCounts[$gameId]--;
+
+        return [Game::find($gameId), false];
+    }
+
+    public static function resetCopyCounts(): void
+    {
+        self::$gameLoanCounts = [];
     }
 }

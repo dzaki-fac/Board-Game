@@ -3,6 +3,7 @@ import { Link } from "@inertiajs/react";
 const navItems = [
     { label: "Home", href: "/admin" },
     { label: "Board Games", href: "/admin/games" },
+    { label: "Permohonan", href: "/admin/permohonan" },
     { label: "Peminjaman", href: "/admin/loans" },
     { label: "Pengembalian", href: "/admin/returns" },
     { label: "Riwayat Peminjaman", href: "/admin/history" },

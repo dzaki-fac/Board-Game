@@ -13,6 +13,7 @@ class Loan extends Model
     protected $fillable = [
         'game_id',
         'borrower_name',
+        'borrower_nim',
         'borrowed_at',
         'returned_at',
         'status',

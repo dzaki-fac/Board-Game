@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthenticatedSessionController;
 use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReturnController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,10 @@ Route::prefix('admin')->group(function () {
 
         Route::get('history', [HistoryController::class, 'index'])->name('history.index');
 
+        Route::get('permohonan', [PeminjamanController::class, 'permohonan'])->name('admin.permohonan.index');
+        Route::patch('permohonan/{peminjaman}/setujui', [PeminjamanController::class, 'setujui'])->name('admin.permohonan.setujui');
+        Route::patch('permohonan/{peminjaman}/tolak', [PeminjamanController::class, 'tolak'])->name('admin.permohonan.tolak');
+
         Route::resource('posts', PostController::class)->except('index');
 
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
@@ -43,3 +48,6 @@ Route::prefix('admin')->group(function () {
         Route::any('{any?}', fn () => abort(404))->where('any', '.*');
     });
 });
+
+Route::get('/peminjaman/create', [PeminjamanController::class, 'create'])->name('peminjaman.create');
+Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
