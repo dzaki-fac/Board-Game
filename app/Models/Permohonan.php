@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Peminjaman extends Model
+class Permohonan extends Model
 {
     use HasFactory;
 
-    protected $table = 'peminjaman';
+    protected $table = 'permohonan';
 
     protected $fillable = [
         'user_id', 'nama', 'nim', 'boardgame_id', 'status',

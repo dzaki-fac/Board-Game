@@ -34,6 +34,6 @@ class Loan extends Model
 
     public function game(): BelongsTo
     {
-        return $this->belongsTo(Game::class);
+        return $this->belongsTo(BoardGame::class, 'game_id');
     }
 }

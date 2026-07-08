@@ -28,7 +28,7 @@ export default function Index({ loans, stats }) {
       (loan) =>
         loan.borrower_name.toLowerCase().includes(q) ||
         (loan.borrower_nim || "").includes(q) ||
-        loan.game.name.toLowerCase().includes(q)
+        loan.game.nama.toLowerCase().includes(q)
     )
   }, [loans.data, search])
 
@@ -100,7 +100,7 @@ export default function Index({ loans, stats }) {
                       {filtered.map((loan) => (
                         <tr key={loan.id} className="hover:bg-gray-50 transition-colors border-b border-gray-100">
                           <td className="px-6 py-4">
-                            <div className="font-medium text-gray-900">{loan.game.name}</div>
+                            <div className="font-medium text-gray-900">{loan.game.nama}</div>
                           </td>
                           <td className="px-6 py-4 text-gray-700">{loan.borrower_name}</td>
                           <td className="px-6 py-4 text-gray-500 font-mono text-sm">{loan.borrower_nim || "-"}</td>

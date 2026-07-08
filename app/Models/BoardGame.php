@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
     'nama',
     'penerbit',
     'jumlah',
+    'available_copies',
     'satuan',
     'link_foto',
     'komponen',

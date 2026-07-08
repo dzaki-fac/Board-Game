@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePeminjamanRequest;
+use App\Http\Requests\StorePermohonanRequest;
 use App\Models\BoardGame;
-use App\Models\Game;
 use App\Models\Loan;
-use App\Models\Peminjaman;
+use App\Models\Permohonan;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class PeminjamanController extends Controller
+class PermohonanController extends Controller
 {
     public function create()
     {
@@ -41,11 +40,11 @@ class PeminjamanController extends Controller
         ]);
     }
 
-    public function store(StorePeminjamanRequest $request)
+    public function store(StorePermohonanRequest $request)
     {
         $user = Auth::user() ?? User::first() ?? User::factory()->create(['name' => $request->nama, 'email' => $request->nim . '@guest.com']);
 
-        Peminjaman::create([
+        Permohonan::create([
             'user_id' => $user->id,
             'nama' => $request->nama,
             'nim' => $request->nim,
@@ -61,12 +60,12 @@ class PeminjamanController extends Controller
 
     public function permohonan()
     {
-        $menunggu = Peminjaman::where('status', 'menunggu')->count();
-        $disetujui = Peminjaman::where('status', 'dipinjam')->count();
-        $ditolak = Peminjaman::where('status', 'ditolak')->count();
+        $menunggu = Permohonan::where('status', 'menunggu')->count();
+        $disetujui = Permohonan::where('status', 'dipinjam')->count();
+        $ditolak = Permohonan::where('status', 'ditolak')->count();
 
         return inertia('Peminjaman/Permohonan', [
-            'permohonan' => Peminjaman::with(['user', 'boardgame'])
+            'permohonan' => Permohonan::with(['user', 'boardgame'])
                 ->orderByRaw("CASE WHEN status = 'ditolak' THEN 1 ELSE 0 END")
                 ->latest('created_at')
                 ->paginate(10),
@@ -77,30 +76,30 @@ class PeminjamanController extends Controller
         ]);
     }
 
-    public function setujui(Peminjaman $peminjaman)
+    public function setujui(Permohonan $permohonan)
     {
-        $peminjaman->update(['status' => 'dipinjam']);
-        $peminjaman->boardgame()->decrement('jumlah');
+        $permohonan->update(['status' => 'dipinjam']);
+        $permohonan->boardgame()->decrement('jumlah');
 
-        $borrowedAt = $peminjaman->getRawOriginal('tanggal_pinjam') . ' ' . $peminjaman->jam_pinjam;
+        $borrowedAt = $permohonan->getRawOriginal('tanggal_pinjam') . ' ' . $permohonan->jam_pinjam;
 
         Loan::create([
-            'game_id' => $peminjaman->boardgame_id,
-            'borrower_name' => $peminjaman->nama,
-            'borrower_nim' => $peminjaman->nim,
+            'game_id' => $permohonan->boardgame_id,
+            'borrower_name' => $permohonan->nama,
+            'borrower_nim' => $permohonan->nim,
             'borrowed_at' => $borrowedAt,
             'status' => 'borrowed',
-            'notes' => $peminjaman->catatan,
+            'notes' => $permohonan->catatan,
         ]);
 
-        Game::where('id', $peminjaman->boardgame_id)->decrement('available_copies');
+        BoardGame::where('id', $permohonan->boardgame_id)->decrement('available_copies');
 
         return redirect()->route('loans.index')->with('success', 'Permohonan disetujui.');
     }
 
-    public function tolak(Peminjaman $peminjaman)
+    public function tolak(Permohonan $permohonan)
     {
-        $peminjaman->update(['status' => 'ditolak']);
+        $permohonan->update(['status' => 'ditolak']);
 
         return back()->with('success', 'Permohonan ditolak.');
     }

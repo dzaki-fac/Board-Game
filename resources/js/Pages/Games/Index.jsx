@@ -33,19 +33,16 @@ export default function Index({ games }) {
                                                 {(games.current_page - 1) * games.per_page + index + 1}
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className="font-medium text-gray-900">{game.name}</span>
+                                                <span className="font-medium text-gray-900">{game.nama}</span>
                                             </td>
-                                            <td className="px-6 py-4 text-sm text-gray-700">{game.total_copies}</td>
+                                            <td className="px-6 py-4 text-sm text-gray-700">{game.jumlah}</td>
                                             <td className="px-6 py-4">
                                                 <span className={`badge badge-sm ${game.available_copies > 0 ? 'badge-success' : 'badge-error'}`}>
                                                     {game.available_copies}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-500">
-                                                {game.description ? (() => {
-                                                    const match = game.description.match(/Floor: (\d+)/);
-                                                    return match ? match[1] : '-';
-                                                })() : '-'}
+                                                Lt {game.lantai}
                                             </td>
                                         </tr>
                                     ))}

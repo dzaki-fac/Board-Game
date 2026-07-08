@@ -82,7 +82,7 @@ export default function Index({ histories, stats }) {
                 [
                     loan.id,
                     `"${loan.borrower_name}"`,
-                    `"${loan.game.name}"`,
+                    `"${loan.game.nama}"`,
                     formatDateTime(loan.borrowed_at),
                     formatDateTime(loan.returned_at),
                     loan.status,
@@ -347,7 +347,7 @@ export default function Index({ histories, stats }) {
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4 text-gray-700">
-                                                        {loan.game.name}
+                                                        {loan.game.nama}
                                                     </td>
                                                     <td className="px-6 py-4 text-gray-500 text-sm">
                                                         {formatDateTime(loan.borrowed_at)}

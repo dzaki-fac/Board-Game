@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Game;
-use App\Models\Loan;
+use App\Models\BoardGame;
 
 class GameController extends Controller
 {
     public function index()
     {
-        $games = Game::orderBy('name')->paginate(20);
+        $games = BoardGame::orderBy('nama')->paginate(10);
 
         return inertia('Games/Index', [
             'games' => $games,

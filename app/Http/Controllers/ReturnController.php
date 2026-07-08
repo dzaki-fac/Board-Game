@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BoardGame;
 use App\Models\Loan;
 use Illuminate\Http\Request;
 
@@ -57,7 +58,7 @@ class ReturnController extends Controller
         $loan->update($updateData);
 
         if (in_array($validated['status'], ['returned', 'not_returned'])) {
-            $loan->game->increment('available_copies');
+            BoardGame::where('id', $loan->game_id)->increment('available_copies');
         }
 
         return to_route('loans.index');

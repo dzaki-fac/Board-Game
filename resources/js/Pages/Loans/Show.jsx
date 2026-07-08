@@ -35,7 +35,7 @@ export default function Show({ loan }) {
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">Loan Detail</h1>
                         <p className="text-sm text-gray-500 mt-1">
-                            #{loan.id} — {loan.game.name}
+                            #{loan.id} — {loan.game.nama}
                         </p>
                     </div>
                     <Link
@@ -59,7 +59,7 @@ export default function Show({ loan }) {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">Board Game</p>
-                                        <p className="text-sm font-medium text-gray-900 mt-1">{loan.game.name}</p>
+                                        <p className="text-sm font-medium text-gray-900 mt-1">{loan.game.nama}</p>
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">Borrower</p>
