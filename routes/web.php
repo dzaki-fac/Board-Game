@@ -1,13 +1,9 @@
 <?php
 
-<<<<<<< HEAD
-use App\Http\Controllers\GameController;
-=======
 use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AuthenticatedSessionController;
 use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\HistoryController;
->>>>>>> origin/m-3
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReturnController;
@@ -21,17 +17,10 @@ Route::prefix('admin')->group(function () {
         Route::post('login', [AuthenticatedSessionController::class, 'store']);
     });
 
-<<<<<<< HEAD
-    Route::get('/games', [GameController::class, 'index'])->name('games.index');
-
-    Route::get('/loans', [LoanController::class, 'index'])->name('loans.index');
-    Route::patch('/loans/{loan}/return', [LoanController::class, 'return'])->name('loans.return');
-=======
     Route::middleware('auth:admin')->group(function () {
         Route::get('/', [PostController::class, 'index']);
         
         Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
->>>>>>> origin/m-3
 
         Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
         Route::patch('loans/{loan}/return', [LoanController::class, 'return'])->name('loans.return');

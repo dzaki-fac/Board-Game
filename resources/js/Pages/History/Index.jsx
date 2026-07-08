@@ -1,5 +1,5 @@
-import { Head, Link } from "@inertiajs/react"
-import { useMemo, useState } from "react"
+import { Head, Link, router } from "@inertiajs/react"
+import { useEffect, useRef, useState } from "react"
 import BadgeStatus from "../../Components/BadgeStatus"
 import BadgeCondition from "../../Components/BadgeCondition"
 
@@ -16,6 +16,8 @@ function formatDateTime(date) {
 }
 
 export default function Index({ histories, stats }) {
+    const isInitialMount = useRef(true)
+    const debounceRef = useRef(null)
     const [search, setSearch] = useState("")
     const [statusFilter, setStatusFilter] = useState("")
     const [open, setOpen] = useState(false)
