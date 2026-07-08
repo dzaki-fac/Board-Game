@@ -29,6 +29,9 @@ export default function Create({ loans }) {
         status: "returned",
     })
 
+    const conditionDisabled = data.status === "not_returned" || data.status === "lost"
+    const componentsDisabled = data.status === "lost"
+
     const selectedLoan = useMemo(() => {
         if (!data.loan_id) return null
         return loans.find((l) => l.id === Number(data.loan_id)) || null
@@ -51,7 +54,14 @@ export default function Create({ loans }) {
 
     useEffect(() => {
         setData("missing_components", missingComponents.length > 0 ? missingComponents : [])
-    }, [missingComponents])
+        if (data.status === "returned") {
+            if (missingComponents.length > 0 && data.return_condition !== "missing_parts") {
+                setData("return_condition", "missing_parts")
+            } else if (missingComponents.length === 0 && data.return_condition === "missing_parts") {
+                setData("return_condition", "good")
+            }
+        }
+    }, [missingComponents, data.status])
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -64,7 +74,6 @@ export default function Create({ loans }) {
 
     function getFinalStatus() {
         if (data.status === "not_returned") return "not_returned"
-        if (data.status === "damaged") return "damaged"
         if (data.status === "lost") return "lost"
         return "returned"
     }
@@ -152,12 +161,14 @@ export default function Create({ loans }) {
                                         <fieldset className="fieldset">
                                             <legend className="fieldset-legend text-sm font-medium text-gray-700">
                                                 Board Game Components
-                                                <span className="text-gray-400 font-normal ml-1">
-                                                    (uncheck missing items)
-                                                </span>
+                                                {componentsDisabled ? (
+                                                    <span className="text-gray-400 font-normal ml-1">(disabled for Lost status)</span>
+                                                ) : (
+                                                    <span className="text-gray-400 font-normal ml-1">(uncheck missing items)</span>
+                                                )}
                                             </legend>
                                             <div
-                                                className="border border-gray-200 rounded-lg p-4 max-h-80 overflow-y-auto"
+                                                className={`border rounded-lg p-4 max-h-80 overflow-y-auto ${componentsDisabled ? "bg-gray-100 border-gray-200" : "border-gray-200"}`}
                                                 style={{
                                                     display: "grid",
                                                     gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
@@ -168,22 +179,27 @@ export default function Create({ loans }) {
                                                     <label
                                                         key={index}
                                                         className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-                                                            checked[index]
-                                                                ? "bg-green-50 border border-green-200"
-                                                                : "bg-red-50 border border-red-200"
+                                                            componentsDisabled
+                                                                ? "bg-gray-50 border border-gray-200 opacity-60"
+                                                                : checked[index]
+                                                                    ? "bg-green-50 border border-green-200"
+                                                                    : "bg-red-50 border border-red-200"
                                                         }`}
                                                     >
                                                         <input
                                                             type="checkbox"
-                                                            checked={checked[index]}
-                                                            onChange={() => toggleComponent(index)}
+                                                            checked={checked[index] ?? false}
+                                                            onChange={() => componentsDisabled ? null : toggleComponent(index)}
+                                                            disabled={componentsDisabled}
                                                             className="checkbox checkbox-sm"
                                                         />
                                                         <span
                                                             className={`text-sm ${
-                                                                checked[index]
-                                                                    ? "text-gray-700"
-                                                                    : "text-red-700 line-through"
+                                                                componentsDisabled
+                                                                    ? "text-gray-400"
+                                                                    : checked[index]
+                                                                        ? "text-gray-700"
+                                                                        : "text-red-700 line-through"
                                                             }`}
                                                         >
                                                             {component}
@@ -191,11 +207,6 @@ export default function Create({ loans }) {
                                                     </label>
                                                 ))}
                                             </div>
-                                            {missingComponents.length > 0 && (
-                                                <p className="text-xs text-red-500 mt-2">
-                                                    {missingComponents.length} component{missingComponents.length > 1 ? "s" : ""} marked as missing
-                                                </p>
-                                            )}
                                         </fieldset>
                                     )}
 
@@ -221,17 +232,22 @@ export default function Create({ loans }) {
                                     <fieldset className="fieldset">
                                         <legend className="fieldset-legend text-sm font-medium text-gray-700">
                                             Board Game Condition
+                                            {conditionDisabled && (
+                                                <span className="text-gray-400 font-normal ml-1">(disabled for this status)</span>
+                                            )}
                                         </legend>
                                         <select
                                             value={data.return_condition}
                                             onChange={(e) => setData("return_condition", e.target.value)}
-                                            className="select select-bordered w-full"
+                                            disabled={conditionDisabled}
+                                            className={`select select-bordered w-full ${conditionDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
                                         >
                                             <option value="good">Good</option>
                                             <option value="minor_damage">Minor Damage</option>
                                             <option value="damaged">Damaged</option>
-                                            <option value="missing_parts">Missing Parts</option>
-                                            <option value="lost">Lost</option>
+                                            {missingComponents.length > 0 && (
+                                                <option value="missing_parts">Missing Parts</option>
+                                            )}
                                         </select>
                                         {errors.return_condition && (
                                             <p className="text-red-500 text-xs mt-1">
@@ -289,12 +305,22 @@ export default function Create({ loans }) {
                                         </legend>
                                         <select
                                             value={data.status}
-                                            onChange={(e) => setData("status", e.target.value)}
+                                            onChange={(e) => {
+                                                const newStatus = e.target.value
+                                                setData("status", newStatus)
+                                                if (newStatus === "not_returned" || newStatus === "lost") {
+                                                    setData("return_condition", "")
+                                                } else if (newStatus === "returned") {
+                                                    setData("return_condition", "good")
+                                                }
+                                                if (newStatus === "lost") {
+                                                    setChecked(components.map(() => true))
+                                                }
+                                            }}
                                             className="select select-bordered w-full"
                                         >
                                             <option value="returned">Returned</option>
                                             <option value="not_returned">Not Returned</option>
-                                            <option value="damaged">Damaged</option>
                                             <option value="lost">Lost</option>
                                         </select>
                                         {errors.status && (
@@ -487,11 +513,9 @@ export default function Create({ loans }) {
                                                         ? "badge-success"
                                                         : getFinalStatus() === "not_returned"
                                                             ? "badge-warning"
-                                                            : getFinalStatus() === "damaged"
+                                                            : getFinalStatus() === "lost"
                                                                 ? "badge-error"
-                                                                : getFinalStatus() === "lost"
-                                                                    ? "badge-error"
-                                                                    : "badge-ghost"
+                                                                : "badge-ghost"
                                                 }`}
                                             >
                                                 {getFinalStatus().replace(/_/g, " ")}

@@ -23,14 +23,21 @@ class ReturnController extends Controller
     {
         $validated = $request->validate([
             'loan_id' => ['required', 'exists:loans,id'],
-            'returned_at' => ['required', 'date'],
-            'return_condition' => ['required', 'string', 'in:good,minor_damage,damaged,missing_parts,lost'],
+            'return_condition' => ['nullable', 'string', 'in:good,minor_damage,damaged,missing_parts'],
             'missing_components' => ['nullable', 'array'],
             'missing_components.*' => ['string'],
             'fine_amount' => ['nullable', 'numeric', 'min:0'],
             'return_notes' => ['nullable', 'string'],
-            'status' => ['required', 'string', 'in:returned,not_returned,damaged,lost'],
+            'status' => ['required', 'string', 'in:returned,not_returned,lost'],
         ]);
+
+        if ($validated['status'] === 'returned' && empty($validated['return_condition'])) {
+            return back()->withErrors(['return_condition' => 'Condition is required when status is Returned.'])->withInput();
+        }
+
+        if (in_array($validated['status'], ['not_returned', 'lost'])) {
+            $validated['return_condition'] = null;
+        }
 
         $loan = Loan::findOrFail($validated['loan_id']);
 
@@ -39,7 +46,7 @@ class ReturnController extends Controller
             : null;
 
         $updateData = [
-            'returned_at' => $validated['returned_at'],
+            'returned_at' => now(),
             'status' => $validated['status'],
             'return_condition' => $validated['return_condition'],
             'missing_components' => $missingComponents,

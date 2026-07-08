@@ -18,6 +18,13 @@ class LoanController extends Controller
         ]);
     }
 
+    public function show(Loan $loan)
+    {
+        $loan->load('game');
+
+        return inertia('Loans/Show', ['loan' => $loan]);
+    }
+
     public function return(Loan $loan)
     {
         if ($loan->status === 'returned') {
