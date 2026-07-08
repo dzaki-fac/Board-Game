@@ -16,9 +16,8 @@ class PeminjamanController extends Controller
     {
         $borrowedIds = Peminjaman::where('status', 'dipinjam')->pluck('boardgame_id')->unique();
 
-        $boardgames = BoardGame::where('jumlah', '>', 0)
-            ->orderBy('nama')
-            ->get(['id', 'nama', 'kode', 'jumlah'])
+        $boardgames = BoardGame::orderBy('nama')
+            ->get(['id', 'nama', 'kode'])
             ->map(function ($bg) use ($borrowedIds) {
                 $isBorrowed = $borrowedIds->contains($bg->id);
                 return [
