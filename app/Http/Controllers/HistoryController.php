@@ -19,7 +19,7 @@ class HistoryController extends Controller
                 'total' => Loan::where('status', '!=', 'borrowed')->count(),
                 'returned' => Loan::whereIn('status', ['returned', 'not_returned'])->count(),
                 'not_returned' => Loan::where('status', 'not_returned')->count(),
-                'damaged_lost' => Loan::whereIn('status', ['damaged', 'lost'])->count(),
+                'lost' => Loan::where('status', 'lost')->count(),
             ],
         ]);
     }

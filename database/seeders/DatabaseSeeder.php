@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Admin;
+use App\Models\BoardGame;
 use App\Models\Loan;
 use App\Models\Post;
 use Database\Seeders\BoardGameSeeder;
@@ -14,10 +16,14 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        // $this->call([
-        //     AdminSeeder::class,
-        // ]);
+        Admin::truncate();
+        $this->call([
+            AdminSeeder::class,
+        ]);
 
+        Post::factory(30)->create();
+
+        BoardGame::truncate();
         $this->call(BoardGameSeeder::class);
 
         Loan::truncate();

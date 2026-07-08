@@ -24,6 +24,7 @@ Route::prefix('admin')->group(function () {
 
         Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
         Route::patch('loans/{loan}/return', [LoanController::class, 'return'])->name('loans.return');
+        Route::get('loans/{loan}', [LoanController::class, 'show'])->name('loans.show');
 
         Route::get('returns', [ReturnController::class, 'create'])->name('returns.create');
         Route::post('returns', [ReturnController::class, 'store'])->name('returns.store');
