@@ -98,6 +98,7 @@ export default function Games({ boardgames }) {
                     <thead>
                         <tr className="bg-slate-800 text-slate-200 text-sm uppercase">
                             <th className="px-4 py-3 w-24 text-center">Actions</th>
+                            <th className="px-4 py-3 text-center">Foto</th>
                             <th className="px-4 py-3 cursor-pointer select-none hover:text-white" onClick={() => toggleSort('kode')}>Kode{sortArrow('kode')}</th>
                             <th className="px-4 py-3 cursor-pointer select-none hover:text-white" onClick={() => toggleSort('box')}>Box{sortArrow('box')}</th>
                             <th className="px-4 py-3 cursor-pointer select-none hover:text-white" onClick={() => toggleSort('nama')}>Nama{sortArrow('nama')}</th>
@@ -113,6 +114,9 @@ export default function Games({ boardgames }) {
                             <tr key={game.id} className="hover:bg-slate-50 text-sm">
                                 <td className="px-4 py-3">
                                     <div className="flex items-center justify-center gap-2">
+                                        <Link href={`/admin/games/${game.id}`} className="btn btn-ghost btn-xs btn-square text-slate-500 hover:text-slate-800 hover:bg-slate-100" title="Detail">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                        </Link>
                                         <Link href={`/admin/games/${game.id}/edit`} className="btn btn-ghost btn-xs btn-square text-blue-600 hover:text-blue-800 hover:bg-blue-50" title="Edit">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                         </Link>
@@ -122,6 +126,23 @@ export default function Games({ boardgames }) {
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                         </Link>
                                     </div>
+                                </td>
+                                <td className="px-4 py-3 text-center">
+                                    {game.link_foto?.length > 0 ? (
+                                        <div className="flex items-center justify-center">
+                                            <img
+                                                src={game.link_foto[0]}
+                                                alt={game.nama}
+                                                className="w-10 h-10 object-cover rounded-md border border-slate-200"
+                                                onError={(e) => { e.target.style.display = 'none' }}
+                                            />
+                                            {game.link_foto.length > 1 && (
+                                                <span className="text-[10px] text-slate-400 ml-1">+{game.link_foto.length - 1}</span>
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <span className="text-slate-300 text-xs">-</span>
+                                    )}
                                 </td>
                                 <td className="px-4 py-3 font-mono text-xs">{game.kode}</td>
                                 <td className="px-4 py-3">{game.box}</td>

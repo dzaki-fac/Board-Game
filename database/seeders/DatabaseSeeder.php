@@ -14,11 +14,9 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        $this->call([
-            AdminSeeder::class,
-        ]);
-
-        Post::factory(30)->create();
+        // $this->call([
+        //     AdminSeeder::class,
+        // ]);
 
         $this->call(BoardGameSeeder::class);
 

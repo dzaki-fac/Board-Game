@@ -20,7 +20,7 @@ Route::prefix('admin')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('/', [PostController::class, 'index']);
         
-        Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
+        Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
 
         Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
         Route::patch('loans/{loan}/return', [LoanController::class, 'return'])->name('loans.return');
