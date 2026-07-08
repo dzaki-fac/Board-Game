@@ -16,8 +16,15 @@ return new class extends Migration
             $table->string('penerbit')->nullable();
             $table->integer('jumlah');
             $table->string('satuan');
-            $table->string('link_foto')->nullable();
+
+            // Array of string (disimpan sebagai JSON)
+            $table->json('link_foto')->nullable();
+
             $table->text('komponen');
+
+            // Barang yang hilang
+            $table->text('barang_hilang')->nullable();
+
             $table->integer('lantai');
             $table->timestamps();
         });
