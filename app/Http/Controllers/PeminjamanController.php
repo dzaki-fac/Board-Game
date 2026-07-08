@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePeminjamanRequest;
 use App\Models\BoardGame;
+use App\Models\Game;
+use App\Models\Loan;
 use App\Models\Peminjaman;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -59,6 +61,19 @@ class PeminjamanController extends Controller
     {
         $peminjaman->update(['status' => 'dipinjam']);
         $peminjaman->boardgame()->decrement('jumlah');
+
+        $borrowedAt = "{$peminjaman->tanggal_pinjam} {$peminjaman->jam_pinjam}";
+
+        Loan::create([
+            'game_id' => $peminjaman->boardgame_id,
+            'borrower_name' => $peminjaman->nama,
+            'borrower_nim' => $peminjaman->nim,
+            'borrowed_at' => $borrowedAt,
+            'status' => 'borrowed',
+            'notes' => $peminjaman->catatan,
+        ]);
+
+        Game::where('id', $peminjaman->boardgame_id)->decrement('available_copies');
 
         return back()->with('success', 'Permohonan disetujui.');
     }
