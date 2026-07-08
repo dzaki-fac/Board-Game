@@ -117,7 +117,7 @@ export default function Account({ admins }) {
                 <h1 className="text-2xl font-bold">Daftar Akun Admin</h1>
                 {isSuperAdmin && (
                     <button onClick={openCreateModal} className="btn btn-primary">
-                        Tambah Admin
+                        + Tambah Admin
                     </button>
                 )}
             </div>
@@ -131,7 +131,7 @@ export default function Account({ admins }) {
                             <th>Email</th>
                             <th>Role</th>
                             <th>Tanggal Dibuat</th>
-                            {isSuperAdmin && <th>Aksi</th>}
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -141,7 +141,7 @@ export default function Account({ admins }) {
                                 <td>
                                     {admin.name}
                                     {admin.id === currentAdminId && (
-                                        <span className="badge badge-ghost badge-xs ml-2">Anda</span>
+                                        <span className="badge badge-xs ml-2 bg-green-100 text-green-700 border-green-200 rounded">Anda</span>
                                     )}
                                 </td>
                                 <td>{admin.email}</td>
@@ -156,24 +156,26 @@ export default function Account({ admins }) {
                                         { year: "numeric", month: "long", day: "numeric" }
                                     )}
                                 </td>
-                                {isSuperAdmin && (
-                                    <td className="flex gap-2">
-                                        <button
-                                            onClick={() => openEditModal(admin)}
-                                            className="btn btn-sm btn-outline btn-warning"
-                                        >
-                                            Edit
-                                        </button>
-                                        {admin.id !== currentAdminId && (
+                                <td>
+                                    {(isSuperAdmin || admin.id === currentAdminId) && (
+                                        <div className="flex gap-2">
                                             <button
-                                                onClick={() => setDeleteTarget(admin)}
-                                                className="btn btn-sm btn-outline btn-error"
+                                                onClick={() => openEditModal(admin)}
+                                                className="btn btn-sm btn-outline btn-warning"
                                             >
-                                                Hapus
+                                                Edit
                                             </button>
-                                        )}
-                                    </td>
-                                )}
+                                            {isSuperAdmin && admin.id !== currentAdminId && (
+                                                <button
+                                                    onClick={() => setDeleteTarget(admin)}
+                                                    className="btn btn-sm btn-outline btn-error"
+                                                >
+                                                    Hapus
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

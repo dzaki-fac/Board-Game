@@ -43,6 +43,10 @@ class AdminAccountController extends Controller
     {
         $currentAdmin = Auth::guard('admin')->user();
 
+        if (!$currentAdmin->isSuperAdmin() && $admin->id !== $currentAdmin->id) {
+            abort(403, 'Anda hanya dapat mengedit akun sendiri.');
+        }
+
         if ($admin->id === $currentAdmin->id) {
             $request->merge(['role' => $admin->role]);
         }

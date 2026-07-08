@@ -37,7 +37,7 @@ Route::prefix('admin')->group(function () {
 
         Route::get('accounts', [AdminAccountController::class, 'index'])->name('admin.accounts.index');
         Route::post('accounts', [AdminAccountController::class, 'store'])->name('admin.accounts.store')->middleware('superadmin');
-        Route::put('accounts/{admin}', [AdminAccountController::class, 'update'])->name('admin.accounts.update')->middleware('superadmin');
+        Route::put('accounts/{admin}', [AdminAccountController::class, 'update'])->name('admin.accounts.update');
         Route::delete('accounts/{admin}', [AdminAccountController::class, 'destroy'])->name('admin.accounts.destroy')->middleware('superadmin');
 
         Route::any('{any?}', fn () => abort(404))->where('any', '.*');
