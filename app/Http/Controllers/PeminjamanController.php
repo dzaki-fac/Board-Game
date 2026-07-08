@@ -62,7 +62,7 @@ class PeminjamanController extends Controller
         $peminjaman->update(['status' => 'dipinjam']);
         $peminjaman->boardgame()->decrement('jumlah');
 
-        $borrowedAt = "{$peminjaman->tanggal_pinjam} {$peminjaman->jam_pinjam}";
+        $borrowedAt = $peminjaman->getRawOriginal('tanggal_pinjam') . ' ' . $peminjaman->jam_pinjam;
 
         Loan::create([
             'game_id' => $peminjaman->boardgame_id,
