@@ -112,15 +112,16 @@ export default function Form({ boardgames = [] }) {
               />
             </div>
 
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-medium">Pilih board game</span>
-              </label>
-              <div className="max-h-48 overflow-y-auto border border-base-300 rounded-box">
-                {filtered.length === 0 ? (
-                  <div className="p-4 text-center text-slate-400">Board game tidak ditemukan</div>
-                ) : (
-                  filtered.map((bg) => {
+            {search.trim() !== "" && (
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-medium">Pilih board game</span>
+                </label>
+                <div className="max-h-48 overflow-y-auto border border-base-300 rounded-box">
+                  {filtered.length === 0 ? (
+                    <div className="p-4 text-center text-slate-400">Board game tidak ditemukan</div>
+                  ) : (
+                    filtered.map((bg) => {
                       const isBorrowed = bg.availability_status === "borrowed";
                       return (
                         <label
@@ -161,6 +162,7 @@ export default function Form({ boardgames = [] }) {
                   )}
                 </div>
               </div>
+            )}
 
             {selected && (
               <div className="mt-3 p-3 bg-base-200 rounded-box text-sm">
