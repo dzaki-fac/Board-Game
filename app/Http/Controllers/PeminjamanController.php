@@ -9,17 +9,24 @@ use App\Models\Loan;
 use App\Models\Peminjaman;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PeminjamanController extends Controller
 {
     public function create()
     {
-        $borrowedIds = Loan::where('status', 'borrowed')->pluck('game_id')->unique();
-
         $boardgames = BoardGame::orderBy('nama')
-            ->get(['id', 'nama', 'kode'])
-            ->map(function ($bg) use ($borrowedIds) {
-                $isBorrowed = $borrowedIds->contains($bg->id);
+            ->select(['board_games.id', 'board_games.nama', 'board_games.kode'])
+            ->selectSub(function ($query) {
+                $query->from('loans')
+                    ->whereColumn('loans.game_id', 'board_games.id')
+                    ->whereNull('loans.returned_at')
+                    ->where('loans.status', '!=', 'returned')
+                    ->select(DB::raw('COUNT(*)'));
+            }, 'active_loans_count')
+            ->get()
+            ->map(function ($bg) {
+                $isBorrowed = $bg->active_loans_count > 0;
                 return [
                     'id' => $bg->id,
                     'nama' => $bg->nama,
