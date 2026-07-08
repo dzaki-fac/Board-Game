@@ -10,11 +10,34 @@ class BoardGameController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = BoardGame::all();
+        $query = BoardGame::query();
 
-        return inertia('Boardgame/Games', ['boardgames' => $data]);
+        if ($search = $request->search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nama', 'like', "%{$search}%")
+                  ->orWhere('kode', 'like', "%{$search}%")
+                  ->orWhere('penerbit', 'like', "%{$search}%");
+            });
+        }
+
+        if ($lantai = $request->filterLantai) {
+            $query->where('lantai', $lantai);
+        }
+
+        if ($box = $request->filterBox) {
+            $query->where('box', $box);
+        }
+
+        $sortField = $request->sortField ?? 'nama';
+        $sortDir = $request->sortDir === 'desc' ? 'desc' : 'asc';
+        $query->orderBy($sortField, $sortDir);
+
+        return inertia('Boardgame/Games', [
+            'boardgames' => $query->paginate(20)->withQueryString(),
+            'query' => $request->only(['search', 'sortField', 'sortDir', 'filterLantai', 'filterBox']),
+        ]);
     }
 
     /**
