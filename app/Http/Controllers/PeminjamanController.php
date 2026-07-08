@@ -34,7 +34,7 @@ class PeminjamanController extends Controller
             'catatan' => $request->catatan,
         ]);
 
-        return redirect()->route('permohonan.index')->with('success', 'Permohonan peminjaman berhasil dikirim.');
+        return redirect()->route('admin.permohonan.index')->with('success', 'Permohonan peminjaman berhasil dikirim.');
     }
 
     public function permohonan()
@@ -58,7 +58,7 @@ class PeminjamanController extends Controller
     public function setujui(Peminjaman $peminjaman)
     {
         $peminjaman->update(['status' => 'dipinjam']);
-        $peminjaman->boardgame()->decrement('stok');
+        $peminjaman->boardgame()->decrement('jumlah');
 
         return back()->with('success', 'Permohonan disetujui.');
     }

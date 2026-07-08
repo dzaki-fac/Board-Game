@@ -2,11 +2,11 @@ import { Link, router } from "@inertiajs/react";
 
 export default function Permohonan({ permohonan, total, total_menunggu, total_disetujui, total_ditolak }) {
   function setujui(id) {
-    router.patch(`/permohonan/${id}/setujui`, {}, { preserveScroll: true });
+    router.patch(`/admin/permohonan/${id}/setujui`, {}, { preserveScroll: true });
   }
 
   function tolak(id) {
-    router.patch(`/permohonan/${id}/tolak`, {}, { preserveScroll: true });
+    router.patch(`/admin/permohonan/${id}/tolak`, {}, { preserveScroll: true });
   }
 
   return (
@@ -58,7 +58,7 @@ export default function Permohonan({ permohonan, total, total_menunggu, total_di
               <tr key={p.id}>
                 <td>{p.nama || p.user?.name}</td>
                 <td>{p.nim}</td>
-                <td>{p.boardgame?.judul}</td>
+                <td>{p.boardgame?.nama}</td>
                 <td>{new Date(p.tanggal_pinjam + "T00:00:00").toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "2-digit" })}</td>
                 <td>{p.jam_pinjam?.slice(0, 8)}</td>
                 <td>
