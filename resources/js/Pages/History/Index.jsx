@@ -1,5 +1,5 @@
-import { Head, Link } from "@inertiajs/react"
-import { useMemo, useState } from "react"
+import { Head, Link, router } from "@inertiajs/react"
+import { useEffect, useRef, useState } from "react"
 import BadgeStatus from "../../Components/BadgeStatus"
 import BadgeCondition from "../../Components/BadgeCondition"
 
@@ -16,29 +16,28 @@ function formatDateTime(date) {
 }
 
 export default function Index({ histories, stats }) {
+    const isInitialMount = useRef(true)
+    const debounceRef = useRef(null)
     const [search, setSearch] = useState("")
     const [statusFilter, setStatusFilter] = useState("")
     const [open, setOpen] = useState(false)
 
-    const filtered = useMemo(() => {
-        const data = histories.data || []
-        return data.filter((loan) => {
-            const query = search.toLowerCase()
-            if (
-                query &&
-                !loan.borrower_name.toLowerCase().includes(query) &&
-                !loan.game.name.toLowerCase().includes(query)
-            ) {
-                return false
-            }
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false
+            return
+        }
 
-            if (statusFilter && loan.status !== statusFilter) {
-                return false
-            }
-
-            return true
-        })
-    }, [histories.data, search, statusFilter])
+        clearTimeout(debounceRef.current)
+        debounceRef.current = setTimeout(() => {
+            router.get("/admin/history", { search, status: statusFilter }, {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
+            })
+        }, 400)
+        return () => clearTimeout(debounceRef.current)
+    }, [search, statusFilter])
 
     const statCards = [
         {
@@ -79,11 +78,11 @@ export default function Index({ histories, stats }) {
                 "Condition",
                 "Fine",
             ].join(","),
-            ...filtered.map((loan) =>
+            ...(histories.data || []).map((loan) =>
                 [
                     loan.id,
                     `"${loan.borrower_name}"`,
-                    `"${loan.game.name}"`,
+                    `"${loan.game.nama}"`,
                     formatDateTime(loan.borrowed_at),
                     formatDateTime(loan.returned_at),
                     loan.status,
@@ -292,7 +291,7 @@ export default function Index({ histories, stats }) {
                                     Belum ada riwayat peminjaman
                                 </p>
                             </div>
-                        ) : filtered.length === 0 ? (
+                        ) : histories.data.length === 0 ? (
                             <div className="flex flex-col items-center justify-center py-16 text-center">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -332,7 +331,7 @@ export default function Index({ histories, stats }) {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {filtered.map((loan) => (
+                                            {(histories.data || []).map((loan) => (
                                                 <tr
                                                     key={loan.id}
                                                     className="hover:bg-gray-50 transition-colors border-b border-gray-100"
@@ -348,7 +347,7 @@ export default function Index({ histories, stats }) {
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4 text-gray-700">
-                                                        {loan.game.name}
+                                                        {loan.game.nama}
                                                     </td>
                                                     <td className="px-6 py-4 text-gray-500 text-sm">
                                                         {formatDateTime(loan.borrowed_at)}

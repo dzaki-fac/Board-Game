@@ -1,8 +1,9 @@
 import { Link } from "@inertiajs/react";
 
 const navItems = [
-    { label: "Home", href: "/admin" },
+    { label: "Home", href: "/peminjaman/create" },
     { label: "Board Games", href: "/admin/games" },
+    { label: "Permohonan", href: "/admin/permohonan" },
     { label: "Peminjaman", href: "/admin/loans" },
     { label: "Pengembalian", href: "/admin/returns" },
     { label: "Riwayat Peminjaman", href: "/admin/history" },
@@ -37,7 +38,7 @@ export default function Layout({ children }) {
                             </svg>
                         </label>
                     </div>
-                    <div className="flex-none gap-2 flex items-center">
+                    <div href='/peminjaman/create' className="flex-none gap-2 flex items-center">
                         <div className="avatar placeholder hidden sm:flex">
                             <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-medium">
                                 AD

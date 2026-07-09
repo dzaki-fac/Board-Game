@@ -5,11 +5,12 @@ use App\Http\Controllers\Admin\AuthenticatedSessionController;
 use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LoanController;
+use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReturnController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/admin');
+Route::redirect('/', [PermohonanController::class, 'create']);
 
 Route::prefix('admin')->group(function () {
     Route::middleware('guest:admin')->group(function () {
@@ -18,7 +19,6 @@ Route::prefix('admin')->group(function () {
     });
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/', [PostController::class, 'index']);
         
         Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
 
@@ -31,7 +31,9 @@ Route::prefix('admin')->group(function () {
 
         Route::get('history', [HistoryController::class, 'index'])->name('history.index');
 
-        Route::resource('posts', PostController::class)->except('index');
+        Route::get('permohonan', [PermohonanController::class, 'permohonan'])->name('admin.permohonan.index');
+        Route::patch('permohonan/{permohonan}/setujui', [PermohonanController::class, 'setujui'])->name('admin.permohonan.setujui');
+        Route::patch('permohonan/{permohonan}/tolak', [PermohonanController::class, 'tolak'])->name('admin.permohonan.tolak');
 
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
 
@@ -43,3 +45,6 @@ Route::prefix('admin')->group(function () {
         Route::any('{any?}', fn () => abort(404))->where('any', '.*');
     });
 });
+
+Route::get('/peminjaman/create', [PermohonanController::class, 'create'])->name('peminjaman.create');
+Route::post('/peminjaman', [PermohonanController::class, 'store'])->name('peminjaman.store');

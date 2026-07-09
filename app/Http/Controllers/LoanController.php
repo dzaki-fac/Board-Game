@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BoardGame;
 use App\Models\Loan;
+use App\Models\Permohonan;
 
 class LoanController extends Controller
 {
@@ -36,7 +38,11 @@ class LoanController extends Controller
             'status' => 'returned',
         ]);
 
-        $loan->game->increment('available_copies');
+        BoardGame::where('id', $loan->boardgame_id)->increment('available_copies');
+
+        Permohonan::where('boardgame_id', $loan->boardgame_id)
+            ->where('status', 'dipinjam')
+            ->update(['status' => 'dikembalikan']);
 
         return to_route('loans.index');
     }
