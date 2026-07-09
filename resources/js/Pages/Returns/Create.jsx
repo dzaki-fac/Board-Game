@@ -42,15 +42,17 @@ export default function Create({ loans }) {
         return parseKomponen(selectedLoan.game.komponen)
     }, [selectedLoan])
 
-    const [checked, setChecked] = useState([])
+    const [missingQty, setMissingQty] = useState([])
 
     useEffect(() => {
-        setChecked(components.map(() => true))
+        setMissingQty(components.map(() => null))
     }, [components])
 
     const missingComponents = useMemo(() => {
-        return components.filter((_, i) => !checked[i])
-    }, [components, checked])
+        return components
+            .map((nama, i) => (missingQty[i] ? { nama, jumlah: missingQty[i] } : null))
+            .filter(Boolean)
+    }, [components, missingQty])
 
     useEffect(() => {
         setData("missing_components", missingComponents.length > 0 ? missingComponents : [])
@@ -91,16 +93,17 @@ export default function Create({ loans }) {
         missing_parts: "Kekurangan Bagian",
     }
 
-    function toggleComponent(index) {
-        setChecked((prev) => {
+    function setQty(index, qty) {
+        setMissingQty((prev) => {
             const next = [...prev]
-            next[index] = !next[index]
+            next[index] = qty > 0 ? qty : null
             return next
         })
     }
 
-    const returnedCount = checked.filter(Boolean).length
+    const returnedCount = components.length - missingComponents.reduce((sum, m) => sum + m.jumlah, 0)
     const totalCount = components.length
+    const totalHilang = missingComponents.reduce((sum, m) => sum + m.jumlah, 0)
 
     return (
         <>
@@ -177,7 +180,7 @@ export default function Create({ loans }) {
                                                 {componentsDisabled ? (
                                                     <span className="text-gray-400 font-normal ml-1">(dinonaktifkan untuk status Hilang)</span>
                                                 ) : (
-                                                    <span className="text-gray-400 font-normal ml-1">(uncheck item yang hilang)</span>
+                                                    <span className="text-gray-400 font-normal ml-1">(uncheck & isi jumlah item yang hilang)</span>
                                                 )}
                                             </legend>
                                             <div
@@ -188,39 +191,72 @@ export default function Create({ loans }) {
                                                     gap: "0.5rem",
                                                 }}
                                             >
-                                                {components.map((component, index) => (
-                                                    <label
-                                                        key={index}
-                                                        className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
+                                                {components.map((component, index) => {
+                                                    const isMissing = missingQty[index] > 0
+                                                    return (
+                                                        <div key={index} className={`p-2 rounded-lg transition-colors ${
                                                             componentsDisabled
                                                                 ? "bg-gray-50 border border-gray-200 opacity-60"
-                                                                : checked[index]
-                                                                    ? "bg-green-50 border border-green-200"
-                                                                    : "bg-red-50 border border-red-200"
-                                                        }`}
-                                                    >
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={checked[index] ?? false}
-                                                            onChange={() => componentsDisabled ? null : toggleComponent(index)}
-                                                            disabled={componentsDisabled}
-                                                            className="checkbox checkbox-sm"
-                                                        />
-                                                        <span
-                                                            className={`text-sm ${
-                                                                componentsDisabled
-                                                                    ? "text-gray-400"
-                                                                    : checked[index]
-                                                                        ? "text-gray-700"
-                                                                        : "text-red-700 line-through"
-                                                            }`}
-                                                        >
-                                                            {component}
-                                                        </span>
-                                                    </label>
-                                                ))}
+                                                                : isMissing
+                                                                    ? "bg-red-50 border border-red-200"
+                                                                    : "bg-green-50 border border-green-200"
+                                                        }`}>
+                                                            <div className="flex items-center gap-3">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={!isMissing}
+                                                                    onChange={() => setQty(index, isMissing ? null : 1)}
+                                                                    disabled={componentsDisabled}
+                                                                    className="checkbox checkbox-sm"
+                                                                />
+                                                                <span className={`text-sm flex-1 ${
+                                                                    componentsDisabled
+                                                                        ? "text-gray-400"
+                                                                        : isMissing
+                                                                            ? "text-red-700 line-through"
+                                                                            : "text-gray-700"
+                                                                }`}>
+                                                                    {component}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })}
                                             </div>
                                         </fieldset>
+                                    )}
+
+                                    {/* Missing Components Summary Card */}
+                                    {missingComponents.length > 0 && (
+                                        <div className="card bg-red-50 border border-red-200 rounded-xl shadow-sm">
+                                            <div className="card-body p-4">
+                                                <h3 className="text-sm font-semibold text-red-800 flex items-center gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
+                                                    Komponen Hilang
+                                                </h3>
+                                                <p className="text-xs text-red-600 mt-1">Atur jumlah masing-masing komponen yang hilang</p>
+                                                <div className="mt-3 space-y-2">
+                                                    {components.map((component, index) => {
+                                                        if (!(missingQty[index] > 0)) return null
+                                                        return (
+                                                            <div key={index} className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-red-100">
+                                                                <span className="text-sm text-red-700">{component}</span>
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="text-xs text-red-500">Jumlah:</span>
+                                                                    <input
+                                                                        type="number"
+                                                                        value={missingQty[index]}
+                                                                        min={1}
+                                                                        onChange={(e) => setQty(index, parseInt(e.target.value) || 1)}
+                                                                        className="input input-bordered input-xs w-16 text-center"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </div>
                                     )}
 
                                     {/* Returned At */}
@@ -327,7 +363,7 @@ export default function Create({ loans }) {
                                                     setData("return_condition", "good")
                                                 }
                                                 if (newStatus === "lost") {
-                                                    setChecked(components.map(() => true))
+                                                    setMissingQty(components.map(() => null))
                                                 }
                                             }}
                                             className="select select-bordered w-full"
@@ -367,6 +403,29 @@ export default function Create({ loans }) {
 
                     {/* Sidebar Cards */}
                     <div className="space-y-6">
+                        {/* Riwayat Komponen Hilang */}
+                        {selectedLoan && (
+                            <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                                <div className="card-body p-6">
+                                    <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+                                        Riwayat Komponen Hilang
+                                    </h3>
+                                    {selectedLoan.game.barang_hilang?.length > 0 ? (
+                                        <div className="space-y-2">
+                                            {selectedLoan.game.barang_hilang.map((item, i) => (
+                                                <div key={i} className="flex items-center justify-between bg-red-50 rounded-lg px-3 py-2 border border-red-100">
+                                                    <span className="text-sm text-red-700">{item.nama}</span>
+                                                    <span className="text-sm font-semibold text-red-600">{item.jumlah} buah</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p className="text-sm text-gray-400 italic">Belum ada riwayat komponen hilang</p>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                         {/* Selected Loan Details */}
                         <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
                             <div className="card-body p-6">
@@ -481,15 +540,18 @@ export default function Create({ loans }) {
                                                             ? "text-red-600"
                                                             : "text-gray-500"
                                                     }`}>
-                                                        {missingComponents.length}
+                                                        {totalHilang}
                                                     </span>
                                                 </div>
                                                 {missingComponents.length > 0 && (
                                                     <div>
                                                         <p className="text-xs text-gray-500 mb-1">Item Hilang</p>
-                                                        <ul className="text-xs text-red-600 list-disc list-inside space-y-0.5">
+                                                        <ul className="text-xs text-red-600 space-y-0.5">
                                                             {missingComponents.map((item, i) => (
-                                                                <li key={i}>{item}</li>
+                                                                <li key={i} className="flex justify-between">
+                                                                    <span>{item.nama}</span>
+                                                                    <span className="font-medium">x{item.jumlah}</span>
+                                                                </li>
                                                             ))}
                                                         </ul>
                                                     </div>
@@ -558,6 +620,7 @@ export default function Create({ loans }) {
                                 )}
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
