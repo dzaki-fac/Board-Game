@@ -228,6 +228,40 @@ function IkonChevron({ arah = "kiri", ...props }) {
     );
 }
 
+function BlobPanel({ variant = "populer" }) {
+    const skema = {
+        populer: {
+            warna: { a: WARNA.hijauUtama, b: WARNA.emas },
+            path1: "M60 60 Q180 -20 300 60 Q420 130 380 250 Q340 370 220 400 Q80 430 30 300 Q-20 170 60 60 Z",
+            path2: "M320 180 Q420 140 470 240 Q510 340 420 400 Q340 450 280 380 Q220 320 260 250 Q290 200 320 180 Z",
+            lingkaran: [{ cx: 90, cy: 380, r: 55 }, { cx: 430, cy: 90, r: 40 }],
+        },
+        info: {
+            warna: { a: WARNA.emas, b: WARNA.hijauUtama },
+            path1: "M40 250 Q20 120 150 90 Q280 60 320 180 Q360 300 240 360 Q120 420 40 250 Z",
+            path2: "M300 40 Q420 20 460 120 Q500 220 420 280 Q340 340 280 260 Q220 180 260 100 Q280 60 300 40 Z",
+            lingkaran: [{ cx: 440, cy: 400, r: 50 }, { cx: 60, cy: 60, r: 35 }],
+        },
+        sanksi: {
+            warna: { a: "#B04A3D", b: WARNA.emas },
+            path1: "M250 20 Q380 40 400 160 Q420 280 300 340 Q180 400 100 300 Q20 200 100 100 Q160 30 250 20 Z",
+            path2: "M60 300 Q0 380 80 440 Q160 480 200 400 Q240 320 160 280 Q100 250 60 300 Z",
+            lingkaran: [{ cx: 460, cy: 80, r: 45 }, { cx: 450, cy: 380, r: 30 }],
+        },
+    }[variant];
+
+    return (
+        <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
+            <rect width="500" height="500" fill={WARNA.krem} />
+            <path d={skema.path1} fill={skema.warna.a} opacity="0.22" />
+            <path d={skema.path2} fill={skema.warna.b} opacity="0.18" />
+            {skema.lingkaran.map((l, i) => (
+                <circle key={i} cx={l.cx} cy={l.cy} r={l.r} fill={i === 0 ? skema.warna.b : skema.warna.a} opacity="0.14" />
+            ))}
+        </svg>
+    );
+}
+
 function IkonBintang({ terisi, ...props }) {
     return (
         <svg viewBox="0 0 24 24" fill={terisi ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1.5" {...props}>
@@ -492,11 +526,10 @@ function SeksiGameSerupa({ gameSerupa, t }) {
 
     return (
         <div className="mt-8 rounded-3xl p-6 md:p-8" style={{ backgroundColor: WARNA.krem }}>
-            <div className="flex items-center gap-2 mb-1">
-                <span className="w-1.5 h-6 rounded-full" style={{ backgroundColor: WARNA.hijauUtama }} />
+            <div className="mb-5">
                 <h2 className="text-xl font-bold text-slate-800">{t.gameSerupa}</h2>
+                <p className="text-sm text-slate-500 mt-0.5">{t.gameSerupaSub}</p>
             </div>
-            <p className="text-sm text-slate-500 mb-5 ml-3.5">{t.gameSerupaSub}</p>
             <div className="flex gap-4 overflow-x-auto pb-2">
                 {gameSerupa.map((item) => (
                     <KartuGameSerupa key={item.id} item={item} />
@@ -521,7 +554,7 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
 
             <div className="max-w-[1300px] mx-auto px-4 md:px-6 py-6">
                 <div className="bg-white rounded-3xl overflow-hidden ring-1 ring-slate-100">
-                    <div className="grid md:grid-cols-2 gap-0">
+                    <div className="grid md:grid-cols-2 gap-0 items-start">
                         {/* Galeri foto: gambar + gambar_hover, geser pakai panah/dot */}
                         <GaleriGambar game={game} warna={warna} bg={bg} />
 
