@@ -74,7 +74,6 @@ class PermohonanController extends Controller
     public function setujui(Permohonan $permohonan)
     {
         $permohonan->update(['status' => 'dipinjam']);
-        $permohonan->boardgame()->decrement('jumlah');
 
         $borrowedAt = $permohonan->getRawOriginal('tanggal_pinjam') . ' ' . $permohonan->jam_pinjam;
 
