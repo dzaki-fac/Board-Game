@@ -41,27 +41,27 @@ export default function Index({ histories, stats }) {
 
     const statCards = [
         {
-            title: "Total Records",
+            title: "Total Riwayat",
             value: stats.total,
-            desc: "All borrowing records",
+            desc: "Semua riwayat peminjaman",
             color: "text-blue-600",
         },
         {
-            title: "Returned",
+            title: "Dikembalikan",
             value: stats.returned,
-            desc: "Completed returns",
+            desc: "Pengembalian selesai",
             color: "text-emerald-600",
         },
         {
-            title: "Not Returned",
+            title: "Belum Dikembalikan",
             value: stats.not_returned,
-            desc: "Not returned after due",
+            desc: "Belum dikembalikan",
             color: "text-amber-600",
         },
         {
-            title: "Lost",
+            title: "Hilang",
             value: stats.lost,
-            desc: "Items marked as lost",
+            desc: "Item ditandai hilang",
             color: "text-red-600",
         },
     ]
@@ -69,14 +69,14 @@ export default function Index({ histories, stats }) {
     function handleExport() {
         const csv = [
             [
-                "Loan ID",
-                "Borrower",
+                "ID Peminjaman",
+                "Peminjam",
                 "Board Game",
-                "Borrowed At",
-                "Returned At",
+                "Dipinjam",
+                "Dikembalikan",
                 "Status",
-                "Condition",
-                "Fine",
+                "Kondisi",
+                "Denda",
             ].join(","),
             ...(histories.data || []).map((loan) =>
                 [
@@ -96,21 +96,21 @@ export default function Index({ histories, stats }) {
         const url = URL.createObjectURL(blob)
         const a = document.createElement("a")
         a.href = url
-        a.download = "loan-history.csv"
+        a.download = "riwayat-peminjaman.csv"
         a.click()
         URL.revokeObjectURL(url)
     }
 
     return (
         <>
-            <Head title="Loan History" />
+            <Head title="Riwayat Peminjaman" />
 
             <div className="p-4 lg:p-6 space-y-6">
                 {/* Page Header */}
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900">Riwayat Peminjaman</h1>
                     <p className="text-sm text-gray-500 mt-1">
-                        View and manage all board game borrowing records
+                        Lihat dan kelola semua riwayat peminjaman board game
                     </p>
                 </div>
 
@@ -137,13 +137,13 @@ export default function Index({ histories, stats }) {
                 {/* Filters Card */}
                 <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
                     <div className="card-body p-6">
-                        <h2 className="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
+                        <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter</h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                             {/* Search */}
                             <div>
                                 <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
-                                    Search
+                                    Cari
                                 </label>
                                 <div className="relative">
                                     <svg
@@ -164,7 +164,7 @@ export default function Index({ histories, stats }) {
                                         type="text"
                                         value={search}
                                         onChange={(e) => setSearch(e.target.value)}
-                                        placeholder="Search history by game or borrower"
+                                        placeholder="Cari riwayat berdasarkan game atau peminjam"
                                         className="input input-bordered input-sm pl-9 w-full"
                                     />
                                 </div>
@@ -184,7 +184,7 @@ export default function Index({ histories, stats }) {
                                         {statusFilter ? (
                                             <BadgeStatus value={statusFilter} />
                                         ) : (
-                                            <span className="text-gray-500">All</span>
+                                            <span className="text-gray-500">Semua</span>
                                         )}
                                         <svg
                                             className={`w-4 h-4 ml-auto text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
@@ -207,7 +207,7 @@ export default function Index({ histories, stats }) {
                                                     onClick={() => { setStatusFilter(""); setOpen(false) }}
                                                     className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${!statusFilter ? "bg-indigo-50" : ""}`}
                                                 >
-                                                    <span className="text-gray-500">All</span>
+                                                    <span className="text-gray-500">Semua</span>
                                                     {!statusFilter && (
                                                         <svg className="w-4 h-4 ml-auto text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                             <polyline points="20 6 9 17 4 12" />
@@ -256,7 +256,7 @@ export default function Index({ histories, stats }) {
                                         d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                                     />
                                 </svg>
-                                Export
+                                Ekspor
                             </button>
                         </div>
                     </div>
@@ -267,7 +267,7 @@ export default function Index({ histories, stats }) {
                     <div className="card-body p-0">
                         <div className="px-6 py-4 border-b border-gray-100">
                             <h2 className="text-lg font-semibold text-gray-900">
-                                Borrowing Records
+                                Riwayat Peminjaman
                             </h2>
                         </div>
 
@@ -308,7 +308,7 @@ export default function Index({ histories, stats }) {
                                     />
                                 </svg>
                                 <p className="text-gray-400 text-sm">
-                                    No records match your filters
+                                    Tidak ada riwayat yang sesuai filter
                                 </p>
                             </div>
                         ) : (
@@ -317,16 +317,16 @@ export default function Index({ histories, stats }) {
                                     <table className="table">
                                         <thead>
                                             <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
-                                                <th className="px-6 py-3 font-medium">Loan ID</th>
-                                                <th className="px-6 py-3 font-medium">Borrower</th>
+                                                <th className="px-6 py-3 font-medium">ID</th>
+                                                <th className="px-6 py-3 font-medium">Peminjam</th>
                                                 <th className="px-6 py-3 font-medium">Board Game</th>
-                                                <th className="px-6 py-3 font-medium">Borrowed At</th>
-                                                <th className="px-6 py-3 font-medium">Returned At</th>
+                                                <th className="px-6 py-3 font-medium">Dipinjam</th>
+                                                <th className="px-6 py-3 font-medium">Dikembalikan</th>
                                                 <th className="px-6 py-3 font-medium">Status</th>
-                                                <th className="px-6 py-3 font-medium">Condition</th>
-                                                <th className="px-6 py-3 font-medium">Fine</th>
+                                                <th className="px-6 py-3 font-medium">Kondisi</th>
+                                                <th className="px-6 py-3 font-medium">Denda</th>
                                                 <th className="px-6 py-3 font-medium text-right">
-                                                    Actions
+                                                    Aksi
                                                 </th>
                                             </tr>
                                         </thead>

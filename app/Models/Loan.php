@@ -36,4 +36,6 @@ class Loan extends Model
     {
         return $this->belongsTo(BoardGame::class, 'boardgame_id');
     }
+
+    
 }

@@ -7,7 +7,7 @@ const navItems = [
     { label: "Peminjaman", href: "/admin/loans" },
     { label: "Pengembalian", href: "/admin/returns" },
     { label: "Riwayat Peminjaman", href: "/admin/history" },
-    { label: "Accounts", href: "/admin/accounts" },
+    { label: "Akun", href: "/admin/accounts" },
 ];
 
 export default function Layout({ children }) {

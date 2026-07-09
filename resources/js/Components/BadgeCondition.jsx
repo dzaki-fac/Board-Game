@@ -29,25 +29,25 @@ const icons = {
 
 const config = {
   good: {
-    label: "Good",
+    label: "Baik",
     bg: "bg-[#E8F6ED]",
     text: "text-[#15803D]",
     border: "border-[#86EFAC]",
   },
   minor_damage: {
-    label: "Minor Damage",
+    label: "Rusak Ringan",
     bg: "bg-[#FFF4CC]",
     text: "text-[#A16207]",
     border: "border-[#FACC15]",
   },
   damaged: {
-    label: "Damaged",
+    label: "Rusak",
     bg: "bg-[#FFF3E1]",
     text: "text-[#C2410C]",
     border: "border-[#FDBA74]",
   },
   missing_parts: {
-    label: "Missing Parts",
+    label: "Kekurangan Bagian",
     bg: "bg-[#FFE9D6]",
     text: "text-[#C2410C]",
     border: "border-[#FDBA74]",
