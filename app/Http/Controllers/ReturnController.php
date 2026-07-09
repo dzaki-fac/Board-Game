@@ -70,6 +70,7 @@ class ReturnController extends Controller
         $loan->update($updateData);
 
         if ($validated['status'] === 'returned') {
+            BoardGame::where('id', $loan->boardgame_id)->increment('available_copies');
             Permohonan::where('boardgame_id', $loan->boardgame_id)
                 ->where('status', Permohonan::STATUS_APPROVED)
                 ->oldest()

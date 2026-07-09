@@ -21,12 +21,8 @@ return new class extends Migration
             $table->string('nama');
             $table->string('nim');
 
-            $table->enum('status', [
-                'menunggu',
-                'dipinjam',
-                'dikembalikan',
-                'ditolak'
-            ])->default('menunggu');
+            $table->string('status', 20)
+                ->default('pending');
 
             $table->date('tanggal_pinjam');
             $table->time('jam_pinjam');

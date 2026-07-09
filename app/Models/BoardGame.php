@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Model;
     'nama',
     'penerbit',
     'jumlah',
-    'total_copies',
     'available_copies',
     'satuan',
     'link_foto',
