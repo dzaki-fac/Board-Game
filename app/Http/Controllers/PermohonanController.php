@@ -6,6 +6,7 @@ use App\Http\Requests\StorePermohonanRequest;
 use App\Models\BoardGame;
 use App\Models\Loan;
 use App\Models\Permohonan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PermohonanController extends Controller
@@ -55,15 +56,26 @@ class PermohonanController extends Controller
 
     public function permohonan()
     {
-        $menunggu = Permohonan::where('status', 'menunggu')->count();
-        $disetujui = Permohonan::where('status', 'dipinjam')->count();
-        $ditolak = Permohonan::where('status', 'ditolak')->count();
+        $admin = Auth::guard('admin')->user();
+        $isSuperAdmin = $admin->isSuperAdmin();
+
+        $query = Permohonan::query();
+
+        if (!$isSuperAdmin) {
+            $query->whereHas('boardgame', fn ($q) => $q->where('lantai', $admin->lantai));
+        }
+
+        $menunggu = (clone $query)->where('status', 'menunggu')->count();
+        $disetujui = (clone $query)->where('status', 'dipinjam')->count();
+        $ditolak = (clone $query)->where('status', 'ditolak')->count();
+
+        $permohonan = (clone $query)->with('boardgame')
+            ->orderByRaw("CASE WHEN status = 'ditolak' THEN 1 ELSE 0 END")
+            ->latest('created_at')
+            ->paginate(10);
 
         return inertia('Peminjaman/Permohonan', [
-            'permohonan' => Permohonan::with('boardgame')
-                ->orderByRaw("CASE WHEN status = 'ditolak' THEN 1 ELSE 0 END")
-                ->latest('created_at')
-                ->paginate(10),
+            'permohonan' => $permohonan,
             'total' => $menunggu + $disetujui + $ditolak,
             'total_menunggu' => $menunggu,
             'total_disetujui' => $disetujui,
@@ -73,6 +85,11 @@ class PermohonanController extends Controller
 
     public function setujui(Permohonan $permohonan)
     {
+        $admin = Auth::guard('admin')->user();
+        if (!$admin->isSuperAdmin() && $permohonan->boardgame->lantai != $admin->lantai) {
+            abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
+        }
+
         $permohonan->update(['status' => 'dipinjam']);
         $permohonan->boardgame()->decrement('jumlah');
 
@@ -89,11 +106,16 @@ class PermohonanController extends Controller
 
         $permohonan->boardgame->decrement('available_copies');
 
-        return redirect()->route('loans.index')->with('success', 'Permohonan disetujui.');
+        // return redirect()->route('loans.index')->with('success', 'Permohonan disetujui.');
     }
 
     public function tolak(Permohonan $permohonan)
     {
+        $admin = Auth::guard('admin')->user();
+        if (!$admin->isSuperAdmin() && $permohonan->boardgame->lantai != $admin->lantai) {
+            abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
+        }
+
         $permohonan->update(['status' => 'ditolak']);
 
         return back()->with('success', 'Permohonan ditolak.');

@@ -13,6 +13,7 @@ export default function Account({ admins }) {
         password: "",
         password_confirmation: "",
         role: "admin",
+        lantai: "",
     });
 
     const edit = useForm({
@@ -21,6 +22,7 @@ export default function Account({ admins }) {
         password: "",
         password_confirmation: "",
         role: "admin",
+        lantai: "",
     });
 
     const [showCreateModal, setShowCreateModal] = useState(false);
@@ -67,6 +69,7 @@ export default function Account({ admins }) {
             password: "",
             password_confirmation: "",
             role: admin.role,
+            lantai: admin.lantai,
         });
     }
 
@@ -130,6 +133,7 @@ export default function Account({ admins }) {
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Role</th>
+                            <th>Lantai</th>
                             <th>Tanggal Dibuat</th>
                             <th>Aksi</th>
                         </tr>
@@ -148,6 +152,11 @@ export default function Account({ admins }) {
                                 <td>
                                     <span className={`badge badge-sm rounded ${admin.role === "superadmin" ? "bg-amber-100 text-amber-700 border-amber-200" : "bg-sky-100 text-sky-700 border-sky-200"}`}>
                                         {admin.role === "superadmin" ? "Superadmin" : "Admin"}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span className="badge badge-sm rounded bg-gray-100 text-gray-700 border-gray-200">
+                                        {admin.lantai ? `Lantai ${admin.lantai}` : 'Semua Lantai'}
                                     </span>
                                 </td>
                                 <td>
@@ -280,6 +289,24 @@ export default function Account({ admins }) {
                                 )}
                             </div>
 
+                            <div className="form-control">
+                                <label className="label" htmlFor="create-lantai">
+                                    <span className="label-text">Lantai</span>
+                                </label>
+                                <input
+                                    id="create-lantai"
+                                    type="text"
+                                    className="input input-bordered w-full"
+                                    value={create.data.lantai}
+                                    onChange={(e) => create.setData("lantai", e.target.value)}
+                                />
+                                {create.errors.lantai && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{create.errors.lantai}</span>
+                                    </label>
+                                )}
+                            </div>
+
                             <div className="modal-action">
                                 <button type="button" className="btn btn-ghost" onClick={closeCreateModal}>
                                     Batal
@@ -398,6 +425,24 @@ export default function Account({ admins }) {
                                 {edit.errors.role && (
                                     <label className="label">
                                         <span className="label-text-alt text-error">{edit.errors.role}</span>
+                                    </label>
+                                )}
+                            </div>
+
+                            <div className="form-control">
+                                <label className="label" htmlFor="edit-lantai">
+                                    <span className="label-text">Lantai</span>
+                                </label>
+                                <input
+                                    id="edit-lantai"
+                                    type="text"
+                                    className="input input-bordered w-full"
+                                    value={edit.data.lantai}
+                                    onChange={(e) => edit.setData("lantai", e.target.value)}
+                                />
+                                {edit.errors.lantai && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">{edit.errors.lantai}</span>
                                     </label>
                                 )}
                             </div>

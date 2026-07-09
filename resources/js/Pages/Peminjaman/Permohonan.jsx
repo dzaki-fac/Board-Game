@@ -40,6 +40,7 @@ export default function Permohonan({ permohonan, total, total_menunggu, total_di
               <th>Nama</th>
               <th>NIM</th>
               <th>Boardgame</th>
+              <th>Lantai</th>
               <th>Tgl pinjam</th>
               <th>Jam pinjam</th>
               <th>Status</th>
@@ -49,7 +50,7 @@ export default function Permohonan({ permohonan, total, total_menunggu, total_di
           <tbody>
             {permohonan.data.length === 0 && (
               <tr>
-                <td colSpan={7} className="text-center text-slate-400 py-6">
+                <td colSpan={8} className="text-center text-slate-400 py-6">
                   Belum ada permohonan.
                 </td>
               </tr>
@@ -59,6 +60,7 @@ export default function Permohonan({ permohonan, total, total_menunggu, total_di
                 <td>{p.nama || p.user?.name}</td>
                 <td>{p.nim}</td>
                 <td>{p.boardgame?.nama}</td>
+                <td>Lt {p.boardgame?.lantai}</td>
                 <td>{new Date(p.tanggal_pinjam + "T00:00:00").toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "2-digit" })}</td>
                 <td>{p.jam_pinjam?.slice(0, 8)}</td>
                 <td>
