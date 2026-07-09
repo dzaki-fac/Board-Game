@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BoardGame;
 use App\Models\Loan;
 use App\Models\Permohonan;
 use Illuminate\Support\Facades\Auth;
@@ -61,11 +60,11 @@ class LoanController extends Controller
             'status' => 'returned',
         ]);
 
-        BoardGame::where('id', $loan->boardgame_id)->increment('available_copies');
-
         Permohonan::where('boardgame_id', $loan->boardgame_id)
-            ->where('status', 'dipinjam')
-            ->update(['status' => 'dikembalikan']);
+            ->where('status', 'approved')
+            ->oldest()
+            ->limit(1)
+            ->update(['status' => 'returned']);
 
         return to_route('loans.index');
     }

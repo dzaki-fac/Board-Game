@@ -1,5 +1,6 @@
 import { Link, Head } from "@inertiajs/react"
 import { useMemo, useState } from "react"
+import BadgeStatus from "../../Components/BadgeStatus"
 
 function formatDateTime(date) {
   if (!date) return "-"
@@ -13,10 +14,6 @@ function formatDateTime(date) {
   })
 }
 
-function statusBadge() {
-  return <span className="badge badge-sm capitalize badge-primary">Dipinjam</span>
-}
-
 export default function Index({ loans, stats }) {
   const [search, setSearch] = useState("")
 
@@ -28,12 +25,13 @@ export default function Index({ loans, stats }) {
       (loan) =>
         loan.borrower_name.toLowerCase().includes(q) ||
         (loan.borrower_nim || "").includes(q) ||
-        loan.game.nama.toLowerCase().includes(q)
+        loan.game.nama.toLowerCase().includes(q) ||
+        (loan.game.kode || "").toLowerCase().includes(q)
     )
   }, [loans.data, search])
 
   const statCards = [
-    { title: "Pinjaman Aktif", value: stats.total, desc: "Sedang dipinjam", color: "text-[#2F6F62]" },
+    { title: "Pinjaman Aktif", value: stats.total, desc: "Sedang dipinjam", color: "text-indigo-600" },
   ]
 
   return (
@@ -43,8 +41,8 @@ export default function Index({ loans, stats }) {
       <div className="p-4 lg:p-6 space-y-6">
         {/* Page Header */}
         <div>
-          <h1 className="text-2xl font-bold text-[#173C33]">Dashboard Peminjaman</h1>
-          <p className="text-sm text-[#2F6F62]/60 mt-1">Kelola semua aktivitas peminjaman board game</p>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard Peminjaman</h1>
+          <p className="text-sm text-gray-500 mt-1">Kelola seluruh aktivitas peminjaman board game</p>
         </div>
 
         {/* Stat Cards */}
@@ -63,8 +61,8 @@ export default function Index({ loans, stats }) {
         {/* Loans Table */}
         <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
           <div className="card-body p-0">
-            <div className="px-6 py-4 border-b border-[#E8F3EF] flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-[#173C33]">Daftar Peminjaman</h2>
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-gray-900">Daftar Peminjaman</h2>
               <div className="relative">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 <input
@@ -103,9 +101,9 @@ export default function Index({ loans, stats }) {
                             <div className="font-medium text-[#173C33]">{loan.game.nama}</div>
                           </td>
                           <td className="px-6 py-4 text-gray-700">{loan.borrower_name}</td>
-                          <td className="px-6 py-4 text-[#2F6F62]/70 font-mono text-sm">{loan.borrower_nim || "-"}</td>
-                          <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">{formatDateTime(loan.borrowed_at)}</td>
-                          <td className="px-6 py-4">{statusBadge()}</td>
+                          <td className="px-6 py-4 text-gray-500 font-mono text-sm">{loan.borrower_nim || "-"}</td>
+                          <td className="px-6 py-4 text-gray-500 text-sm">{formatDateTime(loan.borrowed_at)}</td>
+                          <td className="px-6 py-4"><BadgeStatus status="borrowed" /></td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
                               <Link

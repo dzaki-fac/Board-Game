@@ -47,7 +47,7 @@ const config = {
     border: "border-[#FDBA74]",
   },
   missing_parts: {
-    label: "Kekurangan Bagian",
+    label: "Bagian Hilang",
     bg: "bg-[#FFE9D6]",
     text: "text-[#C2410C]",
     border: "border-[#FDBA74]",

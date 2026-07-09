@@ -34,6 +34,7 @@ class BoardGameFactory extends Factory
             'nama' => fake()->randomElement($games),
             'penerbit' => $penerbit,
             'jumlah' => 1,
+            'total_copies' => 1,
             'satuan' => 'set',
             'link_foto' => null,
             'komponen' => [

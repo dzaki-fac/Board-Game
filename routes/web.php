@@ -11,12 +11,7 @@ use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\ReturnController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', [PermohonanController::class, 'create']);
-
-
-Route::get('/', [BoardGameController::class, 'katalog'])->name('katalog');
-Route::get('/katalog', [BoardGameController::class, 'katalog'])->name('katalog');
-Route::get('/katalog/{boardGame}', [BoardGameController::class, 'detail'])->name('katalog.show');
+Route::get('/', [PermohonanController::class, 'create']);
 
 Route::prefix('admin')->group(function () {
     Route::middleware('guest:admin')->group(function () {
@@ -39,8 +34,8 @@ Route::prefix('admin')->group(function () {
         Route::get('history', [HistoryController::class, 'index'])->name('history.index');
 
         Route::get('permohonan', [PermohonanController::class, 'permohonan'])->name('admin.permohonan.index');
-        Route::patch('permohonan/{permohonan}/setujui', [PermohonanController::class, 'setujui'])->name('admin.permohonan.setujui');
-        Route::patch('permohonan/{permohonan}/tolak', [PermohonanController::class, 'tolak'])->name('admin.permohonan.tolak');
+        Route::patch('permohonan/{permohonan}/approve', [PermohonanController::class, 'approve'])->name('admin.permohonan.approve');
+        Route::patch('permohonan/{permohonan}/reject', [PermohonanController::class, 'reject'])->name('admin.permohonan.reject');
 
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
 

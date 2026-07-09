@@ -73,7 +73,7 @@ export default function Login() {
                             className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none w-full"
                             disabled={processing}
                         >
-                            {processing ? "Loading..." : "Login"}
+                            {processing ? "Memuat..." : "Masuk"}
                         </button>
                     </form>
                 </div>
