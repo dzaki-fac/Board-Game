@@ -90,8 +90,15 @@ export default function Create({ loans }) {
         lost: "Hilang",
     }
 
-    function toggleComponent(index) {
-        setChecked((prev) => {
+    const conditionLabel = {
+        good: "Baik",
+        minor_damage: "Rusak Ringan",
+        damaged: "Rusak",
+        missing_parts: "Bagian Hilang",
+    }
+
+    function setQty(index, qty) {
+        setMissingQty((prev) => {
             const next = [...prev]
             next[index] = qty > 0 ? qty : null
             return next
