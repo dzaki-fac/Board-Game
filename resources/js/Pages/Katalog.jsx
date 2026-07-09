@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef, useEffect, createContext, useContext } from "react";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 
 /* ================= Palet warna UPT Perpustakaan Undip ================= */
 const WARNA = {
@@ -62,6 +62,7 @@ const TEKS = {
         boardGame: "board game",
         tersediaDipinjam: "Tersedia untuk Dipinjam",
         sedangDipinjam: "Sedang Dipinjam",
+        pinjam: "Pinjam",
         lihatDetail: "Lihat Detail",
         tidakCocok: "Tidak ada board game yang cocok dengan filter ini.",
         rekomendasi: "Rekomendasi",
@@ -101,6 +102,7 @@ const TEKS = {
         boardGame: "board games",
         tersediaDipinjam: "Available to Borrow",
         sedangDipinjam: "Currently Borrowed",
+        pinjam: "Borrow",
         lihatDetail: "View Details",
         tidakCocok: "No board games match this filter.",
         rekomendasi: "Recommended",
@@ -373,7 +375,11 @@ function KartuGame({ game, tersedia }) {
 
     return (
         <div
-            className={`group h-full flex flex-col rounded-2xl border transition-all duration-300 overflow-hidden ${
+            role="button"
+            tabIndex={0}
+            onClick={() => router.visit(`/katalog/${game.id}`)}
+            onKeyDown={(e) => { if (e.key === 'Enter') router.visit(`/katalog/${game.id}`) }}
+            className={`group h-full flex flex-col rounded-2xl border transition-all duration-300 overflow-hidden cursor-pointer ${
                 tersedia
                     ? "bg-white border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5"
                     : "bg-slate-50 border-slate-100 opacity-75"
@@ -431,7 +437,7 @@ function KartuGame({ game, tersedia }) {
                     <p className="text-xs text-slate-500 mt-0.5 truncate">{game.penerbit ?? "\u00A0"}</p>
                 </div>
 
-                <div className="mt-2">
+                <div className="mt-auto">
                     <div className="text-[11px] text-slate-500 mb-3 space-y-0.5">
                         <div className="flex items-center gap-x-1.5">
                             <span className="flex items-center gap-1 whitespace-nowrap">
@@ -450,15 +456,17 @@ function KartuGame({ game, tersedia }) {
                     </div>
 
                     {tersedia ? (
-                        <Link
-                            href={`/katalog/${game.id}`}
-                            className="block w-full rounded-full py-2 text-sm font-semibold text-white text-center transition-colors"
-                            style={{ backgroundColor: WARNA.hijauUtama }}
-                            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
-                            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
-                        >
-                            {t.lihatDetail}
-                        </Link>
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <Link
+                                href={`/katalog/${game.id}`}
+                                className="block w-full rounded-full py-2 text-sm font-semibold text-white text-center transition-colors"
+                                style={{ backgroundColor: WARNA.hijauUtama }}
+                                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
+                                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
+                            >
+                                {t.lihatDetail}
+                            </Link>
+                        </div>
                     ) : (
                         <button
                             disabled
@@ -549,21 +557,22 @@ function SlidePopuler({ games, nomor }) {
                     {games.slice(0, 5).map((game) => {
                         const [warna, bg] = warnaKategori(game.kategori);
                         return (
-                            <div
-                                key={game.id}
-                                className="shrink-0 w-[calc(50%-8px)] md:w-[calc(20%-19.2px)] rounded-md bg-white overflow-hidden shadow-md transition-transform hover:-translate-y-1"
-                            >
-                                <div className="aspect-square flex items-center justify-center bg-white p-3">
-                                    {game.link_foto?.[0] ? (
-                                        <img src={game.link_foto[0]} alt={game.nama} className="h-full w-full object-contain" />
-                                    ) : (
-                                        <IkonDadu pip={pipDariJumlahPemain(game.jumlah_pemain)} color={warna} />
-                                    )}
-                                </div>
-                                <p className="text-[11px] font-semibold text-slate-800 px-2 py-2 line-clamp-2 text-center">
-                                    {game.nama}
-                                </p>
-                            </div>
+                                <Link
+                                    key={game.id}
+                                    href={`/katalog/${game.id}`}
+                                    className="shrink-0 w-[calc(50%-8px)] md:w-[calc(20%-19.2px)] rounded-md bg-white overflow-hidden shadow-md transition-transform hover:-translate-y-1"
+                                >
+                                    <div className="aspect-square flex items-center justify-center bg-white p-3">
+                                        {game.link_foto?.[0] ? (
+                                            <img src={game.link_foto[0]} alt={game.nama} className="h-full w-full object-contain" />
+                                        ) : (
+                                            <IkonDadu pip={pipDariJumlahPemain(game.jumlah_pemain)} color={warna} />
+                                        )}
+                                    </div>
+                                    <p className="text-[11px] font-semibold text-slate-800 px-2 py-2 line-clamp-2 text-center">
+                                        {game.nama}
+                                    </p>
+                                </Link>
                         );
                     })}
                 </div>

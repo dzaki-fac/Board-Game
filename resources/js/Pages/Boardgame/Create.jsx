@@ -7,12 +7,18 @@ export default function Create() {
         box: '',
         nama: '',
         penerbit: '',
+        kategori: '',
         jumlah: '',
         satuan: '',
+        tingkat_kesulitan: '',
+        usia_minimum: '',
+        jumlah_pemain: '',
+        durasi: '',
         link_foto: [],
         lantai: '',
         komponen: [],
         barang_hilang: [],
+        populer: false,
     })
 
     const [komponenList, setKomponenList] = useState([{ jumlah: '1', nama: '' }])
@@ -116,6 +122,56 @@ export default function Create() {
                             {errors.penerbit && <p className="text-xs text-red-500 mt-1">{errors.penerbit}</p>}
                         </div>
                         <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Kategori</label>
+                            <select value={data.kategori} onChange={(e) => setData('kategori', e.target.value)} className="select select-bordered w-full select-sm">
+                                <option value="">Pilih kategori</option>
+                                <option value="Strategi">Strategi</option>
+                                <option value="Strategi Ekonomi">Strategi Ekonomi</option>
+                                <option value="Strategi Abstrak">Strategi Abstrak</option>
+                                <option value="Strategi & Keluarga">Strategi & Keluarga</option>
+                                <option value="Keluarga">Keluarga</option>
+                                <option value="Kartu">Kartu</option>
+                                <option value="Kartu & Strategi">Kartu & Strategi</option>
+                                <option value="Puzzle">Puzzle</option>
+                                <option value="Manajemen">Manajemen</option>
+                                <option value="Party">Party</option>
+                                <option value="Party & Reaksi">Party & Reaksi</option>
+                                <option value="Party & Dadu">Party & Dadu</option>
+                                <option value="Party & Deduksi">Party & Deduksi</option>
+                                <option value="Party & Kartu">Party & Kartu</option>
+                                <option value="Party & Fisik">Party & Fisik</option>
+                                <option value="Party & Kooperatif">Party & Kooperatif</option>
+                                <option value="Kooperatif">Kooperatif</option>
+                                <option value="Deduksi">Deduksi</option>
+                                <option value="Deduksi & Party">Deduksi & Party</option>
+                                <option value="Anak & Memori">Anak & Memori</option>
+                                <option value="Anak & Keluarga">Anak & Keluarga</option>
+                                <option value="Anak & Ketangkasan">Anak & Ketangkasan</option>
+                                <option value="Anak-anak">Anak-anak</option>
+                            </select>
+                            {errors.kategori && <p className="text-xs text-red-500 mt-1">{errors.kategori}</p>}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Jumlah Pemain</label>
+                            <input type="text" value={data.jumlah_pemain} onChange={(e) => setData('jumlah_pemain', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 2-4 Pemain" />
+                            {errors.jumlah_pemain && <p className="text-xs text-red-500 mt-1">{errors.jumlah_pemain}</p>}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Durasi</label>
+                            <input type="text" value={data.durasi} onChange={(e) => setData('durasi', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 60-90 Menit" />
+                            {errors.durasi && <p className="text-xs text-red-500 mt-1">{errors.durasi}</p>}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Tingkat Kesulitan (1-5)</label>
+                            <input type="number" step="0.1" min="1" max="5" value={data.tingkat_kesulitan} onChange={(e) => setData('tingkat_kesulitan', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 3.5" />
+                            {errors.tingkat_kesulitan && <p className="text-xs text-red-500 mt-1">{errors.tingkat_kesulitan}</p>}
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Usia Minimum</label>
+                            <input type="text" value={data.usia_minimum} onChange={(e) => setData('usia_minimum', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 10+" />
+                            {errors.usia_minimum && <p className="text-xs text-red-500 mt-1">{errors.usia_minimum}</p>}
+                        </div>
+                        <div>
                             <label className="block text-sm font-medium text-slate-700 mb-1">Jumlah</label>
                             <input type="number" value={data.jumlah} onChange={(e) => setData('jumlah', e.target.value)} className="input input-bordered w-full input-sm" placeholder="1" />
                             {errors.jumlah && <p className="text-xs text-red-500 mt-1">{errors.jumlah}</p>}
@@ -129,6 +185,12 @@ export default function Create() {
                             <label className="block text-sm font-medium text-slate-700 mb-1">Lantai</label>
                             <input type="number" value={data.lantai} onChange={(e) => setData('lantai', e.target.value)} className="input input-bordered w-full input-sm" placeholder="1" />
                             {errors.lantai && <p className="text-xs text-red-500 mt-1">{errors.lantai}</p>}
+                        </div>
+                        <div className="flex items-end pb-1">
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" checked={data.populer} onChange={(e) => setData('populer', e.target.checked)} className="checkbox checkbox-sm border-slate-300" />
+                                <span className="text-sm font-medium text-slate-700">Populer</span>
+                            </label>
                         </div>
                     </div>
 
@@ -231,13 +293,16 @@ export default function Create() {
                                         className="input input-bordered input-xs w-16 text-center"
                                         placeholder="Jml"
                                     />
-                                    <input
-                                        type="text"
+                                    <select
                                         value={item.nama}
                                         onChange={(e) => updateBarangHilang(index, 'nama', e.target.value)}
-                                        className="input input-bordered input-xs flex-1"
-                                        placeholder="Nama barang hilang"
-                                    />
+                                        className="select select-bordered select-xs flex-1"
+                                    >
+                                        <option value="">Pilih komponen</option>
+                                        {komponenList.filter(k => k.nama.trim()).map((k, i) => (
+                                            <option key={i} value={k.nama}>{k.nama}</option>
+                                        ))}
+                                    </select>
                                     <button type="button" onClick={() => removeBarangHilang(index)} className="btn btn-ghost btn-xs btn-square text-red-500 hover:bg-red-100" title="Hapus">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                     </button>
