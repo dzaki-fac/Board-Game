@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\BoardGame;
 use App\Models\Loan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReturnController extends Controller
 {
     public function create()
     {
+        $admin = Auth::guard('admin')->user();
+        $isSuperAdmin = $admin->isSuperAdmin();
+
         $loans = Loan::with('game')
             ->where('status', 'borrowed')
+            ->when(!$isSuperAdmin, fn ($q) => $q->whereHas('game', fn ($q2) => $q2->where('lantai', $admin->lantai)))
             ->latest()
             ->get();
 
@@ -42,6 +47,11 @@ class ReturnController extends Controller
         }
 
         $loan = Loan::findOrFail($validated['loan_id']);
+
+        $admin = Auth::guard('admin')->user();
+        if (!$admin->isSuperAdmin() && $loan->game->lantai != $admin->lantai) {
+            abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
+        }
 
         $missingComponents = ! empty($validated['missing_components'])
             ? json_encode($validated['missing_components'], JSON_UNESCAPED_UNICODE)

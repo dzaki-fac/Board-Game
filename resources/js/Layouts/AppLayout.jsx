@@ -1,4 +1,4 @@
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
 const navItems = [
     { label: "Home", href: "/peminjaman/create" },
@@ -11,6 +11,7 @@ const navItems = [
 ];
 
 export default function Layout({ children }) {
+    const admin = usePage().props.auth?.admin;
     return (
         <div className="drawer">
             <input id="drawer" type="checkbox" className="drawer-toggle" />
@@ -38,12 +39,10 @@ export default function Layout({ children }) {
                             </svg>
                         </label>
                     </div>
-                    <div href='/peminjaman/create' className="flex-none gap-2 flex items-center">
-                        <div className="avatar placeholder hidden sm:flex">
-                            <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-xs font-medium">
-                                AD
-                            </div>
-                        </div>
+                    <div className="flex-none gap-2 flex items-center">
+                        <span className="text-sm font-medium text-gray-700 hidden sm:block">
+                            {admin?.name}
+                        </span>
                     </div>
                 </div>
 
