@@ -13,7 +13,7 @@ class AdminAccountController extends Controller
 {
     public function index()
     {
-        $admins = Admin::select(['id', 'name', 'email', 'role', 'created_at'])->get();
+        $admins = Admin::select(['id', 'name', 'email', 'role', 'lantai', 'created_at'])->get();
 
         return Inertia::render('Accounts/Account', [
             'admins' => $admins,
@@ -27,6 +27,7 @@ class AdminAccountController extends Controller
             'email' => 'required|email|unique:admins,email',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:admin,superadmin',
+            'lantai' => [$request->role === 'admin' ? 'required' : 'nullable', 'string', 'max:50'],
         ]);
 
         Admin::create([
@@ -34,6 +35,7 @@ class AdminAccountController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
+            'lantai' => $validated['lantai'] ?? '',
         ]);
 
         return redirect()->route('admin.accounts.index')->with('flash', 'Admin berhasil ditambahkan.');
@@ -56,12 +58,14 @@ class AdminAccountController extends Controller
             'email' => 'required|email|unique:admins,email,' . $admin->id,
             'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|in:admin,superadmin',
+            'lantai' => [$request->role === 'admin' ? 'required' : 'nullable', 'string', 'max:50'],
         ]);
 
         $data = [
             'name' => $validated['name'],
             'email' => $validated['email'],
             'role' => $validated['role'],
+            'lantai' => $validated['lantai'] ?? '',
         ];
 
         if (!empty($validated['password'])) {

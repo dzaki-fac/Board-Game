@@ -18,22 +18,22 @@ class AdminSeeder extends Seeder
         ]);
 
         Admin::create([
-            'name' => 'Siti Rahmawati',
-            'email' => 'siti.rahmawati@perpus.ac.id',
+            'name' => 'Admin 1',
+            'email' => 'admin1@perpus.ac.id',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
         ]);
 
         Admin::create([
-            'name' => 'Bambang Suprapto',
-            'email' => 'bambang.suprapto@perpus.ac.id',
+            'name' => 'Admin 2',
+            'email' => 'admin2@perpus.ac.id',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
         ]);
 
         Admin::create([
-            'name' => 'Dewi Sartika',
-            'email' => 'dewi.sartika@perpus.ac.id',
+            'name' => 'Admin 3',
+            'email' => 'admin3@perpus.ac.id',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
         ]);
