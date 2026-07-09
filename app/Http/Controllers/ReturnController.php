@@ -31,7 +31,8 @@ class ReturnController extends Controller
             'loan_id' => ['required', 'exists:loans,id'],
             'return_condition' => ['nullable', 'string', 'in:good,minor_damage,damaged,missing_parts'],
             'missing_components' => ['nullable', 'array'],
-            'missing_components.*' => ['string'],
+            'missing_components.*.nama' => ['required', 'string'],
+            'missing_components.*.jumlah' => ['required', 'integer', 'min:1'],
             'fine_amount' => ['nullable', 'numeric', 'min:0'],
             'return_notes' => ['nullable', 'string'],
             'status' => ['required', 'string', 'in:returned,not_returned,lost'],
@@ -69,6 +70,29 @@ class ReturnController extends Controller
 
         if (in_array($validated['status'], ['returned', 'not_returned'])) {
             BoardGame::where('id', $loan->boardgame_id)->increment('available_copies');
+        }
+
+        // Simpan ke barang_hilang boardgame
+        if (! empty($validated['missing_components'])) {
+            $boardgame = BoardGame::findOrFail($loan->boardgame_id);
+            $existing = $boardgame->barang_hilang ?? [];
+
+            foreach ($validated['missing_components'] as $mc) {
+                $found = false;
+                foreach ($existing as &$item) {
+                    if ($item['nama'] === $mc['nama']) {
+                        $item['jumlah'] += $mc['jumlah'];
+                        $found = true;
+                        break;
+                    }
+                }
+                if (! $found) {
+                    $existing[] = ['nama' => $mc['nama'], 'jumlah' => $mc['jumlah']];
+                }
+            }
+
+            $boardgame->barang_hilang = $existing;
+            $boardgame->save();
         }
 
         return to_route('loans.index');

@@ -36,7 +36,10 @@ class BoardGameFactory extends Factory
             'jumlah' => 1,
             'satuan' => 'set',
             'link_foto' => null,
-            'komponen' => fake()->sentence(20),
+            'komponen' => [
+                ['nama' => fake()->randomElement(['Kartu', 'Dadu', 'Papan', 'Token', 'Bidak', 'Koin', 'Kubus', 'Lembar Skor']), 'jumlah' => fake()->numberBetween(1, 100)],
+                ['nama' => fake()->randomElement(['Rulebook', 'Timer', 'Kantong', 'Mat', 'Spinner', 'Card Sleeve']), 'jumlah' => fake()->numberBetween(1, 10)],
+            ],
             'lantai' => fake()->numberBetween(1, 3),
         ];
     }

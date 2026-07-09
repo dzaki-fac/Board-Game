@@ -27,14 +27,14 @@ function parseMissingComponents(value) {
 export default function Show({ loan }) {
     return (
         <>
-            <Head title="Loan Detail" />
+            <Head title="Detail Peminjaman" />
 
             <div className="p-4 lg:p-6 space-y-6">
                 {/* Page Header */}
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">
-                            Loan Detail
+                            Detail Peminjaman
                         </h1>
                         <p className="text-sm text-gray-500 mt-1">
                             #{loan.id} — {loan.game.nama}
@@ -62,7 +62,7 @@ export default function Show({ loan }) {
                                 d="M10 19l-7-7m0 0l7-7m-7 7h18"
                             />
                         </svg>
-                        Back
+                        Kembali
                     </Link>
                 </div>
 
@@ -72,7 +72,7 @@ export default function Show({ loan }) {
                         <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
                             <div className="card-body p-6 space-y-6">
                                 <h2 className="text-lg font-semibold text-gray-900">
-                                    Borrowing Information
+                                    Informasi Peminjaman
                                 </h2>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -86,7 +86,7 @@ export default function Show({ loan }) {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                            Borrower
+                                            Peminjam
                                         </p>
                                         <p className="text-sm font-medium text-gray-900 mt-1">
                                             {loan.borrower_name}
@@ -94,7 +94,7 @@ export default function Show({ loan }) {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                            Borrowed At
+                                            Dipinjam
                                         </p>
                                         <p className="text-sm text-gray-700 mt-1">
                                             {formatDateTime(loan.borrowed_at)}
@@ -102,7 +102,7 @@ export default function Show({ loan }) {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                            Returned At
+                                            Dikembalikan
                                         </p>
                                         <p className="text-sm text-gray-700 mt-1">
                                             {formatDateTime(loan.returned_at)}
@@ -118,7 +118,7 @@ export default function Show({ loan }) {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                            Condition
+                                            Kondisi
                                         </p>
                                         <div className="mt-1">
                                             <BadgeCondition
@@ -128,7 +128,7 @@ export default function Show({ loan }) {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                            Fine Amount
+                                            Denda
                                         </p>
                                         <p className="text-sm font-medium text-gray-900 mt-1">
                                             {loan.fine_amount
@@ -138,7 +138,7 @@ export default function Show({ loan }) {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                            Game ID
+                                            ID Game
                                         </p>
                                         <p className="text-sm font-mono text-gray-500 mt-1">
                                             #{loan.boardgame_id}
@@ -149,7 +149,7 @@ export default function Show({ loan }) {
                                 {loan.notes && (
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">
-                                            Notes
+                                            Catatan
                                         </p>
                                         <p className="text-sm text-gray-700 bg-gray-50 rounded-lg p-3">
                                             {loan.notes}
@@ -165,7 +165,7 @@ export default function Show({ loan }) {
                                     return (
                                         <div>
                                             <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">
-                                                Missing Components
+                                                Komponen Hilang
                                             </p>
                                             <ul className="text-sm text-red-600 bg-red-50 rounded-lg p-3 space-y-1 list-disc list-inside">
                                                 {list.map((item, i) => (
@@ -184,20 +184,20 @@ export default function Show({ loan }) {
                         <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
                             <div className="card-body p-6">
                                 <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
-                                    Quick Actions
+                                    Aksi Cepat
                                 </h3>
                                 <div className="space-y-3">
                                     <Link
                                         href="/admin/history"
                                         className="btn btn-outline btn-sm w-full"
                                     >
-                                        Back to History
+                                        Ke Riwayat
                                     </Link>
                                     <Link
                                         href="/admin/loans"
                                         className="btn btn-outline btn-sm w-full"
                                     >
-                                        Back to Loans
+                                        Ke Peminjaman
                                     </Link>
                                 </div>
                             </div>
