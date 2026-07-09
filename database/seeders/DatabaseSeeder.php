@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        Admin::truncate();
+        // Admin::truncate();
         $this->call([
             AdminSeeder::class,
             
@@ -28,9 +28,5 @@ class DatabaseSeeder extends Seeder
         // Loan::truncate();
         // $this->call(LoanSeeder::class);
 
-        // $this->call([
-        //     GameSeeder::class,
-            
-        // ]);
     }
 }

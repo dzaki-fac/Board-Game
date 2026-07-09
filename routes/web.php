@@ -1,16 +1,22 @@
 <?php
 
+use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AuthenticatedSessionController;
-use App\Http\Controllers\BoardGameController;
+
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PermohonanController;
-use App\Http\Controllers\PostController;
+
 use App\Http\Controllers\ReturnController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [PermohonanController::class, 'create']);
+// Route::get('/', [PermohonanController::class, 'create']);
+
+
+Route::get('/', [BoardGameController::class, 'katalog'])->name('katalog');
+Route::get('/katalog', [BoardGameController::class, 'katalog'])->name('katalog');
+Route::get('/katalog/{boardGame}', [BoardGameController::class, 'detail'])->name('katalog.show');
 
 Route::prefix('admin')->group(function () {
     Route::middleware('guest:admin')->group(function () {
@@ -19,6 +25,7 @@ Route::prefix('admin')->group(function () {
     });
 
     Route::middleware('auth:admin')->group(function () {
+        Route::get('/', [BoardGameController::class, 'index']);
         
         Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
 
@@ -48,3 +55,4 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/peminjaman/create', [PermohonanController::class, 'create'])->name('peminjaman.create');
 Route::post('/peminjaman', [PermohonanController::class, 'store'])->name('peminjaman.store');
+Route::get('/peminjaman/{permohonan}/konfirmasi', [PermohonanController::class, 'konfirmasi'])->name('peminjaman.konfirmasi');

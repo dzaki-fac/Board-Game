@@ -2,27 +2,23 @@
 
 namespace App\Models;
 
-use Database\Factories\BoardGameFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
-    'kode',
-    'box',
-    'nama',
-    'penerbit',
-    'jumlah',
-    'available_copies',
-    'satuan',
-    'link_foto',
-    'komponen',
-    'barang_hilang',
-    'lantai',
+    'kode', 'box', 'lantai', 'nama', 'penerbit', 'jumlah', 'satuan',
+    'deskripsi_isi', 'kategori', 'jumlah_pemain', 'durasi', 'gambar', 'gambar_hover',
+    'status', 'populer', 'tingkat_kesulitan', 'usia_minimum'
 ])]
 class BoardGame extends Model
 {
     use HasFactory;
+
+    public function isTersedia(): bool
+    {
+        return $this->available_copies > 0;
+    }
 
     protected function casts(): array
     {
@@ -30,6 +26,7 @@ class BoardGame extends Model
             'link_foto' => 'array',
             'komponen' => 'array',
             'barang_hilang' => 'array',
+            'populer' => 'boolean',
         ];
     }
 }
