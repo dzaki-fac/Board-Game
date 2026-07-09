@@ -14,13 +14,13 @@ export default function Login() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="min-h-screen flex items-center justify-center bg-[#FAF7F2]">
             <div className="card w-full max-w-md bg-white shadow-xl">
                 <div className="card-body p-8">
                     <h2 className="text-2xl font-bold text-center mb-2">
                         Login Admin
                     </h2>
-                    <p className="text-center text-sm text-gray-500 mb-6">
+                    <p className="text-center text-sm text-[#2F6F62]/70 mb-6">
                         Sistem Peminjaman Board Game
                     </p>
 
@@ -70,7 +70,7 @@ export default function Login() {
 
                         <button
                             type="submit"
-                            className="btn btn-primary w-full"
+                            className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none w-full"
                             disabled={processing}
                         >
                             {processing ? "Loading..." : "Login"}

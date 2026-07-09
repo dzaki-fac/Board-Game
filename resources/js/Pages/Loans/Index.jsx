@@ -33,7 +33,7 @@ export default function Index({ loans, stats }) {
   }, [loans.data, search])
 
   const statCards = [
-    { title: "Pinjaman Aktif", value: stats.total, desc: "Sedang dipinjam", color: "text-indigo-600" },
+    { title: "Pinjaman Aktif", value: stats.total, desc: "Sedang dipinjam", color: "text-[#2F6F62]" },
   ]
 
   return (
@@ -43,16 +43,16 @@ export default function Index({ loans, stats }) {
       <div className="p-4 lg:p-6 space-y-6">
         {/* Page Header */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Dashboard Peminjaman</h1>
-          <p className="text-sm text-gray-500 mt-1">Kelola semua aktivitas peminjaman board game</p>
+          <h1 className="text-2xl font-bold text-[#173C33]">Dashboard Peminjaman</h1>
+          <p className="text-sm text-[#2F6F62]/60 mt-1">Kelola semua aktivitas peminjaman board game</p>
         </div>
 
         {/* Stat Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {statCards.map((card) => (
-            <div key={card.title} className="stats shadow border border-gray-100 bg-white rounded-xl">
+            <div key={card.title} className="stats shadow border border-[#E8F3EF] bg-white rounded-xl">
               <div className="stat">
-                <div className="stat-title text-gray-500 text-xs font-medium uppercase tracking-wider">{card.title}</div>
+                <div className="stat-title text-[#2F6F62]/70 text-xs font-medium uppercase tracking-wider">{card.title}</div>
                 <div className={`stat-value text-3xl font-bold ${card.color}`}>{card.value}</div>
                 <div className="stat-desc text-gray-400 text-xs">{card.desc}</div>
               </div>
@@ -61,10 +61,10 @@ export default function Index({ loans, stats }) {
         </div>
 
         {/* Loans Table */}
-        <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+        <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
           <div className="card-body p-0">
-            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Daftar Peminjaman</h2>
+            <div className="px-6 py-4 border-b border-[#E8F3EF] flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-[#173C33]">Daftar Peminjaman</h2>
               <div className="relative">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 <input
@@ -87,7 +87,7 @@ export default function Index({ loans, stats }) {
                 <div className="overflow-x-auto">
                   <table className="table">
                     <thead>
-                      <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                      <tr className="bg-[#FAF7F2] text-[#173C33]/60 text-xs uppercase tracking-wider">
                         <th className="px-6 py-3 font-medium">Game</th>
                         <th className="px-6 py-3 font-medium">Peminjam</th>
                         <th className="px-6 py-3 font-medium">NIM</th>
@@ -98,19 +98,19 @@ export default function Index({ loans, stats }) {
                     </thead>
                     <tbody>
                       {filtered.map((loan) => (
-                        <tr key={loan.id} className="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <tr key={loan.id} className="hover:bg-[#FAF7F2] transition-colors border-b border-[#E8F3EF]">
                           <td className="px-6 py-4">
-                            <div className="font-medium text-gray-900">{loan.game.nama}</div>
+                            <div className="font-medium text-[#173C33]">{loan.game.nama}</div>
                           </td>
                           <td className="px-6 py-4 text-gray-700">{loan.borrower_name}</td>
-                          <td className="px-6 py-4 text-gray-500 font-mono text-sm">{loan.borrower_nim || "-"}</td>
-                          <td className="px-6 py-4 text-gray-500 text-sm">{formatDateTime(loan.borrowed_at)}</td>
+                          <td className="px-6 py-4 text-[#2F6F62]/70 font-mono text-sm">{loan.borrower_nim || "-"}</td>
+                          <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">{formatDateTime(loan.borrowed_at)}</td>
                           <td className="px-6 py-4">{statusBadge()}</td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
                               <Link
                                 href={`/admin/loans/${loan.id}`}
-                                className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-blue-600"
+                                className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-[#2F6F62]"
                                 title="Detail"
                               >
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
@@ -125,7 +125,7 @@ export default function Index({ loans, stats }) {
 
                 {/* Pagination */}
                 {loans.links && loans.links.length > 3 && (
-                  <div className="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100">
+                  <div className="flex items-center justify-center gap-1 px-6 py-4 border-t border-[#E8F3EF]">
                     {loans.links.map((link, i) =>
                       link.url ? (
                         <Link
@@ -133,9 +133,9 @@ export default function Index({ loans, stats }) {
                           href={link.url}
                           preserveScroll
                           className={`btn btn-sm min-w-9 ${
-                            link.active
-                              ? "btn-primary"
-                              : "btn-ghost text-gray-600"
+                                                         link.active
+                                                              ? "bg-[#2F6F62] text-white border-none"
+                                                              : "btn-ghost text-gray-600"
                           }`}
                           dangerouslySetInnerHTML={{ __html: link.label }}
                         />

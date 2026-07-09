@@ -44,7 +44,7 @@ export default function Index({ histories, stats }) {
             title: "Total Riwayat",
             value: stats.total,
             desc: "Semua riwayat peminjaman",
-            color: "text-blue-600",
+            color: "text-[#2F6F62]",
         },
         {
             title: "Dikembalikan",
@@ -108,8 +108,8 @@ export default function Index({ histories, stats }) {
             <div className="p-4 lg:p-6 space-y-6">
                 {/* Page Header */}
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Riwayat Peminjaman</h1>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <h1 className="text-2xl font-bold text-[#173C33]">Riwayat Peminjaman</h1>
+                    <p className="text-sm text-[#2F6F62]/60 mt-1">
                         Lihat dan kelola semua riwayat peminjaman board game
                     </p>
                 </div>
@@ -119,10 +119,10 @@ export default function Index({ histories, stats }) {
                     {statCards.map((card) => (
                         <div
                             key={card.title}
-                            className="stats shadow border border-gray-100 bg-white rounded-xl"
+                            className="stats shadow border border-[#E8F3EF] bg-white rounded-xl"
                         >
                             <div className="stat">
-                                <div className="stat-title text-gray-500 text-xs font-medium uppercase tracking-wider">
+                                <div className="stat-title text-[#2F6F62]/70 text-xs font-medium uppercase tracking-wider">
                                     {card.title}
                                 </div>
                                 <div className={`stat-value text-3xl font-bold ${card.color}`}>
@@ -135,14 +135,14 @@ export default function Index({ histories, stats }) {
                 </div>
 
                 {/* Filters Card */}
-                <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                     <div className="card-body p-6">
-                        <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter</h2>
+                            <h2 className="text-lg font-semibold text-[#173C33] mb-4">Filter</h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                             {/* Search */}
                             <div>
-                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
+                                <label className="text-xs font-medium text-[#2F6F62]/70 uppercase tracking-wider block mb-1.5">
                                     Cari
                                 </label>
                                 <div className="relative">
@@ -172,19 +172,19 @@ export default function Index({ histories, stats }) {
 
                             {/* Status Filter */}
                             <div>
-                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
+                                <label className="text-xs font-medium text-[#2F6F62]/70 uppercase tracking-wider block mb-1.5">
                                     Status
                                 </label>
                                 <div className="relative">
                                     <button
                                         type="button"
                                         onClick={() => setOpen((prev) => !prev)}
-                                        className="flex items-center gap-2 w-full h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
+                                        className="flex items-center gap-2 w-full h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F6F62] transition-colors"
                                     >
                                         {statusFilter ? (
                                             <BadgeStatus value={statusFilter} />
                                         ) : (
-                                            <span className="text-gray-500">Semua</span>
+                                            <span className="text-[#2F6F62]/70">Semua</span>
                                         )}
                                         <svg
                                             className={`w-4 h-4 ml-auto text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
@@ -201,15 +201,15 @@ export default function Index({ histories, stats }) {
                                     {open && (
                                         <>
                                             <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-                                            <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-xl shadow-lg py-1">
+                                            <div className="absolute z-20 mt-1 w-full bg-white border border-[#E8F3EF] rounded-xl shadow-lg py-1">
                                                 <button
                                                     type="button"
                                                     onClick={() => { setStatusFilter(""); setOpen(false) }}
-                                                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${!statusFilter ? "bg-indigo-50" : ""}`}
+                                                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${!statusFilter ? "bg-[#E8F3EF]" : ""}`}
                                                 >
-                                                    <span className="text-gray-500">Semua</span>
+                                                    <span className="text-[#2F6F62]/70">Semua</span>
                                                     {!statusFilter && (
-                                                        <svg className="w-4 h-4 ml-auto text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                        <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                             <polyline points="20 6 9 17 4 12" />
                                                         </svg>
                                                     )}
@@ -219,11 +219,11 @@ export default function Index({ histories, stats }) {
                                                         key={opt}
                                                         type="button"
                                                         onClick={() => { setStatusFilter(opt); setOpen(false) }}
-                                                        className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-gray-50 transition-colors ${statusFilter === opt ? "bg-indigo-50" : ""}`}
+                                                        className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${statusFilter === opt ? "bg-[#E8F3EF]" : ""}`}
                                                     >
                                                         <BadgeStatus value={opt} />
                                                         {statusFilter === opt && (
-                                                            <svg className="w-4 h-4 ml-auto text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                            <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                                 <polyline points="20 6 9 17 4 12" />
                                                             </svg>
                                                         )}
@@ -240,7 +240,7 @@ export default function Index({ histories, stats }) {
                         <div className="mt-4 flex justify-end">
                             <button
                                 onClick={handleExport}
-                                className="btn btn-primary btn-sm gap-2"
+                                className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm gap-2"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -263,10 +263,10 @@ export default function Index({ histories, stats }) {
                 </div>
 
                 {/* History Table Card */}
-                <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                     <div className="card-body p-0">
-                        <div className="px-6 py-4 border-b border-gray-100">
-                            <h2 className="text-lg font-semibold text-gray-900">
+                        <div className="px-6 py-4 border-b border-[#E8F3EF]">
+                            <h2 className="text-lg font-semibold text-[#173C33]">
                                 Riwayat Peminjaman
                             </h2>
                         </div>
@@ -316,7 +316,7 @@ export default function Index({ histories, stats }) {
                                 <div className="overflow-x-auto">
                                     <table className="table">
                                         <thead>
-                                            <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
+                                            <tr className="bg-[#FAF7F2] text-[#173C33]/60 text-xs uppercase tracking-wider">
                                                 <th className="px-6 py-3 font-medium">ID</th>
                                                 <th className="px-6 py-3 font-medium">Peminjam</th>
                                                 <th className="px-6 py-3 font-medium">Board Game</th>
@@ -334,25 +334,25 @@ export default function Index({ histories, stats }) {
                                             {(histories.data || []).map((loan) => (
                                                 <tr
                                                     key={loan.id}
-                                                    className="hover:bg-gray-50 transition-colors border-b border-gray-100"
+                                                    className="hover:bg-[#FAF7F2] transition-colors border-b border-[#E8F3EF]"
                                                 >
                                                     <td className="px-6 py-4">
-                                                        <span className="text-sm font-mono text-gray-500">
+                                                        <span className="text-sm font-mono text-[#2F6F62]/70">
                                                             #{loan.id}
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <span className="font-medium text-gray-900">
+                                                        <span className="font-medium text-[#173C33]">
                                                             {loan.borrower_name}
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4 text-gray-700">
                                                         {loan.game.nama}
                                                     </td>
-                                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                                    <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">
                                                         {formatDateTime(loan.borrowed_at)}
                                                     </td>
-                                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                                    <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">
                                                         {formatDateTime(loan.returned_at)}
                                                     </td>
                                                     <td className="px-6 py-4">
@@ -361,7 +361,7 @@ export default function Index({ histories, stats }) {
                                                     <td className="px-6 py-4">
                                                         <BadgeCondition value={loan.return_condition} />
                                                     </td>
-                                                    <td className="px-6 py-4 text-sm text-gray-500">
+                                                    <td className="px-6 py-4 text-sm text-[#2F6F62]/70">
                                                         {loan.fine_amount
                                                             ? `Rp ${Number(loan.fine_amount).toLocaleString("id-ID")}`
                                                             : "-"}
@@ -370,7 +370,7 @@ export default function Index({ histories, stats }) {
                                                         <div className="flex items-center justify-end gap-1">
                                                             <Link
                                                                 href={`/admin/loans/${loan.id}`}
-                                                                className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-blue-600"
+                                                                className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-[#2F6F62]"
                                                                 title="Detail"
                                                             >
                                                                 <svg
@@ -424,7 +424,7 @@ export default function Index({ histories, stats }) {
 
                                 {/* Pagination */}
                                 {histories.links && histories.links.length > 3 && (
-                                    <div className="flex items-center justify-center gap-1 px-6 py-4 border-t border-gray-100">
+                                    <div className="flex items-center justify-center gap-1 px-6 py-4 border-t border-[#E8F3EF]">
                                         {histories.links.map((link, i) =>
                                             link.url ? (
                                                 <Link
@@ -433,7 +433,7 @@ export default function Index({ histories, stats }) {
                                                     preserveScroll
                                                     className={`btn btn-sm min-w-9 ${
                                                         link.active
-                                                            ? "btn-primary"
+                                                            ? "bg-[#2F6F62] text-white border-none"
                                                             : "btn-ghost text-gray-600"
                                                     }`}
                                                     dangerouslySetInnerHTML={{

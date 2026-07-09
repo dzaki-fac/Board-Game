@@ -71,7 +71,7 @@ export default function Permohonan({ permohonan, total, total_menunggu, total_di
                 <td className="flex gap-2">
                   {p.status === 'menunggu' && (
                     <>
-                      <button className="btn btn-sm btn-primary" onClick={() => setujui(p.id)}>Setujui</button>
+                      <button className="btn btn-sm bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none" onClick={() => setujui(p.id)}>Setujui</button>
                       <button className="btn btn-sm btn-error" onClick={() => tolak(p.id)}>Tolak</button>
                     </>
                   )}
@@ -89,7 +89,7 @@ export default function Permohonan({ permohonan, total, total_menunggu, total_di
               key={link.label}
               href={link.url}
               dangerouslySetInnerHTML={{ __html: link.label }}
-              className={`px-2 ${link.active ? "font-bold text-blue-600" : ""}`}
+              className={`px-2 ${link.active ? "font-bold text-[#2F6F62]" : ""}`}
               preserveScroll
             />
           ) : (

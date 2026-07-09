@@ -63,7 +63,7 @@ export default function Games({ boardgames }) {
         <div className="p-6">
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold text-slate-900">Board Games</h1>
-                <Link href="/admin/games/create" className="btn bg-blue-600 hover:bg-blue-700 text-white border-none btn-sm">
+                <Link href="/admin/games/create" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
                     Add Game
                 </Link>
@@ -105,7 +105,7 @@ export default function Games({ boardgames }) {
             <div className="overflow-x-auto bg-white rounded-lg shadow">
                 <table className="table table-zebra w-full">
                     <thead>
-                        <tr className="bg-slate-800 text-slate-200 text-sm uppercase">
+                        <tr className="bg-[#173C33] text-[#FAF7F2]/80 text-sm uppercase">
                             <th className="px-4 py-3 w-24 text-center">Actions</th>
                             <th className="px-4 py-3 text-center">Foto</th>
                             <th className="px-4 py-3 cursor-pointer select-none hover:text-white" onClick={() => toggleSort('kode')}>Kode{sortArrow('kode')}</th>
@@ -126,7 +126,7 @@ export default function Games({ boardgames }) {
                                         <Link href={`/admin/games/${game.id}`} className="btn btn-ghost btn-xs btn-square text-slate-500 hover:text-slate-800 hover:bg-slate-100" title="Detail">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                         </Link>
-                                        <Link href={`/admin/games/${game.id}/edit`} className="btn btn-ghost btn-xs btn-square text-blue-600 hover:text-blue-800 hover:bg-blue-50" title="Edit">
+                                        <Link href={`/admin/games/${game.id}/edit`} className="btn btn-ghost btn-xs btn-square text-[#2F6F62] hover:text-[#255A4F] hover:bg-[#E8F3EF]" title="Edit">
                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                         </Link>
                                         <Link href={`/admin/games/${game.id}`} method="delete" as="button" className="btn btn-ghost btn-xs btn-square text-red-600 hover:text-red-800 hover:bg-red-50" title="Hapus"
@@ -186,7 +186,7 @@ export default function Games({ boardgames }) {
                                 href={link.url || '#'}
                                 preserveState
                                 replace
-                                className={`btn btn-xs ${link.active ? 'bg-blue-600 text-white' : 'btn-ghost'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
+                                                className={`btn btn-xs ${link.active ? 'bg-[#2F6F62] text-white' : 'btn-ghost'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />
                         ))}

@@ -82,14 +82,14 @@ export default function Create() {
         <div className="p-6 max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold text-slate-900">Tambah Board Game</h1>
-                <Link href="/admin/games" className="btn bg-blue-600 hover:bg-blue-700 text-white border-none btn-sm">
+                <Link href="/admin/games" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     Kembali
                 </Link>
             </div>
 
             <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="bg-slate-800 text-slate-200 px-6 py-4">
+                <div className="bg-[#173C33] text-[#FAF7F2]/80 px-6 py-4">
                     <h2 className="text-sm font-semibold uppercase tracking-wider">Form Tambah Board Game</h2>
                 </div>
 
@@ -136,7 +136,7 @@ export default function Create() {
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
                             <label className="block text-sm font-medium text-slate-700">Link Foto</label>
-                            <button type="button" onClick={addLinkFoto} className="btn bg-blue-600 hover:bg-blue-700 text-white border-none btn-xs">
+                            <button type="button" onClick={addLinkFoto} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-xs">
                                 + Tambah link foto
                             </button>
                         </div>
@@ -182,7 +182,7 @@ export default function Create() {
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
                             <label className="block text-sm font-medium text-slate-700">Komponen</label>
-                            <button type="button" onClick={addKomponen} className="btn bg-blue-600 hover:bg-blue-700 text-white border-none btn-xs">
+                            <button type="button" onClick={addKomponen} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-xs">
                                 + Tambah komponen
                             </button>
                         </div>
@@ -216,7 +216,7 @@ export default function Create() {
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
                             <label className="block text-sm font-medium text-slate-700">Barang Hilang</label>
-                            <button type="button" onClick={addBarangHilang} className="btn bg-blue-600 hover:bg-blue-700 text-white border-none btn-xs">
+                            <button type="button" onClick={addBarangHilang} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-xs">
                                 + Tambah barang hilang
                             </button>
                         </div>
@@ -247,7 +247,7 @@ export default function Create() {
                     </div>
 
                     <div className="flex items-center gap-3 pt-3 border-t border-slate-200">
-                        <button type="submit" disabled={processing} className="btn bg-blue-600 hover:bg-blue-700 text-white border-none btn-sm">
+                        <button type="submit" disabled={processing} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
                             {processing ? 'Menyimpan...' : 'Simpan'}
                         </button>
                         <Link href="/admin/games" className="btn btn-ghost btn-sm">Batal</Link>
