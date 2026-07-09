@@ -10,7 +10,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReturnController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', [PermohonanController::class, 'create']);
+Route::get('/', [PermohonanController::class, 'create']);
 
 Route::prefix('admin')->group(function () {
     Route::middleware('guest:admin')->group(function () {
