@@ -1,14 +1,35 @@
+import { useMemo } from "react"
+
 const icons = {
-  returned: (
+  pending: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+  ),
+  approved: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
       <polyline points="22 4 12 14.01 9 11.01" />
     </svg>
   ),
-  not_returned: (
+  rejected: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
       <circle cx="12" cy="12" r="10" />
-      <polyline points="12 6 12 12 16 14" />
+      <line x1="15" y1="9" x2="9" y2="15" />
+      <line x1="9" y1="9" x2="15" y2="15" />
+    </svg>
+  ),
+  borrowed: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 19.5z" />
+      <polyline points="9 2 9 11 12 9 15 11 15 2" />
+    </svg>
+  ),
+  returned: (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+      <polyline points="22 4 12 14.01 9 11.01" />
     </svg>
   ),
   lost: (
@@ -21,33 +42,65 @@ const icons = {
 }
 
 const config = {
-  returned: {
-    label: "Returned",
+  pending: {
+    label: "Menunggu",
+    bg: "bg-[#FFF4CC]",
+    text: "text-[#A16207]",
+    border: "border-[#FACC15]",
+  },
+  approved: {
+    label: "Disetujui",
     bg: "bg-[#E8F6ED]",
     text: "text-[#15803D]",
     border: "border-[#86EFAC]",
   },
-  not_returned: {
-    label: "Not Returned",
-    bg: "bg-[#EEF1F5]",
-    text: "text-[#475569]",
-    border: "border-[#CBD5E1]",
+  rejected: {
+    label: "Ditolak",
+    bg: "bg-[#FDE8E8]",
+    text: "text-[#DC2626]",
+    border: "border-[#FCA5A5]",
+  },
+  borrowed: {
+    label: "Dipinjam",
+    bg: "bg-[#EEF0FD]",
+    text: "text-[#4338CA]",
+    border: "border-[#A5B4FC]",
+  },
+  returned: {
+    label: "Dikembalikan",
+    bg: "bg-[#E8F6ED]",
+    text: "text-[#15803D]",
+    border: "border-[#86EFAC]",
   },
   lost: {
-    label: "Lost",
+    label: "Hilang",
     bg: "bg-[#FDE8E8]",
     text: "text-[#DC2626]",
     border: "border-[#FCA5A5]",
   },
 }
 
-export default function BadgeStatus({ value }) {
-  const c = config[value]
+const normalizeMap = {
+  menunggu: "pending",
+  disetujui: "approved",
+  ditolak: "rejected",
+  dipinjam: "borrowed",
+  dikembalikan: "returned",
+  hilang: "lost",
+}
+
+export default function BadgeStatus({ status }) {
+  const normalized = useMemo(() => {
+    const key = status?.toLowerCase?.()
+    return normalizeMap[key] || key
+  }, [status])
+
+  const c = config[normalized]
   if (!c) return <span className="text-sm text-gray-400">-</span>
 
   return (
     <span className={`inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap border ${c.bg} ${c.text} ${c.border}`}>
-      {icons[value]}
+      {icons[normalized]}
       {c.label}
     </span>
   )

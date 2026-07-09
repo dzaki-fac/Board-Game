@@ -32,8 +32,8 @@ Route::prefix('admin')->group(function () {
         Route::get('history', [HistoryController::class, 'index'])->name('history.index');
 
         Route::get('permohonan', [PermohonanController::class, 'permohonan'])->name('admin.permohonan.index');
-        Route::patch('permohonan/{permohonan}/setujui', [PermohonanController::class, 'setujui'])->name('admin.permohonan.setujui');
-        Route::patch('permohonan/{permohonan}/tolak', [PermohonanController::class, 'tolak'])->name('admin.permohonan.tolak');
+        Route::patch('permohonan/{permohonan}/approve', [PermohonanController::class, 'approve'])->name('admin.permohonan.approve');
+        Route::patch('permohonan/{permohonan}/reject', [PermohonanController::class, 'reject'])->name('admin.permohonan.reject');
 
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
 

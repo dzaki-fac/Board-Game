@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BoardGame;
 use App\Models\Loan;
+use App\Models\Permohonan;
 use Illuminate\Http\Request;
 
 class ReturnController extends Controller
@@ -29,14 +30,14 @@ class ReturnController extends Controller
             'missing_components.*' => ['string'],
             'fine_amount' => ['nullable', 'numeric', 'min:0'],
             'return_notes' => ['nullable', 'string'],
-            'status' => ['required', 'string', 'in:returned,not_returned,lost'],
+            'status' => ['required', 'string', 'in:returned,lost'],
         ]);
 
         if ($validated['status'] === 'returned' && empty($validated['return_condition'])) {
             return back()->withErrors(['return_condition' => 'Condition is required when status is Returned.'])->withInput();
         }
 
-        if (in_array($validated['status'], ['not_returned', 'lost'])) {
+        if ($validated['status'] === 'lost') {
             $validated['return_condition'] = null;
         }
 
@@ -57,8 +58,12 @@ class ReturnController extends Controller
 
         $loan->update($updateData);
 
-        if (in_array($validated['status'], ['returned', 'not_returned'])) {
-            BoardGame::where('id', $loan->boardgame_id)->increment('available_copies');
+        if ($validated['status'] === 'returned') {
+            Permohonan::where('boardgame_id', $loan->boardgame_id)
+                ->where('status', Permohonan::STATUS_APPROVED)
+                ->oldest()
+                ->limit(1)
+                ->update(['status' => Permohonan::STATUS_RETURNED]);
         }
 
         return to_route('loans.index');

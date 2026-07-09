@@ -73,7 +73,7 @@ export default function Login() {
                             className="btn btn-primary w-full"
                             disabled={processing}
                         >
-                            {processing ? "Loading..." : "Login"}
+                            {processing ? "Memuat..." : "Masuk"}
                         </button>
                     </form>
                 </div>

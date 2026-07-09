@@ -1,13 +1,13 @@
 import { Link } from "@inertiajs/react";
 
 const navItems = [
-    { label: "Home", href: "/peminjaman/create" },
-    { label: "Board Games", href: "/admin/games" },
+    { label: "Beranda", href: "/peminjaman/create" },
+    { label: "Board Game", href: "/admin/games" },
     { label: "Permohonan", href: "/admin/permohonan" },
     { label: "Peminjaman", href: "/admin/loans" },
     { label: "Pengembalian", href: "/admin/returns" },
-    { label: "Riwayat Peminjaman", href: "/admin/history" },
-    { label: "Accounts", href: "/admin/accounts" },
+    { label: "Riwayat", href: "/admin/history" },
+    { label: "Akun", href: "/admin/accounts" },
 ];
 
 export default function Layout({ children }) {
@@ -125,7 +125,7 @@ export default function Layout({ children }) {
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                                 />
                             </svg>
-                            Logout
+                            Keluar
                         </Link>
                     </div>
                 </div>

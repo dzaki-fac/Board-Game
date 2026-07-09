@@ -9,20 +9,16 @@ use Illuminate\Database\Seeder;
 
 class PermohonanSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $boardgameIds = BoardGame::pluck('id')->toArray();
 
         for ($i = 0; $i < 30; $i++) {
-            $tanggalPinjam = fake()->dateTimeBetween('-30 days', '+7 days');
             $status = fake()->randomElement([
-                'menunggu',
-                'dipinjam',
-                'dikembalikan',
-                'ditolak',
+                Permohonan::STATUS_PENDING,
+                Permohonan::STATUS_APPROVED,
+                Permohonan::STATUS_RETURNED,
+                Permohonan::STATUS_REJECTED,
             ]);
 
             Permohonan::create([
@@ -30,9 +26,9 @@ class PermohonanSeeder extends Seeder
                 'nama' => fake()->name(),
                 'nim' => fake()->numerify('24########'),
                 'status' => fake()->randomElement([
-                    'menunggu',
-                    'dipinjam',
-                    'ditolak',
+                    Permohonan::STATUS_PENDING,
+                    Permohonan::STATUS_APPROVED,
+                    Permohonan::STATUS_REJECTED,
                 ]),
                 'tanggal_pinjam' => fake()->date(),
                 'jam_pinjam' => fake()->time(),

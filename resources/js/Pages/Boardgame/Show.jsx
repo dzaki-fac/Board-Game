@@ -89,7 +89,7 @@ export default function Show({ boardgame }) {
           {/* Actions */}
           <div className="flex items-center gap-3 pt-3 border-t border-slate-200">
             <Link href={`/admin/games/${boardgame.id}/edit`} className="btn bg-amber-500 hover:bg-amber-600 text-white border-none btn-sm">
-              Edit
+              Ubah
             </Link>
             <Link href="/admin/games" className="btn btn-ghost btn-sm">Kembali</Link>
           </div>
