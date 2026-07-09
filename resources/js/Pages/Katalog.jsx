@@ -502,36 +502,60 @@ function IkonChevron({ arah = "kiri", ...props }) {
     );
 }
 
-function SlidePopuler({ games, nomor }) {
-    const t = useTeks();
+function BlobPanel({ variant = "populer" }) {
+    const skema = {
+        populer: {
+            warna: { a: WARNA.hijauUtama, b: WARNA.emas },
+            path1: "M60 60 Q180 -20 300 60 Q420 130 380 250 Q340 370 220 400 Q80 430 30 300 Q-20 170 60 60 Z",
+            path2: "M320 180 Q420 140 470 240 Q510 340 420 400 Q340 450 280 380 Q220 320 260 250 Q290 200 320 180 Z",
+            lingkaran: [{ cx: 90, cy: 380, r: 55 }, { cx: 430, cy: 90, r: 40 }],
+        },
+        info: {
+            warna: { a: WARNA.emas, b: WARNA.hijauUtama },
+            path1: "M40 250 Q20 120 150 90 Q280 60 320 180 Q360 300 240 360 Q120 420 40 250 Z",
+            path2: "M300 40 Q420 20 460 120 Q500 220 420 280 Q340 340 280 260 Q220 180 260 100 Q280 60 300 40 Z",
+            lingkaran: [{ cx: 440, cy: 400, r: 50 }, { cx: 60, cy: 60, r: 35 }],
+        },
+        sanksi: {
+            warna: { a: "#B04A3D", b: WARNA.emas },
+            path1: "M250 20 Q380 40 400 160 Q420 280 300 340 Q180 400 100 300 Q20 200 100 100 Q160 30 250 20 Z",
+            path2: "M60 300 Q0 380 80 440 Q160 480 200 400 Q240 320 160 280 Q100 250 60 300 Z",
+            lingkaran: [{ cx: 460, cy: 80, r: 45 }, { cx: 450, cy: 380, r: 30 }],
+        },
+    }[variant];
 
     return (
-        <div className="relative h-full w-full flex overflow-hidden" style={{ backgroundColor: WARNA.krem }}>
-            <div
-                className="hidden md:block absolute -right-10 top-1/2 -translate-y-1/2 opacity-[0.07]"
-                style={{ color: WARNA.hijauUtama, transform: "translateY(-50%) scale(4)" }}
-            >
-                <IkonDadu pip={5} color="currentColor" />
-            </div>
+        <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
+            <rect width="500" height="500" fill={WARNA.krem} />
+            <path d={skema.path1} fill={skema.warna.a} opacity="0.22" />
+            <path d={skema.path2} fill={skema.warna.b} opacity="0.18" />
+            {skema.lingkaran.map((l, i) => (
+                <circle key={i} cx={l.cx} cy={l.cy} r={l.r} fill={i === 0 ? skema.warna.b : skema.warna.a} opacity="0.14" />
+            ))}
+        </svg>
+    );
+}
 
-            <div className="absolute left-0 top-0 h-full w-1.5" style={{ backgroundColor: WARNA.emas }} />
-
-            <div className="relative flex flex-col justify-center px-6 py-6 w-full">
-                <h3 className="text-2xl md:text-[32px] font-bold mb-5 leading-tight" style={{ color: WARNA.hijauTua }}>
+function SlidePopuler({ games, nomor }) {
+    const t = useTeks();
+    return (
+        <div className="relative h-full w-full flex overflow-hidden">
+            <BlobPanel variant="populer" />
+            <div className="relative flex flex-col h-full w-full px-6 md:px-12 py-6">
+                <h3 className="shrink-0 text-2xl md:text-[32px] font-bold mb-4 md:mb-6 leading-tight text-center" style={{ color: WARNA.hijauTua }}>
                     {t.produkPopuler}
                 </h3>
-
-                <div className="grid grid-cols-5 gap-6">
+                <div className="flex gap-4 md:gap-6 overflow-x-auto pb-1" style={{ scrollbarWidth: "none" }}>
                     {games.slice(0, 5).map((game) => {
                         const [warna, bg] = warnaKategori(game.kategori);
                         return (
                             <div
                                 key={game.id}
-                                className="w-full rounded-xl bg-white overflow-hidden shadow-md transition-transform hover:-translate-y-1"
+                                className="shrink-0 w-[calc(50%-8px)] md:w-[calc(20%-19.2px)] rounded-md bg-white overflow-hidden shadow-md transition-transform hover:-translate-y-1"
                             >
-                                <div className="aspect-square flex items-center justify-center" style={{ backgroundColor: bg }}>
+                                <div className="aspect-square flex items-center justify-center bg-white p-3">
                                     {game.link_foto?.[0] ? (
-                                        <img src={game.link_foto[0]} alt={game.nama} className="h-full w-full object-cover" />
+                                        <img src={game.link_foto[0]} alt={game.nama} className="h-full w-full object-contain" />
                                     ) : (
                                         <IkonDadu pip={pipDariJumlahPemain(game.jumlah_pemain)} color={warna} />
                                     )}
@@ -550,24 +574,35 @@ function SlidePopuler({ games, nomor }) {
 
 function SlideInfo({ slide, nomor }) {
     const t = useTeks();
-    const Ikon = slide.ikon === "centang" ? IkonCentangBesar : IkonPeringatanBesar;
 
     return (
-        <div className="relative h-full w-full flex overflow-hidden" style={{ backgroundColor: WARNA.krem }}>
-            <div className="absolute left-0 top-0 h-full w-1.5" style={{ backgroundColor: slide.aksen }} />
+        <div className="relative h-full w-full flex overflow-hidden">
+            <BlobPanel variant={slide.ikon === "peringatan" ? "sanksi" : "info"} />
 
-            <div className="relative flex flex-col justify-center px-6 py-6 w-full">
-                <h3 className="text-2xl md:text-[32px] font-bold mb-5 leading-tight" style={{ color: WARNA.hijauTua }}>
+            <div className="relative flex flex-col h-full w-full max-w-4xl mx-auto px-6 md:px-12 py-6">
+                <h3
+                    className="shrink-0 text-2xl md:text-[32px] font-bold mb-4 md:mb-6 leading-tight text-center"
+                    style={{ color: WARNA.hijauTua }}
+                >
                     {slide.judul}
                 </h3>
-                <ul className="space-y-2.5">
+
+                <ul
+                    className="flex-1 min-h-0 overflow-y-auto grid grid-cols-1 md:grid-cols-2 gap-3 content-start pr-1"
+                    style={{ WebkitOverflowScrolling: "touch" }}
+                >
                     {slide.poin.map((p, i) => (
-                        <li key={i} className="flex gap-3 text-sm md:text-base text-slate-700">
+                        <li
+                            key={i}
+                            className="flex items-start gap-3 bg-white/70 backdrop-blur-sm rounded-xl px-4 py-3 shadow-sm"
+                        >
                             <span
-                                className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0"
+                                className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-white text-[11px] font-bold"
                                 style={{ backgroundColor: slide.aksen }}
-                            />
-                            {p}
+                            >
+                                {i + 1}
+        </span>
+                            <span className="text-sm md:text-[15px] text-slate-700 leading-snug pt-0.5">{p}</span>
                         </li>
                     ))}
                 </ul>
@@ -593,11 +628,11 @@ function AnnouncementCarousel({ games }) {
 
     useEffect(() => {
         if (slides.length <= 1) return;
-        const timer = setInterval(() => {
+        const timer = setTimeout(() => {
             setIndex((i) => (i + 1) % slides.length);
         }, 6000);
-        return () => clearInterval(timer);
-    }, [slides.length]);
+        return () => clearTimeout(timer);
+    }, [index, slides.length]);
 
     if (slides.length === 0) return null;
 
@@ -605,12 +640,12 @@ function AnnouncementCarousel({ games }) {
 
     return (
         <div
-            className="max-w-[1300px] mx-auto px-4 md:px-6 relative z-10 mb-6 md:mb-8"
-            style={{ marginTop: -70 }}
+            className="max-w-[1300px] mx-auto px-4 md:px-6 relative z-10"
+            style={{ marginTop: -87, marginBottom: 25 }}
         >
             <div
-                className="relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5"
-                style={{ height: 400 }}
+                className="relative rounded-xl overflow-hidden shadow-2xl ring-1 ring-black/5"
+                style={{ height: 300 }}
             >
                 {slides.map((slide, i) => (
                     <div
