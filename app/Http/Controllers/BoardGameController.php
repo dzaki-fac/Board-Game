@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\BoardGame;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class BoardGameController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Katalog admin
      */
     public function index(Request $request)
     {
@@ -32,33 +33,84 @@ class BoardGameController extends Controller
 
         $sortField = $request->sortField ?? 'nama';
         $sortDir = $request->sortDir === 'desc' ? 'desc' : 'asc';
+
         $query->orderBy($sortField, $sortDir);
 
-        return inertia('Boardgame/Games', [
+        return Inertia::render('Boardgame/Games', [
             'boardgames' => $query->paginate(20)->withQueryString(),
-            'query' => $request->only(['search', 'sortField', 'sortDir', 'filterLantai', 'filterBox']),
+            'query' => $request->only([
+                'search',
+                'sortField',
+                'sortDir',
+                'filterLantai',
+                'filterBox'
+            ]),
         ]);
     }
 
     /**
-     * Display the specified resource.
+     * Katalog user
+     */
+    public function katalog()
+    {
+        $games = BoardGame::orderBy('available_copies', 'desc')
+            ->orderBy('nama')
+            ->get([
+                'id',
+                'kode',
+                'nama',
+                'penerbit',
+                'kategori',
+                'jumlah_pemain',
+                'durasi',
+                'lantai',
+                'link_foto',
+                'available_copies',
+                'populer'
+            ]);
+
+        return Inertia::render('Katalog', [
+            'games' => $games,
+        ]);
+    }
+
+    /**
+     * Detail board game untuk user
+     */
+    public function detail(BoardGame $boardGame)
+    {
+        $gameSerupa = BoardGame::where('kategori', $boardGame->kategori)
+            ->where('id', '!=', $boardGame->id)
+            ->inRandomOrder()
+            ->limit(8)
+            ->get([
+                'id',
+                'nama',
+                'kategori',
+                'link_foto'
+            ]);
+
+        return Inertia::render('Detail', [
+            'game' => $boardGame,
+            'gameSerupa' => $gameSerupa,
+        ]);
+    }
+
+    /**
+     * Detail admin
      */
     public function show(BoardGame $boardGame)
     {
-        return inertia('Boardgame/Show', ['boardgame' => $boardGame]);
+        return Inertia::render('Boardgame/Show', [
+            'boardgame' => $boardGame
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return inertia('Boardgame/Create');
+        return Inertia::render('Boardgame/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -81,20 +133,17 @@ class BoardGameController extends Controller
 
         BoardGame::create($validated);
 
-        return redirect('/admin/games')->with('success', 'Board game berhasil ditambahkan.');
+        return redirect('/admin/games')
+            ->with('success', 'Board game berhasil ditambahkan.');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(BoardGame $boardGame)
     {
-        return inertia('Boardgame/Edit', ['boardgame' => $boardGame]);
+        return Inertia::render('Boardgame/Edit', [
+            'boardgame' => $boardGame
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, BoardGame $boardGame)
     {
         $validated = $request->validate([
@@ -117,16 +166,15 @@ class BoardGameController extends Controller
 
         $boardGame->update($validated);
 
-        return redirect('/admin/games')->with('success', 'Board game berhasil diperbarui.');
+        return redirect('/admin/games')
+            ->with('success', 'Board game berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(BoardGame $boardGame)
     {
         $boardGame->delete();
 
-        return redirect('/admin/games')->with('success', 'Board game berhasil dihapus.');
+        return redirect('/admin/games')
+            ->with('success', 'Board game berhasil dihapus.');
     }
 }

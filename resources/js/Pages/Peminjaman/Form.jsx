@@ -1,4 +1,4 @@
-import { useForm, usePage } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useMemo, useState } from "react";
 
 export default function Form({ boardgames = [] }) {
@@ -20,11 +20,26 @@ export default function Form({ boardgames = [] }) {
         const local = new Date(now - offset);
         setData("tanggal_pinjam", local.toISOString().slice(0, 10));
         setData("jam_pinjam", local.toISOString().slice(11, 19));
+
+        const params = new URLSearchParams(window.location.search);
+        const bgId = params.get("boardgame_id");
+        if (bgId) {
+            setData("boardgame_id", bgId);
+        }
     }, []);
+
+    const bgList = Array.isArray(boardgames) ? boardgames : [];
 
     const [search, setSearch] = useState("");
 
-    const bgList = Array.isArray(boardgames) ? boardgames : [];
+    useEffect(() => {
+        if (data.boardgame_id && bgList.length > 0) {
+            const bg = bgList.find((b) => b.id == data.boardgame_id);
+            if (bg) {
+                setSearch(bg.nama);
+            }
+        }
+    }, [data.boardgame_id, bgList]);
 
     const filtered = useMemo(() => {
         if (!search) return bgList;
@@ -45,6 +60,16 @@ export default function Form({ boardgames = [] }) {
 
     return (
         <div className="max-w-xl mx-auto p-4">
+            <Link
+                href="/katalog"
+                className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-4"
+            >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
+                    <path d="M19 12H5" />
+                    <path d="m12 19-7-7 7-7" />
+                </svg>
+                Kembali ke Katalog
+            </Link>
             <h1 className="text-2xl font-bold mb-1">Form Peminjaman</h1>
             <p className="text-sm text-slate-500 mb-6">
                 Isi data berikut untuk mengajukan peminjaman boardgame
