@@ -30,12 +30,16 @@ class AdminAccountController extends Controller
             'lantai' => [$request->role === 'admin' ? 'required' : 'nullable', 'string', 'max:50'],
         ]);
 
+        if ($validated['role'] === 'superadmin') {
+            $validated['lantai'] = '';
+        }
+
         Admin::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
-            'lantai' => $validated['lantai'] ?? '',
+            'lantai' => $validated['lantai'],
         ]);
 
         return redirect()->route('admin.accounts.index')->with('flash', 'Admin berhasil ditambahkan.');
@@ -61,11 +65,15 @@ class AdminAccountController extends Controller
             'lantai' => [$request->role === 'admin' ? 'required' : 'nullable', 'string', 'max:50'],
         ]);
 
+        if ($validated['role'] === 'superadmin') {
+            $validated['lantai'] = '';
+        }
+
         $data = [
             'name' => $validated['name'],
             'email' => $validated['email'],
             'role' => $validated['role'],
-            'lantai' => $validated['lantai'] ?? '',
+            'lantai' => $validated['lantai'],
         ];
 
         if (!empty($validated['password'])) {
