@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('posts', function (Blueprint $table) {
-            $table->id();
-            $table->text('body');
-            $table->timestamps();
+        Schema::table('admins', function (Blueprint $table) {
+            $table->string('lantai')->default('1')->after('role');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('posts');
+        Schema::table('admins', function (Blueprint $table) {
+            $table->dropColumn('lantai');
+        });
     }
 };

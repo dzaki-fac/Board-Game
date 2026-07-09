@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Admin;
+use App\Models\BoardGame;
+use App\Models\Loan;
 use App\Models\Post;
+use Database\Seeders\BoardGameSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -11,20 +14,19 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Admin::truncate();
+        $this->call([
+            AdminSeeder::class,
+            
+            BoardGameSeeder::class,
+            // LoanSeeder::class,
+            PermohonanSeeder::class,
+        ]);
 
-        Post::factory(30)->create();
+        // Loan::truncate();
+        // $this->call(LoanSeeder::class);
 
-        $this->call(BoardGameSeeder::class);
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
     }
 }
