@@ -1,7 +1,7 @@
 import { useMemo, useState, useRef, useEffect, createContext, useContext } from "react";
 import { Head, Link } from "@inertiajs/react";
 
-/* ================= Palet warna UPT Perpustakaan Undip ================= */
+/* Palet warna UPT Perpustakaan Undip */
 const WARNA = {
     hijauTua: "#173C33",   // top bar paling gelap
     hijauUtama: "#2F6F62", // hero & tombol utama
@@ -135,7 +135,7 @@ function warnaKategori(kategori) {
     return KATEGORI_COLORS[kategori] ?? DEFAULT_COLOR;
 }
 
-/* ========================= Ikon-ikon kecil ========================= */
+/* Ikon-ikon kecil */
 
 function IkonDadu({ pip = 2, color }) {
     const layout = {
@@ -221,7 +221,6 @@ function IkonRak(props) {
     );
 }
 
-/* Ikon media sosial — bentuk generik/monoline, bukan reproduksi logo resmi. */
 function IkonYoutube(props) {
     return (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
@@ -265,7 +264,7 @@ function formatDurasi(text, t) {
     return `${angka} ${t.menit}`;
 }
 
-/* ========================= Navbar utama ========================= */
+/* Navbar utama */
 
 function BarUtilitas({ bahasa, setBahasa }) {
     return (
@@ -365,7 +364,7 @@ function NavbarUtama({ pencarian, setPencarian }) {
     );
 }
 
-/* ========================= Kartu board game ========================= */
+/* Kartu board game */
 
 function KartuGame({ game, tersedia }) {
     const t = useTeks();
@@ -392,30 +391,31 @@ function KartuGame({ game, tersedia }) {
                 </span>
 
                 <div
-                className={`relative aspect-square flex items-center justify-center ${!tersedia ? "grayscale" : ""}`}
-                style={{ backgroundColor: bg }}
-            >
-                {game.gambar ? (
-                    <>
-                        <img
-                            src={game.gambar}
-                            alt={game.nama}
-                            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-                                game.gambar_hover ? "group-hover:opacity-0" : ""
-                            }`}
-                        />
-                        {game.gambar_hover && (
+                    className={`relative aspect-square grid bg-white p-3 ${!tersedia ? "grayscale" : ""}`}
+                >
+                    {game.gambar ? (
+                        <>
                             <img
-                                src={game.gambar_hover}
-                                alt={`${game.nama} - tampilan lain`}
-                                className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                src={game.gambar}
+                                alt={game.nama}
+                                className={`col-start-1 row-start-1 h-full w-full object-contain transition-opacity duration-300 $
+                                    game.gambar_hover ? "group-hover:opacity-0" : ""
+                                }`}
                             />
-                        )}
-                    </>
-                ) : (
-                    <IkonDadu pip={pipDariJumlahPemain(game.jumlah_pemain)} color={warna} />
-                )}
-            </div>
+                            {game.gambar_hover && (
+                                <img
+                                    src={game.gambar_hover}
+                                    alt={`${game.nama} - tampilan lain`}
+                                    className="col-start-1 row-start-1 h-full w-full object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                                />
+                            )}
+                        </>
+                    ) : (
+                        <div className="col-start-1 row-start-1 flex items-center justify-center">
+                            <IkonDadu pip={pipDariJumlahPemain(game.jumlah_pemain)} color={warna} />
+                        </div>
+                    )}
+                </div>
             </div>
 
             {/* supaya semua kartu dalam satu baris tingginya sama */}
@@ -470,7 +470,7 @@ function KartuGame({ game, tersedia }) {
     );
 }
 
-/* ========================= Carousel pengumuman ========================= */
+/* Carousel pengumuman */
 
 function IkonCentangBesar(props) {
     return (
@@ -550,9 +550,9 @@ function SlidePopuler({ games, nomor }) {
                                 key={game.id}
                                 className="shrink-0 w-[calc(50%-8px)] md:w-[calc(20%-19.2px)] rounded-md bg-white overflow-hidden shadow-md transition-transform hover:-translate-y-1"
                             >
-                                <div className="aspect-square flex items-center justify-center" style={{ backgroundColor: bg }}>
+                                <div className="aspect-square flex items-center justify-center bg-white p-3">
                                     {game.gambar ? (
-                                        <img src={game.gambar} alt={game.nama} className="h-full w-full object-cover" />
+                                        <img src={game.gambar} alt={game.nama} className="h-full w-full object-contain" />
                                     ) : (
                                         <IkonDadu pip={pipDariJumlahPemain(game.jumlah_pemain)} color={warna} />
                                     )}
@@ -700,7 +700,7 @@ function AnnouncementCarousel({ games }) {
     );
 }
 
-/* ========================= Halaman Katalog ========================= */
+/* Halaman Katalog */
 
 function IsiKatalog({ games, bahasa, setBahasa }) {
     const t = useTeks();
@@ -740,12 +740,10 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                 setPencarian={setPencarian}
             />
 
-            {/* Hero */}
             <div style={{ backgroundColor: WARNA.hijauUtama, height: 100 }} />
 
             <AnnouncementCarousel games={games.filter((g) => g.populer)} />
 
-            {/* Filter & sort, ala baris filter Amazon */}
             <div className="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-sm">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-3 flex flex-wrap items-center gap-x-3 gap-y-2">
                     <span className="text-xs font-semibold text-slate-500 shrink-0">{t.filter}</span>
