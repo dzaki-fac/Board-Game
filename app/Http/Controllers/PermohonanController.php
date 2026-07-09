@@ -41,7 +41,7 @@ class PermohonanController extends Controller
 
     public function store(StorePermohonanRequest $request)
     {
-        Permohonan::create([
+        $permohonan = Permohonan::create([
             'nama' => $request->nama,
             'nim' => $request->nim,
             'boardgame_id' => $request->boardgame_id,
@@ -51,7 +51,16 @@ class PermohonanController extends Controller
             'catatan' => $request->catatan,
         ]);
 
-        return redirect()->route('admin.permohonan.index')->with('success', 'Permohonan peminjaman berhasil dikirim.');
+        return redirect()->route('peminjaman.konfirmasi', $permohonan);
+    }
+
+    public function konfirmasi(Permohonan $permohonan)
+    {
+        $permohonan->load('boardgame');
+
+        return inertia('Peminjaman/Konfirmasi', [
+            'permohonan' => $permohonan,
+        ]);
     }
 
     public function permohonan()

@@ -25,6 +25,7 @@ Route::prefix('admin')->group(function () {
     });
 
     Route::middleware('auth:admin')->group(function () {
+        Route::get('/', [BoardGameController::class, 'index']);
         
         Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
 
@@ -54,3 +55,4 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/peminjaman/create', [PermohonanController::class, 'create'])->name('peminjaman.create');
 Route::post('/peminjaman', [PermohonanController::class, 'store'])->name('peminjaman.store');
+Route::get('/peminjaman/{permohonan}/konfirmasi', [PermohonanController::class, 'konfirmasi'])->name('peminjaman.konfirmasi');

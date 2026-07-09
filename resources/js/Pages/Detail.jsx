@@ -567,19 +567,24 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
                             )}
 
                             <div className="mt-auto">
-                                <button
-                                    disabled={!tersedia}
-                                    className={`w-full rounded-full py-3 text-base font-semibold transition-colors ${
-                                        tersedia
-                                            ? "text-white"
-                                            : "bg-slate-200 text-slate-400 cursor-not-allowed"
-                                    }`}
-                                    style={tersedia ? { backgroundColor: WARNA.hijauUtama } : undefined}
-                                    onMouseOver={(e) => tersedia && (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
-                                    onMouseOut={(e) => tersedia && (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
-                                >
-                                    {tersedia ? t.pinjamSekarang : t.dipinjam}
-                                </button>
+                                {tersedia ? (
+                                    <Link
+                                        href={`/peminjaman/create?boardgame_id=${game.id}`}
+                                        className="block w-full rounded-full py-3 text-base font-semibold text-white text-center transition-colors"
+                                        style={{ backgroundColor: WARNA.hijauUtama }}
+                                        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
+                                        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
+                                    >
+                                        {t.pinjamSekarang}
+                                    </Link>
+                                ) : (
+                                    <button
+                                        disabled
+                                        className="w-full rounded-full py-3 text-base font-semibold bg-slate-200 text-slate-400 cursor-not-allowed"
+                                    >
+                                        {t.dipinjam}
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
