@@ -277,7 +277,11 @@ export default function Account({ admins }) {
                                     id="create-role"
                                     className="select select-bordered w-full"
                                     value={create.data.role}
-                                    onChange={(e) => create.setData("role", e.target.value)}
+                                    onChange={(e) => {
+                                        const role = e.target.value;
+                                        create.setData("role", role);
+                                        if (role === 'superadmin') create.setData("lantai", "");
+                                    }}
                                 >
                                     <option value="admin">Admin</option>
                                     <option value="superadmin">Superadmin</option>
@@ -293,13 +297,23 @@ export default function Account({ admins }) {
                                 <label className="label" htmlFor="create-lantai">
                                     <span className="label-text">Lantai</span>
                                 </label>
-                                <input
+                                <select
                                     id="create-lantai"
-                                    type="text"
-                                    className="input input-bordered w-full"
+                                    className="select select-bordered w-full"
                                     value={create.data.lantai}
                                     onChange={(e) => create.setData("lantai", e.target.value)}
-                                />
+                                    disabled={create.data.role === 'superadmin'}
+                                >
+                                    <option value="">Pilih lantai</option>
+                                    <option value="1">Lantai 1</option>
+                                    <option value="2">Lantai 2</option>
+                                    <option value="3">Lantai 3</option>
+                                </select>
+                                {create.data.role === 'superadmin' && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-gray-500">Semua Lantai (otomatis untuk superadmin)</span>
+                                    </label>
+                                )}
                                 {create.errors.lantai && (
                                     <label className="label">
                                         <span className="label-text-alt text-error">{create.errors.lantai}</span>
@@ -433,13 +447,23 @@ export default function Account({ admins }) {
                                 <label className="label" htmlFor="edit-lantai">
                                     <span className="label-text">Lantai</span>
                                 </label>
-                                <input
+                                <select
                                     id="edit-lantai"
-                                    type="text"
-                                    className="input input-bordered w-full"
+                                    className="select select-bordered w-full"
                                     value={edit.data.lantai}
                                     onChange={(e) => edit.setData("lantai", e.target.value)}
-                                />
+                                    disabled={edit.data.role === 'superadmin'}
+                                >
+                                    <option value="">Pilih lantai</option>
+                                    <option value="1">Lantai 1</option>
+                                    <option value="2">Lantai 2</option>
+                                    <option value="3">Lantai 3</option>
+                                </select>
+                                {edit.data.role === 'superadmin' && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-gray-500">Semua Lantai (otomatis untuk superadmin)</span>
+                                    </label>
+                                )}
                                 {edit.errors.lantai && (
                                     <label className="label">
                                         <span className="label-text-alt text-error">{edit.errors.lantai}</span>
