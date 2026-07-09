@@ -345,3 +345,5 @@ export default function Form({ boardgames = [] }) {
         </div>
     );
 }
+
+Form.layout = (page) => page;

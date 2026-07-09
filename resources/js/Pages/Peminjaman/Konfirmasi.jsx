@@ -64,3 +64,5 @@ export default function Konfirmasi({ permohonan }) {
         </div>
     );
 }
+
+Konfirmasi.layout = (page) => page;
