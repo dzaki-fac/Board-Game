@@ -119,8 +119,8 @@ export default function Create({ loans }) {
                 {/* Page Header */}
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">Form Pengembalian</h1>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <h1 className="text-2xl font-bold text-[#173C33]">Form Pengembalian</h1>
+                        <p className="text-sm text-[#2F6F62]/60 mt-1">
                             Proses pengembalian board game yang dipinjam
                         </p>
                     </div>
@@ -149,9 +149,9 @@ export default function Create({ loans }) {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Main Form Card */}
                     <div className="lg:col-span-2">
-                        <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                        <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6">
-                                <h2 className="text-lg font-semibold text-gray-900 mb-6">
+                                <h2 className="text-lg font-semibold text-[#173C33] mb-6">
                                     Informasi Pengembalian
                                 </h2>
 
@@ -190,7 +190,7 @@ export default function Create({ loans }) {
                                                 )}
                                             </legend>
                                             <div
-                                                className={`border rounded-lg p-4 max-h-80 overflow-y-auto ${componentsDisabled ? "bg-gray-100 border-gray-200" : "border-gray-200"}`}
+                                                className={`border rounded-lg p-4 max-h-80 overflow-y-auto ${componentsDisabled ? "bg-[#FAF7F2] border-[#E8F3EF]" : "border-[#E8F3EF]"}`}
                                                 style={{
                                                     display: "grid",
                                                     gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
@@ -202,7 +202,7 @@ export default function Create({ loans }) {
                                                     return (
                                                         <div key={index} className={`p-2 rounded-lg transition-colors ${
                                                             componentsDisabled
-                                                                ? "bg-gray-50 border border-gray-200 opacity-60"
+                                                                ? "bg-[#FAF7F2] border border-[#E8F3EF] opacity-60"
                                                                 : isMissing
                                                                     ? "bg-red-50 border border-red-200"
                                                                     : "bg-green-50 border border-green-200"
@@ -395,7 +395,7 @@ export default function Create({ loans }) {
                                         <button
                                             type="submit"
                                             disabled={isProcessing()}
-                                            className="btn btn-primary"
+                                            className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none"
                                         >
                                             {isProcessing() ? (
                                                 <span className="loading loading-spinner loading-sm"></span>
@@ -412,9 +412,9 @@ export default function Create({ loans }) {
                     <div className="space-y-6">
                         {/* Riwayat Komponen Hilang */}
                         {selectedLoan && (
-                            <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                            <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                                 <div className="card-body p-6">
-                                    <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+                                    <h3 className="text-sm font-semibold text-[#173C33] uppercase tracking-wider mb-4">
                                         Riwayat Komponen Hilang
                                     </h3>
                                     {selectedLoan.game.barang_hilang?.length > 0 ? (
@@ -434,34 +434,34 @@ export default function Create({ loans }) {
                         )}
 
                         {/* Selected Loan Details */}
-                        <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                        <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6">
-                                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+                                <h3 className="text-sm font-semibold text-[#173C33] uppercase tracking-wider mb-4">
                                     Detail Peminjaman
                                 </h3>
 
                                 {selectedLoan ? (
                                     <div className="space-y-3">
                                         <div>
-                                            <p className="text-xs text-gray-500">Peminjam</p>
-                                            <p className="text-sm font-medium text-gray-900">
+                                            <p className="text-xs text-[#2F6F62]/70">Peminjam</p>
+                                            <p className="text-sm font-medium text-[#173C33]">
                                                 {selectedLoan.borrower_name}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-gray-500">Board Game</p>
-                                            <p className="text-sm font-medium text-gray-900">
+                                            <p className="text-xs text-[#2F6F62]/70">Board Game</p>
+                                            <p className="text-sm font-medium text-[#173C33]">
                                                 {selectedLoan.game.nama}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-gray-500">Dipinjam Pada</p>
+                                            <p className="text-xs text-[#2F6F62]/70">Dipinjam Pada</p>
                                             <p className="text-sm text-gray-700">
                                                 {formatDateTime(selectedLoan.borrowed_at)}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-gray-500">Status Saat Ini</p>
+                                            <p className="text-xs text-[#2F6F62]/70">Status Saat Ini</p>
                                             <span
                                                 className={`badge badge-sm capitalize ${
                                                     selectedLoan.status === "borrowed"
@@ -504,55 +504,55 @@ export default function Create({ loans }) {
                         </div>
 
                         {/* Return Summary */}
-                        <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                        <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6">
-                                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+                                <h3 className="text-sm font-semibold text-[#173C33] uppercase tracking-wider mb-4">
                                     Ringkasan Pengembalian
                                 </h3>
 
                                 {selectedLoan ? (
                                     <div className="space-y-3">
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-gray-500">Peminjam</span>
-                                            <span className="text-sm font-medium text-gray-900">
+                                            <span className="text-xs text-[#2F6F62]/70">Peminjam</span>
+                                            <span className="text-sm font-medium text-[#173C33]">
                                                 {selectedLoan.borrower_name}
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-gray-500">Board Game</span>
-                                            <span className="text-sm font-medium text-gray-900">
+                                            <span className="text-xs text-[#2F6F62]/70">Board Game</span>
+                                            <span className="text-sm font-medium text-[#173C33]">
                                                 {selectedLoan.game.nama}
                                             </span>
                                         </div>
 
                                         {totalCount > 0 && (
                                             <>
-                                                <div className="border-t border-gray-100 my-1"></div>
+                                                <div className="border-t border-[#E8F3EF] my-1"></div>
                                                 <div className="flex justify-between items-center">
-                                                    <span className="text-xs text-gray-500">Total Komponen</span>
-                                                    <span className="text-sm font-medium text-gray-900">
+                                                    <span className="text-xs text-[#2F6F62]/70">Total Komponen</span>
+                                                    <span className="text-sm font-medium text-[#173C33]">
                                                         {totalCount}
                                                     </span>
                                                 </div>
                                                 <div className="flex justify-between items-center">
-                                                    <span className="text-xs text-gray-500">Dikembalikan</span>
+                                                    <span className="text-xs text-[#2F6F62]/70">Dikembalikan</span>
                                                     <span className="text-sm font-medium text-green-600">
                                                         {returnedCount}
                                                     </span>
                                                 </div>
                                                 <div className="flex justify-between items-center">
-                                                    <span className="text-xs text-gray-500">Hilang</span>
+                                                    <span className="text-xs text-[#2F6F62]/70">Hilang</span>
                                                     <span className={`text-sm font-medium ${
                                                         missingComponents.length > 0
                                                             ? "text-red-600"
-                                                            : "text-gray-500"
+                                                            : "text-[#2F6F62]/70"
                                                     }`}>
                                                         {totalHilang}
                                                     </span>
                                                 </div>
                                                 {missingComponents.length > 0 && (
                                                     <div>
-                                                        <p className="text-xs text-gray-500 mb-1">Item Hilang</p>
+                                                        <p className="text-xs text-[#2F6F62]/70 mb-1">Item Hilang</p>
                                                         <ul className="text-xs text-red-600 space-y-0.5">
                                                             {missingComponents.map((item, i) => (
                                                                 <li key={i} className="flex justify-between">
@@ -563,32 +563,32 @@ export default function Create({ loans }) {
                                                         </ul>
                                                     </div>
                                                 )}
-                                                <div className="border-t border-gray-100 my-1"></div>
+                                                <div className="border-t border-[#E8F3EF] my-1"></div>
                                             </>
                                         )}
 
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-gray-500">Tanggal Dikembalikan</span>
+                                            <span className="text-xs text-[#2F6F62]/70">Tanggal Dikembalikan</span>
                                             <span className="text-sm text-gray-700">
                                                 {data.returned_at ? formatDateTime(data.returned_at) : "-"}
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-gray-500">Kondisi</span>
+                                            <span className="text-xs text-[#2F6F62]/70">Kondisi</span>
                                             <span className="text-sm capitalize text-gray-700">
                                                 {conditionLabel[data.return_condition] || data.return_condition.replace(/_/g, " ")}
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-gray-500">Denda</span>
-                                            <span className="text-sm font-medium text-gray-900">
+                                            <span className="text-xs text-[#2F6F62]/70">Denda</span>
+                                            <span className="text-sm font-medium text-[#173C33]">
                                                 {data.fine_amount
                                                     ? `Rp ${Number(data.fine_amount).toLocaleString("id-ID")}`
                                                     : "-"}
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-gray-500">Status Akhir</span>
+                                            <span className="text-xs text-[#2F6F62]/70">Status Akhir</span>
                                             <span
                                                 className={`badge badge-sm capitalize ${
                                                     getFinalStatus() === "returned"

@@ -100,7 +100,6 @@ class PermohonanController extends Controller
         }
 
         $permohonan->update(['status' => 'dipinjam']);
-        $permohonan->boardgame()->decrement('jumlah');
 
         $borrowedAt = $permohonan->getRawOriginal('tanggal_pinjam') . ' ' . $permohonan->jam_pinjam;
 

@@ -119,7 +119,7 @@ export default function Account({ admins }) {
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold">Daftar Akun Admin</h1>
                 {isSuperAdmin && (
-                    <button onClick={openCreateModal} className="btn btn-primary">
+                    <button onClick={openCreateModal} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none">
                         + Tambah Admin
                     </button>
                 )}
@@ -145,17 +145,17 @@ export default function Account({ admins }) {
                                 <td>
                                     {admin.name}
                                     {admin.id === currentAdminId && (
-                                        <span className="badge badge-xs ml-2 bg-green-100 text-green-700 border-green-200 rounded">Anda</span>
+                                        <span className="badge badge-xs ml-2 bg-[#E8F3EF] text-[#2F6F62] border-[#B8D5C8] rounded">Anda</span>
                                     )}
                                 </td>
                                 <td>{admin.email}</td>
                                 <td>
-                                    <span className={`badge badge-sm rounded ${admin.role === "superadmin" ? "bg-amber-100 text-amber-700 border-amber-200" : "bg-sky-100 text-sky-700 border-sky-200"}`}>
+                                    <span className={`badge badge-sm rounded ${admin.role === "superadmin" ? "bg-[#FDF3E1] text-[#B98A4A] border-[#E8D5B0]" : "bg-[#E8F3EF] text-[#2F6F62] border-[#B8D5C8]"}`}>
                                         {admin.role === "superadmin" ? "Superadmin" : "Admin"}
                                     </span>
                                 </td>
                                 <td>
-                                    <span className="badge badge-sm rounded bg-gray-100 text-gray-700 border-gray-200">
+                                    <span className="badge badge-sm rounded bg-[#E8F3EF] text-[#173C33] border-[#B8D5C8]">
                                         {admin.lantai ? `Lantai ${admin.lantai}` : 'Semua Lantai'}
                                     </span>
                                 </td>
@@ -311,7 +311,7 @@ export default function Account({ admins }) {
                                 </select>
                                 {create.data.role === 'superadmin' && (
                                     <label className="label">
-                                        <span className="label-text-alt text-gray-500">Semua Lantai (otomatis untuk superadmin)</span>
+                                        <span className="label-text-alt text-[#2F6F62]/70">Semua Lantai (otomatis untuk superadmin)</span>
                                     </label>
                                 )}
                                 {create.errors.lantai && (
@@ -325,7 +325,7 @@ export default function Account({ admins }) {
                                 <button type="button" className="btn btn-ghost" onClick={closeCreateModal}>
                                     Batal
                                 </button>
-                                <button type="submit" className="btn btn-primary" disabled={create.processing}>
+                                <button type="submit" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none" disabled={create.processing}>
                                     {create.processing ? "Menyimpan..." : "Simpan"}
                                 </button>
                             </div>
@@ -433,7 +433,7 @@ export default function Account({ admins }) {
                                 </select>
                                 {editingAdmin?.id === currentAdminId && (
                                     <label className="label">
-                                        <span className="label-text-alt text-gray-500">Tidak dapat mengubah role sendiri</span>
+                                        <span className="label-text-alt text-[#2F6F62]/70">Tidak dapat mengubah role sendiri</span>
                                     </label>
                                 )}
                                 {edit.errors.role && (
@@ -461,7 +461,7 @@ export default function Account({ admins }) {
                                 </select>
                                 {edit.data.role === 'superadmin' && (
                                     <label className="label">
-                                        <span className="label-text-alt text-gray-500">Semua Lantai (otomatis untuk superadmin)</span>
+                                        <span className="label-text-alt text-[#2F6F62]/70">Semua Lantai (otomatis untuk superadmin)</span>
                                     </label>
                                 )}
                                 {edit.errors.lantai && (
@@ -475,7 +475,7 @@ export default function Account({ admins }) {
                                 <button type="button" className="btn btn-ghost" onClick={closeEditModal}>
                                     Batal
                                 </button>
-                                <button type="submit" className="btn btn-primary" disabled={edit.processing}>
+                                <button type="submit" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none" disabled={edit.processing}>
                                     {edit.processing ? "Menyimpan..." : "Simpan"}
                                 </button>
                             </div>

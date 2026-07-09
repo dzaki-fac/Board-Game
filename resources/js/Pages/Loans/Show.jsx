@@ -33,10 +33,10 @@ export default function Show({ loan }) {
                 {/* Page Header */}
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900">
+                        <h1 className="text-2xl font-bold text-[#173C33]">
                             Detail Peminjaman
                         </h1>
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-[#2F6F62]/60 mt-1">
                             #{loan.id} — {loan.game.nama}
                         </p>
                     </div>
@@ -69,31 +69,31 @@ export default function Show({ loan }) {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Main Info Card */}
                     <div className="lg:col-span-2">
-                        <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                        <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6 space-y-6">
-                                <h2 className="text-lg font-semibold text-gray-900">
+                                <h2 className="text-lg font-semibold text-[#173C33]">
                                     Informasi Peminjaman
                                 </h2>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
                                             Board Game
                                         </p>
-                                        <p className="text-sm font-medium text-gray-900 mt-1">
+                                        <p className="text-sm font-medium text-[#173C33] mt-1">
                                             {loan.game.nama}
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
                                             Peminjam
                                         </p>
-                                        <p className="text-sm font-medium text-gray-900 mt-1">
+                                        <p className="text-sm font-medium text-[#173C33] mt-1">
                                             {loan.borrower_name}
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
                                             Dipinjam
                                         </p>
                                         <p className="text-sm text-gray-700 mt-1">
@@ -101,7 +101,7 @@ export default function Show({ loan }) {
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
                                             Dikembalikan
                                         </p>
                                         <p className="text-sm text-gray-700 mt-1">
@@ -109,7 +109,7 @@ export default function Show({ loan }) {
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
                                             Status
                                         </p>
                                         <div className="mt-1">
@@ -117,7 +117,7 @@ export default function Show({ loan }) {
                                         </div>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
                                             Kondisi
                                         </p>
                                         <div className="mt-1">
@@ -127,20 +127,20 @@ export default function Show({ loan }) {
                                         </div>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
                                             Denda
                                         </p>
-                                        <p className="text-sm font-medium text-gray-900 mt-1">
+                                        <p className="text-sm font-medium text-[#173C33] mt-1">
                                             {loan.fine_amount
                                                 ? `Rp ${Number(loan.fine_amount).toLocaleString("id-ID")}`
                                                 : "-"}
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
                                             ID Game
                                         </p>
-                                        <p className="text-sm font-mono text-gray-500 mt-1">
+                                        <p className="text-sm font-mono text-[#2F6F62]/70 mt-1">
                                             #{loan.boardgame_id}
                                         </p>
                                     </div>
@@ -148,7 +148,7 @@ export default function Show({ loan }) {
 
                                 {loan.notes && (
                                     <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">
+                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium mb-1">
                                             Catatan
                                         </p>
                                         <p className="text-sm text-gray-700 bg-gray-50 rounded-lg p-3">
@@ -164,7 +164,7 @@ export default function Show({ loan }) {
                                     if (!list) return null;
                                     return (
                                         <div>
-                                            <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">
+                                            <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium mb-1">
                                                 Komponen Hilang
                                             </p>
                                             <ul className="text-sm text-red-600 bg-red-50 rounded-lg p-3 space-y-1 list-disc list-inside">
@@ -181,9 +181,9 @@ export default function Show({ loan }) {
 
                     {/* Sidebar Card */}
                     <div className="space-y-6">
-                        <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
+                        <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6">
-                                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+                                <h3 className="text-sm font-semibold text-[#173C33] uppercase tracking-wider mb-4">
                                     Aksi Cepat
                                 </h3>
                                 <div className="space-y-3">

@@ -182,7 +182,7 @@ export default function Form({ boardgames = [] }) {
                                                     className={`flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200 transition-colors ${
                                                         data.boardgame_id ==
                                                         bg.id
-                                                            ? "bg-primary/10 border-l-4 border-primary"
+                                                            ? "bg-[#E8F3EF] border-l-4 border-[#2F6F62]"
                                                             : "border-l-4 border-transparent"
                                                     } ${isBorrowed ? "opacity-60" : ""}`}
                                                 >
@@ -321,7 +321,7 @@ export default function Form({ boardgames = [] }) {
                     <button
                         type="submit"
                         disabled={processing}
-                        className="btn btn-primary flex-1"
+                        className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none flex-1"
                     >
                         {processing ? (
                             <>

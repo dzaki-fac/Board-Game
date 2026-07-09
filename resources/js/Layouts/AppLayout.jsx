@@ -17,11 +17,11 @@ export default function Layout({ children }) {
             <input id="drawer" type="checkbox" className="drawer-toggle" />
             <div className="drawer-content flex flex-col min-h-screen">
                 {/* Topbar */}
-                <div className="navbar bg-white shadow-sm border-b border-gray-200 px-4 lg:px-6 sticky top-0 z-30 h-16">
+                <div className="navbar bg-white shadow-sm border-b border-[#E8F3EF] px-4 lg:px-6 sticky top-0 z-30 h-16">
                     <div className="flex-1 flex items-center gap-3">
                         <label
                             htmlFor="drawer"
-                            className="w-8 h-8 flex items-center justify-center cursor-pointer rounded-lg hover:bg-gray-100"
+                            className="w-8 h-8 flex items-center justify-center cursor-pointer rounded-lg hover:bg-[#E8F3EF]"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -40,22 +40,22 @@ export default function Layout({ children }) {
                         </label>
                     </div>
                     <div className="flex-none gap-2 flex items-center">
-                        <span className="text-sm font-medium text-gray-700 hidden sm:block">
+                        <span className="text-sm font-medium text-[#173C33] hidden sm:block">
                             {admin?.name}
                         </span>
                     </div>
                 </div>
 
                 {/* Page Content */}
-                <main className="flex-1 bg-gray-50">{children}</main>
+                <main className="flex-1 bg-[#FAF7F2]">{children}</main>
             </div>
 
             {/* Sidebar */}
             <div className="drawer-side z-40">
                 <label htmlFor="drawer" className="drawer-overlay"></label>
-                <div className="menu p-0 w-64 min-h-full bg-slate-900 flex flex-col">
+                <div className="menu p-0 w-64 min-h-full bg-[#173C33] flex flex-col">
                     {/* Brand */}
-                    <div className="px-6 py-6 border-b border-slate-700 flex items-center gap-3">
+                    <div className="px-6 py-6 border-b border-[#255A4F] flex items-center gap-3">
                         <img
                             src="/assets/logo.png"
                             alt="Logo"
@@ -68,7 +68,7 @@ export default function Layout({ children }) {
                             <h2 className="text-base font-bold text-white tracking-tight leading-tight">
                                 Sistem Peminjaman Board Game
                             </h2>
-                            <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">
+                            <p className="text-[10px] text-[#FAF7F2]/60 mt-0.5 leading-tight">
                                 UPT Perpustakaan Universitas Diponegoro
                             </p>
                         </div>
@@ -90,8 +90,8 @@ export default function Layout({ children }) {
                                         href={item.href}
                                         className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                                             isActive
-                                                ? "bg-blue-600 text-white"
-                                                : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                                                ? "bg-[#2F6F62] text-white"
+                                                : "text-[#FAF7F2]/70 hover:bg-[#255A4F] hover:text-white"
                                         }`}
                                         /* @route: adjust href if the route name differs */
                                     >
@@ -103,12 +103,12 @@ export default function Layout({ children }) {
                     </ul>
 
                     {/* Logout */}
-                    <div className="px-3 py-4 border-t border-slate-700">
+                    <div className="px-3 py-4 border-t border-[#255A4F]">
                         <Link
                             href="/admin/logout"
                             method="post"
                             as="button"
-                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-colors w-full"
+                            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#FAF7F2]/70 hover:bg-[#255A4F] hover:text-white transition-colors w-full"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
