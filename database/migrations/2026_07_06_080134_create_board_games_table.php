@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('board_games', function (Blueprint $table) {
@@ -18,25 +15,26 @@ return new class extends Migration
             $table->string('nama');
             $table->string('penerbit')->nullable();
             $table->integer('jumlah');
-            $table->integer('available_copies')->default(0);
+
+            // Jumlah copy yang masih tersedia untuk dipinjam
+            $table->integer('available_copies');
+
             $table->string('satuan');
 
             // Array of string (disimpan sebagai JSON)
             $table->json('link_foto')->nullable();
 
-            $table->text('komponen');
+            // Array of objek {nama, jumlah} (disimpan sebagai JSON)
+            $table->json('komponen');
 
-            // Barang yang hilang
-            $table->text('barang_hilang')->nullable();
+            // Barang yang hilang, array of objek {nama, jumlah} (disimpan sebagai JSON)
+            $table->json('barang_hilang')->nullable();
 
             $table->integer('lantai');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('board_games');

@@ -1,20 +1,6 @@
 import { useState } from "react"
 import { Link, useForm } from "@inertiajs/react"
 
-function parseKomponen(text) {
-    if (!text) return [{ jumlah: '1', nama: '' }]
-    return text.split(',').map(item => {
-        item = item.trim()
-        const match = item.match(/^(\d+)\s+(.+)$/)
-        if (match) return { jumlah: match[1], nama: match[2] }
-        return { jumlah: '1', nama: item }
-    })
-}
-
-function toKomponenString(items) {
-    return items.map(item => `${item.jumlah} ${item.nama}`).join(', ')
-}
-
 export default function Edit({ boardgame }) {
     const { data, setData, put, processing, errors } = useForm({
         kode: boardgame.kode,
@@ -25,11 +11,11 @@ export default function Edit({ boardgame }) {
         satuan: boardgame.satuan,
         link_foto: boardgame.link_foto ?? [],
         lantai: boardgame.lantai,
-        komponen: boardgame.komponen ?? '',
+        komponen: boardgame.komponen ?? [],
         barang_hilang: boardgame.barang_hilang ?? [],
     })
 
-    const [komponenList, setKomponenList] = useState(parseKomponen(boardgame.komponen))
+    const [komponenList, setKomponenList] = useState(boardgame.komponen?.length ? boardgame.komponen : [{ jumlah: '1', nama: '' }])
     const [linkFotoList, setLinkFotoList] = useState(boardgame.link_foto?.length ? boardgame.link_foto : [''])
     const [barangHilangList, setBarangHilangList] = useState(boardgame.barang_hilang?.length ? boardgame.barang_hilang.map(b => typeof b === 'string' ? { jumlah: '1', nama: b } : b) : [])
 
@@ -72,19 +58,19 @@ export default function Edit({ boardgame }) {
             i === index ? { ...item, [field]: value } : item
         )
         setKomponenList(updated)
-        setData('komponen', toKomponenString(updated))
+        setData('komponen', updated.filter(item => item.nama.trim()))
     }
 
     const addKomponen = () => {
         const updated = [...komponenList, { jumlah: '1', nama: '' }]
         setKomponenList(updated)
-        setData('komponen', toKomponenString(updated))
+        setData('komponen', updated.filter(item => item.nama.trim()))
     }
 
     const removeKomponen = (index) => {
         const updated = komponenList.filter((_, i) => i !== index)
         setKomponenList(updated)
-        setData('komponen', toKomponenString(updated))
+        setData('komponen', updated.filter(item => item.nama.trim()))
     }
 
     const handleSubmit = (e) => {

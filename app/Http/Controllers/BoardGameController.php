@@ -17,8 +17,8 @@ class BoardGameController extends Controller
         if ($search = $request->search) {
             $query->where(function ($q) use ($search) {
                 $q->where('nama', 'like', "%{$search}%")
-                  ->orWhere('kode', 'like', "%{$search}%")
-                  ->orWhere('penerbit', 'like', "%{$search}%");
+                    ->orWhere('kode', 'like', "%{$search}%")
+                    ->orWhere('penerbit', 'like', "%{$search}%");
             });
         }
 
@@ -70,7 +70,9 @@ class BoardGameController extends Controller
             'satuan' => 'required|string|max:255',
             'link_foto' => 'nullable|array',
             'link_foto.*' => 'nullable|string|max:255',
-            'komponen' => 'required|string',
+            'komponen' => 'required|array',
+            'komponen.*.jumlah' => 'nullable|integer|min:1',
+            'komponen.*.nama' => 'nullable|string|max:255',
             'barang_hilang' => 'nullable|array',
             'barang_hilang.*.jumlah' => 'nullable|integer|min:1',
             'barang_hilang.*.nama' => 'nullable|string|max:255',
@@ -104,7 +106,9 @@ class BoardGameController extends Controller
             'satuan' => 'required|string|max:255',
             'link_foto' => 'nullable|array',
             'link_foto.*' => 'nullable|string|max:255',
-            'komponen' => 'required|string',
+            'komponen' => 'required|array',
+            'komponen.*.jumlah' => 'nullable|integer|min:1',
+            'komponen.*.nama' => 'nullable|string|max:255',
             'barang_hilang' => 'nullable|array',
             'barang_hilang.*.jumlah' => 'nullable|integer|min:1',
             'barang_hilang.*.nama' => 'nullable|string|max:255',

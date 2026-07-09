@@ -79,7 +79,18 @@ export default function Show({ boardgame }) {
           {/* Komponen */}
           <div>
             <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Komponen</label>
-            <p className="text-sm text-slate-700 bg-slate-50 rounded-lg px-4 py-3 leading-relaxed">{boardgame.komponen}</p>
+            {boardgame.komponen?.length > 0 ? (
+              <div className="space-y-1">
+                {boardgame.komponen.map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 bg-slate-50 rounded-md px-3 py-1.5 text-sm text-slate-700">
+                    <span className="font-medium">{item.jumlah}x</span>
+                    <span>{item.nama}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-400 italic">Tidak ada komponen</p>
+            )}
           </div>
 
           {/* Barang Hilang */}

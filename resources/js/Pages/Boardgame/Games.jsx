@@ -162,7 +162,7 @@ export default function Games({ boardgames }) {
                                 <td className="px-4 py-3 text-center">
                                     <span className="badge badge-ghost badge-sm">Lt {game.lantai}</span>
                                 </td>
-                                <td className="px-4 py-3 max-w-xs truncate text-slate-500" title={game.komponen}>{game.komponen}</td>
+                                <td className="px-4 py-3 max-w-xs truncate text-slate-500" title={game.komponen?.map(k => `${k.jumlah} ${k.nama}`).join(', ')}>{game.komponen?.length ? game.komponen.map(k => `${k.jumlah} ${k.nama}`).join(', ') : '-'}</td>
                             </tr>
                         ))}
                     </tbody>

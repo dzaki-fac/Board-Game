@@ -1,6 +1,5 @@
 import { Head, Link, useForm } from "@inertiajs/react"
 import { useEffect, useMemo, useState } from "react"
-import { parseKomponen } from "../../utils/parseKomponen"
 
 function formatDateTime(date) {
     if (!date) return "-"
@@ -39,7 +38,14 @@ export default function Create({ loans }) {
 
     const components = useMemo(() => {
         if (!selectedLoan?.game?.komponen) return []
-        return parseKomponen(selectedLoan.game.komponen)
+        const hilang = selectedLoan.game.barang_hilang ?? []
+        return selectedLoan.game.komponen.map(k => {
+            const sudahHilang = hilang.find(h => h.nama === k.nama)
+            return {
+                nama: k.nama,
+                available: k.jumlah - (sudahHilang?.jumlah ?? 0),
+            }
+        })
     }, [selectedLoan])
 
     const [missingQty, setMissingQty] = useState([])
@@ -50,7 +56,7 @@ export default function Create({ loans }) {
 
     const missingComponents = useMemo(() => {
         return components
-            .map((nama, i) => (missingQty[i] ? { nama, jumlah: missingQty[i] } : null))
+            .map((c, i) => (missingQty[i] ? { nama: c.nama, jumlah: missingQty[i] } : null))
             .filter(Boolean)
     }, [components, missingQty])
 
@@ -101,8 +107,8 @@ export default function Create({ loans }) {
         })
     }
 
-    const returnedCount = components.length - missingComponents.reduce((sum, m) => sum + m.jumlah, 0)
-    const totalCount = components.length
+    const totalCount = components.reduce((sum, c) => sum + c.available, 0)
+    const returnedCount = totalCount - missingComponents.reduce((sum, m) => sum + m.jumlah, 0)
     const totalHilang = missingComponents.reduce((sum, m) => sum + m.jumlah, 0)
 
     return (
@@ -216,7 +222,7 @@ export default function Create({ loans }) {
                                                                             ? "text-red-700 line-through"
                                                                             : "text-gray-700"
                                                                 }`}>
-                                                                    {component}
+                                                                    {component.available} {component.nama}
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -240,14 +246,15 @@ export default function Create({ loans }) {
                                                         if (!(missingQty[index] > 0)) return null
                                                         return (
                                                             <div key={index} className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-red-100">
-                                                                <span className="text-sm text-red-700">{component}</span>
+                                                                <span className="text-sm text-red-700">{component.nama}</span>
                                                                 <div className="flex items-center gap-2">
                                                                     <span className="text-xs text-red-500">Jumlah:</span>
                                                                     <input
                                                                         type="number"
                                                                         value={missingQty[index]}
                                                                         min={1}
-                                                                        onChange={(e) => setQty(index, parseInt(e.target.value) || 1)}
+                                                                        max={component.available}
+                                                                        onChange={(e) => setQty(index, Math.min(parseInt(e.target.value) || 1, component.available))}
                                                                         className="input input-bordered input-xs w-16 text-center"
                                                                     />
                                                                 </div>
