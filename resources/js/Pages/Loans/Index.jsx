@@ -14,7 +14,7 @@ function formatDateTime(date) {
 }
 
 function statusBadge() {
-  return <span className="badge badge-sm capitalize badge-primary">borrowed</span>
+  return <span className="badge badge-sm capitalize badge-primary">Dipinjam</span>
 }
 
 export default function Index({ loans, stats }) {
@@ -33,18 +33,18 @@ export default function Index({ loans, stats }) {
   }, [loans.data, search])
 
   const statCards = [
-    { title: "Pinjaman Aktif", value: stats.total, desc: "Currently borrowed", color: "text-indigo-600" },
+    { title: "Pinjaman Aktif", value: stats.total, desc: "Sedang dipinjam", color: "text-indigo-600" },
   ]
 
   return (
     <>
-      <Head title="Loan Dashboard" />
+      <Head title="Dashboard Peminjaman" />
 
       <div className="p-4 lg:p-6 space-y-6">
         {/* Page Header */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Loan Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage all board game borrowing activity</p>
+          <h1 className="text-2xl font-bold text-gray-900">Dashboard Peminjaman</h1>
+          <p className="text-sm text-gray-500 mt-1">Kelola semua aktivitas peminjaman board game</p>
         </div>
 
         {/* Stat Cards */}
@@ -64,14 +64,14 @@ export default function Index({ loans, stats }) {
         <div className="card bg-white border border-gray-200 rounded-xl shadow-sm">
           <div className="card-body p-0">
             <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gray-900">Loans List</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Daftar Peminjaman</h2>
               <div className="relative">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search game or borrower"
+                  placeholder="Cari game atau peminjam"
                   className="input input-bordered input-sm pl-9 w-64"
                 />
               </div>
@@ -89,11 +89,11 @@ export default function Index({ loans, stats }) {
                     <thead>
                       <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                         <th className="px-6 py-3 font-medium">Game</th>
-                        <th className="px-6 py-3 font-medium">Borrower</th>
+                        <th className="px-6 py-3 font-medium">Peminjam</th>
                         <th className="px-6 py-3 font-medium">NIM</th>
-                        <th className="px-6 py-3 font-medium">Borrowed At</th>
+                        <th className="px-6 py-3 font-medium">Dipinjam</th>
                         <th className="px-6 py-3 font-medium">Status</th>
-                        <th className="px-6 py-3 font-medium text-right">Actions</th>
+                        <th className="px-6 py-3 font-medium text-right">Aksi</th>
                       </tr>
                     </thead>
                     <tbody>

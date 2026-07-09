@@ -22,19 +22,19 @@ const icons = {
 
 const config = {
   returned: {
-    label: "Returned",
+    label: "Dikembalikan",
     bg: "bg-[#E8F6ED]",
     text: "text-[#15803D]",
     border: "border-[#86EFAC]",
   },
   not_returned: {
-    label: "Not Returned",
+    label: "Belum Dikembalikan",
     bg: "bg-[#EEF1F5]",
     text: "text-[#475569]",
     border: "border-[#CBD5E1]",
   },
   lost: {
-    label: "Lost",
+    label: "Hilang",
     bg: "bg-[#FDE8E8]",
     text: "text-[#DC2626]",
     border: "border-[#FCA5A5]",

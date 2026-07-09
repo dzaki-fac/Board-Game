@@ -28,6 +28,7 @@ class BoardGame extends Model
     {
         return [
             'link_foto' => 'array',
+            'komponen' => 'array',
             'barang_hilang' => 'array',
         ];
     }

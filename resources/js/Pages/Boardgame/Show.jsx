@@ -1,6 +1,13 @@
+import { useState } from "react"
 import { Link } from "@inertiajs/react"
 
 export default function Show({ boardgame }) {
+  const [fotoIndex, setFotoIndex] = useState(0)
+  const fotos = boardgame.link_foto || []
+
+  const prevFoto = () => setFotoIndex((i) => (i > 0 ? i - 1 : fotos.length - 1))
+  const nextFoto = () => setFotoIndex((i) => (i < fotos.length - 1 ? i + 1 : 0))
+
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -18,19 +25,25 @@ export default function Show({ boardgame }) {
 
         <div className="p-6 space-y-6">
           {/* Images */}
-          {boardgame.link_foto?.length > 0 && (
+          {fotos.length > 0 && (
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-3">Foto</label>
-              <div className="flex flex-wrap gap-3">
-                {boardgame.link_foto.map((url, i) => (
+              <div className="relative flex items-center justify-center gap-4">
+                <button onClick={prevFoto} className="btn btn-circle btn-ghost btn-lg text-slate-600 hover:bg-slate-100 flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <div className="relative flex-1 max-w-lg">
                   <img
-                    key={i}
-                    src={url}
-                    alt={`Foto ${i + 1}`}
-                    className="w-32 h-32 object-cover rounded-lg border border-slate-200 shadow-sm"
+                    src={fotos[fotoIndex]}
+                    alt={`Foto ${fotoIndex + 1}`}
+                    className="w-full h-96 object-contain rounded-lg border border-slate-200 shadow-sm bg-slate-50"
                     onError={(e) => { e.target.style.display = 'none' }}
                   />
-                ))}
+                  <p className="text-center text-xs text-slate-400 mt-2">Foto {fotoIndex + 1} dari {fotos.length}</p>
+                </div>
+                <button onClick={nextFoto} className="btn btn-circle btn-ghost btn-lg text-slate-600 hover:bg-slate-100 flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </button>
               </div>
             </div>
           )}
@@ -66,7 +79,18 @@ export default function Show({ boardgame }) {
           {/* Komponen */}
           <div>
             <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Komponen</label>
-            <p className="text-sm text-slate-700 bg-slate-50 rounded-lg px-4 py-3 leading-relaxed">{boardgame.komponen}</p>
+            {boardgame.komponen?.length > 0 ? (
+              <div className="space-y-1">
+                {boardgame.komponen.map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 bg-slate-50 rounded-md px-3 py-1.5 text-sm text-slate-700">
+                    <span className="font-medium">{item.jumlah}x</span>
+                    <span>{item.nama}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-400 italic">Tidak ada komponen</p>
+            )}
           </div>
 
           {/* Barang Hilang */}

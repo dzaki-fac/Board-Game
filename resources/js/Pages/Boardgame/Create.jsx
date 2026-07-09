@@ -1,10 +1,6 @@
 import { useState } from "react"
 import { Link, useForm } from "@inertiajs/react"
 
-function toKomponenString(items) {
-    return items.filter(item => item.nama.trim()).map(item => `${item.jumlah} ${item.nama}`).join(', ')
-}
-
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
         kode: '',
@@ -15,7 +11,7 @@ export default function Create() {
         satuan: '',
         link_foto: [],
         lantai: '',
-        komponen: '',
+        komponen: [],
         barang_hilang: [],
     })
 
@@ -62,19 +58,19 @@ export default function Create() {
             i === index ? { ...item, [field]: value } : item
         )
         setKomponenList(updated)
-        setData('komponen', toKomponenString(updated))
+        setData('komponen', updated.filter(item => item.nama.trim()))
     }
 
     const addKomponen = () => {
         const updated = [...komponenList, { jumlah: '1', nama: '' }]
         setKomponenList(updated)
-        setData('komponen', toKomponenString(updated))
+        setData('komponen', updated.filter(item => item.nama.trim()))
     }
 
     const removeKomponen = (index) => {
         const updated = komponenList.filter((_, i) => i !== index)
         setKomponenList(updated)
-        setData('komponen', toKomponenString(updated))
+        setData('komponen', updated.filter(item => item.nama.trim()))
     }
 
     const handleSubmit = (e) => {

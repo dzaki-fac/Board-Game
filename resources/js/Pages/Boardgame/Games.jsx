@@ -1,21 +1,32 @@
-import { useState, useMemo } from "react"
-import { Link } from "@inertiajs/react"
+import { useState, useCallback } from "react"
+import { Link, router, usePage } from "@inertiajs/react"
 
 export default function Games({ boardgames }) {
-    const [search, setSearch] = useState('')
-    const [sortField, setSortField] = useState('nama')
-    const [sortDir, setSortDir] = useState('asc')
-    const [filterLantai, setFilterLantai] = useState('')
-    const [filterBox, setFilterBox] = useState('')
-    const [penerbitList] = useState(() => [...new Set(boardgames.map(g => g.penerbit).filter(Boolean))])
+    const { data: games, links, from, to, total } = boardgames
+    const { query } = usePage().props
+    const [search, setSearch] = useState(query.search || '')
+    const [sortField, setSortField] = useState(query.sortField || 'nama')
+    const [sortDir, setSortDir] = useState(query.sortDir || 'asc')
+    const [filterLantai, setFilterLantai] = useState(query.filterLantai || '')
+    const [filterBox, setFilterBox] = useState(query.filterBox || '')
+
+    const go = useCallback((overrides = {}) => {
+        const params = {
+            search: overrides.search ?? (search || undefined),
+            sortField: overrides.sortField ?? sortField,
+            sortDir: overrides.sortDir ?? sortDir,
+            filterLantai: overrides.filterLantai ?? (filterLantai || undefined),
+            filterBox: overrides.filterBox ?? (filterBox || undefined),
+            page: overrides.page ?? undefined,
+        }
+        router.get('/admin/games', params, { preserveState: true, replace: true })
+    }, [search, sortField, sortDir, filterLantai, filterBox])
 
     const toggleSort = (field) => {
-        if (sortField === field) {
-            setSortDir(d => d === 'asc' ? 'desc' : 'asc')
-        } else {
-            setSortField(field)
-            setSortDir('asc')
-        }
+        const newDir = sortField === field && sortDir === 'asc' ? 'desc' : 'asc'
+        setSortField(field)
+        setSortDir(newDir)
+        go({ sortField: field, sortDir: newDir, page: 1 })
     }
 
     const sortArrow = (field) => {
@@ -23,32 +34,30 @@ export default function Games({ boardgames }) {
         return sortDir === 'asc' ? ' ▲' : ' ▼'
     }
 
-    const filtered = useMemo(() => {
-        let items = [...boardgames]
+    const handleSearch = (e) => {
+        const v = e.target.value
+        setSearch(v)
+        go({ search: v, page: 1 })
+    }
 
-        if (search.trim()) {
-            const q = search.toLowerCase()
-            items = items.filter(g =>
-                g.nama.toLowerCase().includes(q) ||
-                g.kode.toLowerCase().includes(q) ||
-                (g.penerbit && g.penerbit.toLowerCase().includes(q))
-            )
-        }
-        if (filterLantai) items = items.filter(g => g.lantai === Number(filterLantai))
-        if (filterBox) items = items.filter(g => g.box === Number(filterBox))
+    const setLantai = (e) => {
+        const v = e.target.value
+        setFilterLantai(v)
+        go({ filterLantai: v, page: 1 })
+    }
 
-        items.sort((a, b) => {
-            let va = a[sortField]
-            let vb = b[sortField]
-            if (typeof va === 'string') va = va.toLowerCase()
-            if (typeof vb === 'string') vb = vb.toLowerCase()
-            if (va < vb) return sortDir === 'asc' ? -1 : 1
-            if (va > vb) return sortDir === 'asc' ? 1 : -1
-            return 0
-        })
+    const setBox = (e) => {
+        const v = e.target.value
+        setFilterBox(v)
+        go({ filterBox: v, page: 1 })
+    }
 
-        return items
-    }, [boardgames, search, sortField, sortDir, filterLantai, filterBox])
+    const reset = () => {
+        setSearch('')
+        setFilterLantai('')
+        setFilterBox('')
+        go({ search: '', filterLantai: '', filterBox: '', page: 1 })
+    }
 
     return (
         <div className="p-6">
@@ -66,20 +75,20 @@ export default function Games({ boardgames }) {
                     <input
                         type="text"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={handleSearch}
                         placeholder="Cari nama, kode, atau penerbit..."
                         className="input input-bordered input-sm pl-9 w-full"
                     />
                 </div>
 
-                <select value={filterLantai} onChange={(e) => setFilterLantai(e.target.value)} className="select select-bordered select-sm w-45">
+                <select value={filterLantai} onChange={setLantai} className="select select-bordered select-sm w-45">
                     <option value="">Semua Lantai</option>
                     <option value="1">Lt 1</option>
                     <option value="2">Lt 2</option>
                     <option value="3">Lt 3</option>
                 </select>
 
-                <select value={filterBox} onChange={(e) => setFilterBox(e.target.value)} className="select select-bordered select-sm w-32">
+                <select value={filterBox} onChange={setBox} className="select select-bordered select-sm w-32">
                     <option value="">Semua Box</option>
                     {[1,2,3,4,5,6,7].map(b => (
                         <option key={b} value={b}>Box {b}</option>
@@ -87,7 +96,7 @@ export default function Games({ boardgames }) {
                 </select>
 
                 {(search || filterLantai || filterBox) && (
-                    <button onClick={() => { setSearch(''); setFilterLantai(''); setFilterBox('') }} className="btn btn-ghost btn-xs text-red-500">
+                    <button onClick={reset} className="btn btn-ghost btn-xs text-red-500">
                         Reset
                     </button>
                 )}
@@ -110,7 +119,7 @@ export default function Games({ boardgames }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {filtered.map((game) => (
+                        {games.map((game) => (
                             <tr key={game.id} className="hover:bg-slate-50 text-sm">
                                 <td className="px-4 py-3">
                                     <div className="flex items-center justify-center gap-2">
@@ -153,20 +162,37 @@ export default function Games({ boardgames }) {
                                 <td className="px-4 py-3 text-center">
                                     <span className="badge badge-ghost badge-sm">Lt {game.lantai}</span>
                                 </td>
-                                <td className="px-4 py-3 max-w-xs truncate text-slate-500" title={game.komponen}>{game.komponen}</td>
+                                <td className="px-4 py-3 max-w-xs truncate text-slate-500" title={game.komponen?.map(k => `${k.jumlah} ${k.nama}`).join(', ')}>{game.komponen?.length ? game.komponen.map(k => `${k.jumlah} ${k.nama}`).join(', ') : '-'}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
 
-            {filtered.length === 0 && (
+            {games.length === 0 && (
                 <div className="text-center py-12 text-slate-400">
                     <p className="text-lg">Tidak ada board game ditemukan.</p>
                 </div>
             )}
 
-            <p className="text-xs text-slate-400 mt-2">{filtered.length} dari {boardgames.length} board game</p>
+            {/* Pagination */}
+            {links.length > 3 && (
+                <div className="flex items-center justify-between mt-4">
+                    <p className="text-xs text-slate-400">Menampilkan {from}-{to} dari {total}</p>
+                    <div className="flex items-center gap-1">
+                        {links.map((link, i) => (
+                            <Link
+                                key={i}
+                                href={link.url || '#'}
+                                preserveState
+                                replace
+                                className={`btn btn-xs ${link.active ? 'bg-blue-600 text-white' : 'btn-ghost'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
