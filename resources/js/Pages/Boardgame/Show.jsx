@@ -67,12 +67,40 @@ export default function Show({ boardgame }) {
               <p className="text-sm text-slate-900">{boardgame.penerbit || '-'}</p>
             </div>
             <div>
+              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Kategori</label>
+              <p className="text-sm text-slate-900">{boardgame.kategori || '-'}</p>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Jumlah Pemain</label>
+              <p className="text-sm text-slate-900">{boardgame.jumlah_pemain || '-'}</p>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Durasi</label>
+              <p className="text-sm text-slate-900">{boardgame.durasi || '-'}</p>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Tingkat Kesulitan</label>
+              <p className="text-sm text-slate-900">{boardgame.tingkat_kesulitan ? boardgame.tingkat_kesulitan + ' / 5' : '-'}</p>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Usia Minimum</label>
+              <p className="text-sm text-slate-900">{boardgame.usia_minimum || '-'}</p>
+            </div>
+            <div>
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Jumlah</label>
               <p className="text-sm text-slate-900">{boardgame.jumlah} {boardgame.satuan}</p>
             </div>
             <div>
+              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Available Copies</label>
+              <p className="text-sm text-slate-900">{boardgame.available_copies}</p>
+            </div>
+            <div>
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Lantai</label>
               <p className="text-sm text-slate-900">Lt {boardgame.lantai}</p>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Populer</label>
+              <p className="text-sm text-slate-900">{boardgame.populer ? 'Ya' : 'Tidak'}</p>
             </div>
           </div>
 

@@ -27,7 +27,7 @@ class PermohonanSeeder extends Seeder
                 'nim' => fake()->numerify('24########'),
                 'status' => fake()->randomElement([
                     Permohonan::STATUS_PENDING,
-                    Permohonan::STATUS_APPROVED,
+                    // Permohonan::STATUS_APPROVED,
                     Permohonan::STATUS_REJECTED,
                 ]),
                 'tanggal_pinjam' => fake()->date(),

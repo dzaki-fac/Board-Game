@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('loans', function (Blueprint $table) {
             $table->id();
 
-            // Relasi ke board_games
             $table->foreignId('boardgame_id')
                 ->constrained('board_games')
                 ->cascadeOnDelete();
@@ -25,7 +24,7 @@ return new class extends Migration
             $table->dateTime('borrowed_at');
             $table->dateTime('returned_at')->nullable();
 
-            $table->enum('status', ['borrowed', 'returned'])
+            $table->string('status', 20)
                 ->default('borrowed');
 
             $table->string('return_condition')->nullable();

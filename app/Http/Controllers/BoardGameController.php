@@ -118,8 +118,13 @@ class BoardGameController extends Controller
             'box' => 'required|integer',
             'nama' => 'required|string|max:255',
             'penerbit' => 'nullable|string|max:255',
+            'kategori' => 'nullable|string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
+            'tingkat_kesulitan' => 'nullable|numeric|min:1|max:5',
+            'usia_minimum' => 'nullable|string|max:255',
+            'jumlah_pemain' => 'nullable|string|max:255',
+            'durasi' => 'nullable|string|max:255',
             'link_foto' => 'nullable|array',
             'link_foto.*' => 'nullable|string|max:255',
             'komponen' => 'required|array',
@@ -129,7 +134,10 @@ class BoardGameController extends Controller
             'barang_hilang.*.jumlah' => 'nullable|integer|min:1',
             'barang_hilang.*.nama' => 'nullable|string|max:255',
             'lantai' => 'required|integer',
+            'populer' => 'boolean',
         ]);
+
+        $validated['available_copies'] = $validated['jumlah'];
 
         BoardGame::create($validated);
 
@@ -151,8 +159,13 @@ class BoardGameController extends Controller
             'box' => 'required|integer',
             'nama' => 'required|string|max:255',
             'penerbit' => 'nullable|string|max:255',
+            'kategori' => 'nullable|string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
+            'tingkat_kesulitan' => 'nullable|numeric|min:1|max:5',
+            'usia_minimum' => 'nullable|string|max:255',
+            'jumlah_pemain' => 'nullable|string|max:255',
+            'durasi' => 'nullable|string|max:255',
             'link_foto' => 'nullable|array',
             'link_foto.*' => 'nullable|string|max:255',
             'komponen' => 'required|array',
@@ -162,6 +175,8 @@ class BoardGameController extends Controller
             'barang_hilang.*.jumlah' => 'nullable|integer|min:1',
             'barang_hilang.*.nama' => 'nullable|string|max:255',
             'lantai' => 'required|integer',
+            'populer' => 'boolean',
+            'available_copies' => 'required|integer',
         ]);
 
         $boardGame->update($validated);
