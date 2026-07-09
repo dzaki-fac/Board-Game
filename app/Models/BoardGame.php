@@ -17,6 +17,16 @@ class BoardGame extends Model
 
     public function isTersedia(): bool
     {
-        return $this->status === 'tersedia';
+        return $this->available_copies > 0;
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'link_foto' => 'array',
+            'komponen' => 'array',
+            'barang_hilang' => 'array',
+            'populer' => 'boolean',
+        ];
     }
 }

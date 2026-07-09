@@ -11,29 +11,43 @@ return new class extends Migration
         Schema::create('board_games', function (Blueprint $table) {
             $table->id();
 
+            // Identitas
             $table->string('kode')->unique();
-            $table->string('box');
-            $table->unsignedTinyInteger('lantai');
+            $table->integer('box');
+            $table->integer('lantai');
 
+            // Informasi board game
             $table->string('nama');
             $table->string('penerbit')->nullable();
-
-            $table->unsignedInteger('jumlah')->default(1);
-            $table->string('satuan')->default('set');
-
-            $table->text('deskripsi_isi')->nullable();
-
             $table->string('kategori')->nullable();
-            $table->decimal('tingkat_kesulitan', 2, 1)->nullable(); // 1.0 - 5.0
-            $table->string('usia_minimum')->nullable(); // contoh: 12+
 
+            // Stok
+            $table->integer('jumlah');
+            $table->integer('available_copies');
+            $table->string('satuan');
+
+            // Detail permainan
+            $table->decimal('tingkat_kesulitan', 2, 1)->nullable();
+            $table->string('usia_minimum')->nullable();
             $table->string('jumlah_pemain')->nullable();
             $table->string('durasi')->nullable();
 
-            $table->string('gambar')->nullable();
-            $table->string('gambar_hover')->nullable();
+            // Foto (array URL)
+            $table->json('link_foto')->nullable();
 
-            $table->enum('status', ['tersedia', 'dipinjam'])->default('tersedia');
+            // Daftar komponen
+            // [
+            //     { "nama": "Kartu", "jumlah": 120 },
+            //     { "nama": "Dadu", "jumlah": 2 }
+            // ]
+            $table->json('komponen');
+
+            // Komponen yang sedang hilang
+            // [
+            //     { "nama": "Kartu", "jumlah": 2 }
+            // ]
+            $table->json('barang_hilang')->nullable();
+
             $table->boolean('populer')->default(false);
 
             $table->timestamps();

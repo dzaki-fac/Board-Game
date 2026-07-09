@@ -109,29 +109,6 @@ function warnaKategori(kategori) {
     return KATEGORI_COLORS[kategori] ?? DEFAULT_COLOR;
 }
 
-// Pisah string komponen jadi array item, tapi koma di dalam tanda kurung ga dihitung
-function parseKomponen(text) {
-    if (!text) return [];
-    const items = [];
-    let current = "";
-    let depth = 0;
-
-    for (const char of text) {
-        if (char === "(") depth++;
-        if (char === ")") depth--;
-
-        if (char === "," && depth === 0) {
-            items.push(current.trim());
-            current = "";
-        } else {
-            current += char;
-        }
-    }
-    if (current.trim()) items.push(current.trim());
-
-    return items.filter(Boolean);
-}
-
 function labelKesulitan(nilai, t) {
     if (nilai <= 2) return t.ringan;
     if (nilai <= 3.5) return t.sedang;
@@ -358,8 +335,8 @@ function NavbarUtama({ t }) {
 // Slider foto: gambar utama + gambar_hover, dengan panah & dot (mirip AnnouncementCarousel di Katalog)
 function GaleriGambar({ game, warna }) {
     const slides = useMemo(
-        () => [game.gambar, game.gambar_hover].filter(Boolean),
-        [game.gambar, game.gambar_hover]
+        () => game.link_foto?.filter(Boolean) ?? [],
+        [game.link_foto]
     );
     const [index, setIndex] = useState(0);
     const adaBanyak = slides.length > 1;
@@ -471,8 +448,8 @@ function KartuGameSerupa({ item }) {
     return (
         <Link href={`/katalog/${item.id}`} className="shrink-0 w-44 group">
             <div className="w-44 h-44 rounded-2xl overflow-hidden flex items-center justify-center mb-2.5 border border-slate-100 p-4 bg-white">
-                {item.gambar ? (
-                    <img src={item.gambar} alt={item.nama} className="max-w-full max-h-full object-contain" />
+                {item.link_foto?.[0] ? (
+                    <img src={item.link_foto[0]} alt={item.nama} className="max-w-full max-h-full object-contain" />
                 ) : (
                     <IkonDadu pip={2} color={warnaKartu} />
                 )}
@@ -509,8 +486,8 @@ function SeksiGameSerupa({ gameSerupa, t }) {
 function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
     const t = useTeks();
     const [warna, bg] = warnaKategori(game.kategori);
-    const tersedia = game.status === "tersedia";
-    const daftarKomponen = useMemo(() => parseKomponen(game.deskripsi_isi), [game.deskripsi_isi]);
+    const tersedia = game.available_copies > 0;
+    const daftarKomponen = useMemo(() => game.komponen ?? [], [game.komponen]);
     const [tampilkanKomponen, setTampilkanKomponen] = useState(false);
     const adaBadge = game.tingkat_kesulitan || game.usia_minimum;
 
@@ -580,7 +557,8 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
                                             {daftarKomponen.map((item, i) => (
                                                 <li key={i} className="flex items-start gap-2 text-sm text-slate-600 leading-snug">
                                                     <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: warna }} />
-                                                    <span>{item}</span>
+                                                    <span className="font-medium capitalize">{item.nama}</span>
+                                                    <span className="text-slate-400 ml-auto">x{item.jumlah}</span>
                                                 </li>
                                             ))}
                                         </ul>

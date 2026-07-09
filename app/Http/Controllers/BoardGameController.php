@@ -9,11 +9,11 @@ class BoardGameController extends Controller
 {
     public function index()
     {
-        $games = BoardGame::orderByRaw("status = 'dipinjam'") // tersedia duluan
+        $games = BoardGame::orderBy('available_copies', 'desc')
             ->orderBy('nama')
             ->get([
                 'id', 'kode', 'nama', 'penerbit', 'kategori',
-                'jumlah_pemain', 'durasi', 'lantai', 'gambar', 'gambar_hover', 'status', 'populer'
+                'jumlah_pemain', 'durasi', 'lantai', 'link_foto', 'available_copies', 'populer'
             ]);
         return Inertia::render('Katalog', [
             'games' => $games,
@@ -26,7 +26,7 @@ class BoardGameController extends Controller
             ->where('id', '!=', $boardGame->id)
             ->inRandomOrder()
             ->limit(8)
-            ->get(['id', 'nama', 'kategori', 'gambar']);
+            ->get(['id', 'nama', 'kategori', 'link_foto']);
 
         return Inertia::render('Detail', [
             'game' => $boardGame,

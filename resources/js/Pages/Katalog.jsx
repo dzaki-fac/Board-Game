@@ -392,18 +392,18 @@ function KartuGame({ game, tersedia }) {
                 className={`relative aspect-square flex items-center justify-center ${!tersedia ? "grayscale" : ""}`}
                 style={{ backgroundColor: bg }}
             >
-                {game.gambar ? (
+                {game.link_foto?.[0] ? (
                     <>
                         <img
-                            src={game.gambar}
+                            src={game.link_foto[0]}
                             alt={game.nama}
                             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-                                game.gambar_hover ? "group-hover:opacity-0" : ""
+                                game.link_foto?.[1] ? "group-hover:opacity-0" : ""
                             }`}
                         />
-                        {game.gambar_hover && (
+                        {game.link_foto?.[1] && (
                             <img
-                                src={game.gambar_hover}
+                                src={game.link_foto[1]}
                                 alt={`${game.nama} - tampilan lain`}
                                 className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                             />
@@ -530,8 +530,8 @@ function SlidePopuler({ games, nomor }) {
                                 className="w-full rounded-xl bg-white overflow-hidden shadow-md transition-transform hover:-translate-y-1"
                             >
                                 <div className="aspect-square flex items-center justify-center" style={{ backgroundColor: bg }}>
-                                    {game.gambar ? (
-                                        <img src={game.gambar} alt={game.nama} className="h-full w-full object-cover" />
+                                    {game.link_foto?.[0] ? (
+                                        <img src={game.link_foto[0]} alt={game.nama} className="h-full w-full object-cover" />
                                     ) : (
                                         <IkonDadu pip={pipDariJumlahPemain(game.jumlah_pemain)} color={warna} />
                                     )}
@@ -689,13 +689,13 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
             const cocokLantai = lantaiAktif === "Semua" || String(g.lantai) === lantaiAktif;
             const cocokStatus =
                 statusAktif === "Semua" ||
-                (statusAktif === "Tersedia" ? g.status === "tersedia" : g.status !== "tersedia");
+                (statusAktif === "Tersedia" ? g.available_copies > 0 : g.available_copies <= 0);
             return cocokNama && cocokKategori && cocokLantai && cocokStatus;
         });
     }, [games, pencarian, kategoriAktif, lantaiAktif, statusAktif]);
 
-    const tersedia = filtered.filter((g) => g.status === "tersedia");
-    const dipinjam = filtered.filter((g) => g.status !== "tersedia");
+    const tersedia = filtered.filter((g) => g.available_copies > 0);
+    const dipinjam = filtered.filter((g) => g.available_copies <= 0);
 
     const kelasSelect =
         "rounded-md border border-slate-200 text-xs sm:text-sm px-2.5 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2F6F62]/30";
