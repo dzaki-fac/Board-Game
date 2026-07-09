@@ -147,7 +147,7 @@ export default function Create({ loans }) {
                                             <option value="">Select active loan</option>
                                             {loans.map((loan) => (
                                                 <option key={loan.id} value={loan.id}>
-                                                    {loan.game.name} — {loan.borrower_name}
+                                                    {loan.game.nama} — {loan.borrower_name}
                                                 </option>
                                             ))}
                                         </select>
@@ -372,7 +372,7 @@ export default function Create({ loans }) {
                                         <div>
                                             <p className="text-xs text-gray-500">Board Game</p>
                                             <p className="text-sm font-medium text-gray-900">
-                                                {selectedLoan.game.name}
+                                                {selectedLoan.game.nama}
                                             </p>
                                         </div>
                                         <div>
@@ -442,7 +442,7 @@ export default function Create({ loans }) {
                                         <div className="flex justify-between items-center">
                                             <span className="text-xs text-gray-500">Board Game</span>
                                             <span className="text-sm font-medium text-gray-900">
-                                                {selectedLoan.game.name}
+                                                {selectedLoan.game.nama}
                                             </span>
                                         </div>
 

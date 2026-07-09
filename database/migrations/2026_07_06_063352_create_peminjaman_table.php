@@ -11,16 +11,33 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('peminjaman', function (Blueprint $table) {
+        Schema::create('permohonan', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('boardgame_id')->constrained('board_games')->cascadeOnDelete();
-            $table->enum('status', ['menunggu', 'dipinjam', 'dikembalikan', 'ditolak'])->default('menunggu');
+
+            $table->foreignId('boardgame_id')
+                ->constrained('board_games')
+                ->cascadeOnDelete();
+
+            $table->string('nama');
+            $table->string('nim');
+
+            $table->enum('status', [
+                'menunggu',
+                'dipinjam',
+                'dikembalikan',
+                'ditolak'
+            ])->default('menunggu');
+
             $table->date('tanggal_pinjam');
-            $table->date('jam_pinjam');
-            $table->date('jam_rencana_kembali');
-            $table->date('jam_kembali')->nullable();
+            $table->time('jam_pinjam');
+
+            $table->date('tanggal_rencana_kembali')->nullable();
+            $table->time('jam_rencana_kembali')->nullable();
+
+            $table->time('jam_kembali')->nullable();
+
             $table->text('catatan')->nullable();
+
             $table->timestamps();
         });
     }
@@ -30,6 +47,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('peminjaman');
+        Schema::dropIfExists('permohonan');
     }
 };

@@ -11,7 +11,7 @@ class Loan extends Model
     use HasFactory;
 
     protected $fillable = [
-        'game_id',
+        'boardgame_id',
         'borrower_name',
         'borrower_nim',
         'borrowed_at',
@@ -34,6 +34,6 @@ class Loan extends Model
 
     public function game(): BelongsTo
     {
-        return $this->belongsTo(Game::class);
+        return $this->belongsTo(BoardGame::class, 'boardgame_id');
     }
 }

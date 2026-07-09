@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
         Schema::create('board_games', function (Blueprint $table) {
@@ -15,6 +18,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('penerbit')->nullable();
             $table->integer('jumlah');
+            $table->integer('available_copies')->default(0);
             $table->string('satuan');
 
             // Array of string (disimpan sebagai JSON)
@@ -30,6 +34,9 @@ return new class extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('board_games');

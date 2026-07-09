@@ -2,94 +2,43 @@
 
 namespace Database\Seeders;
 
-use App\Models\Game;
+use App\Models\BoardGame;
 use App\Models\Loan;
-use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class LoanSeeder extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
-        $games = Game::all();
+        $boardgameIds = BoardGame::pluck('id')->toArray();
 
-        if ($games->isEmpty()) {
-            $this->command->warn('No games found. Skipping LoanSeeder.');
-            return;
-        }
+        for ($i = 0; $i < 10; $i++) {
+            $borrowedAt = fake()->dateTimeBetween('-30 days', 'now');
+            $returned = fake()->boolean(40);
 
-        $today = Carbon::parse('2026-07-07');
-        $borrowerNames = [
-            'Ahmad Fauzi', 'Budi Santoso', 'Citra Dewi', 'Dian Permata', 'Eko Prasetyo',
-            'Fitri Handayani', 'Gilang Ramadhan', 'Hana Safitri', 'Indra Wijaya', 'Joko Susilo',
-            'Kartika Sari', 'Lukman Hakim', 'Mega Putri', 'Nugroho Adi', 'Olivia Tan',
-            'Putra Nugraha', 'Rina Marlina', 'Sigit Purnomo', 'Tari Utami', 'Umar Said',
-        ];
-
-        $shuffled = $games->shuffle();
-        $totalGames = $shuffled->count();
-
-        $borrowedCount = 15;
-        $historyCount = $totalGames - $borrowedCount;
-
-        $historyStatuses = collect();
-        for ($i = 0; $i < $historyCount; $i++) {
-            if ($i < $historyCount - 6) {
-                $historyStatuses->push('returned');
-            } elseif ($i < $historyCount - 2) {
-                $historyStatuses->push('not_returned');
-            } else {
-                $historyStatuses->push('lost');
-            }
-        }
-        $historyStatuses = $historyStatuses->shuffle();
-
-        $conditions = ['good', 'minor_damage', 'damaged', 'missing_parts'];
-        $borrowedGameIds = [];
-
-        foreach ($shuffled as $i => $game) {
-            $isBorrowed = $i < $borrowedCount;
-            $status = $isBorrowed ? 'borrowed' : $historyStatuses->pop();
-
-            $borrowerName = $borrowerNames[array_rand($borrowerNames)];
-            $borrowedAt = $today->copy()->subDays(rand(1, 30))->setTime(rand(8, 16), rand(0, 59), rand(0, 59));
-
-            $loanData = [
-                'game_id' => $game->id,
-                'borrower_name' => $borrowerName,
+            Loan::create([
+                'boardgame_id' => fake()->randomElement($boardgameIds),
+                'borrower_name' => fake()->name(),
+                'borrower_nim' => fake()->numerify('24########'),
                 'borrowed_at' => $borrowedAt,
-                'returned_at' => null,
-                'status' => $status,
-                'notes' => null,
-                'return_condition' => null,
-                'missing_components' => null,
-                'fine_amount' => null,
-            ];
-
-            if (!$isBorrowed) {
-                $maxReturn = $borrowedAt->copy()->addHours(3);
-                $cap = $borrowedAt->copy()->setTime(20, 0, 0);
-                if ($maxReturn->gt($cap)) $maxReturn = $cap;
-                $returnedAt = fake()->dateTimeBetween($borrowedAt->toDateTimeString(), $maxReturn->toDateTimeString());
-
-                $loanData['returned_at'] = Carbon::instance($returnedAt);
-                if ($status === 'returned') {
-                    $loanData['return_condition'] = fake()->randomElement($conditions);
-                }
-                $loanData['missing_components'] = fake()->boolean(20) ? 'some components missing' : null;
-                $loanData['fine_amount'] = fake()->boolean(25) ? fake()->randomFloat(2, 5000, 100000) : null;
-                $loanData['notes'] = fake()->boolean(40) ? fake()->sentence() : null;
-            }
-
-            Loan::create($loanData);
-
-            if ($isBorrowed) {
-                $game->decrement('available_copies');
-                $borrowedGameIds[] = $game->id;
-            }
+                'returned_at' => $returned
+                    ? fake()->dateTimeBetween($borrowedAt, 'now')
+                    : null,
+                'status' => $returned ? 'returned' : 'borrowed',
+                'return_condition' => $returned
+                    ? fake()->randomElement(['Baik', 'Rusak Ringan'])
+                    : null,
+                'missing_components' => $returned && fake()->boolean(20)
+                    ? fake()->words(3, true)
+                    : null,
+                'fine_amount' => $returned && fake()->boolean(30)
+                    ? fake()->randomFloat(2, 5000, 50000)
+                    : null,
+                'notes' => fake()->optional()->sentence(),
+            ]);
         }
-
-        $this->command->info("61 loan records seeded — {$borrowedCount} borrowed, {$historyCount} history.");
     }
 }
