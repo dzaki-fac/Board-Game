@@ -172,10 +172,7 @@ export default function Form({ boardgames = [] }) {
                                             Board game tidak ditemukan
                                         </div>
                                     ) : (
-                                        filtered.map((bg) => {
-                                            const isBorrowed =
-                                                bg.availability_status ===
-                                                "borrowed";
+                                         filtered.map((bg) => {
                                             return (
                                                 <label
                                                     key={bg.id}
@@ -184,7 +181,7 @@ export default function Form({ boardgames = [] }) {
                                                         bg.id
                                                             ? "bg-[#E8F3EF] border-l-4 border-[#2F6F62]"
                                                             : "border-l-4 border-transparent"
-                                                    } ${isBorrowed ? "opacity-60" : ""}`}
+                                                    } ${!bg.is_available ? "opacity-60" : ""}`}
                                                 >
                                                     <input
                                                         type="radio"
@@ -201,7 +198,7 @@ export default function Form({ boardgames = [] }) {
                                                                 e.target.value,
                                                             )
                                                         }
-                                                        disabled={isBorrowed}
+                                                        disabled={!bg.is_available}
                                                     />
                                                     <div className="flex-1 min-w-0">
                                                         <p className="font-medium truncate">
@@ -210,16 +207,16 @@ export default function Form({ boardgames = [] }) {
                                                         <p className="text-xs text-slate-500 truncate">
                                                             {bg.kode}
                                                         </p>
+                                                        {bg.is_available ? (
+                                                            <span className="inline-block rounded-full bg-green-300 px-3 py-1 text-xs font-semibold text-green-900 mt-1">
+                                                                Tersedia
+                                                            </span>
+                                                        ) : (
+                                                            <span className="inline-block rounded-full bg-yellow-300 px-3 py-1 text-xs font-semibold text-yellow-900 mt-1">
+                                                                Sedang dipinjam
+                                                            </span>
+                                                        )}
                                                     </div>
-                                                    <span
-                                                        className={`badge badge-sm ${
-                                                            isBorrowed
-                                                                ? "badge-warning"
-                                                                : "badge-success"
-                                                        }`}
-                                                    >
-                                                        {bg.availability_label}
-                                                    </span>
                                                 </label>
                                             );
                                         })
@@ -261,7 +258,7 @@ export default function Form({ boardgames = [] }) {
                                             ? new Date(
                                                   data.tanggal_pinjam +
                                                       "T00:00:00",
-                                              ).toLocaleDateString("en-GB", {
+                                              ).toLocaleDateString("id-ID", {
                                                   day: "2-digit",
                                                   month: "long",
                                                   year: "2-digit",
@@ -338,7 +335,7 @@ export default function Form({ boardgames = [] }) {
                         onClick={() => reset()}
                         disabled={processing}
                     >
-                        Reset
+                        Atur Ulang
                     </button>
                 </div>
             </form>

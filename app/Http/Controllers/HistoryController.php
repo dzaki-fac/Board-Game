@@ -47,10 +47,9 @@ class HistoryController extends Controller
                 'status' => $statusFilter,
             ],
             'stats' => [
-                'total' => (clone $statsQuery)->count(),
-                'returned' => (clone $statsQuery)->where('status', 'returned')->count(),
-                'not_returned' => (clone $statsQuery)->where('status', 'not_returned')->count(),
-                'lost' => (clone $statsQuery)->where('status', 'lost')->count(),
+                'total' => Loan::whereIn('status', ['returned', 'lost'])->count(),
+                'returned' => Loan::where('status', 'returned')->count(),
+                'lost' => Loan::where('status', 'lost')->count(),
             ],
         ]);
     }

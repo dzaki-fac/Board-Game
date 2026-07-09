@@ -41,27 +41,21 @@ export default function Index({ histories, stats }) {
 
     const statCards = [
         {
-            title: "Total Riwayat",
+            title: "Total Rekaman",
             value: stats.total,
             desc: "Semua riwayat peminjaman",
-            color: "text-[#2F6F62]",
+            color: "text-blue-600",
         },
         {
             title: "Dikembalikan",
             value: stats.returned,
-            desc: "Pengembalian selesai",
+            desc: "Sudah dikembalikan",
             color: "text-emerald-600",
-        },
-        {
-            title: "Belum Dikembalikan",
-            value: stats.not_returned,
-            desc: "Belum dikembalikan",
-            color: "text-amber-600",
         },
         {
             title: "Hilang",
             value: stats.lost,
-            desc: "Item ditandai hilang",
+            desc: "Ditandai hilang",
             color: "text-red-600",
         },
     ]
@@ -108,14 +102,14 @@ export default function Index({ histories, stats }) {
             <div className="p-4 lg:p-6 space-y-6">
                 {/* Page Header */}
                 <div>
-                    <h1 className="text-2xl font-bold text-[#173C33]">Riwayat Peminjaman</h1>
-                    <p className="text-sm text-[#2F6F62]/60 mt-1">
-                        Lihat dan kelola semua riwayat peminjaman board game
+                    <h1 className="text-2xl font-bold text-gray-900">Riwayat Peminjaman</h1>
+                    <p className="text-sm text-gray-500 mt-1">
+                        Lihat dan kelola seluruh riwayat peminjaman board game
                     </p>
                 </div>
 
                 {/* Stat Cards */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     {statCards.map((card) => (
                         <div
                             key={card.title}
@@ -137,12 +131,12 @@ export default function Index({ histories, stats }) {
                 {/* Filters Card */}
                 <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                     <div className="card-body p-6">
-                            <h2 className="text-lg font-semibold text-[#173C33] mb-4">Filter</h2>
+                        <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter</h2>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                             {/* Search */}
                             <div>
-                                <label className="text-xs font-medium text-[#2F6F62]/70 uppercase tracking-wider block mb-1.5">
+                                <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
                                     Cari
                                 </label>
                                 <div className="relative">
@@ -182,9 +176,9 @@ export default function Index({ histories, stats }) {
                                         className="flex items-center gap-2 w-full h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F6F62] transition-colors"
                                     >
                                         {statusFilter ? (
-                                            <BadgeStatus value={statusFilter} />
+                                            <BadgeStatus status={statusFilter} />
                                         ) : (
-                                            <span className="text-[#2F6F62]/70">Semua</span>
+                                             <span className="text-gray-500">Semua</span>
                                         )}
                                         <svg
                                             className={`w-4 h-4 ml-auto text-gray-400 transition-transform ${open ? "rotate-180" : ""}`}
@@ -207,21 +201,21 @@ export default function Index({ histories, stats }) {
                                                     onClick={() => { setStatusFilter(""); setOpen(false) }}
                                                     className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${!statusFilter ? "bg-[#E8F3EF]" : ""}`}
                                                 >
-                                                    <span className="text-[#2F6F62]/70">Semua</span>
+                                                        <span className="text-gray-500">Semua</span>
                                                     {!statusFilter && (
                                                         <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                             <polyline points="20 6 9 17 4 12" />
                                                         </svg>
                                                     )}
                                                 </button>
-                                                {["returned", "not_returned", "lost"].map((opt) => (
+                                                {["returned", "lost"].map((opt) => (
                                                     <button
                                                         key={opt}
                                                         type="button"
                                                         onClick={() => { setStatusFilter(opt); setOpen(false) }}
                                                         className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${statusFilter === opt ? "bg-[#E8F3EF]" : ""}`}
                                                     >
-                                                        <BadgeStatus value={opt} />
+                                                        <BadgeStatus status={opt} />
                                                         {statusFilter === opt && (
                                                             <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                                 <polyline points="20 6 9 17 4 12" />
@@ -265,8 +259,8 @@ export default function Index({ histories, stats }) {
                 {/* History Table Card */}
                 <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                     <div className="card-body p-0">
-                        <div className="px-6 py-4 border-b border-[#E8F3EF]">
-                            <h2 className="text-lg font-semibold text-[#173C33]">
+                        <div className="px-6 py-4 border-b border-gray-100">
+                            <h2 className="text-lg font-semibold text-gray-900">
                                 Riwayat Peminjaman
                             </h2>
                         </div>
@@ -308,7 +302,7 @@ export default function Index({ histories, stats }) {
                                     />
                                 </svg>
                                 <p className="text-gray-400 text-sm">
-                                    Tidak ada riwayat yang sesuai filter
+                                                    Tidak ada riwayat yang sesuai filter
                                 </p>
                             </div>
                         ) : (
@@ -316,9 +310,10 @@ export default function Index({ histories, stats }) {
                                 <div className="overflow-x-auto">
                                     <table className="table">
                                         <thead>
-                                            <tr className="bg-[#FAF7F2] text-[#173C33]/60 text-xs uppercase tracking-wider">
+                                            <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                                                 <th className="px-6 py-3 font-medium">ID</th>
                                                 <th className="px-6 py-3 font-medium">Peminjam</th>
+                                                <th className="px-6 py-3 font-medium">NIM</th>
                                                 <th className="px-6 py-3 font-medium">Board Game</th>
                                                 <th className="px-6 py-3 font-medium">Dipinjam</th>
                                                 <th className="px-6 py-3 font-medium">Dikembalikan</th>
@@ -346,6 +341,9 @@ export default function Index({ histories, stats }) {
                                                             {loan.borrower_name}
                                                         </span>
                                                     </td>
+                                                    <td className="px-6 py-4 text-gray-500 font-mono text-sm">
+                                                        {loan.borrower_nim || "-"}
+                                                    </td>
                                                     <td className="px-6 py-4 text-gray-700">
                                                         {loan.game.nama}
                                                     </td>
@@ -356,7 +354,7 @@ export default function Index({ histories, stats }) {
                                                         {formatDateTime(loan.returned_at)}
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <BadgeStatus value={loan.status} />
+                                                        <BadgeStatus status={loan.status} />
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <BadgeCondition value={loan.return_condition} />
@@ -397,7 +395,7 @@ export default function Index({ histories, stats }) {
                                                             <Link
                                                                 href={`/admin/loans/${loan.id}/print`}
                                                                 className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-gray-700"
-                                                                title="Print"
+                                                                title="Cetak"
                                                             >
                                                                 <svg
                                                                     xmlns="http://www.w3.org/2000/svg"

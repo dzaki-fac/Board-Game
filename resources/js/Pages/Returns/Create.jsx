@@ -28,7 +28,7 @@ export default function Create({ loans }) {
         status: "returned",
     })
 
-    const conditionDisabled = data.status === "not_returned" || data.status === "lost"
+    const conditionDisabled = data.status === "lost"
     const componentsDisabled = data.status === "lost"
 
     const selectedLoan = useMemo(() => {
@@ -81,14 +81,12 @@ export default function Create({ loans }) {
     }
 
     function getFinalStatus() {
-        if (data.status === "not_returned") return "not_returned"
         if (data.status === "lost") return "lost"
         return "returned"
     }
 
-    const statusLabel = {
+    const statusLabels = {
         returned: "Dikembalikan",
-        not_returned: "Belum Dikembalikan",
         lost: "Hilang",
     }
 
@@ -96,7 +94,7 @@ export default function Create({ loans }) {
         good: "Baik",
         minor_damage: "Rusak Ringan",
         damaged: "Rusak",
-        missing_parts: "Kekurangan Bagian",
+        missing_parts: "Bagian Hilang",
     }
 
     function setQty(index, qty) {
@@ -119,8 +117,8 @@ export default function Create({ loans }) {
                 {/* Page Header */}
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold text-[#173C33]">Form Pengembalian</h1>
-                        <p className="text-sm text-[#2F6F62]/60 mt-1">
+                        <h1 className="text-2xl font-bold text-gray-900">Form Pengembalian</h1>
+                        <p className="text-sm text-gray-500 mt-1">
                             Proses pengembalian board game yang dipinjam
                         </p>
                     </div>
@@ -151,7 +149,7 @@ export default function Create({ loans }) {
                     <div className="lg:col-span-2">
                         <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6">
-                                <h2 className="text-lg font-semibold text-[#173C33] mb-6">
+                                <h2 className="text-lg font-semibold text-gray-900 mb-6">
                                     Informasi Pengembalian
                                 </h2>
 
@@ -159,14 +157,14 @@ export default function Create({ loans }) {
                                     {/* Loan Select */}
                                     <fieldset className="fieldset">
                                         <legend className="fieldset-legend text-sm font-medium text-gray-700">
-                                            Peminjaman
+                                            Pinjaman
                                         </legend>
                                         <select
                                             value={data.loan_id}
                                             onChange={(e) => setData("loan_id", e.target.value)}
                                             className="select select-bordered w-full"
                                         >
-                                            <option value="">Pilih peminjaman aktif</option>
+                                            <option value="">Pilih pinjaman aktif</option>
                                             {loans.map((loan) => (
                                                 <option key={loan.id} value={loan.id}>
                                                     {loan.game.nama} — {loan.borrower_name}
@@ -186,7 +184,7 @@ export default function Create({ loans }) {
                                                 {componentsDisabled ? (
                                                     <span className="text-gray-400 font-normal ml-1">(dinonaktifkan untuk status Hilang)</span>
                                                 ) : (
-                                                    <span className="text-gray-400 font-normal ml-1">(uncheck & isi jumlah item yang hilang)</span>
+                                                    <span className="text-gray-400 font-normal ml-1">(centang komponen yang hilang)</span>
                                                 )}
                                             </legend>
                                             <div
@@ -269,7 +267,7 @@ export default function Create({ loans }) {
                                     {/* Returned At */}
                                     <fieldset className="fieldset">
                                         <legend className="fieldset-legend text-sm font-medium text-gray-700">
-                                            Dikembalikan Pada
+                                            Dikembalikan
                                         </legend>
                                         <input
                                             type="datetime-local"
@@ -302,7 +300,7 @@ export default function Create({ loans }) {
                                             <option value="minor_damage">Rusak Ringan</option>
                                             <option value="damaged">Rusak</option>
                                             {missingComponents.length > 0 && (
-                                                <option value="missing_parts">Kekurangan Bagian</option>
+                                                <option value="missing_parts">Bagian Hilang</option>
                                             )}
                                         </select>
                                         {errors.return_condition && (
@@ -323,7 +321,7 @@ export default function Create({ loans }) {
                                             value={data.fine_amount ?? ""}
                                             onChange={(e) => setData("fine_amount", e.target.value === "" ? null : e.target.value)}
                                             className="input input-bordered w-full"
-                                            placeholder="Masukkan jumlah denda jika ada"
+                                            placeholder="Masukkan denda jika ada"
                                             min="0"
                                             step="0.01"
                                         />
@@ -345,7 +343,7 @@ export default function Create({ loans }) {
                                             onChange={(e) => setData("return_notes", e.target.value)}
                                             className="textarea textarea-bordered w-full"
                                             rows={3}
-                                            placeholder="Tambahkan catatan pengembalian, detail kondisi, atau keterangan admin"
+                                            placeholder="Tambah catatan, detail kondisi, atau keterangan admin"
                                         />
                                         {errors.return_notes && (
                                             <p className="text-red-500 text-xs mt-1">
@@ -364,7 +362,7 @@ export default function Create({ loans }) {
                                             onChange={(e) => {
                                                 const newStatus = e.target.value
                                                 setData("status", newStatus)
-                                                if (newStatus === "not_returned" || newStatus === "lost") {
+                                                if (newStatus === "lost") {
                                                     setData("return_condition", "")
                                                 } else if (newStatus === "returned") {
                                                     setData("return_condition", "good")
@@ -376,7 +374,6 @@ export default function Create({ loans }) {
                                             className="select select-bordered w-full"
                                         >
                                             <option value="returned">Dikembalikan</option>
-                                            <option value="not_returned">Belum Dikembalikan</option>
                                             <option value="lost">Hilang</option>
                                         </select>
                                         {errors.status && (
@@ -436,15 +433,15 @@ export default function Create({ loans }) {
                         {/* Selected Loan Details */}
                         <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6">
-                                <h3 className="text-sm font-semibold text-[#173C33] uppercase tracking-wider mb-4">
-                                    Detail Peminjaman
+                                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
+                                    Detail Pinjaman Dipilih
                                 </h3>
 
                                 {selectedLoan ? (
                                     <div className="space-y-3">
                                         <div>
-                                            <p className="text-xs text-[#2F6F62]/70">Peminjam</p>
-                                            <p className="text-sm font-medium text-[#173C33]">
+                                            <p className="text-xs text-gray-500">Peminjam</p>
+                                            <p className="text-sm font-medium text-gray-900">
                                                 {selectedLoan.borrower_name}
                                             </p>
                                         </div>
@@ -455,13 +452,13 @@ export default function Create({ loans }) {
                                             </p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-[#2F6F62]/70">Dipinjam Pada</p>
+                                            <p className="text-xs text-gray-500">Dipinjam</p>
                                             <p className="text-sm text-gray-700">
                                                 {formatDateTime(selectedLoan.borrowed_at)}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className="text-xs text-[#2F6F62]/70">Status Saat Ini</p>
+                                            <p className="text-xs text-gray-500">Status</p>
                                             <span
                                                 className={`badge badge-sm capitalize ${
                                                     selectedLoan.status === "borrowed"
@@ -496,7 +493,7 @@ export default function Create({ loans }) {
                                             />
                                         </svg>
                                         <p className="text-gray-400 text-sm">
-                                            Pilih peminjaman untuk melihat detail
+                                            Pilih pinjaman untuk melihat detail
                                         </p>
                                     </div>
                                 )}
@@ -506,15 +503,15 @@ export default function Create({ loans }) {
                         {/* Return Summary */}
                         <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6">
-                                <h3 className="text-sm font-semibold text-[#173C33] uppercase tracking-wider mb-4">
+                                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
                                     Ringkasan Pengembalian
                                 </h3>
 
                                 {selectedLoan ? (
                                     <div className="space-y-3">
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-[#2F6F62]/70">Peminjam</span>
-                                            <span className="text-sm font-medium text-[#173C33]">
+                                            <span className="text-xs text-gray-500">Peminjam</span>
+                                            <span className="text-sm font-medium text-gray-900">
                                                 {selectedLoan.borrower_name}
                                             </span>
                                         </div>
@@ -529,19 +526,19 @@ export default function Create({ loans }) {
                                             <>
                                                 <div className="border-t border-[#E8F3EF] my-1"></div>
                                                 <div className="flex justify-between items-center">
-                                                    <span className="text-xs text-[#2F6F62]/70">Total Komponen</span>
-                                                    <span className="text-sm font-medium text-[#173C33]">
+                                                    <span className="text-xs text-gray-500">Total Komponen</span>
+                                                    <span className="text-sm font-medium text-gray-900">
                                                         {totalCount}
                                                     </span>
                                                 </div>
                                                 <div className="flex justify-between items-center">
-                                                    <span className="text-xs text-[#2F6F62]/70">Dikembalikan</span>
+                                                    <span className="text-xs text-gray-500">Dikembalikan</span>
                                                     <span className="text-sm font-medium text-green-600">
                                                         {returnedCount}
                                                     </span>
                                                 </div>
                                                 <div className="flex justify-between items-center">
-                                                    <span className="text-xs text-[#2F6F62]/70">Hilang</span>
+                                                    <span className="text-xs text-gray-500">Hilang</span>
                                                     <span className={`text-sm font-medium ${
                                                         missingComponents.length > 0
                                                             ? "text-red-600"
@@ -552,8 +549,8 @@ export default function Create({ loans }) {
                                                 </div>
                                                 {missingComponents.length > 0 && (
                                                     <div>
-                                                        <p className="text-xs text-[#2F6F62]/70 mb-1">Item Hilang</p>
-                                                        <ul className="text-xs text-red-600 space-y-0.5">
+                                                        <p className="text-xs text-gray-500 mb-1">Item Hilang</p>
+                                                        <ul className="text-xs text-red-600 list-disc list-inside space-y-0.5">
                                                             {missingComponents.map((item, i) => (
                                                                 <li key={i} className="flex justify-between">
                                                                     <span>{item.nama}</span>
@@ -568,39 +565,37 @@ export default function Create({ loans }) {
                                         )}
 
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-[#2F6F62]/70">Tanggal Dikembalikan</span>
+                                            <span className="text-xs text-gray-500">Tanggal Dikembalikan</span>
                                             <span className="text-sm text-gray-700">
                                                 {data.returned_at ? formatDateTime(data.returned_at) : "-"}
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-[#2F6F62]/70">Kondisi</span>
+                                            <span className="text-xs text-gray-500">Kondisi</span>
                                             <span className="text-sm capitalize text-gray-700">
                                                 {conditionLabel[data.return_condition] || data.return_condition.replace(/_/g, " ")}
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-[#2F6F62]/70">Denda</span>
-                                            <span className="text-sm font-medium text-[#173C33]">
+                                            <span className="text-xs text-gray-500">Denda</span>
+                                            <span className="text-sm font-medium text-gray-900">
                                                 {data.fine_amount
                                                     ? `Rp ${Number(data.fine_amount).toLocaleString("id-ID")}`
                                                     : "-"}
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center">
-                                            <span className="text-xs text-[#2F6F62]/70">Status Akhir</span>
+                                            <span className="text-xs text-gray-500">Status Akhir</span>
                                             <span
                                                 className={`badge badge-sm capitalize ${
                                                     getFinalStatus() === "returned"
                                                         ? "badge-success"
-                                                        : getFinalStatus() === "not_returned"
-                                                            ? "badge-warning"
-                                                            : getFinalStatus() === "lost"
+                                                        : getFinalStatus() === "lost"
                                                                 ? "badge-error"
                                                                 : "badge-ghost"
                                                 }`}
                                             >
-                                                {statusLabel[getFinalStatus()] || getFinalStatus().replace(/_/g, " ")}
+                                                {statusLabels[getFinalStatus()] || getFinalStatus().replace(/_/g, " ")}
                                             </span>
                                         </div>
                                     </div>
@@ -621,7 +616,7 @@ export default function Create({ loans }) {
                                             />
                                         </svg>
                                         <p className="text-gray-400 text-sm">
-                                            Pilih peminjaman untuk melihat ringkasan
+                                            Pilih pinjaman untuk melihat ringkasan
                                         </p>
                                     </div>
                                 )}

@@ -7,9 +7,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
-    'kode', 'box', 'lantai', 'nama', 'penerbit', 'jumlah', 'satuan',
-    'deskripsi_isi', 'kategori', 'jumlah_pemain', 'durasi', 'gambar', 'gambar_hover',
-    'status', 'populer', 'tingkat_kesulitan', 'usia_minimum'
+    'kode',
+    'box',
+    'nama',
+    'penerbit',
+    'jumlah',
+    'total_copies',
+    'available_copies',
+    'satuan',
+    'link_foto',
+    'komponen',
+    'barang_hilang',
+    'lantai',
 ])]
 class BoardGame extends Model
 {

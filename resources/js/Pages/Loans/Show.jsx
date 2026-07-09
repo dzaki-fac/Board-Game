@@ -33,7 +33,7 @@ export default function Show({ loan }) {
                 {/* Page Header */}
                 <div className="flex items-center justify-between flex-wrap gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold text-[#173C33]">
+                        <h1 className="text-2xl font-bold text-gray-900">
                             Detail Peminjaman
                         </h1>
                         <p className="text-sm text-[#2F6F62]/60 mt-1">
@@ -71,7 +71,7 @@ export default function Show({ loan }) {
                     <div className="lg:col-span-2">
                         <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6 space-y-6">
-                                <h2 className="text-lg font-semibold text-[#173C33]">
+                                <h2 className="text-lg font-semibold text-gray-900">
                                     Informasi Peminjaman
                                 </h2>
 
@@ -85,7 +85,15 @@ export default function Show({ loan }) {
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                            Kode Game
+                                        </p>
+                                        <p className="text-sm font-mono text-gray-500 mt-1">
+                                            {loan.game.kode}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
                                             Peminjam
                                         </p>
                                         <p className="text-sm font-medium text-[#173C33] mt-1">
@@ -93,7 +101,15 @@ export default function Show({ loan }) {
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                            NIM
+                                        </p>
+                                        <p className="text-sm font-mono text-gray-500 mt-1">
+                                            {loan.borrower_nim || "-"}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
                                             Dipinjam
                                         </p>
                                         <p className="text-sm text-gray-700 mt-1">
@@ -101,7 +117,7 @@ export default function Show({ loan }) {
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
                                             Dikembalikan
                                         </p>
                                         <p className="text-sm text-gray-700 mt-1">
@@ -113,11 +129,11 @@ export default function Show({ loan }) {
                                             Status
                                         </p>
                                         <div className="mt-1">
-                                            <BadgeStatus value={loan.status} />
+                                            <BadgeStatus status={loan.status} />
                                         </div>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
                                             Kondisi
                                         </p>
                                         <div className="mt-1">
@@ -127,7 +143,7 @@ export default function Show({ loan }) {
                                         </div>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
                                             Denda
                                         </p>
                                         <p className="text-sm font-medium text-[#173C33] mt-1">
@@ -136,19 +152,12 @@ export default function Show({ loan }) {
                                                 : "-"}
                                         </p>
                                     </div>
-                                    <div>
-                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
-                                            ID Game
-                                        </p>
-                                        <p className="text-sm font-mono text-[#2F6F62]/70 mt-1">
-                                            #{loan.boardgame_id}
-                                        </p>
-                                    </div>
+
                                 </div>
 
                                 {loan.notes && (
                                     <div>
-                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium mb-1">
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">
                                             Catatan
                                         </p>
                                         <p className="text-sm text-gray-700 bg-gray-50 rounded-lg p-3">
@@ -164,7 +173,7 @@ export default function Show({ loan }) {
                                     if (!list) return null;
                                     return (
                                         <div>
-                                            <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium mb-1">
+                                            <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-1">
                                                 Komponen Hilang
                                             </p>
                                             <ul className="text-sm text-red-600 bg-red-50 rounded-lg p-3 space-y-1 list-disc list-inside">
@@ -183,7 +192,7 @@ export default function Show({ loan }) {
                     <div className="space-y-6">
                         <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
                             <div className="card-body p-6">
-                                <h3 className="text-sm font-semibold text-[#173C33] uppercase tracking-wider mb-4">
+                                <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
                                     Aksi Cepat
                                 </h3>
                                 <div className="space-y-3">
@@ -191,13 +200,13 @@ export default function Show({ loan }) {
                                         href="/admin/history"
                                         className="btn btn-outline btn-sm w-full"
                                     >
-                                        Ke Riwayat
+                                        Kembali ke Riwayat
                                     </Link>
                                     <Link
                                         href="/admin/loans"
                                         className="btn btn-outline btn-sm w-full"
                                     >
-                                        Ke Peminjaman
+                                        Kembali ke Peminjaman
                                     </Link>
                                 </div>
                             </div>
