@@ -74,4 +74,10 @@
     .round-btn {
         @apply w-8 h-8 overflow-auto rounded-full bg-slate-100 focus:outline-none focus:ring-1 focus:ring-slate-100 focus:ring-offset-2 focus:ring-offset-slate-800;
     }
+    .alert-success {
+        @apply bg-green-100 text-green-700 border-green-200 rounded-md;
+    }
+    .alert-error {
+        @apply bg-red-100 text-red-700 border-red-200 rounded-md;
+    }
 }
