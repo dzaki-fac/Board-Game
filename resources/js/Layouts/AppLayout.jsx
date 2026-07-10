@@ -1,25 +1,113 @@
 import { useState } from "react";
 import { Link, usePage } from "@inertiajs/react";
-import {
-    House,
-    Dice5,
-    ClipboardList,
-    PackageOpen,
-    PackageCheck,
-    History,
-    UserRound,
-    LogOut,
-    PanelLeft,
-} from "lucide-react";
+
+function Svg({ className, children }) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            {children}
+        </svg>
+    );
+}
+
+function HouseIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+        </Svg>
+    );
+}
+
+function Dice5Icon({ className }) {
+    return (
+        <Svg className={className}>
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8" cy="8" r="1.5" fill="currentColor" stroke="none" />
+            <circle cx="16" cy="8" r="1.5" fill="currentColor" stroke="none" />
+            <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none" />
+            <circle cx="8" cy="16" r="1.5" fill="currentColor" stroke="none" />
+            <circle cx="16" cy="16" r="1.5" fill="currentColor" stroke="none" />
+        </Svg>
+    );
+}
+
+function ClipboardListIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <rect x="8" y="2" width="8" height="4" rx="1" />
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+            <path d="M12 11h4" />
+            <path d="M12 16h4" />
+            <circle cx="8" cy="11" r="1.5" fill="currentColor" stroke="none" />
+            <circle cx="8" cy="16" r="1.5" fill="currentColor" stroke="none" />
+        </Svg>
+    );
+}
+
+function HandHelpingIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M11 12h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 14" />
+            <path d="m7 18 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9" />
+            <path d="m2 13 6 6" />
+        </Svg>
+    );
+}
+
+function RotateCwIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <polyline points="23 4 23 10 17 10" />
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+        </Svg>
+    );
+}
+
+function HistoryIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+        </Svg>
+    );
+}
+
+function UserRoundIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <circle cx="12" cy="8" r="5" />
+            <path d="M20 21a8 8 0 0 0-16 0" />
+        </Svg>
+    );
+}
+
+function LogOutIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+        </Svg>
+    );
+}
+
+function PanelLeftIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <line x1="9" y1="3" x2="9" y2="21" />
+        </Svg>
+    );
+}
 
 const navItems = [
-    { label: "Beranda", href: "/peminjaman/create", icon: House },
-    { label: "Board Game", href: "/admin/games", icon: Dice5 },
-    { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardList },
-    { label: "Peminjaman", href: "/admin/loans", icon: PackageOpen },
-    { label: "Pengembalian", href: "/admin/returns", icon: PackageCheck },
-    { label: "Riwayat", href: "/admin/history", icon: History },
-    { label: "Akun", href: "/admin/accounts", icon: UserRound },
+    { label: "Beranda", href: "/peminjaman/create", icon: HouseIcon },
+    { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
+    { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
+    { label: "Peminjaman", href: "/admin/loans", icon: HandHelpingIcon },
+    { label: "Pengembalian", href: "/admin/returns", icon: RotateCwIcon },
+    { label: "Riwayat", href: "/admin/history", icon: HistoryIcon },
+    { label: "Akun", href: "/admin/accounts", icon: UserRoundIcon },
 ];
 
 export default function Layout({ children }) {
@@ -45,7 +133,7 @@ export default function Layout({ children }) {
                         sidebarExpanded ? 'right-3' : 'left-1/2 -translate-x-1/2'
                     }`}
                 >
-                    <PanelLeft className={iconClass} />
+                    <PanelLeftIcon className={iconClass} />
                 </button>
 
                 {/* Brand */}
@@ -114,7 +202,7 @@ export default function Layout({ children }) {
                         } text-[#FAF7F2]/70 hover:bg-[#255A4F] hover:text-white w-full`}
                     >
                         <span className="shrink-0 w-5 h-5 flex items-center justify-center">
-                            <LogOut className={iconClass} />
+                            <LogOutIcon className={iconClass} />
                         </span>
                         {sidebarExpanded && <span>Keluar</span>}
                     </Link>
