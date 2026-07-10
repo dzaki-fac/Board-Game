@@ -1,5 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
+import LanguageToggle from "../Components/LanguageToggle";
+import Footer from "../Components/Footer";
+import ReviewSection from "../Components/ReviewSection";
+import RatingSummary from "../Components/RatingSummary";
 
 const WARNA = {
     hijauTua: "#173C33",
@@ -58,7 +62,7 @@ const TEKS = {
         menit: "Menit",
         tersedia: "Tersedia",
         dipinjam: "Dipinjam",
-        deskripsiIsi: "Komponen",
+        deskripsiIsi: "Lihat Detail",
         umum: "Umum",
         pinjamSekarang: "Pinjam Sekarang",
         detailBoardGame: "Detail Board Game",
@@ -172,15 +176,6 @@ function IkonRak(props) {
     );
 }
 
-function IkonKembali(props) {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
-            <path d="M19 12H5" />
-            <path d="m12 19-7-7 7-7" />
-        </svg>
-    );
-}
-
 function IkonLabel(props) {
     return (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
@@ -267,66 +262,74 @@ function formatDurasi(text, t) {
     return `${angka} ${t.menit}`;
 }
 
-function BarUtilitas({ bahasa, setBahasa }) {
-    return (
-        <div className="text-white text-xs" style={{ backgroundColor: WARNA.hijauTua }}>
-            <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-2 grid grid-cols-3 items-center gap-4">
-                <div className="flex items-center gap-1.5 font-medium tracking-wide">
-                    <button
-                        type="button"
-                        onClick={() => setBahasa("EN")}
-                        className={bahasa === "EN" ? "text-white" : "text-white/50 hover:text-white/80"}
-                    >
-                        EN
-                    </button>
-                    <span className="text-white/40">|</span>
-                    <button
-                        type="button"
-                        onClick={() => setBahasa("ID")}
-                        className={bahasa === "ID" ? "text-white" : "text-white/50 hover:text-white/80"}
-                    >
-                        ID
-                    </button>
-                </div>
-                <div className="flex items-center justify-center gap-6 text-white/80">
-                    <a href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
-                        <IkonYoutube className="w-5 h-5" />
-                        <span>Youtube</span>
-                    </a>
-                    <a href="https://www.instagram.com/perpus.undip?igsh=MTh4bXFtd3AzbmRmdQ==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
-                        <IkonInstagram className="w-5 h-5" />
-                        <span>Instagram</span>
-                    </a>
-                    <a href="https://www.tiktok.com/@perpus.undip.press?_r=1&_t=ZS-97okoKr4q4S" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
-                        <IkonTiktok className="w-5 h-5" />
-                        <span>TikTok</span>
-                    </a>
-                </div>
-                <div />
-            </div>
-        </div>
-    );
-}
+function TopNavbar({ bahasa, setBahasa }) {
+    const t = useTeks();
 
-function NavbarUtama({ t }) {
     return (
-        <div style={{ backgroundColor: WARNA.hijauUtama }}>
-            <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-3 flex items-center justify-between gap-4">
-                <Link
-                    href="/katalog"
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-white/90 hover:text-white transition-colors"
-                >
-                    <IkonKembali className="w-4 h-4" />
-                    {t.kembali}
-                </Link>
+        <div style={{ backgroundColor: WARNA.hijauTua }}>
+            <div className="max-w-[1440px] mx-auto px-6 md:px-10">
+                {/* Desktop (md+) */}
+                <div className="hidden md:flex items-center justify-between py-3">
+                    {/* Kiri: Logo + Nama Institusi */}
+                    <a href="/katalog" className="flex items-center gap-2 shrink-0">
+                        <img
+                            src="/assets/logo_undip.png"
+                            alt="Universitas Diponegoro"
+                            className="h-10 w-10 object-contain"
+                        />
+                        <img
+                            src="/images/logo-upt.png"
+                            alt="UPT Perpustakaan Undip"
+                            className="h-10 w-10 object-contain"
+                        />
+                        <div className="leading-tight text-white">
+                            <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
+                            <span className="block text-sm font-semibold">UPT Perpustakaan</span>
+                        </div>
+                    </a>
 
-                <a href="/katalog" className="flex items-center gap-2 shrink-0">
-                    <span className="hidden md:block leading-tight text-white text-right">
-                        <span className="block text-[11px] text-emerald-100/90 tracking-wide">UPT Perpustakaan</span>
-                        <span className="block text-sm font-semibold">Universitas Diponegoro</span>
-                    </span>
-                    <img src="/images/logo-upt.png" alt="Logo UPT Perpustakaan Undip" className="h-10 w-10 rounded-full bg-white p-1 object-contain" />
-                </a>
+                    {/* Kanan: Bahasa + Sosial Media */}
+                    <div className="flex items-center gap-5 shrink-0">
+                        <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
+                        <div className="flex items-center gap-3 text-white/80">
+                            <a href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                                <IkonYoutube className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">Youtube</span>
+                            </a>
+                            <a href="https://www.instagram.com/perpus.undip?igsh=MTh4bXFtd3AzbmRmdQ==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                                <IkonInstagram className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">Instagram</span>
+                            </a>
+                            <a href="https://www.tiktok.com/@perpus.undip.press?_r=1&_t=ZS-97okoKr4q4S" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                                <IkonTiktok className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">TikTok</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Mobile (< md) */}
+                <div className="md:hidden">
+                    <div className="flex items-center justify-between py-3">
+                        <a href="/katalog" className="flex items-center gap-1.5">
+                            <img
+                                src="/assets/logo_undip.png"
+                                alt="Universitas Diponegoro"
+                                className="h-9 w-9 object-contain"
+                            />
+                            <img
+                                src="/images/logo-upt.png"
+                                alt="UPT Perpustakaan Undip"
+                                className="h-9 w-9 object-contain"
+                            />
+                            <div className="leading-tight text-white">
+                                <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
+                                <span className="block text-xs font-semibold">UPT Perpustakaan</span>
+                            </div>
+                        </a>
+                        <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
+                    </div>
+                </div>
             </div>
         </div>
     );
@@ -483,7 +486,7 @@ function SeksiGameSerupa({ gameSerupa, t }) {
     );
 }
 
-function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
+function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingDistribution, selectedReviewRating, bahasa, setBahasa }) {
     const t = useTeks();
     const [warna, bg] = warnaKategori(game.kategori);
     const tersedia = game.available_copies > 0;
@@ -493,10 +496,23 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
 
     return (
         <div className="min-h-screen bg-white text-[15px]">
-            <BarUtilitas bahasa={bahasa} setBahasa={setBahasa} />
-            <NavbarUtama t={t} />
+            <TopNavbar
+                bahasa={bahasa}
+                setBahasa={setBahasa}
+            />
 
             <div className="max-w-[1300px] mx-auto px-4 md:px-6 py-6">
+                <Link
+                    href="/katalog"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-900 hover:bg-emerald-50 rounded-full px-4 py-2 transition-colors mb-4"
+                >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
+                        <path d="M19 12H5" />
+                        <path d="m12 19-7-7 7-7" />
+                    </svg>
+                    {t.kembali}
+                </Link>
+
                 <div className="bg-white rounded-3xl overflow-hidden ring-1 ring-slate-100">
                     <div className="grid md:grid-cols-2 gap-0">
                         {/* Galeri foto: gambar + gambar_hover, geser pakai panah/dot */}
@@ -508,6 +524,14 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
                                 {game.nama}
                             </h1>
                             <p className="text-sm text-slate-500 mb-4">{game.penerbit}</p>
+
+                            <div className="mb-4">
+                                <RatingSummary
+                                    averageRating={avgRating}
+                                    reviewsCount={totalReviews}
+                                    size="lg"
+                                />
+                            </div>
 
                             {/* Badge kesulitan & usia - eye catching, tepat di bawah judul */}
                             {adaBadge && (
@@ -537,7 +561,7 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
                             </div>
 
                             {daftarKomponen.length > 0 && (
-                                <div className="mb-6">
+                                <div className="mb-3">
                                     <button
                                         type="button"
                                         onClick={() => setTampilkanKomponen((prev) => !prev)}
@@ -566,7 +590,7 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
                                 </div>
                             )}
 
-                            <div className="mt-auto">
+                            <div className={daftarKomponen.length > 0 ? "" : "mt-auto"}>
                                 {tersedia ? (
                                     <Link
                                         href={`/peminjaman/create?boardgame_id=${game.id}`}
@@ -592,20 +616,29 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
 
                 {/* Game Serupa - section lebar, background beda biar mencolok */}
                 <SeksiGameSerupa gameSerupa={gameSerupa} t={t} />
+
+                <ReviewSection
+                    boardgameId={game.id}
+                    reviews={reviews}
+                    avgRating={avgRating}
+                    totalReviews={totalReviews}
+                    ratingDistribution={ratingDistribution}
+                    selectedReviewRating={selectedReviewRating}
+                />
             </div>
 
-            <div className="h-16" />
+            <Footer />
         </div>
     );
 }
 
-export default function Detail({ game, gameSerupa = [] }) {
+export default function Detail({ game, gameSerupa = [], reviews = [], avgRating = null, totalReviews = 0, ratingDistribution = [], selectedReviewRating = 'all' }) {
     const [bahasa, setBahasa] = useState("ID");
 
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
             <Head title={game ? game.nama : "Detail Board Game"} />
-            <IsiDetail game={game} gameSerupa={gameSerupa} bahasa={bahasa} setBahasa={setBahasa} />
+            <IsiDetail game={game} gameSerupa={gameSerupa} reviews={reviews} avgRating={avgRating} totalReviews={totalReviews} ratingDistribution={ratingDistribution} selectedReviewRating={selectedReviewRating} bahasa={bahasa} setBahasa={setBahasa} />
         </BahasaContext.Provider>
     );
 }
