@@ -118,10 +118,26 @@ export default function Show({ loan }) {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                            Disetujui Oleh
+                                        </p>
+                                        <p className="text-sm text-gray-700 mt-1">
+                                            {loan.approved_by || '-'}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
                                             Dikembalikan
                                         </p>
                                         <p className="text-sm text-gray-700 mt-1">
                                             {formatDateTime(loan.returned_at)}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
+                                            Diterima Oleh
+                                        </p>
+                                        <p className="text-sm text-gray-700 mt-1">
+                                            {loan.received_by || '-'}
                                         </p>
                                     </div>
                                     <div>

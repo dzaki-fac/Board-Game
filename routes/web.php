@@ -1,13 +1,12 @@
 <?php
 
-use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AuthenticatedSessionController;
-
+use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PermohonanController;
-
 use App\Http\Controllers\ReturnController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +42,8 @@ Route::prefix('admin')->group(function () {
         Route::patch('permohonan/{permohonan}/reject', [PermohonanController::class, 'reject'])->name('admin.permohonan.reject');
 
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
+
+        Route::get('rules', [HomeController::class, 'rules'])->name('admin.rules');
 
         Route::get('accounts', [AdminAccountController::class, 'index'])->name('admin.accounts.index');
         Route::post('accounts', [AdminAccountController::class, 'store'])->name('admin.accounts.store')->middleware('superadmin');

@@ -49,6 +49,8 @@ class ReturnController extends Controller
             ? json_encode($validated['missing_components'], JSON_UNESCAPED_UNICODE)
             : null;
 
+        $admin = Auth::guard('admin')->user();
+
         $updateData = [
             'returned_at' => now(),
             'status' => $validated['status'],
@@ -56,6 +58,7 @@ class ReturnController extends Controller
             'missing_components' => $missingComponents,
             'fine_amount' => $validated['fine_amount'],
             'notes' => $validated['return_notes'],
+            'received_by' => $admin->name,
         ];
 
         $loan->update($updateData);

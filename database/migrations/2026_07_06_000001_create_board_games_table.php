@@ -19,7 +19,7 @@ return new class extends Migration
             // Informasi board game
             $table->string('nama');
             $table->string('penerbit')->nullable();
-            $table->string('kategori')->nullable();
+            $table->json('kategori')->nullable();
 
             // Stok
             $table->integer('jumlah');
