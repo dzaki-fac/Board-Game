@@ -10,35 +10,21 @@ class LoanController extends Controller
 {
     public function index()
     {
-        $admin = Auth::guard('admin')->user();
-        $isSuperAdmin = $admin->isSuperAdmin();
-
         $loans = Loan::with('game')
             ->where('status', 'borrowed')
-            ->when(!$isSuperAdmin, fn ($q) => $q->whereHas('game', fn ($q2) => $q2->where('lantai', $admin->lantai)))
             ->orderBy('borrowed_at', 'desc')
             ->paginate(10);
-
-        $totalQuery = Loan::where('status', 'borrowed');
-        if (!$isSuperAdmin) {
-            $totalQuery->whereHas('game', fn ($q) => $q->where('lantai', $admin->lantai));
-        }
 
         return inertia('Loans/Index', [
             'loans' => $loans,
             'stats' => [
-                'total' => $totalQuery->count(),
+                'total' => Loan::where('status', 'borrowed')->count(),
             ],
         ]);
     }
 
     public function show(Loan $loan)
     {
-        $admin = Auth::guard('admin')->user();
-        if (!$admin->isSuperAdmin() && $loan->game->lantai != $admin->lantai) {
-            abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
-        }
-
         $loan->load('game');
 
         return inertia('Loans/Show', ['loan' => $loan]);
@@ -48,11 +34,6 @@ class LoanController extends Controller
     {
         if ($loan->status === 'returned') {
             return back()->withErrors(['loan' => 'Already returned']);
-        }
-
-        $admin = Auth::guard('admin')->user();
-        if (!$admin->isSuperAdmin() && $loan->game->lantai != $admin->lantai) {
-            abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
         }
 
         $loan->update([

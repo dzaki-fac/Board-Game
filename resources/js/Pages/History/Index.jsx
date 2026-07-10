@@ -315,6 +315,7 @@ export default function Index({ histories, stats }) {
                                                 <th className="px-6 py-3 font-medium">Peminjam</th>
                                                 <th className="px-6 py-3 font-medium">NIM</th>
                                                 <th className="px-6 py-3 font-medium">Board Game</th>
+                                                <th className="px-6 py-3 font-medium">Lantai</th>
                                                 <th className="px-6 py-3 font-medium">Dipinjam</th>
                                                 <th className="px-6 py-3 font-medium">Dikembalikan</th>
                                                 <th className="px-6 py-3 font-medium">Status</th>
@@ -346,6 +347,9 @@ export default function Index({ histories, stats }) {
                                                     </td>
                                                     <td className="px-6 py-4 text-gray-700">
                                                         {loan.game.nama}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">
+                                                        {loan.game.lantai ?? '-'}
                                                     </td>
                                                     <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">
                                                         {formatDateTime(loan.borrowed_at)}
