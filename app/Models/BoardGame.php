@@ -33,6 +33,7 @@ class BoardGame extends Model
         return [
             'link_foto' => 'array',
             'komponen' => 'array',
+            'kategori' => 'array',
             'barang_hilang' => 'array',
             'populer' => 'boolean',
         ];

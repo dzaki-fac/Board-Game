@@ -317,7 +317,9 @@ export default function Index({ histories, stats }) {
                                                 <th className="px-6 py-3 font-medium">Board Game</th>
                                                 <th className="px-6 py-3 font-medium">Lantai</th>
                                                 <th className="px-6 py-3 font-medium">Dipinjam</th>
+                                                <th className="px-6 py-3 font-medium">Disetujui Oleh</th>
                                                 <th className="px-6 py-3 font-medium">Dikembalikan</th>
+                                                <th className="px-6 py-3 font-medium">Diterima Oleh</th>
                                                 <th className="px-6 py-3 font-medium">Status</th>
                                                 <th className="px-6 py-3 font-medium">Kondisi</th>
                                                 <th className="px-6 py-3 font-medium">Denda</th>
@@ -354,8 +356,14 @@ export default function Index({ histories, stats }) {
                                                     <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">
                                                         {formatDateTime(loan.borrowed_at)}
                                                     </td>
+                                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                                        {loan.approved_by || '-'}
+                                                    </td>
                                                     <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">
                                                         {formatDateTime(loan.returned_at)}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                                        {loan.received_by || '-'}
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <BadgeStatus status={loan.status} />

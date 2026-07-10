@@ -101,7 +101,7 @@ function PanelLeftIcon({ className }) {
 }
 
 const navItems = [
-    { label: "Beranda", href: "/peminjaman/create", icon: HouseIcon },
+    { label: "Beranda", href: "/admin/rules", icon: HouseIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
     { label: "Peminjaman", href: "/admin/loans", icon: HandHelpingIcon },
