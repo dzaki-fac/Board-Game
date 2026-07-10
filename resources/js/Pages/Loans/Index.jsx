@@ -87,9 +87,12 @@ export default function Index({ loans, stats }) {
                     <thead>
                       <tr className="bg-[#FAF7F2] text-[#173C33]/60 text-xs uppercase tracking-wider">
                         <th className="px-6 py-3 font-medium">Game</th>
+                        <th className="px-6 py-3 font-medium">Lantai</th>
                         <th className="px-6 py-3 font-medium">Peminjam</th>
                         <th className="px-6 py-3 font-medium">NIM</th>
                         <th className="px-6 py-3 font-medium">Dipinjam</th>
+                        <th className="px-6 py-3 font-medium">Disetujui Oleh</th>
+                        <th className="px-6 py-3 font-medium">Diterima Oleh</th>
                         <th className="px-6 py-3 font-medium">Status</th>
                         <th className="px-6 py-3 font-medium text-right">Aksi</th>
                       </tr>
@@ -100,10 +103,13 @@ export default function Index({ loans, stats }) {
                           <td className="px-6 py-4">
                             <div className="font-medium text-[#173C33]">{loan.game.nama}</div>
                           </td>
+                          <td className="px-6 py-4 text-gray-500 text-sm">{loan.game.lantai ?? '-'}</td>
                           <td className="px-6 py-4 text-gray-700">{loan.borrower_name}</td>
                           <td className="px-6 py-4 text-gray-500 font-mono text-sm">{loan.borrower_nim || "-"}</td>
                           <td className="px-6 py-4 text-gray-500 text-sm">{formatDateTime(loan.borrowed_at)}</td>
-                          <td className="px-6 py-4"><BadgeStatus status="borrowed" /></td>
+                          <td className="px-6 py-4 text-gray-500 text-sm">{loan.approved_by || '-'}</td>
+                          <td className="px-6 py-4 text-gray-500 text-sm">{loan.received_by || '-'}</td>
+                          <td className="px-6 py-4"><BadgeStatus status={loan.status} /></td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
                               <Link

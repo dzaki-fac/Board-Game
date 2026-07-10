@@ -64,22 +64,24 @@ class PermohonanController extends Controller
         $search = $request->input('search');
         $status = $request->input('status');
 
-        $query = Permohonan::with('boardgame')
+        $base = Permohonan::with('boardgame')
             ->where('status', '!=', Permohonan::STATUS_RETURNED)
-            ->when(!$isSuperAdmin, fn ($q) => $q->whereHas('boardgame', fn ($q2) => $q2->where('lantai', $admin->lantai)))
-            ->when($status, fn ($q) => $q->where('status', $status))
+            ->when(!$isSuperAdmin, fn ($q) => $q->whereHas('boardgame', fn ($q2) => $q2->where('lantai', $admin->lantai)));
+
+        $pending = (clone $base)->where('status', Permohonan::STATUS_PENDING)->count();
+        $approved = (clone $base)->where('status', Permohonan::STATUS_APPROVED)->count();
+        $rejected = (clone $base)->where('status', Permohonan::STATUS_REJECTED)->count();
+
+        $query = clone $base;
+        $query->when($status, fn ($q) => $q->where('status', $status))
             ->when($search, fn ($q) => $q->where(function ($q2) use ($search) {
                 $q2->where('nama', 'like', "%{$search}%")
                     ->orWhere('nim', 'like', "%{$search}%")
                     ->orWhereHas('boardgame', fn ($q3) => $q3->where('nama', 'like', "%{$search}%"));
             }));
 
-        $pending = (clone $query)->where('status', Permohonan::STATUS_PENDING)->count();
-        $approved = (clone $query)->where('status', Permohonan::STATUS_APPROVED)->count();
-        $rejected = (clone $query)->where('status', Permohonan::STATUS_REJECTED)->count();
-
         return inertia('Peminjaman/Permohonan', [
-            'permohonan' => $query->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")->latest('created_at')->paginate(10)->withQueryString(),
+            'permohonan' => $query->orderByRaw("CASE WHEN status = 'menunggu' THEN 0 ELSE 1 END")->latest('created_at')->paginate(10)->withQueryString(),
             'total' => $pending + $approved + $rejected,
             'total_pending' => $pending,
             'total_approved' => $approved,
@@ -94,11 +96,8 @@ class PermohonanController extends Controller
     public function approve(Permohonan $permohonan)
     {
         $admin = Auth::guard('admin')->user();
-        if (!$admin->isSuperAdmin() && $permohonan->boardgame->lantai != $admin->lantai) {
-            abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
-        }
 
-        return DB::transaction(function () use ($permohonan) {
+        return DB::transaction(function () use ($permohonan, $admin) {
             $boardGame = BoardGame::where('id', $permohonan->boardgame_id)
                 ->lockForUpdate()
                 ->firstOrFail();
@@ -120,6 +119,7 @@ class PermohonanController extends Controller
                 'borrowed_at' => $borrowedAt,
                 'status' => 'borrowed',
                 'notes' => $permohonan->catatan,
+                'approved_by' => $admin->name,
             ]);
 
             if ($boardGame->fresh()->available_copies <= 0) {
@@ -135,11 +135,6 @@ class PermohonanController extends Controller
 
     public function reject(Permohonan $permohonan)
     {
-        $admin = Auth::guard('admin')->user();
-        if (!$admin->isSuperAdmin() && $permohonan->boardgame->lantai != $admin->lantai) {
-            abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
-        }
-
         $permohonan->update(['status' => Permohonan::STATUS_REJECTED]);
 
         return back()->with('success', 'Permohonan ditolak.');

@@ -12,12 +12,8 @@ class ReturnController extends Controller
 {
     public function create()
     {
-        $admin = Auth::guard('admin')->user();
-        $isSuperAdmin = $admin->isSuperAdmin();
-
         $loans = Loan::with('game')
             ->where('status', 'borrowed')
-            ->when(!$isSuperAdmin, fn ($q) => $q->whereHas('game', fn ($q2) => $q2->where('lantai', $admin->lantai)))
             ->latest()
             ->get();
 
@@ -49,14 +45,11 @@ class ReturnController extends Controller
 
         $loan = Loan::findOrFail($validated['loan_id']);
 
-        $admin = Auth::guard('admin')->user();
-        if (!$admin->isSuperAdmin() && $loan->game->lantai != $admin->lantai) {
-            abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
-        }
-
         $missingComponents = ! empty($validated['missing_components'])
             ? json_encode($validated['missing_components'], JSON_UNESCAPED_UNICODE)
             : null;
+
+        $admin = Auth::guard('admin')->user();
 
         $updateData = [
             'returned_at' => now(),
@@ -65,6 +58,7 @@ class ReturnController extends Controller
             'missing_components' => $missingComponents,
             'fine_amount' => $validated['fine_amount'],
             'notes' => $validated['return_notes'],
+            'received_by' => $admin->name,
         ];
 
         $loan->update($updateData);

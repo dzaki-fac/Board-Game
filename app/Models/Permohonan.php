@@ -9,10 +9,10 @@ class Permohonan extends Model
 {
     use HasFactory;
 
-    const STATUS_PENDING = 'pending';
-    const STATUS_APPROVED = 'approved';
-    const STATUS_REJECTED = 'rejected';
-    const STATUS_RETURNED = 'returned';
+    const STATUS_PENDING = 'menunggu';
+    const STATUS_APPROVED = 'dipinjam';
+    const STATUS_REJECTED = 'ditolak';
+    const STATUS_RETURNED = 'dikembalikan';
 
     protected $table = 'permohonan';
 
