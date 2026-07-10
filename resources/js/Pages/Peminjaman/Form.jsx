@@ -6,13 +6,32 @@ export default function Form({ boardgames = [] }) {
     const flash = props.flash || {};
 
     const { data, setData, post, processing, errors, reset } = useForm({
+        tipe_peminjam: "",
         nama: "",
         nim: "",
+        nik: "",
         boardgame_id: "",
         jam_pinjam: "",
         tanggal_pinjam: "",
         catatan: "",
     });
+
+    const [anggota, setAnggota] = useState([]);
+
+    function addAnggota() {
+        setAnggota([...anggota, { nama: "", nim: "", nik: "" }]);
+    }
+
+    function removeAnggota(index) {
+        setAnggota(anggota.filter((_, i) => i !== index));
+    }
+
+    function updateAnggota(index, field, value) {
+        const updated = anggota.map((a, i) =>
+            i === index ? { ...a, [field]: value } : a,
+        );
+        setAnggota(updated);
+    }
 
     useEffect(() => {
         const now = new Date();
@@ -55,7 +74,7 @@ export default function Form({ boardgames = [] }) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        post("/peminjaman");
+        post("/peminjaman", { data: { anggota } });
     }
 
     return (
@@ -91,6 +110,94 @@ export default function Form({ boardgames = [] }) {
                         <div className="form-control mb-3">
                             <label className="label">
                                 <span className="label-text font-medium">
+                                    Tipe Peminjam
+                                </span>
+                            </label>
+                            {errors.tipe_peminjam && (
+                                <p className="text-error text-xs mb-2">
+                                    {errors.tipe_peminjam}
+                                </p>
+                            )}
+                            <div className="grid grid-cols-2 gap-3">
+                                <button
+                                    type="button"
+                                    className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all cursor-pointer ${
+                                        data.tipe_peminjam === "mahasiswa"
+                                            ? "border-[#2F6F62] bg-[#E8F3EF]"
+                                            : "border-base-300 bg-base-100 hover:border-slate-400"
+                                    }`}
+                                    onClick={() =>
+                                        setData(
+                                            "tipe_peminjam",
+                                            data.tipe_peminjam === "mahasiswa"
+                                                ? ""
+                                                : "mahasiswa",
+                                        )
+                                    }
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className={`w-8 h-8 ${data.tipe_peminjam === "mahasiswa" ? "text-[#2F6F62]" : "text-slate-400"}`}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={1.5}
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
+                                        />
+                                    </svg>
+                                    <span
+                                        className={`text-sm font-semibold ${data.tipe_peminjam === "mahasiswa" ? "text-[#2F6F62]" : "text-slate-600"}`}
+                                    >
+                                        Mahasiswa UNDIP
+                                    </span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all cursor-pointer ${
+                                        data.tipe_peminjam === "visitor"
+                                            ? "border-[#2F6F62] bg-[#E8F3EF]"
+                                            : "border-base-300 bg-base-100 hover:border-slate-400"
+                                    }`}
+                                    onClick={() =>
+                                        setData(
+                                            "tipe_peminjam",
+                                            data.tipe_peminjam === "visitor"
+                                                ? ""
+                                                : "visitor",
+                                        )
+                                    }
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className={`w-8 h-8 ${data.tipe_peminjam === "visitor" ? "text-[#2F6F62]" : "text-slate-400"}`}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={1.5}
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                                        />
+                                    </svg>
+                                    <span
+                                        className={`text-sm font-semibold ${data.tipe_peminjam === "visitor" ? "text-[#2F6F62]" : "text-slate-600"}`}
+                                    >
+                                        Visitor / Umum
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="form-control mb-3">
+                            <label className="label">
+                                <span className="label-text font-medium">
                                     Nama
                                 </span>
                             </label>
@@ -110,25 +217,166 @@ export default function Form({ boardgames = [] }) {
                             )}
                         </div>
 
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text font-medium">
-                                    NIM
-                                </span>
-                            </label>
-                            <input
-                                type="text"
-                                className={`input input-bordered w-full ${errors.nim ? "input-error" : ""}`}
-                                value={data.nim}
-                                onChange={(e) => setData("nim", e.target.value)}
-                                placeholder="Masukkan NIM"
-                            />
-                            {errors.nim && (
-                                <p className="text-error text-xs mt-1">
-                                    {errors.nim}
-                                </p>
-                            )}
-                        </div>
+                        {data.tipe_peminjam === "mahasiswa" && (
+                            <div className="form-control mb-3">
+                                <label className="label">
+                                    <span className="label-text font-medium">
+                                        NIM
+                                    </span>
+                                </label>
+                                <input
+                                    type="text"
+                                    className={`input input-bordered w-full ${errors.nim ? "input-error" : ""}`}
+                                    value={data.nim}
+                                    onChange={(e) =>
+                                        setData("nim", e.target.value)
+                                    }
+                                    placeholder="Masukkan NIM"
+                                />
+                                {errors.nim && (
+                                    <p className="text-error text-xs mt-1">
+                                        {errors.nim}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
+                        {data.tipe_peminjam === "visitor" && (
+                            <div className="form-control mb-3">
+                                <label className="label">
+                                    <span className="label-text font-medium">
+                                        NIK
+                                    </span>
+                                </label>
+                                <input
+                                    type="text"
+                                    className={`input input-bordered w-full ${errors.nik ? "input-error" : ""}`}
+                                    value={data.nik}
+                                    onChange={(e) =>
+                                        setData("nik", e.target.value)
+                                    }
+                                    placeholder="Masukkan NIK"
+                                />
+                                {errors.nik && (
+                                    <p className="text-error text-xs mt-1">
+                                        {errors.nik}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
+                        {data.tipe_peminjam && (
+                            <div className="form-control">
+                                <label className="label">
+                                    <span className="label-text font-medium">
+                                        Anggota
+                                    </span>
+                                </label>
+
+                                {anggota.length > 0 && (
+                                    <div className="space-y-3 mb-3">
+                                        {anggota.map((a, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex gap-2 items-start p-3 bg-base-200 rounded-lg"
+                                            >
+                                                <div className="flex-1 space-y-2">
+                                                    <input
+                                                        type="text"
+                                                        className="input input-bordered input-sm w-full"
+                                                        value={a.nama}
+                                                        onChange={(e) =>
+                                                            updateAnggota(
+                                                                index,
+                                                                "nama",
+                                                                e.target.value,
+                                                            )
+                                                        }
+                                                        placeholder="Nama anggota"
+                                                    />
+                                                    {data.tipe_peminjam ===
+                                                    "mahasiswa" ? (
+                                                        <input
+                                                            type="text"
+                                                            className="input input-bordered input-sm w-full"
+                                                            value={a.nim}
+                                                            onChange={(e) =>
+                                                                updateAnggota(
+                                                                    index,
+                                                                    "nim",
+                                                                    e.target
+                                                                        .value,
+                                                                )
+                                                            }
+                                                            placeholder="NIM anggota"
+                                                        />
+                                                    ) : (
+                                                        <input
+                                                            type="text"
+                                                            className="input input-bordered input-sm w-full"
+                                                            value={a.nik}
+                                                            onChange={(e) =>
+                                                                updateAnggota(
+                                                                    index,
+                                                                    "nik",
+                                                                    e.target
+                                                                        .value,
+                                                                )
+                                                            }
+                                                            placeholder="NIK anggota"
+                                                        />
+                                                    )}
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-ghost btn-sm btn-square text-error mt-0.5"
+                                                    onClick={() =>
+                                                        removeAnggota(index)
+                                                    }
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="h-4 w-4"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                        strokeWidth={2}
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            d="M6 18L18 6M6 6l12 12"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <button
+                                    type="button"
+                                    className="btn btn-outline btn-sm border-dashed border-base-300 hover:border-[#2F6F62] hover:text-[#2F6F62] hover:bg-[#E8F3EF]"
+                                    onClick={addAnggota}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-4 w-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={2}
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M12 4v16m8-8H4"
+                                        />
+                                    </svg>
+                                    Tambah Anggota
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -332,7 +580,10 @@ export default function Form({ boardgames = [] }) {
                     <button
                         type="button"
                         className="btn btn-ghost"
-                        onClick={() => reset()}
+                        onClick={() => {
+                            reset();
+                            setAnggota([]);
+                        }}
                         disabled={processing}
                     >
                         Atur Ulang
