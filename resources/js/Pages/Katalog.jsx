@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef, useEffect, createContext, useContext } from "react";
+import { useMemo, useState, useRef, useEffect, useCallback, createContext, useContext } from "react";
 import { Head, Link, router } from "@inertiajs/react";
 import LanguageToggle from "../Components/LanguageToggle";
 import Footer from "../Components/Footer";
@@ -683,36 +683,114 @@ function AnnouncementCarousel({ onModalChange }) {
     const t = useTeks();
     const items = t.carousel;
     const [index, setIndex] = useState(0);
-    const [isPaused, setIsPaused] = useState(false);
     const [modalItem, setModalItem] = useState(null);
+    const [paused, setPaused] = useState(false);
+    const wrapperRef = useRef(null);
+    const lastChangeRef = useRef(Date.now());
+    const intervalRef = useRef(null);
+    const mountedRef = useRef(true);
 
     useEffect(() => {
         onModalChange?.(!!modalItem);
     }, [modalItem, onModalChange]);
 
     useEffect(() => {
-        if (isPaused) return;
-        const timer = setTimeout(() => {
-            setIndex((i) => (i + 1) % items.length);
-        }, 10000);
-        return () => clearTimeout(timer);
-    }, [index, isPaused, items.length]);
+        return () => { mountedRef.current = false; };
+    }, []);
 
-    const geser = (arah) => setIndex((i) => (i + arah + items.length) % items.length);
+    const clearAutoplay = useCallback(() => {
+        if (intervalRef.current !== null) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
+    }, []);
+
+    const startAutoplay = useCallback(() => {
+        clearAutoplay();
+        if (items.length <= 1) return;
+        lastChangeRef.current = Date.now();
+        intervalRef.current = setInterval(() => {
+            if (mountedRef.current) {
+                setIndex((i) => (i + 1) % items.length);
+            }
+        }, 8000);
+    }, [items.length, clearAutoplay]);
+
+    const advanceImmediately = useCallback(() => {
+        setIndex((i) => (i + 1) % items.length);
+        lastChangeRef.current = Date.now();
+    }, []);
+
+    useEffect(() => {
+        if (paused || modalItem || items.length <= 1) {
+            clearAutoplay();
+        } else {
+            const elapsed = Date.now() - lastChangeRef.current;
+            if (elapsed >= 8000) {
+                advanceImmediately();
+            }
+            startAutoplay();
+        }
+        return clearAutoplay;
+    }, [paused, modalItem, items.length, clearAutoplay, startAutoplay, advanceImmediately]);
+
+    useEffect(() => {
+        if (items.length <= 1) return;
+
+        const handleVisibility = () => setPaused(document.hidden);
+        document.addEventListener('visibilitychange', handleVisibility);
+        return () => document.removeEventListener('visibilitychange', handleVisibility);
+    }, [items.length]);
+
+    useEffect(() => {
+        if (items.length <= 1) return;
+        const handleFocus = () => setPaused(false);
+        const handleBlur = () => setPaused(true);
+        window.addEventListener('focus', handleFocus);
+        window.addEventListener('blur', handleBlur);
+        return () => {
+            window.removeEventListener('focus', handleFocus);
+            window.removeEventListener('blur', handleBlur);
+        };
+    }, [items.length]);
+
+    useEffect(() => {
+        if (items.length <= 1) return;
+        const el = wrapperRef.current;
+        if (!el) return;
+        const observer = new IntersectionObserver(
+            ([entry]) => setPaused(!entry.isIntersecting || entry.intersectionRatio < 0.25),
+            { threshold: [0, 0.25] }
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [items.length]);
+
+    const geser = useCallback((arah) => {
+        setIndex((i) => (i + arah + items.length) % items.length);
+        lastChangeRef.current = Date.now();
+        startAutoplay();
+    }, [items.length, startAutoplay]);
+
+    const goToSlide = useCallback((slideIndex) => {
+        setIndex(slideIndex);
+        lastChangeRef.current = Date.now();
+        startAutoplay();
+    }, [startAutoplay]);
+
     const item = items[index];
     const theme = THEMES[item.theme] || THEMES.welcome;
 
     return (
         <>
             <div
-                className="max-w-[1300px] mx-auto px-4 md:px-6 relative z-10"
-                style={{ marginTop: -87, marginBottom: 25 }}
+                ref={wrapperRef}
+                className="w-full relative z-10"
+                style={{ height: 'calc(100dvh - 92px)', minHeight: 'calc(100dvh - 92px)' }}
             >
                 <div
-                    className="relative rounded-3xl overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md min-h-[380px] md:min-h-[480px] lg:h-[560px] xl:h-[600px]"
-                    onMouseEnter={() => setIsPaused(true)}
-                    onMouseLeave={() => setIsPaused(false)}
-                    onClick={() => setModalItem(item)}
+                    className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md"
+                    onClick={() => { clearAutoplay(); setModalItem(item); }}
                 >
                     <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
                         <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
@@ -727,7 +805,7 @@ function AnnouncementCarousel({ onModalChange }) {
                         </svg>
                     </div>
 
-                    <div className="relative flex flex-col h-full px-8 md:px-14 lg:px-20 py-10 md:py-14 pb-16 text-center min-h-[380px] md:min-h-[480px] lg:h-[560px] xl:h-[600px] overflow-y-auto">
+                    <div className="relative flex flex-col h-full px-8 md:px-14 lg:px-20 py-10 md:py-14 pb-16 text-center overflow-y-auto">
                         {item.theme === "welcome" ? (
                             <div className="flex flex-col items-center justify-center flex-1">
                                 <h3
@@ -806,7 +884,7 @@ function AnnouncementCarousel({ onModalChange }) {
                                     <button
                                         key={i}
                                         type="button"
-                                        onClick={(e) => { e.stopPropagation(); setIndex(i); }}
+                                        onClick={(e) => { e.stopPropagation(); goToSlide(i); }}
                                         aria-label={`Slide ${i + 1}`}
                                         className="h-1.5 rounded-full transition-all duration-300"
                                         style={{
@@ -867,9 +945,6 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                 bahasa={bahasa}
                 setBahasa={setBahasa}
             />
-
-            {/* Hero */}
-            <div style={{ backgroundColor: WARNA.hijauUtama, height: 100 }} />
 
             <AnnouncementCarousel onModalChange={setModalCarouselOpen} />
 
