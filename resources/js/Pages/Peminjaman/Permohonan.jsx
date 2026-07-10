@@ -7,10 +7,9 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
   const flash = props.flash || {};
   const errors = props.errors || {};
 
-  function canApproveReject(p) {
+  function canApproveReject() {
     if (!admin) return false;
-    if (admin.role === 'superadmin') return true;
-    return String(p.boardgame?.lantai) === String(admin.lantai);
+    return true;
   }
 
   function approve(id) {
@@ -78,7 +77,7 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
           <tbody>
             {permohonan.data.length === 0 && (
               <tr>
-                <td colSpan={9} className="text-center text-slate-400 py-6">
+                <td colSpan={10} className="text-center text-slate-400 py-6">
                   Belum ada permohonan.
                 </td>
               </tr>
@@ -88,14 +87,14 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
                 <td>{p.nama || p.user?.name}</td>
                 <td>{p.nim}</td>
                 <td>{p.boardgame?.nama}</td>
-                <td>{p.boardgame?.lantai}</td>
+                <td>{p.boardgame?.lantai ?? '-'}</td>
                 <td>{new Date(p.tanggal_pinjam + "T00:00:00").toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "2-digit" })}</td>
                 <td>{p.jam_pinjam?.slice(0, 8)}</td>
                 <td>
                   <BadgeStatus status={p.status} />
                 </td>
                 <td className="flex gap-2">
-                  {p.status === 'pending' && canApproveReject(p) && (
+                  {p.status === 'menunggu' && canApproveReject() && (
                     <>
                       <button className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition bg-emerald-500 hover:bg-emerald-600 text-white" onClick={() => approve(p.id)}>Setujui</button>
                       <button className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition bg-rose-500 hover:bg-rose-600 text-white" onClick={() => reject(p.id)}>Tolak</button>

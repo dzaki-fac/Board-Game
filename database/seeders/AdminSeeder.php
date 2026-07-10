@@ -13,33 +13,33 @@ class AdminSeeder extends Seeder
         Admin::create([
             'name' => 'Super Admin',
             'email' => 'superadmin@perpus.ac.id',
+            'nip' => '199001012010011001',
             'password' => Hash::make('superadmin123'),
             'role' => 'superadmin',
-            'lantai' => '',
         ]);
 
         Admin::create([
             'name' => 'Admin 1',
             'email' => 'admin1@perpus.ac.id',
+            'nip' => '199002012010011002',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
-            'lantai' => '1',
         ]);
 
         Admin::create([
             'name' => 'Admin 2',
             'email' => 'admin2@perpus.ac.id',
+            'nip' => '199003012010011003',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
-            'lantai' => '2',
         ]);
 
         Admin::create([
             'name' => 'Admin 3',
             'email' => 'admin3@perpus.ac.id',
+            'nip' => '199004012010011004',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
-            'lantai' => '3',
         ]);
     }
 }
