@@ -1,7 +1,7 @@
 import { Link, usePage } from "@inertiajs/react";
 
 const navItems = [
-    { label: "Beranda", href: "/peminjaman/create" },
+    { label: "Beranda", href: "/" },
     { label: "Board Game", href: "/admin/games" },
     { label: "Permohonan", href: "/admin/permohonan" },
     { label: "Peminjaman", href: "/admin/loans" },
