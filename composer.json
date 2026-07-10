@@ -43,7 +43,7 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "@php artisan serve"
+             "npx concurrently \"php artisan serve\" \"npm run dev\""
         ],
         "dev:full": [
             "Composer\\Config::disableProcessTimeout",
