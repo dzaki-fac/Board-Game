@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use Inertia\Inertia;
 
 class HomeController extends Controller
@@ -13,5 +11,10 @@ class HomeController extends Controller
         return Inertia::render('Home', [
             'message' => 'Hello Laravel + React'
         ]);
+    }
+
+    public function rules()
+    {
+        return Inertia::render('Rules/Index');
     }
 }
