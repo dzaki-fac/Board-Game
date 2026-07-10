@@ -1,5 +1,7 @@
 import { useMemo, useState, useRef, useEffect, createContext, useContext } from "react";
 import { Head, Link, router } from "@inertiajs/react";
+import LanguageToggle from "../Components/LanguageToggle";
+import Footer from "../Components/Footer";
 
 /* ================= Palet warna UPT Perpustakaan Undip ================= */
 const WARNA = {
@@ -269,98 +271,110 @@ function formatDurasi(text, t) {
 
 /* ========================= Navbar utama ========================= */
 
-function BarUtilitas({ bahasa, setBahasa }) {
-    return (
-        <div className="text-white text-xs" style={{ backgroundColor: WARNA.hijauTua }}>
-            <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-2 grid grid-cols-3 items-center gap-4">
-                <div className="flex items-center gap-1.5 font-medium tracking-wide">
-                    <button
-                        type="button"
-                        onClick={() => setBahasa("EN")}
-                        className={bahasa === "EN" ? "text-white" : "text-white/50 hover:text-white/80"}
-                    >
-                        EN
-                    </button>
-                    <span className="text-white/40">|</span>
-                    <button
-                        type="button"
-                        onClick={() => setBahasa("ID")}
-                        className={bahasa === "ID" ? "text-white" : "text-white/50 hover:text-white/80"}
-                    >
-                        ID
-                    </button>
-                </div>
-
-                <div className="flex items-center justify-center gap-6 text-white/80">
-                    <a
-                        href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 hover:text-white transition-colors"
-                    >
-                        <IkonYoutube className="w-5 h-5" />
-                        <span>Youtube</span>
-                    </a>
-                    <a
-                        href="https://www.instagram.com/perpus.undip?igsh=MTh4bXFtd3AzbmRmdQ=="
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 hover:text-white transition-colors"
-                    >
-                        <IkonInstagram className="w-5 h-5" />
-                        <span>Instagram</span>
-                    </a>
-                    <a
-                        href="https://www.tiktok.com/@perpus.undip.press?_r=1&_t=ZS-97okoKr4q4S"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 hover:text-white transition-colors"
-                    >
-                        <IkonTiktok className="w-5 h-5" />
-                        <span>TikTok</span>
-                    </a>
-                </div>
-
-                <div />
-            </div>
-        </div>
-    );
-}
-
-function NavbarUtama({ pencarian, setPencarian }) {
+function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
     const t = useTeks();
 
     return (
-        <div style={{ backgroundColor: WARNA.hijauUtama }}>
-            <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-3 flex items-center gap-4">
-                {/* Logo */}
-                <a href="/katalog" className="flex items-center gap-2 shrink-0">
-                    <img src="/images/logo-upt.png" alt="Logo UPT Perpustakaan Undip" className="h-10 w-10 rounded-full bg-white p-1 object-contain" />
-                    <span className="hidden md:block leading-tight text-white">
-                        <span className="block text-[11px] text-emerald-100/90 tracking-wide">UPT Perpustakaan</span>
-                        <span className="block text-sm font-semibold">Universitas Diponegoro</span>
-                    </span>
-                </a>
+        <div style={{ backgroundColor: WARNA.hijauTua }}>
+            <div className="max-w-[1440px] mx-auto px-6 md:px-10">
+                {/* Desktop (md+) */}
+                <div className="hidden md:flex items-center gap-6 py-3">
+                    {/* Kiri: Logo + Nama Institusi */}
+                    <a href="/katalog" className="flex items-center gap-2 shrink-0">
+                        <img
+                            src="/images/logo-upt.png"
+                            alt="Logo UPT Perpustakaan Undip"
+                            className="h-10 w-10 rounded-full bg-white p-1 object-contain"
+                        />
+                        <div className="leading-tight text-white">
+                            <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
+                            <span className="block text-sm font-semibold">UPT Perpustakaan</span>
+                        </div>
+                    </a>
 
-                {/* Pencarian, sekarang ngisi seluruh sisa ruang navbar */}
-                <div className="flex-1 flex rounded-md overflow-hidden ring-1 ring-black/10">
-                    <input
-                        type="text"
-                        value={pencarian}
-                        onChange={(e) => setPencarian(e.target.value)}
-                        placeholder={t.cariPlaceholder}
-                        className="flex-1 min-w-0 px-4 py-2 text-sm text-slate-800 bg-white focus:outline-none"
-                    />
-                    <button
-                        type="button"
-                        aria-label="Cari"
-                        className="px-4 flex items-center justify-center text-white transition-colors"
-                        style={{ backgroundColor: WARNA.emas }}
-                        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.emasHover)}
-                        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.emas)}
-                    >
-                        <IkonCari className="w-4 h-4" />
-                    </button>
+                    {/* Tengah: Pencarian */}
+                    <div className="flex-1 flex justify-center">
+                        <div className="relative w-full max-w-xl">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60">
+                                <circle cx="11" cy="11" r="7" />
+                                <path d="m20 20-3.5-3.5" />
+                            </svg>
+                            <input
+                                type="text"
+                                value={pencarian}
+                                onChange={(e) => setPencarian(e.target.value)}
+                                placeholder={t.cariPlaceholder}
+                                className="w-full pl-11 pr-4 py-2 text-sm text-slate-800 bg-white rounded-md focus:outline-none"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Kanan: Bahasa + Sosial Media */}
+                    <div className="flex items-center gap-5 shrink-0">
+                        <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
+                        <div className="flex items-center gap-3 text-white/80">
+                            <a
+                                href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 hover:text-white transition-colors"
+                            >
+                                <IkonYoutube className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">Youtube</span>
+                            </a>
+                            <a
+                                href="https://www.instagram.com/perpus.undip?igsh=MTh4bXFtd3AzbmRmdQ=="
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 hover:text-white transition-colors"
+                            >
+                                <IkonInstagram className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">Instagram</span>
+                            </a>
+                            <a
+                                href="https://www.tiktok.com/@perpus.undip.press?_r=1&_t=ZS-97okoKr4q4S"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 hover:text-white transition-colors"
+                            >
+                                <IkonTiktok className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">TikTok</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Mobile (< md) */}
+                <div className="md:hidden">
+                    <div className="flex items-center justify-between py-3">
+                        <a href="/katalog" className="flex items-center gap-2">
+                            <img
+                                src="/images/logo-upt.png"
+                                alt="Logo UPT Perpustakaan Undip"
+                                className="h-9 w-9 rounded-full bg-white p-1 object-contain"
+                            />
+                            <div className="leading-tight text-white">
+                                <span className="block text-[10px] text-emerald-100/90 tracking-wide">UPT Perpustakaan</span>
+                                <span className="block text-xs font-semibold">Universitas Diponegoro</span>
+                            </div>
+                        </a>
+                        <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
+                    </div>
+                    <div className="pb-3">
+                        <div className="relative">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/60">
+                                <circle cx="11" cy="11" r="7" />
+                                <path d="m20 20-3.5-3.5" />
+                            </svg>
+                            <input
+                                type="text"
+                                value={pencarian}
+                                onChange={(e) => setPencarian(e.target.value)}
+                                placeholder={t.cariPlaceholder}
+                                className="w-full pl-11 pr-4 py-2 text-sm text-slate-800 bg-white rounded-md focus:outline-none"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -746,10 +760,11 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
 
     return (
         <div className="min-h-screen bg-[#FAF7F2] text-[15px]">
-            <BarUtilitas bahasa={bahasa} setBahasa={setBahasa} />
-            <NavbarUtama
+            <TopNavbar
                 pencarian={pencarian}
                 setPencarian={setPencarian}
+                bahasa={bahasa}
+                setBahasa={setBahasa}
             />
 
             {/* Hero */}
@@ -758,41 +773,108 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
             <AnnouncementCarousel games={games.filter((g) => g.populer)} />
 
             {/* Filter & sort, ala baris filter Amazon */}
-            <div className="sticky top-0 z-20 bg-white border-b border-slate-200 shadow-sm">
-                <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-3 flex flex-wrap items-center gap-x-3 gap-y-2">
-                    <span className="text-xs font-semibold text-slate-500 shrink-0">{t.filter}</span>
+            <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
+                <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-3">
+                    {/* Desktop (lg+) */}
+                    <div className="hidden lg:flex items-center gap-4">
+                        <div className="flex-1 max-w-md">
+                            <div className="relative">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400">
+                                    <circle cx="11" cy="11" r="7" />
+                                    <path d="m20 20-3.5-3.5" />
+                                </svg>
+                                <input
+                                    type="text"
+                                    value={pencarian}
+                                    onChange={(e) => setPencarian(e.target.value)}
+                                    placeholder={t.cariPlaceholder}
+                                    className="w-full pl-11 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition-colors"
+                                />
+                            </div>
+                        </div>
 
-                    <div className="flex items-center gap-1">
-                        <label className="text-xs text-slate-500 hidden sm:inline">{t.kategori}</label>
-                        <select value={kategoriAktif} onChange={(e) => setKategoriAktif(e.target.value)} className={kelasSelect}>
-                            {kategoriList.map((k) => (
-                                <option key={k} value={k}>{k === "Semua" ? t.semua : k}</option>
-                            ))}
-                        </select>
+                        <div className="flex items-center gap-3 shrink-0">
+                            <span className="text-xs font-semibold text-slate-500 shrink-0">{t.filter}</span>
+
+                            <div className="flex items-center gap-1">
+                                <label className="text-xs text-slate-500 hidden sm:inline">{t.kategori}</label>
+                                <select value={kategoriAktif} onChange={(e) => setKategoriAktif(e.target.value)} className={kelasSelect}>
+                                    {kategoriList.map((k) => (
+                                        <option key={k} value={k}>{k === "Semua" ? t.semua : k}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="flex items-center gap-1">
+                                <label className="text-xs text-slate-500 hidden sm:inline">{t.lantai}</label>
+                                <select value={lantaiAktif} onChange={(e) => setLantaiAktif(e.target.value)} className={kelasSelect}>
+                                    <option value="Semua">{t.semua}</option>
+                                    <option value="1">{t.lantai} 1</option>
+                                    <option value="2">{t.lantai} 2</option>
+                                    <option value="3">{t.lantai} 3</option>
+                                </select>
+                            </div>
+
+                            <div className="flex items-center gap-1">
+                                <label className="text-xs text-slate-500 hidden sm:inline">{t.status}</label>
+                                <select value={statusAktif} onChange={(e) => setStatusAktif(e.target.value)} className={kelasSelect}>
+                                    <option value="Semua">{t.semua}</option>
+                                    <option value="Tersedia">{t.tersedia}</option>
+                                    <option value="Dipinjam">{t.dipinjam}</option>
+                                </select>
+                            </div>
+
+                            <span className="text-xs text-slate-500 shrink-0">{filtered.length} {t.boardGame}</span>
+                        </div>
                     </div>
 
-                    <div className="flex items-center gap-1">
-                        <label className="text-xs text-slate-500 hidden sm:inline">{t.lantai}</label>
-                        <select value={lantaiAktif} onChange={(e) => setLantaiAktif(e.target.value)} className={kelasSelect}>
-                            <option value="Semua">{t.semua}</option>
-                            <option value="1">{t.lantai} 1</option>
-                            <option value="2">{t.lantai} 2</option>
-                            <option value="3">{t.lantai} 3</option>
-                        </select>
+                    {/* Mobile (< lg) */}
+                    <div className="lg:hidden space-y-3">
+                        <div className="relative">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400">
+                                <circle cx="11" cy="11" r="7" />
+                                <path d="m20 20-3.5-3.5" />
+                            </svg>
+                            <input
+                                type="text"
+                                value={pencarian}
+                                onChange={(e) => setPencarian(e.target.value)}
+                                placeholder={t.cariPlaceholder}
+                                className="w-full pl-11 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition-colors"
+                            />
+                        </div>
+
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                            <span className="text-xs font-semibold text-slate-500">{t.filter}</span>
+
+                            <div className="flex items-center gap-1">
+                                <select value={kategoriAktif} onChange={(e) => setKategoriAktif(e.target.value)} className={kelasSelect}>
+                                    {kategoriList.map((k) => (
+                                        <option key={k} value={k}>{k === "Semua" ? t.semua : k}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="flex items-center gap-1">
+                                <select value={lantaiAktif} onChange={(e) => setLantaiAktif(e.target.value)} className={kelasSelect}>
+                                    <option value="Semua">{t.semua}</option>
+                                    <option value="1">{t.lantai} 1</option>
+                                    <option value="2">{t.lantai} 2</option>
+                                    <option value="3">{t.lantai} 3</option>
+                                </select>
+                            </div>
+
+                            <div className="flex items-center gap-1">
+                                <select value={statusAktif} onChange={(e) => setStatusAktif(e.target.value)} className={kelasSelect}>
+                                    <option value="Semua">{t.semua}</option>
+                                    <option value="Tersedia">{t.tersedia}</option>
+                                    <option value="Dipinjam">{t.dipinjam}</option>
+                                </select>
+                            </div>
+
+                            <span className="text-xs text-slate-500 ml-auto">{filtered.length} {t.boardGame}</span>
+                        </div>
                     </div>
-
-                    <div className="flex items-center gap-1">
-                        <label className="text-xs text-slate-500 hidden sm:inline">{t.status}</label>
-                        <select value={statusAktif} onChange={(e) => setStatusAktif(e.target.value)} className={kelasSelect}>
-                            <option value="Semua">{t.semua}</option>
-                            <option value="Tersedia">{t.tersedia}</option>
-                            <option value="Dipinjam">{t.dipinjam}</option>
-                        </select>
-                    </div>
-
-                    <div className="flex-1" />
-
-                    <span className="text-xs text-slate-500 shrink-0">{filtered.length} {t.boardGame}</span>
                 </div>
             </div>
 
@@ -828,6 +910,21 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                     </>
                 )}
             </div>
+
+            <Footer />
+
+            {/* Floating Pinjam button */}
+            <Link
+                href="/peminjaman/create"
+                className="fixed bottom-4 left-4 right-4 md:bottom-8 md:left-auto md:right-8 md:w-auto z-50 inline-flex items-center justify-center gap-2 px-6 py-3.5 md:py-3 font-semibold text-white bg-emerald-700 hover:bg-emerald-800 rounded-2xl md:rounded-full shadow-xl shadow-emerald-900/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-emerald-900/40"
+            >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+                    <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+                    <path d="M3 6h18" />
+                    <path d="M16 10a4 4 0 01-8 0" />
+                </svg>
+                Pinjam
+            </Link>
         </div>
     );
 }
