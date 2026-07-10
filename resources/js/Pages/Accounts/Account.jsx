@@ -118,12 +118,14 @@ export default function Account({ admins }) {
 
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold">Daftar Akun Admin</h1>
-                {isSuperAdmin && (
-                    <button onClick={openCreateModal} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none">
-                        + Tambah Admin
-                    </button>
-                )}
             </div>
+
+            {isSuperAdmin && (
+                <button onClick={openCreateModal} className="fixed bottom-6 right-6 z-50 btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none rounded-full shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                    Tambah Admin
+                </button>
+            )}
 
             <div className="overflow-x-auto">
                 <table className="table table-zebra w-full">

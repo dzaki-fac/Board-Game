@@ -6,6 +6,7 @@ use App\Http\Requests\StorePermohonanRequest;
 use App\Models\BoardGame;
 use App\Models\Loan;
 use App\Models\Permohonan;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -55,25 +56,38 @@ class PermohonanController extends Controller
         ]);
     }
 
-    public function permohonan()
+    public function permohonan(Request $request)
     {
         $admin = Auth::guard('admin')->user();
         $isSuperAdmin = $admin->isSuperAdmin();
 
+        $search = $request->input('search');
+        $status = $request->input('status');
+
         $query = Permohonan::with('boardgame')
             ->where('status', '!=', Permohonan::STATUS_RETURNED)
-            ->when(!$isSuperAdmin, fn ($q) => $q->whereHas('boardgame', fn ($q2) => $q2->where('lantai', $admin->lantai)));
+            ->when(!$isSuperAdmin, fn ($q) => $q->whereHas('boardgame', fn ($q2) => $q2->where('lantai', $admin->lantai)))
+            ->when($status, fn ($q) => $q->where('status', $status))
+            ->when($search, fn ($q) => $q->where(function ($q2) use ($search) {
+                $q2->where('nama', 'like', "%{$search}%")
+                    ->orWhere('nim', 'like', "%{$search}%")
+                    ->orWhereHas('boardgame', fn ($q3) => $q3->where('nama', 'like', "%{$search}%"));
+            }));
 
         $pending = (clone $query)->where('status', Permohonan::STATUS_PENDING)->count();
         $approved = (clone $query)->where('status', Permohonan::STATUS_APPROVED)->count();
         $rejected = (clone $query)->where('status', Permohonan::STATUS_REJECTED)->count();
 
         return inertia('Peminjaman/Permohonan', [
-            'permohonan' => $query->latest('created_at')->paginate(10),
+            'permohonan' => $query->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")->latest('created_at')->paginate(10)->withQueryString(),
             'total' => $pending + $approved + $rejected,
             'total_pending' => $pending,
             'total_approved' => $approved,
             'total_rejected' => $rejected,
+            'filters' => [
+                'search' => $search,
+                'status' => $status,
+            ],
         ]);
     }
 
