@@ -2,6 +2,8 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
 import LanguageToggle from "../Components/LanguageToggle";
 import Footer from "../Components/Footer";
+import ReviewSection from "../Components/ReviewSection";
+import RatingSummary from "../Components/RatingSummary";
 
 const WARNA = {
     hijauTua: "#173C33",
@@ -60,7 +62,7 @@ const TEKS = {
         menit: "Menit",
         tersedia: "Tersedia",
         dipinjam: "Dipinjam",
-        deskripsiIsi: "Komponen",
+        deskripsiIsi: "Lihat Detail",
         umum: "Umum",
         pinjamSekarang: "Pinjam Sekarang",
         detailBoardGame: "Detail Board Game",
@@ -271,13 +273,18 @@ function TopNavbar({ bahasa, setBahasa }) {
                     {/* Kiri: Logo + Nama Institusi */}
                     <a href="/katalog" className="flex items-center gap-2 shrink-0">
                         <img
+                            src="/assets/logo_undip.png"
+                            alt="Universitas Diponegoro"
+                            className="h-10 w-10 object-contain"
+                        />
+                        <img
                             src="/images/logo-upt.png"
-                            alt="Logo UPT Perpustakaan Undip"
-                            className="h-10 w-10 rounded-full bg-white p-1 object-contain"
+                            alt="UPT Perpustakaan Undip"
+                            className="h-10 w-10 object-contain"
                         />
                         <div className="leading-tight text-white">
-                            <span className="block text-[11px] text-emerald-100/90 tracking-wide">UPT Perpustakaan</span>
-                            <span className="block text-sm font-semibold">Universitas Diponegoro</span>
+                            <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
+                            <span className="block text-sm font-semibold">UPT Perpustakaan</span>
                         </div>
                     </a>
 
@@ -304,15 +311,20 @@ function TopNavbar({ bahasa, setBahasa }) {
                 {/* Mobile (< md) */}
                 <div className="md:hidden">
                     <div className="flex items-center justify-between py-3">
-                        <a href="/katalog" className="flex items-center gap-2">
+                        <a href="/katalog" className="flex items-center gap-1.5">
+                            <img
+                                src="/assets/logo_undip.png"
+                                alt="Universitas Diponegoro"
+                                className="h-9 w-9 object-contain"
+                            />
                             <img
                                 src="/images/logo-upt.png"
-                                alt="Logo UPT Perpustakaan Undip"
-                                className="h-9 w-9 rounded-full bg-white p-1 object-contain"
+                                alt="UPT Perpustakaan Undip"
+                                className="h-9 w-9 object-contain"
                             />
                             <div className="leading-tight text-white">
-                                <span className="block text-[10px] text-emerald-100/90 tracking-wide">UPT Perpustakaan</span>
-                                <span className="block text-xs font-semibold">Universitas Diponegoro</span>
+                                <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
+                                <span className="block text-xs font-semibold">UPT Perpustakaan</span>
                             </div>
                         </a>
                         <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
@@ -474,7 +486,7 @@ function SeksiGameSerupa({ gameSerupa, t }) {
     );
 }
 
-function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
+function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingDistribution, selectedReviewRating, bahasa, setBahasa }) {
     const t = useTeks();
     const [warna, bg] = warnaKategori(game.kategori);
     const tersedia = game.available_copies > 0;
@@ -513,6 +525,14 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
                             </h1>
                             <p className="text-sm text-slate-500 mb-4">{game.penerbit}</p>
 
+                            <div className="mb-4">
+                                <RatingSummary
+                                    averageRating={avgRating}
+                                    reviewsCount={totalReviews}
+                                    size="lg"
+                                />
+                            </div>
+
                             {/* Badge kesulitan & usia - eye catching, tepat di bawah judul */}
                             {adaBadge && (
                                 <div className="flex flex-wrap items-center gap-2 mb-5">
@@ -541,7 +561,7 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
                             </div>
 
                             {daftarKomponen.length > 0 && (
-                                <div className="mb-6">
+                                <div className="mb-3">
                                     <button
                                         type="button"
                                         onClick={() => setTampilkanKomponen((prev) => !prev)}
@@ -570,7 +590,7 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
                                 </div>
                             )}
 
-                            <div className="mt-auto">
+                            <div className={daftarKomponen.length > 0 ? "" : "mt-auto"}>
                                 {tersedia ? (
                                     <Link
                                         href={`/peminjaman/create?boardgame_id=${game.id}`}
@@ -596,6 +616,15 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
 
                 {/* Game Serupa - section lebar, background beda biar mencolok */}
                 <SeksiGameSerupa gameSerupa={gameSerupa} t={t} />
+
+                <ReviewSection
+                    boardgameId={game.id}
+                    reviews={reviews}
+                    avgRating={avgRating}
+                    totalReviews={totalReviews}
+                    ratingDistribution={ratingDistribution}
+                    selectedReviewRating={selectedReviewRating}
+                />
             </div>
 
             <Footer />
@@ -603,13 +632,13 @@ function IsiDetail({ game, gameSerupa, bahasa, setBahasa }) {
     );
 }
 
-export default function Detail({ game, gameSerupa = [] }) {
+export default function Detail({ game, gameSerupa = [], reviews = [], avgRating = null, totalReviews = 0, ratingDistribution = [], selectedReviewRating = 'all' }) {
     const [bahasa, setBahasa] = useState("ID");
 
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
             <Head title={game ? game.nama : "Detail Board Game"} />
-            <IsiDetail game={game} gameSerupa={gameSerupa} bahasa={bahasa} setBahasa={setBahasa} />
+            <IsiDetail game={game} gameSerupa={gameSerupa} reviews={reviews} avgRating={avgRating} totalReviews={totalReviews} ratingDistribution={ratingDistribution} selectedReviewRating={selectedReviewRating} bahasa={bahasa} setBahasa={setBahasa} />
         </BahasaContext.Provider>
     );
 }

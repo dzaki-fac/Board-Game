@@ -9,6 +9,7 @@ use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PermohonanController;
 
 use App\Http\Controllers\ReturnController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', [PermohonanController::class, 'create']);
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [BoardGameController::class, 'katalog'])->name('katalog');
 Route::get('/katalog', [BoardGameController::class, 'katalog'])->name('katalog');
 Route::get('/katalog/{boardGame}', [BoardGameController::class, 'detail'])->name('katalog.show');
+Route::post('/katalog/{boardGame}/reviews', [ReviewController::class, 'store'])->name('katalog.reviews.store');
 
 Route::prefix('admin')->group(function () {
     Route::middleware('guest:admin')->group(function () {
