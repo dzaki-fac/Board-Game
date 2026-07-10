@@ -40,7 +40,7 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
         </div>
         <div className="stat bg-base-100 border border-base-300 rounded-box shadow-sm">
           <div className="stat-title text-sm">Ditolak</div>
-          <div className="stat-value text-3xl text-pink-500">{total_rejected}</div>
+          <div className="stat-value text-3xl text-red-600">{total_rejected}</div>
         </div>
       </div>
 
@@ -93,12 +93,12 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
                 <td>
                   <BadgeStatus status={p.status} />
                 </td>
-                <td className="flex gap-2">
+                <td>
                   {p.status === 'menunggu' && canApproveReject() && (
-                    <>
+                    <span className="flex gap-2">
                       <button className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition bg-emerald-500 hover:bg-emerald-600 text-white" onClick={() => approve(p.id)}>Setujui</button>
                       <button className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold shadow-sm transition bg-rose-500 hover:bg-rose-600 text-white" onClick={() => reject(p.id)}>Tolak</button>
-                    </>
+                    </span>
                   )}
                 </td>
               </tr>

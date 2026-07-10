@@ -13,7 +13,8 @@ class AdminAccountController extends Controller
 {
     public function index()
     {
-        $admins = Admin::select(['id', 'name', 'email', 'nip', 'role', 'created_at'])->get();
+        $admins = Admin::select(['id', 'name', 'email', 'nip', 'role', 'created_at'])
+            ->paginate(10);
 
         return Inertia::render('Accounts/Account', [
             'admins' => $admins,
