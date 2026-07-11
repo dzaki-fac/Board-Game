@@ -22,8 +22,8 @@ const icons = {
   ),
   borrowed: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
-      <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5A2.5 2.5 0 0 1 4 19.5z" />
-      <polyline points="9 2 9 11 12 9 15 11 15 2" />
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="16 8 11 15 8 12" />
     </svg>
   ),
   returned: (
@@ -61,10 +61,10 @@ const config = {
     border: "border-[#FCA5A5]",
   },
   borrowed: {
-    label: "Dipinjam",
-    bg: "bg-[#EEF0FD]",
-    text: "text-[#4338CA]",
-    border: "border-[#A5B4FC]",
+    label: "Disetujui",
+    bg: "bg-[#E8F3EF]",
+    text: "text-[#2F6F62]",
+    border: "border-[#B8D5C8]",
   },
   returned: {
     label: "Dikembalikan",
