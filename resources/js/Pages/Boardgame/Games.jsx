@@ -178,8 +178,7 @@ export default function Games({ boardgames }) {
 
             {/* Pagination */}
             {links.length > 3 && (
-                <div className="flex items-center justify-between mt-4">
-                    <p className="text-xs text-slate-400">Menampilkan {from}-{to} dari {total}</p>
+                <div className="flex justify-center mt-6 mb-4">
                     <div className="flex items-center gap-1">
                         {links.map((link, i) => (
                             <Link
@@ -187,7 +186,7 @@ export default function Games({ boardgames }) {
                                 href={link.url || '#'}
                                 preserveState
                                 replace
-                                                className={`btn btn-xs ${link.active ? 'bg-[#2F6F62] text-white' : 'btn-ghost'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
+                                className={`btn btn-sm min-w-9 ${link.active ? 'bg-[#2F6F62] text-white border-none' : 'btn-ghost text-gray-600'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />
                         ))}

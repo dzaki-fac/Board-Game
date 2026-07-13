@@ -58,15 +58,11 @@ class PermohonanController extends Controller
 
     public function permohonan(Request $request)
     {
-        $admin = Auth::guard('admin')->user();
-        $isSuperAdmin = $admin->isSuperAdmin();
-
         $search = $request->input('search');
         $status = $request->input('status');
 
         $base = Permohonan::with('boardgame')
-            ->where('status', '!=', Permohonan::STATUS_RETURNED)
-            ->when(!$isSuperAdmin, fn ($q) => $q->whereHas('boardgame', fn ($q2) => $q2->where('lantai', $admin->lantai)));
+            ->where('status', '!=', Permohonan::STATUS_RETURNED);
 
         $pending = (clone $base)->where('status', Permohonan::STATUS_PENDING)->count();
         $approved = (clone $base)->where('status', Permohonan::STATUS_APPROVED)->count();

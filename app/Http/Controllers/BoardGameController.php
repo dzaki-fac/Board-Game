@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BoardGame;
+use App\Models\BoardGameReview;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -53,7 +54,9 @@ class BoardGameController extends Controller
      */
     public function katalog()
     {
-        $games = BoardGame::orderBy('available_copies', 'desc')
+        $games = BoardGame::withAvg('reviews', 'rating')
+            ->withCount('reviews')
+            ->orderBy('available_copies', 'desc')
             ->orderBy('nama')
             ->get([
                 'id',
@@ -67,7 +70,15 @@ class BoardGameController extends Controller
                 'link_foto',
                 'available_copies',
                 'populer'
-            ]);
+            ])
+            ->map(function ($game) {
+                $game->reviews_avg_rating = $game->reviews_avg_rating
+                    ? round($game->reviews_avg_rating, 1)
+                    : 0;
+                return $game;
+            })
+            ->sortByDesc('reviews_avg_rating')
+            ->values();
 
         return Inertia::render('Katalog', [
             'games' => $games,
@@ -90,9 +101,43 @@ class BoardGameController extends Controller
                 'link_foto'
             ]);
 
+        $selectedRating = request('review_rating', 'all');
+
+        $allReviews = BoardGameReview::where('boardgame_id', $boardGame->id)
+            ->get(['rating']);
+
+        $totalReviews = $allReviews->count();
+        $avgRating = $allReviews->avg('rating');
+
+        $ratingDistribution = [];
+        for ($star = 5; $star >= 1; $star--) {
+            $count = $allReviews->where('rating', $star)->count();
+            $percentage = $totalReviews > 0 ? round(($count / $totalReviews) * 100) : 0;
+            $ratingDistribution[] = [
+                'star' => $star,
+                'count' => $count,
+                'percentage' => $percentage,
+            ];
+        }
+
+        $reviewsQuery = BoardGameReview::where('boardgame_id', $boardGame->id)
+            ->select('id', 'rating', 'comment', 'created_at')
+            ->latest();
+
+        if ($selectedRating !== 'all') {
+            $reviewsQuery->where('rating', (int) $selectedRating);
+        }
+
+        $reviews = $reviewsQuery->paginate(5, ['*'], 'review_page')->withQueryString();
+
         return Inertia::render('Detail', [
             'game' => $boardGame,
             'gameSerupa' => $gameSerupa,
+            'reviews' => $reviews,
+            'avgRating' => $totalReviews > 0 ? round($avgRating, 1) : 0,
+            'totalReviews' => $totalReviews,
+            'ratingDistribution' => $ratingDistribution,
+            'selectedReviewRating' => $selectedRating,
         ]);
     }
 

@@ -1,7 +1,7 @@
-import { usePage, useForm, router } from "@inertiajs/react";
+import { usePage, useForm, router, Link } from "@inertiajs/react";
 import { useState, useEffect } from "react";
 
-export default function Account({ admins }) {
+export default function Account({ admins: { data: admins, links, from, to, total } }) {
     const { auth, flash, error } = usePage().props;
     const currentAdmin = auth?.admin;
     const isSuperAdmin = currentAdmin?.role === "superadmin";
@@ -141,9 +141,16 @@ export default function Account({ admins }) {
                         </tr>
                     </thead>
                     <tbody>
+                        {admins.length === 0 && (
+                            <tr>
+                                <td colSpan={7} className="text-center text-slate-400 py-6">
+                                    Belum ada akun admin.
+                                </td>
+                            </tr>
+                        )}
                         {admins.map((admin, i) => (
                             <tr key={admin.id}>
-                                <td>{i + 1}</td>
+                                <td>{from + i}</td>
                                 <td>
                                     {admin.name}
                                     {admin.id === currentAdminId && (
@@ -490,6 +497,23 @@ export default function Account({ admins }) {
                         <button onClick={() => setDeleteTarget(null)}>close</button>
                     </form>
                 </dialog>
+            )}
+            {/* Pagination */}
+            {links.length > 3 && (
+                <div className="flex justify-center mt-6 mb-4">
+                    <div className="flex items-center gap-1">
+                        {links.map((link, i) => (
+                            <Link
+                                key={i}
+                                href={link.url || '#'}
+                                preserveState
+                                replace
+                                className={`btn btn-sm min-w-9 ${link.active ? 'bg-[#2F6F62] text-white border-none' : 'btn-ghost text-gray-600'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        ))}
+                    </div>
+                </div>
             )}
         </div>
     );
