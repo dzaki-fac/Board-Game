@@ -10,46 +10,45 @@ return new class extends Migration
     {
         Schema::create('board_games', function (Blueprint $table) {
             $table->id();
-
             // Identitas
             $table->string('kode')->unique();
             $table->integer('box');
             $table->integer('lantai');
-
             // Informasi board game
             $table->string('nama');
             $table->string('penerbit')->nullable();
+
+            // Array kategori/genre (disimpan sebagai JSON)
+            // ["Party", "Card Game", "Family"]
             $table->json('kategori')->nullable();
 
             // Stok
             $table->integer('jumlah');
             $table->integer('available_copies');
             $table->string('satuan');
-
             // Detail permainan
             $table->decimal('tingkat_kesulitan', 2, 1)->nullable();
             $table->string('usia_minimum')->nullable();
             $table->string('jumlah_pemain')->nullable();
             $table->string('durasi')->nullable();
-
             // Foto (array URL)
             $table->json('link_foto')->nullable();
-
             // Daftar komponen
             // [
             //     { "nama": "Kartu", "jumlah": 120 },
             //     { "nama": "Dadu", "jumlah": 2 }
             // ]
             $table->json('komponen');
-
             // Komponen yang sedang hilang
             // [
             //     { "nama": "Kartu", "jumlah": 2 }
             // ]
             $table->json('barang_hilang')->nullable();
-
+            // Deskripsi/sinopsis permainan
+            $table->text('deskripsi')->nullable();
+            // Link video tutorial (mis. YouTube)
+            $table->string('link_tutorial')->nullable();
             $table->boolean('populer')->default(false);
-
             $table->timestamps();
         });
     }

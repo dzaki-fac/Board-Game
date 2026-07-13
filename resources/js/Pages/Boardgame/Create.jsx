@@ -1,13 +1,24 @@
 import { useState } from "react"
 import { Link, useForm } from "@inertiajs/react"
 
+const KATEGORI_OPTIONS = [
+    'Strategy',
+    'Party',
+    'Family',
+    'Cooperative',
+    'Card Game',
+    'Abstract',
+    'Puzzle',
+    'Simulation / Economic',
+]
+
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
         kode: '',
         box: '',
         nama: '',
         penerbit: '',
-        kategori: '',
+        kategori: [],
         jumlah: '',
         satuan: '',
         tingkat_kesulitan: '',
@@ -18,12 +29,22 @@ export default function Create() {
         lantai: '',
         komponen: [],
         barang_hilang: [],
+        deskripsi: '',
+        link_tutorial: '',
         populer: false,
     })
 
     const [komponenList, setKomponenList] = useState([{ jumlah: '1', nama: '' }])
     const [linkFotoList, setLinkFotoList] = useState([''])
     const [barangHilangList, setBarangHilangList] = useState([])
+
+    const toggleKategori = (value) => {
+        const current = data.kategori ?? []
+        const updated = current.includes(value)
+            ? current.filter(k => k !== value)
+            : [...current, value]
+        setData('kategori', updated)
+    }
 
     const updateLinkFoto = (index, value) => {
         const updated = linkFotoList.map((item, i) => i === index ? value : item)
@@ -122,36 +143,6 @@ export default function Create() {
                             {errors.penerbit && <p className="text-xs text-red-500 mt-1">{errors.penerbit}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Kategori</label>
-                            <select value={data.kategori} onChange={(e) => setData('kategori', e.target.value)} className="select select-bordered w-full select-sm">
-                                <option value="">Pilih kategori</option>
-                                <option value="Strategi">Strategi</option>
-                                <option value="Strategi Ekonomi">Strategi Ekonomi</option>
-                                <option value="Strategi Abstrak">Strategi Abstrak</option>
-                                <option value="Strategi & Keluarga">Strategi & Keluarga</option>
-                                <option value="Keluarga">Keluarga</option>
-                                <option value="Kartu">Kartu</option>
-                                <option value="Kartu & Strategi">Kartu & Strategi</option>
-                                <option value="Puzzle">Puzzle</option>
-                                <option value="Manajemen">Manajemen</option>
-                                <option value="Party">Party</option>
-                                <option value="Party & Reaksi">Party & Reaksi</option>
-                                <option value="Party & Dadu">Party & Dadu</option>
-                                <option value="Party & Deduksi">Party & Deduksi</option>
-                                <option value="Party & Kartu">Party & Kartu</option>
-                                <option value="Party & Fisik">Party & Fisik</option>
-                                <option value="Party & Kooperatif">Party & Kooperatif</option>
-                                <option value="Kooperatif">Kooperatif</option>
-                                <option value="Deduksi">Deduksi</option>
-                                <option value="Deduksi & Party">Deduksi & Party</option>
-                                <option value="Anak & Memori">Anak & Memori</option>
-                                <option value="Anak & Keluarga">Anak & Keluarga</option>
-                                <option value="Anak & Ketangkasan">Anak & Ketangkasan</option>
-                                <option value="Anak-anak">Anak-anak</option>
-                            </select>
-                            {errors.kategori && <p className="text-xs text-red-500 mt-1">{errors.kategori}</p>}
-                        </div>
-                        <div>
                             <label className="block text-sm font-medium text-slate-700 mb-1">Jumlah Pemain</label>
                             <input type="text" value={data.jumlah_pemain} onChange={(e) => setData('jumlah_pemain', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 2-4 Pemain" />
                             {errors.jumlah_pemain && <p className="text-xs text-red-500 mt-1">{errors.jumlah_pemain}</p>}
@@ -186,12 +177,59 @@ export default function Create() {
                             <input type="number" value={data.lantai} onChange={(e) => setData('lantai', e.target.value)} className="input input-bordered w-full input-sm" placeholder="1" />
                             {errors.lantai && <p className="text-xs text-red-500 mt-1">{errors.lantai}</p>}
                         </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Link Tutorial</label>
+                            <input type="text" value={data.link_tutorial} onChange={(e) => setData('link_tutorial', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: https://youtube.com/..." />
+                            {errors.link_tutorial && <p className="text-xs text-red-500 mt-1">{errors.link_tutorial}</p>}
+                        </div>
                         <div className="flex items-end pb-1">
                             <label className="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" checked={data.populer} onChange={(e) => setData('populer', e.target.checked)} className="checkbox checkbox-sm border-slate-300" />
                                 <span className="text-sm font-medium text-slate-700">Populer</span>
                             </label>
                         </div>
+                    </div>
+
+                    {/* Kategori - checkbox group */}
+                    <div className="border-t border-slate-200 pt-5">
+                        <label className="block text-sm font-medium text-slate-700 mb-3">
+                            Kategori
+                            {data.kategori?.length > 0 && (
+                                <span className="ml-2 text-xs font-normal text-[#2F6F62]">({data.kategori.length} dipilih)</span>
+                            )}
+                        </label>
+                        {errors.kategori && <p className="text-xs text-red-500 mb-2">{errors.kategori}</p>}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {KATEGORI_OPTIONS.map((kat) => (
+                                <label key={kat} className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors text-sm
+                                    ${data.kategori?.includes(kat)
+                                        ? 'border-[#2F6F62] bg-[#2F6F62]/10 text-[#173C33] font-medium'
+                                        : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-slate-100'
+                                    }`}>
+                                    <input
+                                        type="checkbox"
+                                        checked={data.kategori?.includes(kat) ?? false}
+                                        onChange={() => toggleKategori(kat)}
+                                        className="checkbox checkbox-xs"
+                                        style={{ '--chkbg': '#2F6F62', '--chkfg': 'white' }}
+                                    />
+                                    {kat}
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Deskripsi */}
+                    <div className="border-t border-slate-200 pt-5">
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Deskripsi</label>
+                        <textarea
+                            value={data.deskripsi}
+                            onChange={(e) => setData('deskripsi', e.target.value)}
+                            className="textarea textarea-bordered w-full text-sm"
+                            rows={4}
+                            placeholder="Deskripsi singkat tentang board game ini..."
+                        />
+                        {errors.deskripsi && <p className="text-xs text-red-500 mt-1">{errors.deskripsi}</p>}
                     </div>
 
                     {/* Link Foto - mini editor */}

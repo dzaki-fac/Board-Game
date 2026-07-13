@@ -163,7 +163,8 @@ class BoardGameController extends Controller
             'box' => 'required|integer',
             'nama' => 'required|string|max:255',
             'penerbit' => 'nullable|string|max:255',
-            'kategori' => 'nullable|string|max:255',
+            'kategori' => 'nullable|array',
+            'kategori.*' => 'string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
             'tingkat_kesulitan' => 'nullable|numeric|min:1|max:5',
@@ -179,6 +180,8 @@ class BoardGameController extends Controller
             'barang_hilang.*.jumlah' => 'nullable|integer|min:1',
             'barang_hilang.*.nama' => 'nullable|string|max:255',
             'lantai' => 'required|integer',
+            'deskripsi' => 'nullable|string',
+            'link_tutorial' => 'nullable|string|max:255',
             'populer' => 'boolean',
         ]);
 
@@ -204,7 +207,8 @@ class BoardGameController extends Controller
             'box' => 'required|integer',
             'nama' => 'required|string|max:255',
             'penerbit' => 'nullable|string|max:255',
-            'kategori' => 'nullable|string|max:255',
+            'kategori' => 'nullable|array',
+            'kategori.*' => 'string|max:255',
             'jumlah' => 'required|integer',
             'satuan' => 'required|string|max:255',
             'tingkat_kesulitan' => 'nullable|numeric|min:1|max:5',
@@ -220,8 +224,10 @@ class BoardGameController extends Controller
             'barang_hilang.*.jumlah' => 'nullable|integer|min:1',
             'barang_hilang.*.nama' => 'nullable|string|max:255',
             'lantai' => 'required|integer',
+            'deskripsi' => 'nullable|string',
+            'link_tutorial' => 'nullable|string|max:255',
             'populer' => 'boolean',
-            'available_copies' => 'required|integer',
+            'available_copies' => 'required|integer|max:' . $boardGame->jumlah,
         ]);
 
         $boardGame->update($validated);

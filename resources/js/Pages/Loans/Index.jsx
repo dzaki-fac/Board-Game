@@ -109,7 +109,18 @@ export default function Index({ loans, stats }) {
                           <td className="px-6 py-4 text-gray-500 text-sm">{formatDateTime(loan.borrowed_at)}</td>
                           <td className="px-6 py-4 text-gray-500 text-sm">{loan.approved_by || '-'}</td>
                           <td className="px-6 py-4 text-gray-500 text-sm">{loan.received_by || '-'}</td>
-                          <td className="px-6 py-4"><BadgeStatus status={loan.status} /></td>
+                          <td className="px-6 py-4">
+                            {["borrowed", "dipinjam", "disetujui", "approved"].includes(loan.status?.toLowerCase()) ? (
+                              <span className="inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap border bg-[#E8EEF8] text-[#1A56DB] border-[#A9CFF1]">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a2.5 2.5 0 0 1 0-5H20" />
+                                </svg>
+                                Dipinjam
+                              </span>
+                            ) : (
+                              <BadgeStatus status={loan.status} />
+                            )}
+                          </td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
                               <Link
