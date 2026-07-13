@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('loans', function (Blueprint $table) {
@@ -18,8 +15,7 @@ return new class extends Migration
                 ->constrained('board_games')
                 ->cascadeOnDelete();
 
-            $table->string('borrower_name');
-            $table->string('borrower_nim')->nullable();
+            $table->longText('list_peminjam')->nullable();
 
             $table->dateTime('borrowed_at');
             $table->dateTime('returned_at')->nullable();
@@ -39,9 +35,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('loans');

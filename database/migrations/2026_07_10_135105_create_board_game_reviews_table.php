@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('boardgame_id')->constrained('board_games')->cascadeOnDelete();
             $table->foreignId('loan_id')->nullable()->constrained('loans')->cascadeOnDelete();
-            $table->string('borrower_nim');
             $table->unsignedTinyInteger('rating');
             $table->text('comment')->nullable();
             $table->timestamps();
