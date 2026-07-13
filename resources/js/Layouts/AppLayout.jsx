@@ -132,7 +132,7 @@ function ImageIcon({ className }) {
 }
 
 const navItems = [
-    { label: "Beranda", href: "/admin", icon: HouseIcon },
+    { label: "Peraturan", href: "/admin/rules", icon: HouseIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Review", href: "/admin/reviews", icon: StarIcon },
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
@@ -140,7 +140,6 @@ const navItems = [
     { label: "Pengembalian", href: "/admin/returns", icon: RotateCwIcon },
     { label: "Riwayat", href: "/admin/history", icon: HistoryIcon },
     { label: "Akun", href: "/admin/accounts", icon: UserRoundIcon },
-    { label: "Peraturan", href: "/admin/rules", icon: HouseIcon },
     { label: "Carousel", href: "/admin/carousel", icon: ImageIcon },
 ];
 
