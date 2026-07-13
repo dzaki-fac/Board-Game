@@ -10,17 +10,10 @@ class HistoryController extends Controller
 {
     public function index(Request $request)
     {
-        $admin = Auth::guard('admin')->user();
-        $isSuperAdmin = $admin->isSuperAdmin();
-
         $search = $request->input('search');
         $statusFilter = $request->input('status');
 
         $query = Loan::with('game')->where('status', '!=', 'borrowed');
-
-        if (!$isSuperAdmin) {
-            $query->whereHas('game', fn ($q) => $q->where('lantai', $admin->lantai));
-        }
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -34,11 +27,6 @@ class HistoryController extends Controller
         }
 
         $histories = $query->latest('returned_at')->paginate(10)->withQueryString();
-
-        $statsQuery = Loan::whereIn('status', ['returned', 'not_returned', 'lost']);
-        if (!$isSuperAdmin) {
-            $statsQuery->whereHas('game', fn ($q) => $q->where('lantai', $admin->lantai));
-        }
 
         return inertia('History/Index', [
             'histories' => $histories,

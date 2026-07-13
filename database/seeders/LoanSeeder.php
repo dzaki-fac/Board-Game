@@ -16,18 +16,20 @@ class LoanSeeder extends Seeder
             $borrowedAt = fake()->dateTimeBetween('-30 days', 'now');
             $returned = fake()->boolean(40);
 
-            $isMahasiswa = fake()->boolean();
-
             Loan::create([
                 'boardgame_id' => fake()->randomElement($boardgameIds),
-                'borrower_name' => [fake()->name()],
+                'list_peminjam' => [
+                    [
+                        'nama' => fake()->name(),
+                        'jenis_jaminan' => fake()->randomElement(['ktp', 'ktm']),
+                        'nomor_identitas' => fake()->numerify('################'),
+                    ],
+                ],
                 'borrowed_at' => $borrowedAt,
                 'returned_at' => $returned
                     ? fake()->dateTimeBetween($borrowedAt, 'now')
                     : null,
                 'status' => $returned ? 'returned' : 'borrowed',
-                'jenis_jaminan' => fake()->randomElement(['ktm', 'ktp', 'kartu_anggota']),
-                'nomor_identitas' => [$isMahasiswa ? fake()->numerify('24########') : fake()->numerify('################')],
                 'return_condition' => $returned
                     ? fake()->randomElement(['Baik', 'Rusak Ringan'])
                     : null,

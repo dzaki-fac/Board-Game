@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string('status', 20)
                 ->default('borrowed');
 
+            $table->string('approved_by')->nullable();
+            $table->string('received_by')->nullable();
+
             $table->string('return_condition')->nullable();
             $table->text('missing_components')->nullable();
             $table->decimal('fine_amount', 10, 2)->nullable();

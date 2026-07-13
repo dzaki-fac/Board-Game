@@ -97,10 +97,13 @@ export default function Index({ loans, stats }) {
                     <thead>
                       <tr className="bg-[#FAF7F2] text-[#173C33]/60 text-xs uppercase tracking-wider">
                         <th className="px-6 py-3 font-medium">Game</th>
+                        <th className="px-6 py-3 font-medium">Lantai</th>
                         <th className="px-6 py-3 font-medium">Peminjam</th>
                         <th className="px-6 py-3 font-medium">Jenis Jaminan</th>
                         <th className="px-6 py-3 font-medium">Nomor Identitas</th>
                         <th className="px-6 py-3 font-medium">Dipinjam</th>
+                        <th className="px-6 py-3 font-medium">Disetujui Oleh</th>
+                        <th className="px-6 py-3 font-medium">Diterima Oleh</th>
                         <th className="px-6 py-3 font-medium">Status</th>
                         <th className="px-6 py-3 font-medium text-right">Aksi</th>
                       </tr>
@@ -111,6 +114,7 @@ export default function Index({ loans, stats }) {
                           <td className="px-6 py-4">
                             <div className="font-medium text-[#173C33]">{loan.game.nama}</div>
                           </td>
+                          <td className="px-6 py-4 text-gray-500 text-sm">{loan.game.lantai ?? '-'}</td>
                           <td className="px-6 py-4 text-gray-700">
                             {getFirstPeminjam(loan).nama || "-"}
                           </td>
@@ -121,7 +125,20 @@ export default function Index({ loans, stats }) {
                             {getFirstPeminjam(loan).nomor_identitas || "-"}
                           </td>
                           <td className="px-6 py-4 text-gray-500 text-sm">{formatDateTime(loan.borrowed_at)}</td>
-                          <td className="px-6 py-4"><BadgeStatus status="borrowed" /></td>
+                          <td className="px-6 py-4 text-gray-500 text-sm">{loan.approved_by || '-'}</td>
+                          <td className="px-6 py-4 text-gray-500 text-sm">{loan.received_by || '-'}</td>
+                          <td className="px-6 py-4">
+                            {["borrowed", "dipinjam", "disetujui", "approved"].includes(loan.status?.toLowerCase()) ? (
+                              <span className="inline-flex items-center gap-1.5 h-8 px-3.5 rounded-full text-[13px] font-semibold whitespace-nowrap border bg-[#E8EEF8] text-[#1A56DB] border-[#A9CFF1]">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0">
+                                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a2.5 2.5 0 0 1 0-5H20" />
+                                </svg>
+                                Dipinjam
+                              </span>
+                            ) : (
+                              <BadgeStatus status={loan.status} />
+                            )}
+                          </td>
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
                               <Link
@@ -129,7 +146,7 @@ export default function Index({ loans, stats }) {
                                 className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-[#2F6F62]"
                                 title="Detail"
                               >
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 5.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                               </Link>
                             </div>
                           </td>
@@ -149,9 +166,9 @@ export default function Index({ loans, stats }) {
                           href={link.url}
                           preserveScroll
                           className={`btn btn-sm min-w-9 ${
-                                                         link.active
-                                                              ? "bg-[#2F6F62] text-white border-none"
-                                                              : "btn-ghost text-gray-600"
+                                                          link.active
+                                                               ? "bg-[#2F6F62] text-white border-none"
+                                                               : "btn-ghost text-gray-600"
                           }`}
                           dangerouslySetInnerHTML={{ __html: link.label }}
                         />

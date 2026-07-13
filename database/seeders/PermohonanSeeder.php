@@ -14,17 +14,15 @@ class PermohonanSeeder extends Seeder
         $boardgameIds = BoardGame::pluck('id')->toArray();
 
         for ($i = 0; $i < 30; $i++) {
-            $status = fake()->randomElement([
-                Permohonan::STATUS_PENDING,
-                Permohonan::STATUS_APPROVED,
-                Permohonan::STATUS_RETURNED,
-                Permohonan::STATUS_REJECTED,
-            ]);
-
             Permohonan::create([
                 'boardgame_id' => fake()->randomElement($boardgameIds),
-                'nama' => fake()->name(),
-                'nim' => fake()->numerify('24########'),
+                'list_peminjam' => [
+                    [
+                        'nama' => fake()->name(),
+                        'jenis_jaminan' => fake()->randomElement(['ktp', 'ktm']),
+                        'nomor_identitas' => fake()->numerify('################'),
+                    ],
+                ],
                 'status' => fake()->randomElement([
                     Permohonan::STATUS_PENDING,
                     // Permohonan::STATUS_APPROVED,

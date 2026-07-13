@@ -167,7 +167,7 @@ export default function Create({ loans }) {
                                             <option value="">Pilih pinjaman aktif</option>
                                             {loans.map((loan) => (
                                                 <option key={loan.id} value={loan.id}>
-                                                    {loan.game.nama} — {Array.isArray(loan.borrower_name) ? loan.borrower_name[0] : loan.borrower_name}
+                                                    {loan.game.nama} — {Array.isArray(loan.list_peminjam) ? loan.list_peminjam[0].nama : loan.list_peminjam?.nama}
                                                 </option>
                                             ))}
                                         </select>
@@ -442,11 +442,11 @@ export default function Create({ loans }) {
                                         <div>
                                             <p className="text-xs text-gray-500">Peminjam</p>
                                             <p className="text-sm font-medium text-gray-900">
-                                                {Array.isArray(selectedLoan.borrower_name) ? selectedLoan.borrower_name[0] : selectedLoan.borrower_name}
+                                                {Array.isArray(selectedLoan.list_peminjam) ? selectedLoan.list_peminjam[0].nama : selectedLoan.list_peminjam?.nama}
                                             </p>
-                                            {Array.isArray(selectedLoan.borrower_name) && selectedLoan.borrower_name.length > 1 && (
+                                            {Array.isArray(selectedLoan.list_peminjam) && selectedLoan.list_peminjam.length > 1 && (
                                                 <p className="text-xs text-gray-400 mt-0.5">
-                                                    +{selectedLoan.borrower_name.length - 1} anggota lainnya
+                                                    +{selectedLoan.list_peminjam.length - 1} anggota lainnya
                                                 </p>
                                             )}
                                         </div>
@@ -517,7 +517,7 @@ export default function Create({ loans }) {
                                         <div className="flex justify-between items-center">
                                             <span className="text-xs text-gray-500">Peminjam</span>
                                             <span className="text-sm font-medium text-gray-900">
-                                                {Array.isArray(selectedLoan.borrower_name) ? selectedLoan.borrower_name[0] : selectedLoan.borrower_name}
+                                                {Array.isArray(selectedLoan.list_peminjam) ? selectedLoan.list_peminjam[0].nama : selectedLoan.list_peminjam?.nama}
                                             </span>
                                         </div>
                                         <div className="flex justify-between items-center">

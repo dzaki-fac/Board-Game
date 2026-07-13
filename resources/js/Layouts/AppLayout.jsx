@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, usePage } from "@inertiajs/react";
 
 function Svg({ className, children }) {
@@ -101,7 +101,7 @@ function PanelLeftIcon({ className }) {
 }
 
 const navItems = [
-    { label: "Beranda", href: "/peminjaman/create", icon: HouseIcon },
+    { label: "Beranda", href: "/admin/rules", icon: HouseIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
     { label: "Peminjaman", href: "/admin/loans", icon: HandHelpingIcon },
@@ -113,13 +113,27 @@ const navItems = [
 export default function Layout({ children }) {
     const admin = usePage().props.auth?.admin;
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
+    const [tooltip, setTooltip] = useState({ show: false, label: "", top: 0 });
+    const itemRefs = useRef({});
 
     const toggleSidebar = () => setSidebarExpanded((prev) => !prev);
 
     const iconClass = "w-5 h-5";
 
+    function showTooltip(key, label) {
+        const el = itemRefs.current[key];
+        if (el) {
+            const rect = el.getBoundingClientRect();
+            setTooltip({ show: true, label, top: rect.top + rect.height / 2 });
+        }
+    }
+
+    function hideTooltip() {
+        setTooltip({ show: false, label: "", top: 0 });
+    }
+
     return (
-        <div className="min-h-screen overflow-x-hidden">
+        <div className="min-h-screen">
             {/* Sidebar */}
             <aside
                 className={`fixed inset-y-0 left-0 z-40 bg-[#173C33] flex flex-col transition-all duration-300 ease-in-out ${
@@ -170,7 +184,12 @@ export default function Layout({ children }) {
                                       item.href,
                                   ));
                         return (
-                            <li key={item.href}>
+                            <li
+                                key={item.href}
+                                ref={(el) => { itemRefs.current[item.href] = el; }}
+                                onMouseEnter={() => showTooltip(item.href, item.label)}
+                                onMouseLeave={hideTooltip}
+                            >
                                 <Link
                                     href={item.href}
                                     className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors ${
@@ -192,7 +211,12 @@ export default function Layout({ children }) {
                 </ul>
 
                 {/* Logout */}
-                <div className="px-3 py-4 border-t border-[#255A4F] shrink-0">
+                <div
+                    className="px-3 py-4 border-t border-[#255A4F] shrink-0"
+                    ref={(el) => { itemRefs.current["logout"] = el; }}
+                    onMouseEnter={() => showTooltip("logout", "Keluar")}
+                    onMouseLeave={hideTooltip}
+                >
                     <Link
                         href="/admin/logout"
                         method="post"
@@ -207,6 +231,20 @@ export default function Layout({ children }) {
                         {sidebarExpanded && <span>Keluar</span>}
                     </Link>
                 </div>
+
+                {/* Floating Tooltip */}
+                {!sidebarExpanded && tooltip.show && (
+                    <span
+                        className="fixed px-3 py-1.5 rounded-lg bg-[#1f1f1f] text-white text-xs font-medium shadow-lg whitespace-nowrap pointer-events-none z-50"
+                        style={{
+                            left: "calc(4rem + 0.75rem)",
+                            top: tooltip.top,
+                            transform: "translateY(-50%)",
+                        }}
+                    >
+                        {tooltip.label}
+                    </span>
+                )}
             </aside>
 
             {/* Main Content */}

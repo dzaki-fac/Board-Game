@@ -28,11 +28,17 @@ class BoardGame extends Model
         return $this->available_copies > 0;
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(BoardGameReview::class, 'boardgame_id');
+    }
+
     protected function casts(): array
     {
         return [
             'link_foto' => 'array',
             'komponen' => 'array',
+            'kategori' => 'array',
             'barang_hilang' => 'array',
             'populer' => 'boolean',
         ];

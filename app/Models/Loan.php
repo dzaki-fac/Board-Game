@@ -20,6 +20,8 @@ class Loan extends Model
         'return_condition',
         'missing_components',
         'fine_amount',
+        'approved_by',
+        'received_by',
     ];
 
     protected function casts(): array

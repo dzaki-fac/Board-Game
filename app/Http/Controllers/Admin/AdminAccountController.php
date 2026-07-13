@@ -13,7 +13,8 @@ class AdminAccountController extends Controller
 {
     public function index()
     {
-        $admins = Admin::select(['id', 'name', 'email', 'role', 'lantai', 'created_at'])->get();
+        $admins = Admin::select(['id', 'name', 'email', 'nip', 'role', 'created_at'])
+            ->paginate(10);
 
         return Inertia::render('Accounts/Account', [
             'admins' => $admins,
@@ -25,21 +26,17 @@ class AdminAccountController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:admins,email',
+            'nip' => 'required|string|max:30|unique:admins,nip',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:admin,superadmin',
-            'lantai' => [$request->role === 'admin' ? 'required' : 'nullable', 'string', 'max:50'],
         ]);
-
-        if ($validated['role'] === 'superadmin') {
-            $validated['lantai'] = '';
-        }
 
         Admin::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'nip' => $validated['nip'],
             'password' => Hash::make($validated['password']),
             'role' => $validated['role'],
-            'lantai' => $validated['lantai'],
         ]);
 
         return redirect()->route('admin.accounts.index')->with('flash', 'Admin berhasil ditambahkan.');
@@ -60,20 +57,16 @@ class AdminAccountController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:admins,email,' . $admin->id,
+            'nip' => 'required|string|max:30|unique:admins,nip,' . $admin->id,
             'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|in:admin,superadmin',
-            'lantai' => [$request->role === 'admin' ? 'required' : 'nullable', 'string', 'max:50'],
         ]);
-
-        if ($validated['role'] === 'superadmin') {
-            $validated['lantai'] = '';
-        }
 
         $data = [
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'nip' => $validated['nip'],
             'role' => $validated['role'],
-            'lantai' => $validated['lantai'],
         ];
 
         if (!empty($validated['password'])) {
