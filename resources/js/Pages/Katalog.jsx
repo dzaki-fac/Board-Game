@@ -358,16 +358,16 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                 {/* Desktop (md+) */}
                 <div className="hidden md:flex items-center justify-between py-3">
                     {/* Kiri: Logo + Nama Institusi */}
-                    <a href="/katalog" className="flex items-center gap-2 shrink-0">
+                    <a href="/katalog" className="flex items-center gap-3 shrink-0">
                         <img
                             src="/assets/logo_undip.png"
                             alt="Universitas Diponegoro"
-                            className="h-10 w-10 object-contain"
+                            className="h-14 w-14 object-contain"
                         />
                         <img
                             src="/images/logo-upt.png"
                             alt="UPT Perpustakaan Undip"
-                            className="h-10 w-10 object-contain"
+                            className="h-14 w-14 object-contain"
                         />
                         <div className="leading-tight text-white">
                             <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
@@ -413,16 +413,16 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                 {/* Mobile (< md) */}
                 <div className="md:hidden">
                     <div className="flex items-center justify-between py-3">
-                        <a href="/katalog" className="flex items-center gap-1.5">
+                        <a href="/katalog" className="flex items-center gap-2">
                             <img
                                 src="/assets/logo_undip.png"
                                 alt="Universitas Diponegoro"
-                                className="h-9 w-9 object-contain"
+                                className="h-16 w-16 object-contain"
                             />
                             <img
                                 src="/images/logo-upt.png"
                                 alt="UPT Perpustakaan Undip"
-                                className="h-9 w-9 object-contain"
+                                className="h-10 w-10 object-contain"
                             />
                             <div className="leading-tight text-white">
                                 <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
