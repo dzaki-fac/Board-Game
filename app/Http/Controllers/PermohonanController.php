@@ -93,6 +93,7 @@ class PermohonanController extends Controller
     {
         $search = $request->input('search');
         $status = $request->input('status');
+        $lantai = $request->input('lantai');
 
         $base = Permohonan::with('boardgame')
             ->where('status', '!=', Permohonan::STATUS_RETURNED);
@@ -106,10 +107,11 @@ class PermohonanController extends Controller
             ->when($search, fn ($q) => $q->where(function ($q2) use ($search) {
                 $q2->where('list_peminjam', 'like', "%{$search}%")
                     ->orWhereHas('boardgame', fn ($q3) => $q3->where('nama', 'like', "%{$search}%"));
-            }));
+            }))
+            ->when($lantai, fn ($q) => $q->whereHas('boardgame', fn ($q3) => $q3->where('lantai', $lantai)));
 
         return inertia('Peminjaman/Permohonan', [
-            'permohonan' => $query->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")->latest('created_at')->paginate(10)->withQueryString(),
+            'permohonan' => $query->orderByRaw("CASE WHEN status = 'menunggu' THEN 0 ELSE 1 END")->latest('created_at')->paginate(10)->withQueryString(),
             'total' => $pending + $approved + $rejected,
             'total_pending' => $pending,
             'total_approved' => $approved,
@@ -117,6 +119,7 @@ class PermohonanController extends Controller
             'filters' => [
                 'search' => $search,
                 'status' => $status,
+                'lantai' => $lantai,
             ],
         ]);
     }
@@ -124,9 +127,6 @@ class PermohonanController extends Controller
     public function approve(Permohonan $permohonan)
     {
         $admin = Auth::guard('admin')->user();
-        if (!$admin->isSuperAdmin() && $permohonan->boardgame->lantai != $admin->lantai) {
-            abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
-        }
 
         return DB::transaction(function () use ($permohonan, $admin) {
             $boardGame = BoardGame::where('id', $permohonan->boardgame_id)

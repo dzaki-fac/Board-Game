@@ -17,7 +17,9 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
   const debounceRef = useRef(null);
   const [search, setSearch] = useState(filters?.search || "");
   const [statusFilter, setStatusFilter] = useState(filters?.status || "");
+  const [lantaiFilter, setLantaiFilter] = useState(filters?.lantai || "");
   const [open, setOpen] = useState(false);
+  const [openLantai, setOpenLantai] = useState(false);
 
   function canApproveReject() {
     if (!admin) return false;
@@ -32,14 +34,14 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
 
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      router.get("/admin/permohonan", { search, status: statusFilter }, {
+      router.get("/admin/permohonan", { search, status: statusFilter, lantai: lantaiFilter }, {
         preserveState: true,
         preserveScroll: true,
         replace: true,
       });
     }, 400);
     return () => clearTimeout(debounceRef.current);
-  }, [search, statusFilter]);
+  }, [search, statusFilter, lantaiFilter]);
 
   function approve(id) {
     router.patch(`/admin/permohonan/${id}/approve`, {}, { preserveScroll: true });
@@ -144,6 +146,58 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
                     >
                       <BadgeStatus status={opt.value} />
                       {statusFilter === opt.value && (
+                        <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Lantai Filter */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setOpenLantai((prev) => !prev)}
+              className="flex items-center gap-2 h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F6F62] transition-colors min-w-[130px]"
+            >
+              {lantaiFilter ? (
+                <span>Lantai {lantaiFilter}</span>
+              ) : (
+                <span className="text-gray-500">Semua Lantai</span>
+              )}
+              <svg className={`w-4 h-4 ml-auto text-gray-400 transition-transform ${openLantai ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            {openLantai && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setOpenLantai(false)} />
+                <div className="absolute z-20 mt-1 bg-white border border-[#E8F3EF] rounded-xl shadow-lg py-1 min-w-[160px]">
+                  <button
+                    type="button"
+                    onClick={() => { setLantaiFilter(""); setOpenLantai(false) }}
+                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${!lantaiFilter ? "bg-[#E8F3EF]" : ""}`}
+                  >
+                    <span className="text-gray-500">Semua Lantai</span>
+                    {!lantaiFilter && (
+                      <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    )}
+                  </button>
+                  {[1, 2, 3].map((l) => (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => { setLantaiFilter(String(l)); setOpenLantai(false) }}
+                      className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${lantaiFilter === String(l) ? "bg-[#E8F3EF]" : ""}`}
+                    >
+                      <span>Lantai {l}</span>
+                      {lantaiFilter === String(l) && (
                         <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
