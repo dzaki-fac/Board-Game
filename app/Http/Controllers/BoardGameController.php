@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BoardGame;
 use App\Models\BoardGameReview;
+use App\Models\CarouselSlide;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -80,8 +81,11 @@ class BoardGameController extends Controller
             ->sortByDesc('reviews_avg_rating')
             ->values();
 
+        $carouselSlides = CarouselSlide::orderBy('sort_order')->get();
+
         return Inertia::render('Katalog', [
             'games' => $games,
+            'carouselSlides' => $carouselSlides,
         ]);
     }
 

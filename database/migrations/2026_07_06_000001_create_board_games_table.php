@@ -48,6 +48,8 @@ return new class extends Migration
             $table->text('deskripsi')->nullable();
             // Link video tutorial (mis. YouTube)
             $table->string('link_tutorial')->nullable();
+            // Link panduan/rules
+            $table->string('link_panduan')->nullable();
             $table->boolean('populer')->default(false);
             $table->timestamps();
         });

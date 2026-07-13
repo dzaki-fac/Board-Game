@@ -108,8 +108,31 @@ function PanelLeftIcon({ className }) {
     );
 }
 
+function ScrollTextIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M15 21h-5a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2" />
+            <path d="M21 12v6a2 2 0 0 1-2 2h-4" />
+            <rect x="3" y="3" width="12" height="18" rx="2" />
+            <line x1="6" y1="8" x2="10" y2="8" />
+            <line x1="6" y1="12" x2="10" y2="12" />
+            <line x1="6" y1="16" x2="8" y2="16" />
+        </Svg>
+    );
+}
+
+function ImageIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+        </Svg>
+    );
+}
+
 const navItems = [
-    { label: "Beranda", href: "/admin/rules", icon: HouseIcon },
+    { label: "Peraturan", href: "/admin/rules", icon: HouseIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Review", href: "/admin/reviews", icon: StarIcon },
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
@@ -117,6 +140,7 @@ const navItems = [
     { label: "Pengembalian", href: "/admin/returns", icon: RotateCwIcon },
     { label: "Riwayat", href: "/admin/history", icon: HistoryIcon },
     { label: "Akun", href: "/admin/accounts", icon: UserRoundIcon },
+    { label: "Carousel", href: "/admin/carousel", icon: ImageIcon },
 ];
 
 export default function Layout({ children }) {

@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('permohonan', function (Blueprint $table) {
@@ -17,9 +14,6 @@ return new class extends Migration
             $table->foreignId('boardgame_id')
                 ->constrained('board_games')
                 ->cascadeOnDelete();
-
-            $table->string('nama');
-            $table->string('nim');
 
             $table->string('status', 20)
                 ->default('pending');
@@ -34,13 +28,12 @@ return new class extends Migration
 
             $table->text('catatan')->nullable();
 
+            $table->longText('list_peminjam')->nullable();
+
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('permohonan');

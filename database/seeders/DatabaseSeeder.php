@@ -19,10 +19,12 @@ class DatabaseSeeder extends Seeder
         // Admin::truncate();
         $this->call([
             AdminSeeder::class,
-            
+
             BoardGameSeeder::class,
             // LoanSeeder::class,
             PermohonanSeeder::class,
+            RuleSeeder::class,
+            CarouselSlideSeeder::class,
         ]);
 
         // Loan::truncate();
