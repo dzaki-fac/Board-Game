@@ -77,6 +77,7 @@ const TEKS = {
         deskripsiGame: "Deskripsi",
         videoTutorial: "Video Tutorial",
         tontonTutorial: "Tonton Cara Bermain",
+        panduanBermain: "Panduan Bermain",
     },
     EN: {
         cariPlaceholder: "Search board game name...",
@@ -107,6 +108,7 @@ const TEKS = {
         deskripsiGame: "Description",
         videoTutorial: "Tutorial Video",
         tontonTutorial: "Watch How to Play",
+        panduanBermain: "Rulebook",
     },
 };
 
@@ -256,6 +258,15 @@ function IkonPlay(props) {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
             <circle cx="12" cy="12" r="10" />
             <path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none" />
+        </svg>
+    );
+}
+
+function IkonBuku(props) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
         </svg>
     );
 }
@@ -462,18 +473,17 @@ function BadgeUsia({ usia, t }) {
 }
 
 // Tombol/link menuju video tutorial (buka tab baru)
-function TautanTutorial({ link, warna, t }) {
-    if (!link) return null;
+function TautanEksternal({ link, warna, label, ikon: Ikon }) {
+    if (!link) return null;   // ← kalau link kosong, gak render apa-apa
     return (
-        <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm font-semibold rounded-full px-4 py-2 border transition-colors"
-            style={{ color: warna, borderColor: `${warna}40`, backgroundColor: `${warna}0D` }}
-        >
-            <IkonPlay className="w-4 h-4" />
-            {t.tontonTutorial}
+    <a  href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 text-sm font-semibold rounded-full px-4 py-2 border transition-colors"
+        style={{ color: warna, borderColor: `${warna}40`, backgroundColor: `${warna}0D` }}
+    >
+            <Ikon className="w-4 h-4" />
+            {label}
         </a>
     );
 }
@@ -546,7 +556,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                 </Link>
 
                 <div className="bg-white rounded-3xl overflow-hidden ring-1 ring-slate-100">
-                    <div className="grid md:grid-cols-2 gap-0">
+                    <div className="grid md:grid-cols-2 gap-0 md:items-start">
                         {/* Galeri foto: gambar + gambar_hover, geser pakai panah/dot */}
                         <GaleriGambar game={game} warna={warna} bg={bg} />
 
@@ -598,16 +608,17 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                                     <h3 className="text-sm font-semibold text-slate-800 mb-1.5">
                                         {t.deskripsiGame}
                                     </h3>
-                                    <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+                                    <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify">
                                         {game.deskripsi}
                                     </p>
                                 </div>
                             )}
 
                             {/* Link video tutorial */}
-                            {game.link_tutorial && (
-                                <div className="mb-5">
-                                    <TautanTutorial link={game.link_tutorial} warna={warna} t={t} />
+                            {(game.link_tutorial || game.link_panduan) && (
+                                <div className="flex flex-wrap gap-2 mb-5">
+                                    <TautanEksternal link={game.link_tutorial} warna={warna} label={t.tontonTutorial} ikon={IkonPlay} />
+                                    <TautanEksternal link={game.link_panduan} warna={warna} label={t.panduanBermain} ikon={IkonBuku} />
                                 </div>
                             )}
 
