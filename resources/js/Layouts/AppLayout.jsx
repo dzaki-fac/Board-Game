@@ -31,6 +31,14 @@ function Dice5Icon({ className }) {
     );
 }
 
+function StarIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+        </Svg>
+    );
+}
+
 function ClipboardListIcon({ className }) {
     return (
         <Svg className={className}>
@@ -103,6 +111,7 @@ function PanelLeftIcon({ className }) {
 const navItems = [
     { label: "Beranda", href: "/admin/rules", icon: HouseIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
+    { label: "Review", href: "/admin/reviews", icon: StarIcon },
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
     { label: "Peminjaman", href: "/admin/loans", icon: HandHelpingIcon },
     { label: "Pengembalian", href: "/admin/returns", icon: RotateCwIcon },
@@ -140,7 +149,7 @@ export default function Layout({ children }) {
                 {sidebarExpanded && (
                     <div className="px-6 py-6 border-b border-[#255A4F] flex items-center gap-3 shrink-0">
                         <img
-                            src="/assets/logo.png"
+                            src="/images/logo-upt.png"
                             alt="Logo"
                             className="w-20 h-20 object-contain rounded shrink-0"
                             onError={(e) => {
