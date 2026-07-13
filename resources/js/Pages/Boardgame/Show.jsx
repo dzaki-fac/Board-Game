@@ -4,6 +4,9 @@ import { Link } from "@inertiajs/react"
 export default function Show({ boardgame }) {
   const [fotoIndex, setFotoIndex] = useState(0)
   const fotos = boardgame.link_foto || []
+  const kategoriList = Array.isArray(boardgame.kategori)
+    ? boardgame.kategori
+    : (boardgame.kategori ? [boardgame.kategori] : [])
 
   const prevFoto = () => setFotoIndex((i) => (i > 0 ? i - 1 : fotos.length - 1))
   const nextFoto = () => setFotoIndex((i) => (i < fotos.length - 1 ? i + 1 : 0))
@@ -67,10 +70,6 @@ export default function Show({ boardgame }) {
               <p className="text-sm text-slate-900">{boardgame.penerbit || '-'}</p>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Kategori</label>
-              <p className="text-sm text-slate-900">{boardgame.kategori || '-'}</p>
-            </div>
-            <div>
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Jumlah Pemain</label>
               <p className="text-sm text-slate-900">{boardgame.jumlah_pemain || '-'}</p>
             </div>
@@ -103,6 +102,46 @@ export default function Show({ boardgame }) {
               <p className="text-sm text-slate-900">{boardgame.populer ? 'Ya' : 'Tidak'}</p>
             </div>
           </div>
+
+          {/* Kategori */}
+          <div>
+            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Kategori</label>
+            {kategoriList.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {kategoriList.map((kat, i) => (
+                  <span key={i} className="badge badge-sm bg-[#2F6F62]/10 text-[#173C33] border border-[#2F6F62]/30 font-medium">
+                    {kat}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-400 italic">-</p>
+            )}
+          </div>
+
+          {/* Deskripsi */}
+          {boardgame.deskripsi && (
+            <div>
+              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Deskripsi</label>
+              <p className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">{boardgame.deskripsi}</p>
+            </div>
+          )}
+
+          {/* Link Tutorial */}
+          {boardgame.link_tutorial && (
+            <div>
+              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-2">Link Tutorial</label>
+              <a
+                href={boardgame.link_tutorial}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm text-[#2F6F62] hover:text-[#173C33] hover:underline"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                {boardgame.link_tutorial}
+              </a>
+            </div>
+          )}
 
           {/* Komponen */}
           <div>
