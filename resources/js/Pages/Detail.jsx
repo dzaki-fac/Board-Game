@@ -74,6 +74,9 @@ const TEKS = {
         berat: "Berat",
         gameSerupa: "Game Serupa Lainnya",
         gameSerupaSub: "Kategori sama dengan game ini",
+        deskripsiGame: "Deskripsi",
+        videoTutorial: "Video Tutorial",
+        tontonTutorial: "Tonton Cara Bermain",
     },
     EN: {
         cariPlaceholder: "Search board game name...",
@@ -101,6 +104,9 @@ const TEKS = {
         berat: "Heavy",
         gameSerupa: "More Similar Games",
         gameSerupaSub: "Same category as this game",
+        deskripsiGame: "Description",
+        videoTutorial: "Tutorial Video",
+        tontonTutorial: "Watch How to Play",
     },
 };
 
@@ -245,6 +251,15 @@ function IkonTiktok(props) {
     );
 }
 
+function IkonPlay(props) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
+            <circle cx="12" cy="12" r="10" />
+            <path d="M10 8.5v7l6-3.5-6-3.5Z" fill="currentColor" stroke="none" />
+        </svg>
+    );
+}
+
 function pipDariJumlahPemain(text) {
     const match = (text || "").match(/\d+/);
     return match ? parseInt(match[0], 10) : 2;
@@ -271,16 +286,16 @@ function TopNavbar({ bahasa, setBahasa }) {
                 {/* Desktop (md+) */}
                 <div className="hidden md:flex items-center justify-between py-3">
                     {/* Kiri: Logo + Nama Institusi */}
-                    <a href="/katalog" className="flex items-center gap-2 shrink-0">
+                    <a href="/katalog" className="flex items-center gap-3 shrink-0">
                         <img
                             src="/assets/logo_undip.png"
                             alt="Universitas Diponegoro"
-                            className="h-10 w-10 object-contain"
+                            className="h-14 w-14 object-contain"
                         />
                         <img
                             src="/images/logo-upt.png"
                             alt="UPT Perpustakaan Undip"
-                            className="h-10 w-10 object-contain"
+                            className="h-14 w-14 object-contain"
                         />
                         <div className="leading-tight text-white">
                             <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
@@ -311,16 +326,16 @@ function TopNavbar({ bahasa, setBahasa }) {
                 {/* Mobile (< md) */}
                 <div className="md:hidden">
                     <div className="flex items-center justify-between py-3">
-                        <a href="/katalog" className="flex items-center gap-1.5">
+                        <a href="/katalog" className="flex items-center gap-2">
                             <img
                                 src="/assets/logo_undip.png"
                                 alt="Universitas Diponegoro"
-                                className="h-9 w-9 object-contain"
+                                className="h-16 w-16 object-contain"
                             />
                             <img
                                 src="/images/logo-upt.png"
                                 alt="UPT Perpustakaan Undip"
-                                className="h-9 w-9 object-contain"
+                                className="h-10 w-10 object-contain"
                             />
                             <div className="leading-tight text-white">
                                 <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
@@ -446,6 +461,23 @@ function BadgeUsia({ usia, t }) {
     );
 }
 
+// Tombol/link menuju video tutorial (buka tab baru)
+function TautanTutorial({ link, warna, t }) {
+    if (!link) return null;
+    return (
+        <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm font-semibold rounded-full px-4 py-2 border transition-colors"
+            style={{ color: warna, borderColor: `${warna}40`, backgroundColor: `${warna}0D` }}
+        >
+            <IkonPlay className="w-4 h-4" />
+            {t.tontonTutorial}
+        </a>
+    );
+}
+
 function KartuGameSerupa({ item }) {
     const [warnaKartu] = warnaKategori(item.kategori);
     return (
@@ -559,6 +591,25 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                                     <span className="font-medium">{t.kode}: {game.kode}</span>
                                 </div>
                             </div>
+
+                            {/* Deskripsi game */}
+                            {game.deskripsi && (
+                                <div className="mb-5">
+                                    <h3 className="text-sm font-semibold text-slate-800 mb-1.5">
+                                        {t.deskripsiGame}
+                                    </h3>
+                                    <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line">
+                                        {game.deskripsi}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* Link video tutorial */}
+                            {game.link_tutorial && (
+                                <div className="mb-5">
+                                    <TautanTutorial link={game.link_tutorial} warna={warna} t={t} />
+                                </div>
+                            )}
 
                             {daftarKomponen.length > 0 && (
                                 <div className="mb-3">

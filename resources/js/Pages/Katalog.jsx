@@ -16,35 +16,14 @@ const WARNA = {
 };
 
 const KATEGORI_COLORS = {
-    "Strategi": ["#2F6F62", "#E8F3EF"],
-    "Strategi Ekonomi": ["#2F6F62", "#E8F3EF"],
-    "Strategi Abstrak": ["#3D5A80", "#EAF0F7"],
-    "Strategi & Keluarga": ["#2F6F62", "#E8F3EF"],
-    "Puzzle": ["#8E5FB0", "#F1E9F7"],
-    "Kooperatif": ["#C0562F", "#FBEAE1"],
-    "Kooperatif & Escape Room": ["#C0562F", "#FBEAE1"],
+    "Strategy": ["#2F6F62", "#E8F3EF"],
     "Party": ["#E8A33D", "#FDF3E1"],
-    "Party & Reaksi": ["#E8A33D", "#FDF3E1"],
-    "Party & Dadu": ["#E8A33D", "#FDF3E1"],
-    "Party & Kartu": ["#E8A33D", "#FDF3E1"],
-    "Party & Fisik": ["#E8A33D", "#FDF3E1"],
-    "Party & Kooperatif": ["#E8A33D", "#FDF3E1"],
-    "Party & Kecepatan": ["#E8A33D", "#FDF3E1"],
-    "Party & Deduksi": ["#E8A33D", "#FDF3E1"],
-    "Deduksi": ["#A13D5C", "#F8E7ED"],
-    "Deduksi & Party": ["#A13D5C", "#F8E7ED"],
-    "Sosial Deduksi": ["#A13D5C", "#F8E7ED"],
-    "Kartu": ["#3D5A80", "#EAF0F7"],
-    "Kartu & Strategi": ["#3D5A80", "#EAF0F7"],
-    "Keluarga": ["#3F8F63", "#E9F5EE"],
-    "Anak & Keluarga": ["#3F8F63", "#E9F5EE"],
-    "Anak-anak": ["#3F8F63", "#E9F5EE"],
-    "Anak & Memori": ["#3F8F63", "#E9F5EE"],
-    "Anak & Ketangkasan": ["#3F8F63", "#E9F5EE"],
-    "Keluarga & Ketangkasan": ["#3F8F63", "#E9F5EE"],
-    "Manajemen": ["#2F6F62", "#E8F3EF"],
-    "Edukasi & Kartu": ["#3D5A80", "#EAF0F7"],
-    "Strategi Ringan": ["#2F6F62", "#E8F3EF"],
+    "Family": ["#3F8F63", "#E9F5EE"],
+    "Cooperative": ["#C0562F", "#FBEAE1"],
+    "Card Game": ["#3D5A80", "#EAF0F7"],
+    "Abstract": ["#8E5FB0", "#F1E9F7"],
+    "Puzzle": ["#A13D5C", "#F8E7ED"],
+    "Simulation / Economic": ["#5B5F66", "#EEEFF1"],
 };
 const DEFAULT_COLOR = ["#5B5F66", "#EEEFF1"];
 
@@ -229,6 +208,12 @@ function useTeks() {
 }
 
 function warnaKategori(kategori) {
+    if (Array.isArray(kategori)) {
+        for (const k of kategori) {
+            if (KATEGORI_COLORS[k]) return KATEGORI_COLORS[k];
+        }
+        return DEFAULT_COLOR;
+    }
     return KATEGORI_COLORS[kategori] ?? DEFAULT_COLOR;
 }
 
@@ -373,16 +358,16 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                 {/* Desktop (md+) */}
                 <div className="hidden md:flex items-center justify-between py-3">
                     {/* Kiri: Logo + Nama Institusi */}
-                    <a href="/katalog" className="flex items-center gap-2 shrink-0">
+                    <a href="/katalog" className="flex items-center gap-3 shrink-0">
                         <img
                             src="/assets/logo_undip.png"
                             alt="Universitas Diponegoro"
-                            className="h-10 w-10 object-contain"
+                            className="h-14 w-14 object-contain"
                         />
                         <img
                             src="/images/logo-upt.png"
                             alt="UPT Perpustakaan Undip"
-                            className="h-10 w-10 object-contain"
+                            className="h-14 w-14 object-contain"
                         />
                         <div className="leading-tight text-white">
                             <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
@@ -428,16 +413,16 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                 {/* Mobile (< md) */}
                 <div className="md:hidden">
                     <div className="flex items-center justify-between py-3">
-                        <a href="/katalog" className="flex items-center gap-1.5">
+                        <a href="/katalog" className="flex items-center gap-2">
                             <img
                                 src="/assets/logo_undip.png"
                                 alt="Universitas Diponegoro"
-                                className="h-9 w-9 object-contain"
+                                className="h-16 w-16 object-contain"
                             />
                             <img
                                 src="/images/logo-upt.png"
                                 alt="UPT Perpustakaan Undip"
-                                className="h-9 w-9 object-contain"
+                                className="h-10 w-10 object-contain"
                             />
                             <div className="leading-tight text-white">
                                 <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
@@ -508,12 +493,23 @@ function KartuGame({ game, tersedia }) {
 
             {/* supaya semua kartu dalam satu baris tingginya sama */}
             <div className="p-4 flex flex-col flex-1">
-                <span
-                    className="inline-block self-start text-[11px] font-medium px-2.5 py-1 rounded-full mb-2"
-                    style={{ backgroundColor: bg, color: warna }}
-                >
-                    {game.kategori ?? t.umum}
-                </span>
+                <div className="flex flex-wrap gap-1 mb-2">
+                    {(Array.isArray(game.kategori) && game.kategori.length > 0
+                        ? game.kategori
+                        : [game.kategori ?? t.umum]
+                    ).map((k, i) => {
+                        const [kw, kb] = warnaKategori(k);
+                        return (
+                            <span
+                                key={i}
+                                className="inline-block self-start text-[11px] font-medium px-2.5 py-1 rounded-full"
+                                style={{ backgroundColor: kb, color: kw }}
+                            >
+                                {k}
+                            </span>
+                        );
+                    })}
+                </div>
 
                 <div className="mb-2">
                     <h3 className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2">
@@ -963,14 +959,23 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
     const [modalCarouselOpen, setModalCarouselOpen] = useState(false);
 
     const kategoriList = useMemo(() => {
-        const set = new Set(games.map((g) => g.kategori).filter(Boolean));
+        const set = new Set();
+        games.forEach((g) => {
+            if (Array.isArray(g.kategori)) {
+                g.kategori.forEach((k) => { if (k) set.add(k); });
+            } else if (g.kategori) {
+                set.add(g.kategori);
+            }
+        });
         return ["Semua", ...Array.from(set).sort()];
     }, [games]);
 
     const filtered = useMemo(() => {
         return games.filter((g) => {
             const cocokNama = g.nama.toLowerCase().includes(pencarian.toLowerCase());
-            const cocokKategori = kategoriAktif === "Semua" || g.kategori === kategoriAktif;
+            const cocokKategori = kategoriAktif === "Semua" || (
+                Array.isArray(g.kategori) ? g.kategori.includes(kategoriAktif) : g.kategori === kategoriAktif
+            );
             const cocokLantai = lantaiAktif === "Semua" || String(g.lantai) === lantaiAktif;
             const cocokStatus =
                 statusAktif === "Semua" ||

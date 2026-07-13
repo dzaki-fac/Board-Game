@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Loan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class HistoryController extends Controller
 {
@@ -12,6 +11,11 @@ class HistoryController extends Controller
     {
         $search = $request->input('search');
         $statusFilter = $request->input('status');
+        $period = $request->input('period', 'all');
+        $dateFrom = $request->input('date_from');
+        $dateTo = $request->input('date_to');
+        $month = $request->input('month');
+        $year = $request->input('year');
 
         $query = Loan::with('game')->where('status', '!=', 'borrowed');
 
@@ -26,18 +30,36 @@ class HistoryController extends Controller
             $query->where('status', $statusFilter);
         }
 
+        match ($period) {
+            'today' => $query->whereDate('borrowed_at', today()),
+            'this_week' => $query->whereBetween('borrowed_at', [now()->startOfWeek(), now()->endOfWeek()]),
+            'this_month' => $query->whereMonth('borrowed_at', (int) ($month ?: now()->month))
+                                  ->whereYear('borrowed_at', (int) ($year ?: now()->year)),
+            'this_year' => $query->whereYear('borrowed_at', (int) ($year ?: now()->year)),
+            'custom' => $query->when($dateFrom, fn ($q) => $q->whereDate('borrowed_at', '>=', $dateFrom))
+                              ->when($dateTo, fn ($q) => $q->whereDate('borrowed_at', '<=', $dateTo)),
+            default => null,
+        };
+
         $histories = $query->latest('returned_at')->paginate(10)->withQueryString();
+
+        $statsQuery = (clone $query)->whereIn('status', ['returned', 'lost']);
 
         return inertia('History/Index', [
             'histories' => $histories,
             'filters' => [
                 'search' => $search,
                 'status' => $statusFilter,
+                'period' => $period,
+                'date_from' => $dateFrom,
+                'date_to' => $dateTo,
+                'month' => $month,
+                'year' => $year,
             ],
             'stats' => [
-                'total' => Loan::whereIn('status', ['returned', 'lost'])->count(),
-                'returned' => Loan::where('status', 'returned')->count(),
-                'lost' => Loan::where('status', 'lost')->count(),
+                'total' => (clone $statsQuery)->count(),
+                'returned' => (clone $statsQuery)->where('status', 'returned')->count(),
+                'lost' => (clone $statsQuery)->where('status', 'lost')->count(),
             ],
         ]);
     }

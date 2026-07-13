@@ -15,12 +15,17 @@ function formatDateTime(date) {
     })
 }
 
-export default function Index({ histories, stats }) {
+export default function Index({ histories, stats, filters }) {
     const isInitialMount = useRef(true)
     const debounceRef = useRef(null)
-    const [search, setSearch] = useState("")
-    const [statusFilter, setStatusFilter] = useState("")
+    const [search, setSearch] = useState(filters?.search || "")
+    const [statusFilter, setStatusFilter] = useState(filters?.status || "")
     const [open, setOpen] = useState(false)
+    const [period, setPeriod] = useState(filters?.period || "all")
+    const [dateFrom, setDateFrom] = useState(filters?.date_from || "")
+    const [dateTo, setDateTo] = useState(filters?.date_to || "")
+    const [month, setMonth] = useState(filters?.month || "")
+    const [year, setYear] = useState(filters?.year || "")
 
     useEffect(() => {
         if (isInitialMount.current) {
@@ -30,14 +35,26 @@ export default function Index({ histories, stats }) {
 
         clearTimeout(debounceRef.current)
         debounceRef.current = setTimeout(() => {
-            router.get("/admin/history", { search, status: statusFilter }, {
+            const params = { search, status: statusFilter, period }
+
+            if (period === "custom") {
+                if (dateFrom) params.date_from = dateFrom
+                if (dateTo) params.date_to = dateTo
+            } else if (period === "this_month") {
+                if (month) params.month = month
+                if (year) params.year = year
+            } else if (period === "this_year") {
+                if (year) params.year = year
+            }
+
+            router.get("/admin/history", params, {
                 preserveState: true,
                 preserveScroll: true,
                 replace: true,
             })
         }, 400)
         return () => clearTimeout(debounceRef.current)
-    }, [search, statusFilter])
+    }, [search, statusFilter, period, dateFrom, dateTo, month, year])
 
     const statCards = [
         {
@@ -147,7 +164,7 @@ export default function Index({ histories, stats }) {
                     <div className="card-body p-6">
                         <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter</h2>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                             {/* Search */}
                             <div>
                                 <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
@@ -242,7 +259,118 @@ export default function Index({ histories, stats }) {
                                     )}
                                 </div>
                             </div>
+
+                            {/* Period Filter */}
+                            <div>
+                                <label className="text-xs font-medium text-[#2F6F62]/70 uppercase tracking-wider block mb-1.5">
+                                    Periode
+                                </label>
+                                <select
+                                    value={period}
+                                    onChange={(e) => setPeriod(e.target.value)}
+                                    className="select select-bordered select-sm w-full"
+                                >
+                                    <option value="all">All Time</option>
+                                    <option value="today">Hari Ini</option>
+                                    <option value="this_week">This Week</option>
+                                    <option value="this_month">This Month</option>
+                                    <option value="this_year">This Year</option>
+                                    <option value="custom">Custom Date</option>
+                                </select>
+                            </div>
                         </div>
+
+                        {/* Conditional date/period inputs */}
+                        {period === "custom" && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
+                                        Dari Tanggal
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={dateFrom}
+                                        onChange={(e) => setDateFrom(e.target.value)}
+                                        className="input input-bordered input-sm w-full"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
+                                        Sampai Tanggal
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={dateTo}
+                                        onChange={(e) => setDateTo(e.target.value)}
+                                        className="input input-bordered input-sm w-full"
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {period === "this_month" && (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
+                                        Bulan
+                                    </label>
+                                    <select
+                                        value={month}
+                                        onChange={(e) => setMonth(e.target.value)}
+                                        className="select select-bordered select-sm w-full"
+                                    >
+                                        <option value="">Bulan Ini</option>
+                                        {[
+                                            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                                            "Juli", "Agustus", "September", "Oktober", "November", "Desember",
+                                        ].map((name, i) => (
+                                            <option key={i + 1} value={i + 1}>
+                                                {name}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
+                                        Tahun
+                                    </label>
+                                    <select
+                                        value={year}
+                                        onChange={(e) => setYear(e.target.value)}
+                                        className="select select-bordered select-sm w-full"
+                                    >
+                                        <option value="">Tahun Ini</option>
+                                        {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((y) => (
+                                            <option key={y} value={y}>
+                                                {y}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        )}
+
+                        {period === "this_year" && (
+                            <div className="mt-4">
+                                <div className="max-w-xs">
+                                    <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
+                                        Tahun
+                                    </label>
+                                    <select
+                                        value={year}
+                                        onChange={(e) => setYear(e.target.value)}
+                                        className="select select-bordered select-sm w-full"
+                                    >
+                                        <option value="">Tahun Ini</option>
+                                        {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((y) => (
+                                            <option key={y} value={y}>
+                                                {y}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Export Button */}
                         <div className="mt-4 flex justify-end">
@@ -292,31 +420,11 @@ export default function Index({ histories, stats }) {
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                         strokeWidth={1}
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                        d={search || statusFilter || period !== "all" ? "M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 2a10 10 0 100 20 10 10 0 000-20z" : "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"}
                                     />
                                 </svg>
                                 <p className="text-gray-400 text-sm">
-                                    Belum ada riwayat peminjaman
-                                </p>
-                            </div>
-                        ) : histories.data.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center py-16 text-center">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-12 w-12 text-gray-300 mb-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={1}
-                                        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
-                                    />
-                                </svg>
-                                <p className="text-gray-400 text-sm">
-                                                    Tidak ada riwayat yang sesuai filter
+                                    {search || statusFilter || period !== "all" ? "Tidak ada riwayat yang sesuai filter" : "Belum ada riwayat peminjaman"}
                                 </p>
                             </div>
                         ) : (
