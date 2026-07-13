@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\RuleController;
 use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
@@ -46,7 +47,10 @@ Route::prefix('admin')->group(function () {
 
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
 
-        Route::get('rules', [HomeController::class, 'rules'])->name('admin.rules');
+        Route::get('rules', [RuleController::class, 'index'])->name('admin.rules');
+        Route::post('rules', [RuleController::class, 'store'])->name('admin.rules.store');
+        Route::put('rules/{rule}', [RuleController::class, 'update'])->name('admin.rules.update');
+        Route::delete('rules/{rule}', [RuleController::class, 'destroy'])->name('admin.rules.destroy');
 
         Route::get('reviews', [AdminReviewController::class, 'index'])->name('admin.reviews.index');
         Route::delete('reviews/{boardGameReview}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
