@@ -162,7 +162,8 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
           <thead>
             <tr>
               <th>Nama</th>
-              <th>NIM</th>
+              <th>Jenis Jaminan</th>
+              <th>Nomor Identitas</th>
               <th>Boardgame</th>
               <th>Lantai</th>
               <th>Tgl pinjam</th>
@@ -179,10 +180,22 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
                 </td>
               </tr>
             )}
-            {permohonan.data.map((p) => (
+            {permohonan.data.map((p) => {
+              const listPeminjam = Array.isArray(p.list_peminjam) ? p.list_peminjam : [];
+              const first = listPeminjam[0] || {};
+              return (
               <tr key={p.id}>
-                <td>{p.nama || p.user?.name}</td>
-                <td>{p.nim}</td>
+                <td>{first.nama || p.user?.name}</td>
+                <td>
+                    {first.jenis_jaminan
+                        ? first.jenis_jaminan === "kartu_anggota"
+                            ? "Kartu Anggota"
+                            : first.jenis_jaminan.toUpperCase()
+                        : "-"}
+                </td>
+                <td>
+                    {first.nomor_identitas || "-"}
+                </td>
                 <td>{p.boardgame?.nama}</td>
                 <td>{p.boardgame?.lantai ?? '-'}</td>
                 <td>{new Date(p.tanggal_pinjam + "T00:00:00").toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "2-digit" })}</td>
@@ -199,7 +212,8 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
                   )}
                 </td>
               </tr>
-            ))}
+            );
+          })}
           </tbody>
         </table>
       </div>

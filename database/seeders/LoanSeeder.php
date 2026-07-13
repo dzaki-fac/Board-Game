@@ -8,9 +8,6 @@ use Illuminate\Database\Seeder;
 
 class LoanSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $boardgameIds = BoardGame::pluck('id')->toArray();
@@ -21,8 +18,13 @@ class LoanSeeder extends Seeder
 
             Loan::create([
                 'boardgame_id' => fake()->randomElement($boardgameIds),
-                'borrower_name' => fake()->name(),
-                'borrower_nim' => fake()->numerify('24########'),
+                'list_peminjam' => [
+                    [
+                        'nama' => fake()->name(),
+                        'jenis_jaminan' => fake()->randomElement(['ktp', 'ktm']),
+                        'nomor_identitas' => fake()->numerify('################'),
+                    ],
+                ],
                 'borrowed_at' => $borrowedAt,
                 'returned_at' => $returned
                     ? fake()->dateTimeBetween($borrowedAt, 'now')

@@ -17,17 +17,27 @@ function formatDateTime(date) {
 export default function Index({ loans, stats }) {
   const [search, setSearch] = useState("")
 
+  function getFirstPeminjam(loan) {
+    const list = Array.isArray(loan.list_peminjam) ? loan.list_peminjam : []
+    return list[0] || {}
+  }
+
   const filtered = useMemo(() => {
     const data = loans.data || []
     if (!search) return data
     const q = search.toLowerCase()
-    return data.filter(
-      (loan) =>
-        loan.borrower_name.toLowerCase().includes(q) ||
-        (loan.borrower_nim || "").includes(q) ||
+    return data.filter((loan) => {
+      const first = getFirstPeminjam(loan)
+      const allData = (Array.isArray(loan.list_peminjam) ? loan.list_peminjam : [])
+        .map(p => `${p.nama} ${p.nomor_identitas}`).join(" ").toLowerCase()
+      return (
+        allData.includes(q) ||
+        first.nama?.toLowerCase().includes(q) ||
+        first.nomor_identitas?.toLowerCase().includes(q) ||
         loan.game.nama.toLowerCase().includes(q) ||
         (loan.game.kode || "").toLowerCase().includes(q)
-    )
+      )
+    })
   }, [loans.data, search])
 
   const statCards = [
@@ -89,7 +99,8 @@ export default function Index({ loans, stats }) {
                         <th className="px-6 py-3 font-medium">Game</th>
                         <th className="px-6 py-3 font-medium">Lantai</th>
                         <th className="px-6 py-3 font-medium">Peminjam</th>
-                        <th className="px-6 py-3 font-medium">NIM</th>
+                        <th className="px-6 py-3 font-medium">Jenis Jaminan</th>
+                        <th className="px-6 py-3 font-medium">Nomor Identitas</th>
                         <th className="px-6 py-3 font-medium">Dipinjam</th>
                         <th className="px-6 py-3 font-medium">Disetujui Oleh</th>
                         <th className="px-6 py-3 font-medium">Diterima Oleh</th>
@@ -104,8 +115,15 @@ export default function Index({ loans, stats }) {
                             <div className="font-medium text-[#173C33]">{loan.game.nama}</div>
                           </td>
                           <td className="px-6 py-4 text-gray-500 text-sm">{loan.game.lantai ?? '-'}</td>
-                          <td className="px-6 py-4 text-gray-700">{loan.borrower_name}</td>
-                          <td className="px-6 py-4 text-gray-500 font-mono text-sm">{loan.borrower_nim || "-"}</td>
+                          <td className="px-6 py-4 text-gray-700">
+                            {getFirstPeminjam(loan).nama || "-"}
+                          </td>
+                          <td className="px-6 py-4 text-gray-500 text-sm">
+                            {getFirstPeminjam(loan).jenis_jaminan?.toUpperCase() || "-"}
+                          </td>
+                          <td className="px-6 py-4 text-gray-500 font-mono text-sm">
+                            {getFirstPeminjam(loan).nomor_identitas || "-"}
+                          </td>
                           <td className="px-6 py-4 text-gray-500 text-sm">{formatDateTime(loan.borrowed_at)}</td>
                           <td className="px-6 py-4 text-gray-500 text-sm">{loan.approved_by || '-'}</td>
                           <td className="px-6 py-4 text-gray-500 text-sm">{loan.received_by || '-'}</td>

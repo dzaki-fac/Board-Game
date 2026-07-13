@@ -1,4 +1,4 @@
-import { Link, useForm, usePage } from "@inertiajs/react";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useMemo, useState } from "react";
 
 export default function Form({ boardgames = [] }) {
@@ -6,13 +6,38 @@ export default function Form({ boardgames = [] }) {
     const flash = props.flash || {};
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        nama: "",
-        nim: "",
         boardgame_id: "",
         jam_pinjam: "",
         tanggal_pinjam: "",
         catatan: "",
     });
+
+    const [anggota, setAnggota] = useState([{ nama: "", jenis_jaminan: "ktm", nim: "", nik: "" }]);
+    const [localErrors, setLocalErrors] = useState({});
+
+    function addAnggota() {
+        setAnggota([...anggota, { nama: "", jenis_jaminan: "ktm", nim: "", nik: "" }]);
+    }
+
+    function removeAnggota(index) {
+        setAnggota(anggota.filter((_, i) => i !== index));
+    }
+
+    function updateAnggota(index, field, value) {
+        const updated = anggota.map((a, i) =>
+            i === index ? { ...a, [field]: value } : a,
+        );
+        setAnggota(updated);
+        setLocalErrors((prev) => {
+            const next = { ...prev };
+            if (next[index]) {
+                const errField = field === "jenis_jaminan" ? "identitas" : (field === "nim" || field === "nik" ? "identitas" : field);
+                delete next[index][errField];
+                if (!Object.keys(next[index]).length) delete next[index];
+            }
+            return next;
+        });
+    }
 
     useEffect(() => {
         const now = new Date();
@@ -53,9 +78,45 @@ export default function Form({ boardgames = [] }) {
 
     const selected = bgList.find((bg) => bg.id == data.boardgame_id);
 
+    function getAnggotaNomorIdentitas(a) {
+        if (a.jenis_jaminan === "ktm") return a.nim;
+        return a.nik;
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
-        post("/peminjaman");
+
+        const newErrors = {};
+        anggota.forEach((a, i) => {
+            const err = {};
+            if (!a.nama.trim()) err.nama = "Nama wajib diisi.";
+            const id = getAnggotaNomorIdentitas(a);
+            const expectedLen = a.jenis_jaminan === "ktm" ? 14 : 16;
+            if (!id) err.identitas = a.jenis_jaminan === "ktm" ? "NIM wajib diisi." : "NIK wajib diisi.";
+            else if (id.length !== expectedLen) err.identitas = a.jenis_jaminan === "ktm" ? "NIM harus 14 digit." : "NIK harus 16 digit.";
+            if (Object.keys(err).length) newErrors[i] = err;
+        });
+        setLocalErrors(newErrors);
+        if (Object.keys(newErrors).length) {
+            const firstIndex = Math.min(...Object.keys(newErrors).map(Number));
+            const el = document.querySelector(`[data-row="${firstIndex}"] .input-error`);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+        }
+
+        const peminjams = anggota.map((a) => ({
+            nama: a.nama,
+            jenis_jaminan: a.jenis_jaminan,
+            nomor_identitas: getAnggotaNomorIdentitas(a),
+        }));
+
+        router.post("/peminjaman", {
+            boardgame_id: data.boardgame_id,
+            tanggal_pinjam: data.tanggal_pinjam,
+            jam_pinjam: data.jam_pinjam,
+            catatan: data.catatan,
+            peminjams,
+        });
     }
 
     return (
@@ -88,47 +149,122 @@ export default function Form({ boardgames = [] }) {
                             Data Peminjam
                         </h2>
 
-                        <div className="form-control mb-3">
-                            <label className="label">
-                                <span className="label-text font-medium">
-                                    Nama
-                                </span>
-                            </label>
-                            <input
-                                type="text"
-                                className={`input input-bordered w-full ${errors.nama ? "input-error" : ""}`}
-                                value={data.nama}
-                                onChange={(e) =>
-                                    setData("nama", e.target.value)
-                                }
-                                placeholder="Masukkan nama lengkap"
-                            />
-                            {errors.nama && (
-                                <p className="text-error text-xs mt-1">
-                                    {errors.nama}
-                                </p>
-                            )}
-                        </div>
-
                         <div className="form-control">
-                            <label className="label">
-                                <span className="label-text font-medium">
-                                    NIM
-                                </span>
-                            </label>
-                            <input
-                                type="text"
-                                className={`input input-bordered w-full ${errors.nim ? "input-error" : ""}`}
-                                value={data.nim}
-                                onChange={(e) => setData("nim", e.target.value)}
-                                placeholder="Masukkan NIM"
-                            />
-                            {errors.nim && (
-                                <p className="text-error text-xs mt-1">
-                                    {errors.nim}
+                                <label className="label pb-1">
+                                    <span className="label-text font-medium">
+                                        Daftar Peminjam
+                                    </span>
+                                </label>
+                                <p className="text-xs text-error mb-3 ml-1">
+                                    *Anggota pertama sebagai pemberi jaminan
                                 </p>
-                            )}
-                        </div>
+
+                                {anggota.length > 0 && (
+                                    <div className="space-y-3 mb-3">
+                                        {anggota.map((a, index) => (
+                                            <div
+                                                key={index}
+                                                data-row={index}
+                                                className="flex gap-2 items-start p-3 bg-base-200 rounded-lg"
+                                            >
+                                                <div className="flex-1 space-y-2">
+                                                    <input
+                                                         type="text"
+                                                         className={`input input-bordered input-sm w-full ${localErrors[index]?.nama ? "input-error" : ""}`}
+                                                         value={a.nama}
+                                                         onChange={(e) =>
+                                                             updateAnggota(
+                                                                 index,
+                                                                 "nama",
+                                                                 e.target.value,
+                                                             )
+                                                         }
+                                                         placeholder="Nama peminjam"
+                                                     />
+                                                     {localErrors[index]?.nama && (
+                                                         <p className="text-error text-xs mt-0.5">{localErrors[index].nama}</p>
+                                                     )}
+                                                     <div className="flex gap-2">
+                                                         <select
+                                                             className="select select-bordered select-sm w-36"
+                                                             value={a.jenis_jaminan}
+                                                             onChange={(e) =>
+                                                                 updateAnggota(index, "jenis_jaminan", e.target.value)
+                                                             }
+                                                         >
+                                                             <option value="ktm">KTM</option>
+                                                             <option value="ktp">KTP</option>
+                                                         </select>
+                                                         <input
+                                                             type="text"
+                                                             className={`input input-bordered input-sm flex-1 ${localErrors[index]?.identitas ? "input-error" : ""}`}
+                                                             value={a.jenis_jaminan === "ktm" ? a.nim : a.nik}
+                                                             onChange={(e) => {
+                                                                 const val = e.target.value.replace(/\D/g, "");
+                                                                 updateAnggota(
+                                                                     index,
+                                                                     a.jenis_jaminan === "ktm" ? "nim" : "nik",
+                                                                     val,
+                                                                 );
+                                                             }}
+                                                             maxLength={a.jenis_jaminan === "ktm" ? 14 : 16}
+                                                             placeholder={a.jenis_jaminan === "ktm" ? "NIM (14 digit)" : "NIK (16 digit)"}
+                                                         />
+                                                     </div>
+                                                     {localErrors[index]?.identitas && (
+                                                         <p className="text-error text-xs mt-0.5">{localErrors[index].identitas}</p>
+                                                     )}
+                                                 </div>
+                                                <button
+                                                    type="button"
+                                                    className={`btn btn-ghost btn-sm btn-square mt-0.5 ${anggota.length === 1 ? "text-slate-300 cursor-not-allowed" : "text-error"}`}
+                                                    disabled={anggota.length === 1}
+                                                    onClick={() =>
+                                                        removeAnggota(index)
+                                                    }
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        className="h-4 w-4"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                        strokeWidth={2}
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            d="M6 18L18 6M6 6l12 12"
+                                                        />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+
+                                <button
+                                    type="button"
+                                    className="btn btn-outline btn-sm border-dashed border-base-300 hover:border-[#2F6F62] hover:text-[#2F6F62] hover:bg-[#E8F3EF]"
+                                    onClick={addAnggota}
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-4 w-4"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                        strokeWidth={2}
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            d="M12 4v16m8-8H4"
+                                        />
+                                    </svg>
+                                    Tambah Peminjam
+                                </button>
+                            </div>
                     </div>
                 </div>
 
@@ -332,7 +468,10 @@ export default function Form({ boardgames = [] }) {
                     <button
                         type="button"
                         className="btn btn-ghost"
-                        onClick={() => reset()}
+                        onClick={() => {
+                            reset();
+                            setAnggota([{ nama: "", jenis_jaminan: "ktm", nim: "", nik: "" }]);
+                        }}
                         disabled={processing}
                     >
                         Atur Ulang
