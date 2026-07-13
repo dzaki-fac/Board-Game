@@ -9,15 +9,23 @@ use Illuminate\Database\Eloquent\Model;
 #[Fillable([
     'kode',
     'box',
+    'lantai',
     'nama',
     'penerbit',
+    'kategori',
     'jumlah',
     'available_copies',
     'satuan',
+    'tingkat_kesulitan',
+    'usia_minimum',
+    'jumlah_pemain',
+    'durasi',
     'link_foto',
     'komponen',
     'barang_hilang',
-    'lantai',
+    'deskripsi',
+    'link_tutorial',
+    'populer',
 ])]
 class BoardGame extends Model
 {
