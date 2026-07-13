@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\CarouselController;
 use App\Http\Controllers\Admin\RuleController;
 use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\HistoryController;
@@ -51,6 +52,12 @@ Route::prefix('admin')->group(function () {
         Route::post('rules', [RuleController::class, 'store'])->name('admin.rules.store');
         Route::put('rules/{rule}', [RuleController::class, 'update'])->name('admin.rules.update');
         Route::delete('rules/{rule}', [RuleController::class, 'destroy'])->name('admin.rules.destroy');
+
+        Route::get('carousel', [CarouselController::class, 'index'])->name('admin.carousel.index');
+        Route::post('carousel', [CarouselController::class, 'store'])->name('admin.carousel.store');
+        Route::put('carousel/reorder', [CarouselController::class, 'reorder'])->name('admin.carousel.reorder');
+        Route::put('carousel/{carouselSlide}', [CarouselController::class, 'update'])->name('admin.carousel.update');
+        Route::delete('carousel/{carouselSlide}', [CarouselController::class, 'destroy'])->name('admin.carousel.destroy');
 
         Route::get('reviews', [AdminReviewController::class, 'index'])->name('admin.reviews.index');
         Route::delete('reviews/{boardGameReview}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');

@@ -70,54 +70,7 @@ const TEKS = {
             "Board game rusak: wajib ganti unit yang sama",
             "Board game hilang: ganti unit baru atau denda sesuai ketentuan",
         ],
-        carousel: [
-            {
-                title: "Selamat Datang di UPT Perpustakaan Universitas Diponegoro",
-                description: "Temukan, pilih, dan pinjam board game favoritmu melalui katalog digital UPT Perpustakaan Universitas Diponegoro.",
-                detailTitle: "Selamat Datang di Board Game UPT Perpustakaan Undip",
-                detailDescription: "Katalog board game ini membantu pemustaka mencari informasi permainan, melihat detail board game, dan mengajukan peminjaman secara online.",
-                points: [
-                    "Cari board game berdasarkan nama, kategori, lantai, dan status.",
-                    "Lihat detail board game sebelum mengajukan peminjaman.",
-                    "Ajukan peminjaman melalui tombol Pinjam.",
-                    "Gunakan board game hanya di area perpustakaan.",
-                ],
-                theme: "welcome",
-            },
-            {
-                title: "Tata Cara Peminjaman",
-                description: "Ikuti prosedur peminjaman sebelum mengambil board game.",
-                detailTitle: "Tata Cara Peminjaman Board Game",
-                detailDescription: "Pemustaka wajib mengikuti prosedur peminjaman board game di UPT Perpustakaan Universitas Diponegoro.",
-                points: [
-                    "Peminjam melakukan peminjaman langsung di meja layanan kepada petugas yang bertugas",
-                    "Peminjam memilih board game yang ingin dipinjam, lalu melengkapi form peminjaman sebelum mengambil barangnya",
-                    "Peminjam menyerahkan satu kartu identitas (KTM/KTP/Kartu Anggota Perpustakaan) kepada petugas sebagai jaminan",
-                    "Peminjam bersama petugas memeriksa kelengkapan komponen (kartu, dadu, pion, papan, dan lain-lain) sesuai lembar daftar isi pada kotak, sebelum board game dibawa ke meja permainan",
-                    "Peminjam hanya boleh memainkan board game di lantai tempat board game tersebut dipinjam, tidak membawanya ke lantai lain maupun membawanya pulang",
-                    "Peminjam menjaga kelengkapan komponen permainan selama masa peminjaman berlangsung, dan tidak memindahtangankan board game ke kelompok lain secara sepihak.",
-                    "Peminjam meminjam dan mengembalikan board game pada hari yang sama, paling lambat sebelum jam operasional perpustakaan berakhir",
-                    "Peminjam menerima kembali kartu identitasnya setelah board game diperiksa petugas dan dinyatakan lengkap",
-                ],
-                theme: "procedure",
-            },
-            {
-                title: "Ketentuan Penggunaan",
-                description: "Jaga kelengkapan dan kondisi board game selama masa peminjaman.",
-                detailTitle: "Ketentuan Penggunaan Board Game",
-                detailDescription: "Peminjam bertanggung jawab menjaga kondisi dan kelengkapan board game selama digunakan.",
-                points: [
-                    "Peminjam bertanggung jawab penuh atas keutuhan fisik board game yang digunakannya selama masa peminjaman",
-                    "Jika ada komponen yang hilang atau rusak, peminjam wajib menggantinya dengan board game yang judul dan penerbitnya sama persis",
-                    "Kerusakan yang dimaksud mencakup antara lain kartu yang sobek, kotak yang penyok cukup parah, atau komponen permainan yang hilang sebagian, bukan hanya kehilangan seluruh set",
-                    "Apabila board game tersebut sudah tidak beredar lagi di pasaran, peminjam dapat menggantinya dengan board game lain yang setara, baik dari segi jenis permainan maupun harga, bukan dalam bentuk uang tunai.",
-                    "Peminjam diberi waktu paling lama empat belas hari kerja sejak kehilangan atau kerusakan dilaporkan untuk menyelesaikan penggantian",
-                    "Selama proses penggantian belum diselesaikan, kartu identitas peminjam ditahan oleh petugas layanan",
-                    "Selama kasus penggantian ini belum terselesaikan, peminjam belum diperkenankan meminjam board game lain",
-                ],
-                theme: "rules",
-            },
-        ],
+        carousel: [],
     },
     EN: {
         cariPlaceholder: "Search board game name...",
@@ -158,47 +111,7 @@ const TEKS = {
             "Damaged game: must be replaced with the same unit",
             "Lost game: replace with a new unit or pay a fine per policy",
         ],
-        carousel: [
-            {
-                title: "Welcome to UPT Library of Diponegoro University",
-                description: "Discover, choose, and borrow your favorite board games through the digital catalog of UPT Library of Diponegoro University.",
-                detailTitle: "Welcome to Board Game UPT Library Undip",
-                detailDescription: "This board game catalog helps students find game information, view board game details, and submit borrowing requests online.",
-                points: [
-                    "Search board games by name, category, floor, and status.",
-                    "View board game details before submitting a borrowing request.",
-                    "Submit a borrowing request through the Borrow button.",
-                    "Play board games only in the library area.",
-                ],
-                theme: "welcome",
-            },
-            {
-                title: "How to Borrow",
-                description: "Follow the borrowing procedure before taking a board game.",
-                detailTitle: "How to Borrow Board Games",
-                detailDescription: "Students must follow the board game borrowing procedure at UPT Library of Diponegoro University.",
-                points: [
-                    "Fill out the borrowing form through the system before picking up the board game.",
-                    "Hand over your ID card as a deposit.",
-                    "Board games may only be played in the library area.",
-                    "Return on the same day according to the planned return time.",
-                ],
-                theme: "procedure",
-            },
-            {
-                title: "Usage Rules",
-                description: "Keep the board game components and condition during the borrowing period.",
-                detailTitle: "Board Game Usage Rules",
-                detailDescription: "Borrowers are responsible for maintaining the condition and completeness of the board game during use.",
-                points: [
-                    "Keep components such as cards, dice, pawns, boards, and rulebooks.",
-                    "Report to staff if any components are damaged or missing.",
-                    "ID cards are returned after the board game is checked.",
-                    "Use board games properly in the library area.",
-                ],
-                theme: "rules",
-            },
-        ],
+        carousel: [],
     },
 };
 
@@ -657,10 +570,10 @@ function CarouselModal({ item, onClose }) {
 
                             <div className="relative z-10">
                                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: WARNA.hijauTua }}>
-                                    {item.detailTitle}
+                                    {item.detail_title}
                                 </h2>
                                 <p className="text-base md:text-lg text-slate-600 leading-8 mb-6 max-w-4xl">
-                                    {item.detailDescription}
+                                    {item.detail_description}
                                 </p>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {item.points.map((point, i) => (
@@ -691,9 +604,8 @@ function CarouselModal({ item, onClose }) {
     );
 }
 
-function AnnouncementCarousel({ onModalChange }) {
-    const t = useTeks();
-    const items = t.carousel;
+function AnnouncementCarousel({ slides, onModalChange }) {
+    const items = slides || [];
     const [index, setIndex] = useState(0);
     const [modalItem, setModalItem] = useState(null);
     const [paused, setPaused] = useState(false);
@@ -950,7 +862,7 @@ function AnnouncementCarousel({ onModalChange }) {
 
 /* ========================= Halaman Katalog ========================= */
 
-function IsiKatalog({ games, bahasa, setBahasa }) {
+function IsiKatalog({ games, carouselSlides, bahasa, setBahasa }) {
     const t = useTeks();
     const [pencarian, setPencarian] = useState("");
     const [kategoriAktif, setKategoriAktif] = useState("Semua");
@@ -999,7 +911,7 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                 setBahasa={setBahasa}
             />
 
-            <AnnouncementCarousel onModalChange={setModalCarouselOpen} />
+            <AnnouncementCarousel slides={carouselSlides} onModalChange={setModalCarouselOpen} />
 
             {/* Filter & sort, ala baris filter Amazon */}
             <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
@@ -1150,13 +1062,13 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
     );
 }
 
-export default function Katalog({ games }) {
+export default function Katalog({ games, carouselSlides }) {
     const [bahasa, setBahasa] = useState("ID");
 
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
             <Head title="Katalog Board Game" />
-            <IsiKatalog games={games} bahasa={bahasa} setBahasa={setBahasa} />
+            <IsiKatalog games={games} carouselSlides={carouselSlides} bahasa={bahasa} setBahasa={setBahasa} />
         </BahasaContext.Provider>
     );
 }
