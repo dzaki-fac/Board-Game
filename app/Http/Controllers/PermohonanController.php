@@ -33,9 +33,32 @@ class PermohonanController extends Controller
 
     public function store(StorePermohonanRequest $request)
     {
+        $peminjams = $request->peminjams;
+        $nomorIdentitas = collect($peminjams)->pluck('nomor_identitas')->filter()->values()->toArray();
+
+        if (!empty($nomorIdentitas)) {
+            $existing = Loan::where('status', 'borrowed')->get()->first(function ($loan) use ($nomorIdentitas) {
+                $loanPeminjams = $loan->list_peminjam ?? [];
+                $loanIds = collect($loanPeminjams)->pluck('nomor_identitas')->filter()->values()->toArray();
+                return !empty(array_intersect($loanIds, $nomorIdentitas));
+            });
+
+            if ($existing) {
+                $loanPeminjams = $existing->list_peminjam ?? [];
+                $loanIds = collect($loanPeminjams)->pluck('nomor_identitas')->filter()->values()->toArray();
+                $common = array_intersect($loanIds, $nomorIdentitas);
+                $boardgame = \App\Models\BoardGame::find($request->boardgame_id);
+
+                return redirect()->route('peminjaman.gagal')->with([
+                    'error' => 'Peminjam dengan nomor identitas ' . implode(', ', $common) . ' masih memiliki pinjaman aktif yang belum dikembalikan.',
+                    'peminjams' => $peminjams,
+                    'boardgame_nama' => $boardgame?->nama,
+                ]);
+            }
+        }
+
         $permohonan = Permohonan::create([
-            'nama' => $request->nama,
-            'nim' => $request->nim,
+            'list_peminjam' => $peminjams,
             'boardgame_id' => $request->boardgame_id,
             'status' => Permohonan::STATUS_PENDING,
             'tanggal_pinjam' => $request->tanggal_pinjam,
@@ -52,6 +75,16 @@ class PermohonanController extends Controller
 
         return inertia('Peminjaman/Konfirmasi', [
             'permohonan' => $permohonan,
+        ]);
+    }
+
+    public function konfirmasiGagal()
+    {
+        return inertia('Peminjaman/Konfirmasi', [
+            'gagal' => true,
+            'error' => session('error'),
+            'peminjams' => session('peminjams'),
+            'boardgame_nama' => session('boardgame_nama'),
         ]);
     }
 
@@ -93,6 +126,31 @@ class PermohonanController extends Controller
                 return back()->withErrors(['error' => 'Gagal menyetujui. Stok board game sudah tidak tersedia.']);
             }
 
+            $list_peminjam = $permohonan->list_peminjam ?? [];
+            $nomorIdentitas = collect($list_peminjam)->pluck('nomor_identitas')->filter()->values()->toArray();
+
+            if (!empty($nomorIdentitas)) {
+                $existing = Loan::where('status', 'borrowed')
+                    ->where('id', '!=', $permohonan->id)
+                    ->get()
+                    ->filter(function ($loan) use ($nomorIdentitas) {
+                        $loanPeminjams = $loan->list_peminjam ?? [];
+                        $loanIds = collect($loanPeminjams)->pluck('nomor_identitas')->filter()->values()->toArray();
+                        return !empty(array_intersect($loanIds, $nomorIdentitas));
+                    })
+                    ->first();
+
+                if ($existing) {
+                    $loanPeminjams = $existing->list_peminjam ?? [];
+                    $loanIds = collect($loanPeminjams)->pluck('nomor_identitas')->filter()->values()->toArray();
+                    $common = array_intersect($loanIds, $nomorIdentitas);
+                    $namaTersangkut = collect($loanPeminjams)->pluck('nama')->implode(', ');
+                    return back()->withErrors([
+                        'error' => 'Gagal menyetujui. Peminjam dengan nomor identitas ' . implode(', ', $common) . ' masih memiliki pinjaman aktif yang belum dikembalikan.',
+                    ]);
+                }
+            }
+
             $permohonan->update(['status' => Permohonan::STATUS_APPROVED]);
 
             $boardGame->decrement('available_copies');
@@ -101,8 +159,7 @@ class PermohonanController extends Controller
 
             Loan::create([
                 'boardgame_id' => $permohonan->boardgame_id,
-                'borrower_name' => $permohonan->nama,
-                'borrower_nim' => $permohonan->nim,
+                'list_peminjam' => $list_peminjam,
                 'borrowed_at' => $borrowedAt,
                 'status' => 'borrowed',
                 'notes' => $permohonan->catatan,

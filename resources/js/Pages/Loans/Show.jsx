@@ -94,22 +94,6 @@ export default function Show({ loan }) {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                            Peminjam
-                                        </p>
-                                        <p className="text-sm font-medium text-[#173C33] mt-1">
-                                            {loan.borrower_name}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
-                                            NIM
-                                        </p>
-                                        <p className="text-sm font-mono text-gray-500 mt-1">
-                                            {loan.borrower_nim || "-"}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
                                             Dipinjam
                                         </p>
                                         <p className="text-sm text-gray-700 mt-1">
@@ -154,6 +138,32 @@ export default function Show({ loan }) {
                                     </div>
 
                                 </div>
+
+                                {Array.isArray(loan.list_peminjam) && loan.list_peminjam.length > 0 && (
+                                    <div>
+                                        <p className="text-xs text-gray-500 uppercase tracking-wider font-medium mb-2">
+                                            Peminjam
+                                        </p>
+                                        <table className="text-sm w-full">
+                                                    <thead>
+                                                        <tr className="text-xs text-gray-400 uppercase border-b border-gray-200">
+                                                            <th className="text-left pb-1.5 pr-6 font-medium">Nama</th>
+                                                            <th className="text-left pb-1.5 pr-6 font-medium">Identitas</th>
+                                                            <th className="text-left pb-1.5 font-medium">Jaminan</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {loan.list_peminjam.map((p, i) => (
+                                                            <tr key={i} className="text-[#173C33] border-b border-gray-100 last:border-0">
+                                                                <td className="py-1.5 pr-6 font-medium">{p.nama}</td>
+                                                                <td className="py-1.5 pr-6">{p.nomor_identitas || "-"}</td>
+                                                                <td className="py-1.5">{p.jenis_jaminan?.toUpperCase()}</td>
+                                                            </tr>
+                                                        ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
 
                                 {loan.notes && (
                                     <div>

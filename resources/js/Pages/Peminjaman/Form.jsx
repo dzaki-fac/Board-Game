@@ -1,4 +1,4 @@
-import { Link, useForm, usePage } from "@inertiajs/react";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useMemo, useState } from "react";
 
 export default function Form({ boardgames = [] }) {
@@ -6,20 +6,17 @@ export default function Form({ boardgames = [] }) {
     const flash = props.flash || {};
 
     const { data, setData, post, processing, errors, reset } = useForm({
-        tipe_peminjam: "",
-        nama: "",
-        nim: "",
-        nik: "",
         boardgame_id: "",
         jam_pinjam: "",
         tanggal_pinjam: "",
         catatan: "",
     });
 
-    const [anggota, setAnggota] = useState([]);
+    const [anggota, setAnggota] = useState([{ nama: "", jenis_jaminan: "ktm", nim: "", nik: "" }]);
+    const [localErrors, setLocalErrors] = useState({});
 
     function addAnggota() {
-        setAnggota([...anggota, { nama: "", nim: "", nik: "" }]);
+        setAnggota([...anggota, { nama: "", jenis_jaminan: "ktm", nim: "", nik: "" }]);
     }
 
     function removeAnggota(index) {
@@ -31,6 +28,15 @@ export default function Form({ boardgames = [] }) {
             i === index ? { ...a, [field]: value } : a,
         );
         setAnggota(updated);
+        setLocalErrors((prev) => {
+            const next = { ...prev };
+            if (next[index]) {
+                const errField = field === "jenis_jaminan" ? "identitas" : (field === "nim" || field === "nik" ? "identitas" : field);
+                delete next[index][errField];
+                if (!Object.keys(next[index]).length) delete next[index];
+            }
+            return next;
+        });
     }
 
     useEffect(() => {
@@ -72,9 +78,45 @@ export default function Form({ boardgames = [] }) {
 
     const selected = bgList.find((bg) => bg.id == data.boardgame_id);
 
+    function getAnggotaNomorIdentitas(a) {
+        if (a.jenis_jaminan === "ktm") return a.nim;
+        return a.nik;
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
-        post("/peminjaman", { data: { anggota } });
+
+        const newErrors = {};
+        anggota.forEach((a, i) => {
+            const err = {};
+            if (!a.nama.trim()) err.nama = "Nama wajib diisi.";
+            const id = getAnggotaNomorIdentitas(a);
+            const expectedLen = a.jenis_jaminan === "ktm" ? 14 : 16;
+            if (!id) err.identitas = a.jenis_jaminan === "ktm" ? "NIM wajib diisi." : "NIK wajib diisi.";
+            else if (id.length !== expectedLen) err.identitas = a.jenis_jaminan === "ktm" ? "NIM harus 14 digit." : "NIK harus 16 digit.";
+            if (Object.keys(err).length) newErrors[i] = err;
+        });
+        setLocalErrors(newErrors);
+        if (Object.keys(newErrors).length) {
+            const firstIndex = Math.min(...Object.keys(newErrors).map(Number));
+            const el = document.querySelector(`[data-row="${firstIndex}"] .input-error`);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+        }
+
+        const peminjams = anggota.map((a) => ({
+            nama: a.nama,
+            jenis_jaminan: a.jenis_jaminan,
+            nomor_identitas: getAnggotaNomorIdentitas(a),
+        }));
+
+        router.post("/peminjaman", {
+            boardgame_id: data.boardgame_id,
+            tanggal_pinjam: data.tanggal_pinjam,
+            jam_pinjam: data.jam_pinjam,
+            catatan: data.catatan,
+            peminjams,
+        });
     }
 
     return (
@@ -107,229 +149,76 @@ export default function Form({ boardgames = [] }) {
                             Data Peminjam
                         </h2>
 
-                        <div className="form-control mb-3">
-                            <label className="label">
-                                <span className="label-text font-medium">
-                                    Tipe Peminjam
-                                </span>
-                            </label>
-                            {errors.tipe_peminjam && (
-                                <p className="text-error text-xs mb-2">
-                                    {errors.tipe_peminjam}
+                        <div className="form-control">
+                                <label className="label pb-1">
+                                    <span className="label-text font-medium">
+                                        Daftar Peminjam
+                                    </span>
+                                </label>
+                                <p className="text-xs text-error mb-3 ml-1">
+                                    *Anggota pertama sebagai pemberi jaminan
                                 </p>
-                            )}
-                            <div className="grid grid-cols-2 gap-3">
-                                <button
-                                    type="button"
-                                    className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all cursor-pointer ${
-                                        data.tipe_peminjam === "mahasiswa"
-                                            ? "border-[#2F6F62] bg-[#E8F3EF]"
-                                            : "border-base-300 bg-base-100 hover:border-slate-400"
-                                    }`}
-                                    onClick={() =>
-                                        setData(
-                                            "tipe_peminjam",
-                                            data.tipe_peminjam === "mahasiswa"
-                                                ? ""
-                                                : "mahasiswa",
-                                        )
-                                    }
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className={`w-8 h-8 ${data.tipe_peminjam === "mahasiswa" ? "text-[#2F6F62]" : "text-slate-400"}`}
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        strokeWidth={1.5}
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"
-                                        />
-                                    </svg>
-                                    <span
-                                        className={`text-sm font-semibold ${data.tipe_peminjam === "mahasiswa" ? "text-[#2F6F62]" : "text-slate-600"}`}
-                                    >
-                                        Mahasiswa UNDIP
-                                    </span>
-                                </button>
-
-                                <button
-                                    type="button"
-                                    className={`flex flex-col items-center justify-center gap-2 p-4 rounded-xl border-2 transition-all cursor-pointer ${
-                                        data.tipe_peminjam === "visitor"
-                                            ? "border-[#2F6F62] bg-[#E8F3EF]"
-                                            : "border-base-300 bg-base-100 hover:border-slate-400"
-                                    }`}
-                                    onClick={() =>
-                                        setData(
-                                            "tipe_peminjam",
-                                            data.tipe_peminjam === "visitor"
-                                                ? ""
-                                                : "visitor",
-                                        )
-                                    }
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className={`w-8 h-8 ${data.tipe_peminjam === "visitor" ? "text-[#2F6F62]" : "text-slate-400"}`}
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                        strokeWidth={1.5}
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-                                        />
-                                    </svg>
-                                    <span
-                                        className={`text-sm font-semibold ${data.tipe_peminjam === "visitor" ? "text-[#2F6F62]" : "text-slate-600"}`}
-                                    >
-                                        Visitor / Umum
-                                    </span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div className="form-control mb-3">
-                            <label className="label">
-                                <span className="label-text font-medium">
-                                    Nama
-                                </span>
-                            </label>
-                            <input
-                                type="text"
-                                className={`input input-bordered w-full ${errors.nama ? "input-error" : ""}`}
-                                value={data.nama}
-                                onChange={(e) =>
-                                    setData("nama", e.target.value)
-                                }
-                                placeholder="Masukkan nama lengkap"
-                            />
-                            {errors.nama && (
-                                <p className="text-error text-xs mt-1">
-                                    {errors.nama}
-                                </p>
-                            )}
-                        </div>
-
-                        {data.tipe_peminjam === "mahasiswa" && (
-                            <div className="form-control mb-3">
-                                <label className="label">
-                                    <span className="label-text font-medium">
-                                        NIM
-                                    </span>
-                                </label>
-                                <input
-                                    type="text"
-                                    className={`input input-bordered w-full ${errors.nim ? "input-error" : ""}`}
-                                    value={data.nim}
-                                    onChange={(e) =>
-                                        setData("nim", e.target.value)
-                                    }
-                                    placeholder="Masukkan NIM"
-                                />
-                                {errors.nim && (
-                                    <p className="text-error text-xs mt-1">
-                                        {errors.nim}
-                                    </p>
-                                )}
-                            </div>
-                        )}
-
-                        {data.tipe_peminjam === "visitor" && (
-                            <div className="form-control mb-3">
-                                <label className="label">
-                                    <span className="label-text font-medium">
-                                        NIK
-                                    </span>
-                                </label>
-                                <input
-                                    type="text"
-                                    className={`input input-bordered w-full ${errors.nik ? "input-error" : ""}`}
-                                    value={data.nik}
-                                    onChange={(e) =>
-                                        setData("nik", e.target.value)
-                                    }
-                                    placeholder="Masukkan NIK"
-                                />
-                                {errors.nik && (
-                                    <p className="text-error text-xs mt-1">
-                                        {errors.nik}
-                                    </p>
-                                )}
-                            </div>
-                        )}
-
-                        {data.tipe_peminjam && (
-                            <div className="form-control">
-                                <label className="label">
-                                    <span className="label-text font-medium">
-                                        Anggota
-                                    </span>
-                                </label>
 
                                 {anggota.length > 0 && (
                                     <div className="space-y-3 mb-3">
                                         {anggota.map((a, index) => (
                                             <div
                                                 key={index}
+                                                data-row={index}
                                                 className="flex gap-2 items-start p-3 bg-base-200 rounded-lg"
                                             >
                                                 <div className="flex-1 space-y-2">
                                                     <input
-                                                        type="text"
-                                                        className="input input-bordered input-sm w-full"
-                                                        value={a.nama}
-                                                        onChange={(e) =>
-                                                            updateAnggota(
-                                                                index,
-                                                                "nama",
-                                                                e.target.value,
-                                                            )
-                                                        }
-                                                        placeholder="Nama anggota"
-                                                    />
-                                                    {data.tipe_peminjam ===
-                                                    "mahasiswa" ? (
-                                                        <input
-                                                            type="text"
-                                                            className="input input-bordered input-sm w-full"
-                                                            value={a.nim}
-                                                            onChange={(e) =>
-                                                                updateAnggota(
-                                                                    index,
-                                                                    "nim",
-                                                                    e.target
-                                                                        .value,
-                                                                )
-                                                            }
-                                                            placeholder="NIM anggota"
-                                                        />
-                                                    ) : (
-                                                        <input
-                                                            type="text"
-                                                            className="input input-bordered input-sm w-full"
-                                                            value={a.nik}
-                                                            onChange={(e) =>
-                                                                updateAnggota(
-                                                                    index,
-                                                                    "nik",
-                                                                    e.target
-                                                                        .value,
-                                                                )
-                                                            }
-                                                            placeholder="NIK anggota"
-                                                        />
-                                                    )}
-                                                </div>
+                                                         type="text"
+                                                         className={`input input-bordered input-sm w-full ${localErrors[index]?.nama ? "input-error" : ""}`}
+                                                         value={a.nama}
+                                                         onChange={(e) =>
+                                                             updateAnggota(
+                                                                 index,
+                                                                 "nama",
+                                                                 e.target.value,
+                                                             )
+                                                         }
+                                                         placeholder="Nama peminjam"
+                                                     />
+                                                     {localErrors[index]?.nama && (
+                                                         <p className="text-error text-xs mt-0.5">{localErrors[index].nama}</p>
+                                                     )}
+                                                     <div className="flex gap-2">
+                                                         <select
+                                                             className="select select-bordered select-sm w-36"
+                                                             value={a.jenis_jaminan}
+                                                             onChange={(e) =>
+                                                                 updateAnggota(index, "jenis_jaminan", e.target.value)
+                                                             }
+                                                         >
+                                                             <option value="ktm">KTM</option>
+                                                             <option value="ktp">KTP</option>
+                                                         </select>
+                                                         <input
+                                                             type="text"
+                                                             className={`input input-bordered input-sm flex-1 ${localErrors[index]?.identitas ? "input-error" : ""}`}
+                                                             value={a.jenis_jaminan === "ktm" ? a.nim : a.nik}
+                                                             onChange={(e) => {
+                                                                 const val = e.target.value.replace(/\D/g, "");
+                                                                 updateAnggota(
+                                                                     index,
+                                                                     a.jenis_jaminan === "ktm" ? "nim" : "nik",
+                                                                     val,
+                                                                 );
+                                                             }}
+                                                             maxLength={a.jenis_jaminan === "ktm" ? 14 : 16}
+                                                             placeholder={a.jenis_jaminan === "ktm" ? "NIM (14 digit)" : "NIK (16 digit)"}
+                                                         />
+                                                     </div>
+                                                     {localErrors[index]?.identitas && (
+                                                         <p className="text-error text-xs mt-0.5">{localErrors[index].identitas}</p>
+                                                     )}
+                                                 </div>
                                                 <button
                                                     type="button"
-                                                    className="btn btn-ghost btn-sm btn-square text-error mt-0.5"
+                                                    className={`btn btn-ghost btn-sm btn-square mt-0.5 ${anggota.length === 1 ? "text-slate-300 cursor-not-allowed" : "text-error"}`}
+                                                    disabled={anggota.length === 1}
                                                     onClick={() =>
                                                         removeAnggota(index)
                                                     }
@@ -373,10 +262,9 @@ export default function Form({ boardgames = [] }) {
                                             d="M12 4v16m8-8H4"
                                         />
                                     </svg>
-                                    Tambah Anggota
+                                    Tambah Peminjam
                                 </button>
                             </div>
-                        )}
                     </div>
                 </div>
 
@@ -582,7 +470,7 @@ export default function Form({ boardgames = [] }) {
                         className="btn btn-ghost"
                         onClick={() => {
                             reset();
-                            setAnggota([]);
+                            setAnggota([{ nama: "", jenis_jaminan: "ktm", nim: "", nik: "" }]);
                         }}
                         disabled={processing}
                     >

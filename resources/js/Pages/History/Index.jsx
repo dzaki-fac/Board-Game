@@ -65,6 +65,8 @@ export default function Index({ histories, stats }) {
             [
                 "ID Peminjaman",
                 "Peminjam",
+                "Jenis Jaminan",
+                "Nomor Identitas",
                 "Board Game",
                 "Dipinjam",
                 "Dikembalikan",
@@ -75,7 +77,19 @@ export default function Index({ histories, stats }) {
             ...(histories.data || []).map((loan) =>
                 [
                     loan.id,
-                    `"${loan.borrower_name}"`,
+                    `"${(() => {
+                        const list = Array.isArray(loan.list_peminjam) ? loan.list_peminjam : [];
+                        return list.map(p => p.nama).join(", ");
+                    })()}"`,
+                    (() => {
+                        const list = Array.isArray(loan.list_peminjam) ? loan.list_peminjam : [];
+                        const first = list[0] || {};
+                        return first.jenis_jaminan?.toUpperCase() || "-";
+                    })(),
+                    `"${(() => {
+                        const list = Array.isArray(loan.list_peminjam) ? loan.list_peminjam : [];
+                        return list.map(p => p.nomor_identitas).join(", ");
+                    })()}"`,
                     `"${loan.game.nama}"`,
                     formatDateTime(loan.borrowed_at),
                     formatDateTime(loan.returned_at),
@@ -313,7 +327,8 @@ export default function Index({ histories, stats }) {
                                             <tr className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
                                                 <th className="px-6 py-3 font-medium">ID</th>
                                                 <th className="px-6 py-3 font-medium">Peminjam</th>
-                                                <th className="px-6 py-3 font-medium">NIM</th>
+                                                <th className="px-6 py-3 font-medium">Jenis Jaminan</th>
+                                                <th className="px-6 py-3 font-medium">Nomor Identitas</th>
                                                 <th className="px-6 py-3 font-medium">Board Game</th>
                                                 <th className="px-6 py-3 font-medium">Dipinjam</th>
                                                 <th className="px-6 py-3 font-medium">Dikembalikan</th>
@@ -338,11 +353,23 @@ export default function Index({ histories, stats }) {
                                                     </td>
                                                     <td className="px-6 py-4">
                                                         <span className="font-medium text-[#173C33]">
-                                                            {loan.borrower_name}
+                                                            {(() => {
+                                                                const list = Array.isArray(loan.list_peminjam) ? loan.list_peminjam : [];
+                                                                return list[0]?.nama || "-";
+                                                            })()}
                                                         </span>
                                                     </td>
+                                                    <td className="px-6 py-4 text-gray-500 text-sm">
+                                                        {(() => {
+                                                            const list = Array.isArray(loan.list_peminjam) ? loan.list_peminjam : [];
+                                                            return list[0]?.jenis_jaminan?.toUpperCase() || "-";
+                                                        })()}
+                                                    </td>
                                                     <td className="px-6 py-4 text-gray-500 font-mono text-sm">
-                                                        {loan.borrower_nim || "-"}
+                                                        {(() => {
+                                                            const list = Array.isArray(loan.list_peminjam) ? loan.list_peminjam : [];
+                                                            return list[0]?.nomor_identitas || "-";
+                                                        })()}
                                                     </td>
                                                     <td className="px-6 py-4 text-gray-700">
                                                         {loan.game.nama}

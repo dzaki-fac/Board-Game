@@ -12,8 +12,7 @@ class Loan extends Model
 
     protected $fillable = [
         'boardgame_id',
-        'borrower_name',
-        'borrower_nim',
+        'list_peminjam',
         'borrowed_at',
         'returned_at',
         'status',
@@ -29,6 +28,7 @@ class Loan extends Model
             'borrowed_at' => 'datetime',
             'returned_at' => 'datetime',
             'fine_amount' => 'decimal:2',
+            'list_peminjam' => 'array',
         ];
     }
 

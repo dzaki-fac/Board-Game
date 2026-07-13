@@ -55,4 +55,5 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/peminjaman/create', [PermohonanController::class, 'create'])->name('peminjaman.create');
 Route::post('/peminjaman', [PermohonanController::class, 'store'])->name('peminjaman.store');
+Route::get('/peminjaman/gagal', [PermohonanController::class, 'konfirmasiGagal'])->name('peminjaman.gagal');
 Route::get('/peminjaman/{permohonan}/konfirmasi', [PermohonanController::class, 'konfirmasi'])->name('peminjaman.konfirmasi');

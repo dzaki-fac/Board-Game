@@ -25,7 +25,7 @@ class HistoryController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->whereHas('game', fn ($q) => $q->where('nama', 'like', "%{$search}%"))
-                  ->orWhere('borrower_name', 'like', "%{$search}%");
+                  ->orWhere('list_peminjam', 'like', "%{$search}%");
             });
         }
 

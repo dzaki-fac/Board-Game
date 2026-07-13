@@ -17,8 +17,7 @@ class Permohonan extends Model
     protected $table = 'permohonan';
 
     protected $fillable = [
-        'nama',
-        'nim',
+        'list_peminjam',
         'boardgame_id',
         'status',
         'tanggal_pinjam',
@@ -32,6 +31,7 @@ class Permohonan extends Model
     protected $casts = [
         'tanggal_pinjam' => 'date:Y-m-d',
         'tanggal_rencana_kembali' => 'date:Y-m-d',
+        'list_peminjam' => 'array',
     ];
 
     public function boardgame()
