@@ -1,10 +1,11 @@
+import { createPortal } from "react-dom";
 import { useMemo, useState, useRef, useEffect, useCallback, createContext, useContext } from "react";
 import { Head, Link, router } from "@inertiajs/react";
 import LanguageToggle from "../Components/LanguageToggle";
 import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
 
-/* ================= Palet warna UPT Perpustakaan Undip ================= */
+/* Palet warna UPT Perpustakaan Undip */
 const WARNA = {
     hijauTua: "#173C33",   // top bar paling gelap
     hijauUtama: "#2F6F62", // hero & tombol utama
@@ -75,12 +76,14 @@ const TEKS = {
         pemain: "Pemain",
         menit: "Menit",
         tataCaraPoin: [
-            "Isi form peminjaman melalui sistem sebelum mengambil board game",
-            "Serahkan kartu identitas (KTM/KTP/kartu pelajar) ke petugas sebagai jaminan",
-            "Board game hanya boleh dimainkan di area perpustakaan, tidak boleh dibawa pulang",
-            "Kembalikan pada hari yang sama",
-            "Jaga kelengkapan komponen (kartu, dadu, pion, papan, dll) selama masa peminjaman",
-            "Kartu identitas dikembalikan setelah board game diperiksa dan dinyatakan lengkap",
+            "Peminjam melakukan peminjaman langsung di meja layanan kepada petugas yang bertugas",
+            "Peminjam memilih board game yang ingin dipinjam, lalu melengkapi form peminjaman sebelum mengambil barangnya",
+            "Peminjam menyerahkan satu kartu identitas (KTM/KTP/Kartu Anggota Perpustakaan) kepada petugas sebagai jaminan",
+            "Peminjam bersama petugas memeriksa kelengkapan komponen (kartu, dadu, pion, papan, dan lain-lain) sesuai lembar daftar isi pada kotak, sebelum board game dibawa ke meja permainan",
+            "Peminjam hanya boleh memainkan board game di lantai tempat board game tersebut dipinjam, tidak membawanya ke lantai lain maupun membawanya pulang",
+            "Peminjam menjaga kelengkapan komponen permainan selama masa peminjaman berlangsung, dan tidak memindahtangankan board game ke kelompok lain secara sepihak.",
+            "Peminjam meminjam dan mengembalikan board game pada hari yang sama, paling lambat sebelum jam operasional perpustakaan berakhir",
+            "Peminjam menerima kembali kartu identitasnya setelah board game diperiksa petugas dan dinyatakan lengkap",
         ],
         sanksiJudul: "Sanksi Kerusakan / Kehilangan",
         sanksiPoin: [
@@ -108,10 +111,14 @@ const TEKS = {
                 detailTitle: "Tata Cara Peminjaman Board Game",
                 detailDescription: "Pemustaka wajib mengikuti prosedur peminjaman board game di UPT Perpustakaan Universitas Diponegoro.",
                 points: [
-                    "Isi form peminjaman melalui sistem sebelum mengambil board game.",
-                    "Serahkan kartu identitas sebagai jaminan.",
-                    "Board game hanya boleh dimainkan di area perpustakaan.",
-                    "Kembalikan pada hari yang sama",
+                    "Peminjam melakukan peminjaman langsung di meja layanan kepada petugas yang bertugas",
+                    "Peminjam memilih board game yang ingin dipinjam, lalu melengkapi form peminjaman sebelum mengambil barangnya",
+                    "Peminjam menyerahkan satu kartu identitas (KTM/KTP/Kartu Anggota Perpustakaan) kepada petugas sebagai jaminan",
+                    "Peminjam bersama petugas memeriksa kelengkapan komponen (kartu, dadu, pion, papan, dan lain-lain) sesuai lembar daftar isi pada kotak, sebelum board game dibawa ke meja permainan",
+                    "Peminjam hanya boleh memainkan board game di lantai tempat board game tersebut dipinjam, tidak membawanya ke lantai lain maupun membawanya pulang",
+                    "Peminjam menjaga kelengkapan komponen permainan selama masa peminjaman berlangsung, dan tidak memindahtangankan board game ke kelompok lain secara sepihak.",
+                    "Peminjam meminjam dan mengembalikan board game pada hari yang sama, paling lambat sebelum jam operasional perpustakaan berakhir",
+                    "Peminjam menerima kembali kartu identitasnya setelah board game diperiksa petugas dan dinyatakan lengkap",
                 ],
                 theme: "procedure",
             },
@@ -121,10 +128,13 @@ const TEKS = {
                 detailTitle: "Ketentuan Penggunaan Board Game",
                 detailDescription: "Peminjam bertanggung jawab menjaga kondisi dan kelengkapan board game selama digunakan.",
                 points: [
-                    "Jaga komponen seperti kartu, dadu, pion, papan, dan buku aturan.",
-                    "Laporkan kepada petugas jika ada komponen rusak atau hilang.",
-                    "Kartu identitas dikembalikan setelah board game diperiksa.",
-                    "Gunakan board game dengan tertib di area perpustakaan.",
+                    "Peminjam bertanggung jawab penuh atas keutuhan fisik board game yang digunakannya selama masa peminjaman",
+                    "Jika ada komponen yang hilang atau rusak, peminjam wajib menggantinya dengan board game yang judul dan penerbitnya sama persis",
+                    "Kerusakan yang dimaksud mencakup antara lain kartu yang sobek, kotak yang penyok cukup parah, atau komponen permainan yang hilang sebagian, bukan hanya kehilangan seluruh set",
+                    "Apabila board game tersebut sudah tidak beredar lagi di pasaran, peminjam dapat menggantinya dengan board game lain yang setara, baik dari segi jenis permainan maupun harga, bukan dalam bentuk uang tunai.",
+                    "Peminjam diberi waktu paling lama empat belas hari kerja sejak kehilangan atau kerusakan dilaporkan untuk menyelesaikan penggantian",
+                    "Selama proses penggantian belum diselesaikan, kartu identitas peminjam ditahan oleh petugas layanan",
+                    "Selama kasus penggantian ini belum terselesaikan, peminjam belum diperkenankan meminjam board game lain",
                 ],
                 theme: "rules",
             },
@@ -618,64 +628,70 @@ function CarouselModal({ item, onClose }) {
 
     const theme = THEMES[item.theme] || THEMES.welcome;
 
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+    return createPortal(
+        <div className="fixed inset-0 z-50" onClick={onClose}>
             <div className="absolute inset-0 bg-black/60" />
-            <div
-                className="relative w-[92vw] max-w-7xl max-h-[88vh] rounded-[2rem] shadow-2xl overflow-y-auto"
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className="relative p-8 md:p-10 lg:p-12" style={{ backgroundColor: theme.bg }}>
-                    <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full pointer-events-none">
-                        <rect width="500" height="500" fill={theme.bg} />
-                        {theme.blob.map((b, i) =>
-                            b.path ? (
-                                <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
-                            ) : (
-                                <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
-                            )
-                        )}
-                    </svg>
 
-                    <button
-                        onClick={onClose}
-                        className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors"
+            <div className="relative h-full overflow-y-auto p-4 py-8">
+                <div className="flex min-h-full items-center justify-center">
+                    <div
+                        className="relative w-[92vw] max-w-7xl max-h-[88vh] rounded-[2rem] shadow-2xl overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
                     >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
-                            <path d="M18 6 6 18" /><path d="m6 6 12 12" />
-                        </svg>
-                    </button>
+                        <div className="relative p-8 md:p-10 lg:p-12" style={{ backgroundColor: theme.bg }}>
+                            <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full pointer-events-none">
+                                <rect width="500" height="500" fill={theme.bg} />
+                                {theme.blob.map((b, i) =>
+                                    b.path ? (
+                                        <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
+                                    ) : (
+                                        <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
+                                    )
+                                )}
+                            </svg>
 
-                    <div className="relative z-10">
-                        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: WARNA.hijauTua }}>
-                            {item.detailTitle}
-                        </h2>
-                        <p className="text-base md:text-lg text-slate-600 leading-8 mb-6 max-w-4xl">
-                            {item.detailDescription}
-                        </p>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {item.points.map((point, i) => (
-                                <div key={i} className="flex items-start gap-4 p-5 md:p-6 rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
-                                    <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
-                                        {i + 1}
-                                    </span>
-                                    <p className="text-sm md:text-base text-slate-700 leading-relaxed">{point}</p>
+                            <button
+                                onClick={onClose}
+                                className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+                                    <path d="M18 6 6 18" /><path d="m6 6 12 12" />
+                                </svg>
+                            </button>
+
+                            <div className="relative z-10">
+                                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: WARNA.hijauTua }}>
+                                    {item.detailTitle}
+                                </h2>
+                                <p className="text-base md:text-lg text-slate-600 leading-8 mb-6 max-w-4xl">
+                                    {item.detailDescription}
+                                </p>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {item.points.map((point, i) => (
+                                        <div key={i} className="flex items-start gap-4 p-5 md:p-6 rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
+                                            <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                                                {i + 1}
+                                            </span>
+                                            <p className="text-sm md:text-base text-slate-700 leading-relaxed">{point}</p>
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                                <button
+                                    onClick={onClose}
+                                    className="mt-8 w-full rounded-full py-3 text-base font-semibold text-white transition-colors"
+                                    style={{ backgroundColor: WARNA.hijauUtama }}
+                                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
+                                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
+                                >
+                                    Tutup
+                                </button>
+                            </div>
                         </div>
-                        <button
-                            onClick={onClose}
-                            className="mt-8 w-full rounded-full py-3 text-base font-semibold text-white transition-colors"
-                            style={{ backgroundColor: WARNA.hijauUtama }}
-                            onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
-                            onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
-                        >
-                            Tutup
-                        </button>
                     </div>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
 
@@ -686,6 +702,7 @@ function AnnouncementCarousel({ onModalChange }) {
     const [modalItem, setModalItem] = useState(null);
     const [paused, setPaused] = useState(false);
     const wrapperRef = useRef(null);
+    const contentRef = useRef(null);
     const lastChangeRef = useRef(Date.now());
     const intervalRef = useRef(null);
     const mountedRef = useRef(true);
@@ -695,8 +712,8 @@ function AnnouncementCarousel({ onModalChange }) {
     }, [modalItem, onModalChange]);
 
     useEffect(() => {
-        return () => { mountedRef.current = false; };
-    }, []);
+        contentRef.current?.scrollTo({ top: 0, behavior: "auto" });
+    }, [index]);
 
     const clearAutoplay = useCallback(() => {
         if (intervalRef.current !== null) {
@@ -805,7 +822,7 @@ function AnnouncementCarousel({ onModalChange }) {
                         </svg>
                     </div>
 
-                    <div className="relative flex flex-col h-full px-8 md:px-14 lg:px-20 py-10 md:py-14 pb-16 text-center overflow-y-auto">
+                    <div ref={contentRef} className="relative flex flex-col h-full px-8 md:px-14 lg:px-20 py-10 md:py-14 pb-16 text-center overflow-y-auto">
                         {item.theme === "welcome" ? (
                             <div className="flex flex-col items-center justify-center flex-1">
                                 <h3
@@ -832,32 +849,63 @@ function AnnouncementCarousel({ onModalChange }) {
                                     </p>
                                 </div>
                                 {item.points?.length > 0 && (
-                                    <div className="mt-5 grid w-full max-w-4xl mx-auto gap-3 md:gap-4 md:grid-cols-2">
-                                        {item.points.map((point, i) => (
-                                            <div
-                                                key={i}
-                                                className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm"
-                                            >
-                                                <span
-                                                    className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                                                    style={{ backgroundColor: WARNA.hijauUtama }}
+                                    <>
+                                        {/* Mobile: 3 poin */}
+                                        <div className="mt-5 grid w-full max-w-4xl mx-auto gap-3 md:hidden">
+                                            {item.points.slice(0, 3).map((point, i) => (
+                                                <div
+                                                    key={i}
+                                                    className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm"
                                                 >
-                                                    {i + 1}
-                                                </span>
-                                                <p className="text-sm leading-6 text-slate-700">{point}</p>
-                                            </div>
-                                        ))}
-                                    </div>
+                                                    <span
+                                                        className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold"
+                                                        style={{ backgroundColor: WARNA.hijauUtama }}
+                                                    >
+                                                        {i + 1}
+                                                    </span>
+                                                    <p className="text-sm leading-6 text-slate-700">{point}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Desktop: 4 poin */}
+                                        <div className="mt-5 hidden md:grid w-full max-w-4xl mx-auto gap-4 md:grid-cols-2">
+                                            {item.points.slice(0, 4).map((point, i) => (
+                                                <div
+                                                    key={i}
+                                                    className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm"
+                                                >
+                                                    <span
+                                                        className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold"
+                                                        style={{ backgroundColor: WARNA.hijauUtama }}
+                                                    >
+                                                        {i + 1}
+                                                    </span>
+                                                    <p className="text-sm leading-6 text-slate-700">{point}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </>
                                 )}
                             </>
                         )}
-                        <span className="absolute bottom-8 left-1/2 -translate-x-1/2 text-sm text-slate-400 flex items-center gap-1.5">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
-                                <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
-                                <path d="M12 6v6l4 2" />
-                            </svg>
-                            Klik untuk melihat detail
-                        </span>
+                        {item.theme === "welcome" ? (
+                            <span className="absolute bottom-8 left-1/2 -translate-x-1/2 text-sm text-slate-400 flex items-center gap-1.5">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
+                                    <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg>
+                                Klik untuk melihat detail
+                            </span>
+                        ) : (
+                            <span className="mt-6 mb-2 mx-auto text-sm text-slate-400 flex items-center gap-1.5">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
+                                    <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg>
+                                Klik untuk melihat detail
+                            </span>
+                        )}
                     </div>
 
                     {items.length > 1 && (
