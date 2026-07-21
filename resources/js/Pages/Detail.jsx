@@ -6,19 +6,19 @@ import ReviewSection from "../Components/ReviewSection";
 import RatingSummary from "../Components/RatingSummary";
 
 const WARNA = {
-    hijauTua: "#173C33",
-    hijauUtama: "#2F6F62",
-    hijauHover: "#255A4F",
-    emas: "#B98A4A",
-    emasHover: "#A5763A",
-    krem: "#FAF7F2",
+    hijauTua: "#12507A",
+    hijauUtama: "#0E4A73",
+    hijauHover: "#0A3A5C",
+    emas: "#2C7BAE",
+    emasHover: "#22638F",
+    krem: "#FFFFFF",
 };
 
 const KATEGORI_COLORS = {
-    "Strategi": ["#2F6F62", "#E8F3EF"],
-    "Strategi Ekonomi": ["#2F6F62", "#E8F3EF"],
+    "Strategi": ["#0E4A73", "#E5EEF4"],
+    "Strategi Ekonomi": ["#0E4A73", "#E5EEF4"],
     "Strategi Abstrak": ["#3D5A80", "#EAF0F7"],
-    "Strategi & Keluarga": ["#2F6F62", "#E8F3EF"],
+    "Strategi & Keluarga": ["#0E4A73", "#E5EEF4"],
     "Puzzle": ["#8E5FB0", "#F1E9F7"],
     "Kooperatif": ["#C0562F", "#FBEAE1"],
     "Kooperatif & Escape Room": ["#C0562F", "#FBEAE1"],
@@ -41,9 +41,9 @@ const KATEGORI_COLORS = {
     "Anak & Memori": ["#3F8F63", "#E9F5EE"],
     "Anak & Ketangkasan": ["#3F8F63", "#E9F5EE"],
     "Keluarga & Ketangkasan": ["#3F8F63", "#E9F5EE"],
-    "Manajemen": ["#2F6F62", "#E8F3EF"],
+    "Manajemen": ["#0E4A73", "#E5EEF4"],
     "Edukasi & Kartu": ["#3D5A80", "#EAF0F7"],
-    "Strategi Ringan": ["#2F6F62", "#E8F3EF"],
+    "Strategi Ringan": ["#0E4A73", "#E5EEF4"],
 };
 const DEFAULT_COLOR = ["#5B5F66", "#EEEFF1"];
 
@@ -292,7 +292,7 @@ function TopNavbar({ bahasa, setBahasa }) {
     const t = useTeks();
 
     return (
-        <div style={{ backgroundColor: WARNA.hijauTua }}>
+        <div className="bg-white border-b border-slate-200">
             <div className="max-w-[1440px] mx-auto px-6 md:px-10">
                 {/* Desktop (md+) */}
                 <div className="hidden md:flex items-center justify-between py-3">
@@ -308,8 +308,8 @@ function TopNavbar({ bahasa, setBahasa }) {
                             alt="UPT Perpustakaan Undip"
                             className="h-14 w-14 object-contain"
                         />
-                        <div className="leading-tight text-white">
-                            <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
+                        <div className="leading-tight" style={{ color: WARNA.hijauTua }}>
+                            <span className="block text-[11px] opacity-80 tracking-wide">Universitas Diponegoro</span>
                             <span className="block text-sm font-semibold">UPT Perpustakaan</span>
                         </div>
                     </a>
@@ -317,16 +317,16 @@ function TopNavbar({ bahasa, setBahasa }) {
                     {/* Kanan: Bahasa + Sosial Media */}
                     <div className="flex items-center gap-5 shrink-0">
                         <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
-                        <div className="flex items-center gap-3 text-white/80">
-                            <a href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                        <div className="flex items-center gap-3" style={{ color: WARNA.hijauUtama }}>
+                            <a href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
                                 <IkonYoutube className="w-5 h-5" />
                                 <span className="text-xs hidden xl:inline">Youtube</span>
                             </a>
-                            <a href="https://www.instagram.com/perpus.undip?igsh=MTh4bXFtd3AzbmRmdQ==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                            <a href="https://www.instagram.com/perpus.undip?igsh=MTh4bXFtd3AzbmRmdQ==" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
                                 <IkonInstagram className="w-5 h-5" />
                                 <span className="text-xs hidden xl:inline">Instagram</span>
                             </a>
-                            <a href="https://www.tiktok.com/@perpus.undip.press?_r=1&_t=ZS-97okoKr4q4S" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-white transition-colors">
+                            <a href="https://www.tiktok.com/@perpus.undip.press?_r=1&_t=ZS-97okoKr4q4S" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
                                 <IkonTiktok className="w-5 h-5" />
                                 <span className="text-xs hidden xl:inline">TikTok</span>
                             </a>
@@ -348,8 +348,8 @@ function TopNavbar({ bahasa, setBahasa }) {
                                 alt="UPT Perpustakaan Undip"
                                 className="h-10 w-10 object-contain"
                             />
-                            <div className="leading-tight text-white">
-                                <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
+                            <div className="leading-tight" style={{ color: WARNA.hijauTua }}>
+                                <span className="block text-[10px] opacity-80 tracking-wide">Universitas Diponegoro</span>
                                 <span className="block text-xs font-semibold">UPT Perpustakaan</span>
                             </div>
                         </a>
@@ -546,7 +546,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
             <div className="max-w-[1300px] mx-auto px-4 md:px-6 py-6">
                 <Link
                     href="/katalog"
-                    className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-900 hover:bg-emerald-50 rounded-full px-4 py-2 transition-colors mb-4"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-[#0E4A73] hover:text-[#071E30] hover:bg-[#0E4A73]/10 rounded-full px-4 py-2 transition-colors mb-4"
                 >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
                         <path d="M19 12H5" />

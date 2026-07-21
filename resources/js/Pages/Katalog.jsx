@@ -5,14 +5,14 @@ import LanguageToggle from "../Components/LanguageToggle";
 import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
 
-/* Palet warna UPT Perpustakaan Undip */
+/* Palet warna UPT Perpustakaan Undip - Tema Biru */
 const WARNA = {
-    hijauTua: "#173C33",   // top bar paling gelap
-    hijauUtama: "#2F6F62", // hero & tombol utama
-    hijauHover: "#255A4F",
-    emas: "#B98A4A",       // aksen tombol pencarian
-    emasHover: "#A5763A",
-    krem: "#FAF7F2",
+    hijauTua: "#071E30",   // top bar paling gelap (biru navy lebih gelap)
+    hijauUtama: "#0E4A73", // hero & tombol utama (biru lebih gelap)
+    hijauHover: "#0A3A5C", // hover state
+    emas: "#2C7BAE",       // aksen (biru lebih gelap)
+    emasHover: "#22638F",
+    krem: "#FFFFFF",       // background utama, putih
 };
 
 const KATEGORI_COLORS = {
@@ -72,9 +72,9 @@ const TEKS = {
         ],
         carousel: [
             {
-                title: "Selamat Datang di UPT Perpustakaan Universitas Diponegoro",
+                title: "Selamat Datang di\nUPT Perpustakaan Universitas Diponegoro",
                 description: "Temukan, pilih, dan pinjam board game favoritmu melalui katalog digital UPT Perpustakaan Universitas Diponegoro.",
-                detailTitle: "Selamat Datang di Board Game UPT Perpustakaan Undip",
+                detailTitle: "Selamat Datang di Board Game\nUPT Perpustakaan Undip",
                 detailDescription: "Katalog board game ini membantu pemustaka mencari informasi permainan, melihat detail board game, dan mengajukan peminjaman secara online.",
                 points: [
                     "Cari board game berdasarkan nama, kategori, lantai, dan status.",
@@ -83,6 +83,7 @@ const TEKS = {
                     "Gunakan board game hanya di area perpustakaan.",
                 ],
                 theme: "welcome",
+                bgImage: "https://images.pexels.com/photos/37983585/pexels-photo-37983585.jpeg",
             },
             {
                 title: "Tata Cara Peminjaman",
@@ -100,6 +101,7 @@ const TEKS = {
                     "Peminjam menerima kembali kartu identitasnya setelah board game diperiksa petugas dan dinyatakan lengkap",
                 ],
                 theme: "procedure",
+                bgImage: "https://images.pexels.com/photos/6333905/pexels-photo-6333905.jpeg?_gl=1*1dwbmw3*_ga*NzkwNzYzNjA5LjE3ODQwMTI3MDg.*_ga_8JE65Q40S6*czE3ODQ2MjAwOTckbzYkZzEkdDE3ODQ2MjAwOTgkajU5JGwwJGgw",
             },
             {
                 title: "Ketentuan Penggunaan",
@@ -116,6 +118,20 @@ const TEKS = {
                     "Selama kasus penggantian ini belum terselesaikan, peminjam belum diperkenankan meminjam board game lain",
                 ],
                 theme: "rules",
+                bgImage: "https://images.pexels.com/photos/33152331/pexels-photo-33152331.jpeg?_gl=1*1wmu6ve*_ga*NzkwNzYzNjA5LjE3ODQwMTI3MDg.*_ga_8JE65Q40S6*czE3ODQ2MTc0OTckbzUkZzEkdDE3ODQ2MTc1NzgkajU5JGwwJGgw",
+            },
+            {
+                title: "Sanksi Kerusakan / Kehilangan",
+                description: "Ketahui konsekuensi jika komponen atau board game rusak maupun hilang.",
+                detailTitle: "Sanksi Kerusakan / Kehilangan Board Game",
+                detailDescription: "Peminjam wajib mengganti sesuai ketentuan apabila terjadi kerusakan atau kehilangan komponen maupun board game.",
+                points: [
+                    "Komponen hilang: wajib ganti sesuai jenis komponen",
+                    "Board game rusak: wajib ganti unit yang sama",
+                    "Board game hilang: ganti unit baru atau denda sesuai ketentuan",
+                ],
+                theme: "sanksi",
+                bgImage: "https://images.pexels.com/photos/8899971/pexels-photo-8899971.jpeg?_gl=1*g5dap3*_ga*NzkwNzYzNjA5LjE3ODQwMTI3MDg.*_ga_8JE65Q40S6*czE3ODQ2MjAwOTckbzYkZzEkdDE3ODQ2MjA5MDgkajU5JGwwJGgw",
             },
         ],
     },
@@ -160,9 +176,9 @@ const TEKS = {
         ],
         carousel: [
             {
-                title: "Welcome to UPT Library of Diponegoro University",
+                title: "Welcome to\nUPT Library of Diponegoro University",
                 description: "Discover, choose, and borrow your favorite board games through the digital catalog of UPT Library of Diponegoro University.",
-                detailTitle: "Welcome to Board Game UPT Library Undip",
+                detailTitle: "Welcome to Board Game\nUPT Library Undip",
                 detailDescription: "This board game catalog helps students find game information, view board game details, and submit borrowing requests online.",
                 points: [
                     "Search board games by name, category, floor, and status.",
@@ -171,6 +187,7 @@ const TEKS = {
                     "Play board games only in the library area.",
                 ],
                 theme: "welcome",
+                bgImage: "https://images.pexels.com/photos/37983585/pexels-photo-37983585.jpeg",
             },
             {
                 title: "How to Borrow",
@@ -184,6 +201,7 @@ const TEKS = {
                     "Return on the same day according to the planned return time.",
                 ],
                 theme: "procedure",
+                bgImage: "https://images.pexels.com/photos/6333905/pexels-photo-6333905.jpeg?_gl=1*1dwbmw3*_ga*NzkwNzYzNjA5LjE3ODQwMTI3MDg.*_ga_8JE65Q40S6*czE3ODQ2MjAwOTckbzYkZzEkdDE3ODQ2MjAwOTgkajU5JGwwJGgw",
             },
             {
                 title: "Usage Rules",
@@ -197,6 +215,20 @@ const TEKS = {
                     "Use board games properly in the library area.",
                 ],
                 theme: "rules",
+                bgImage: "https://images.pexels.com/photos/33152331/pexels-photo-33152331.jpeg?_gl=1*1wmu6ve*_ga*NzkwNzYzNjA5LjE3ODQwMTI3MDg.*_ga_8JE65Q40S6*czE3ODQ2MTc0OTckbzUkZzEkdDE3ODQ2MTc1NzgkajU5JGwwJGgw",
+            },
+            {
+                title: "Damage / Loss Penalty",
+                description: "Know the consequences if components or the board game are damaged or lost.",
+                detailTitle: "Board Game Damage / Loss Penalty",
+                detailDescription: "Borrowers must replace items according to policy if components or the board game are damaged or lost.",
+                points: [
+                    "Missing component: must be replaced with the matching piece",
+                    "Damaged game: must be replaced with the same unit",
+                    "Lost game: replace with a new unit or pay a fine per policy",
+                ],
+                theme: "sanksi",
+                bgImage: "https://images.pexels.com/photos/8899971/pexels-photo-8899971.jpeg?_gl=1*g5dap3*_ga*NzkwNzYzNjA5LjE3ODQwMTI3MDg.*_ga_8JE65Q40S6*czE3ODQ2MjAwOTckbzYkZzEkdDE3ODQ2MjA5MDgkajU5JGwwJGgw",
             },
         ],
     },
@@ -353,7 +385,7 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
     const t = useTeks();
 
     return (
-        <div style={{ backgroundColor: WARNA.hijauTua }}>
+        <div className="bg-white border-b border-slate-200">
             <div className="max-w-[1440px] mx-auto px-6 md:px-10">
                 {/* Desktop (md+) */}
                 <div className="hidden md:flex items-center justify-between py-3">
@@ -367,23 +399,18 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                         <img
                             src="/images/logo-upt.png"
                             alt="UPT Perpustakaan Undip"
-                            className="h-14 w-14 object-contain"
+                            className="h-28 w-28 object-contain -my-6"
                         />
-                        <div className="leading-tight text-white">
-                            <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
-                            <span className="block text-sm font-semibold">UPT Perpustakaan</span>
-                        </div>
                     </a>
 
-                    {/* Kanan: Bahasa + Sosial Media */}
                     <div className="flex items-center gap-5 shrink-0">
                         <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
-                        <div className="flex items-center gap-3 text-white/80">
+                        <div className="flex items-center gap-3" style={{ color: WARNA.hijauUtama }}>
                             <a
                                 href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 hover:text-white transition-colors"
+                                className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
                             >
                                 <IkonYoutube className="w-5 h-5" />
                                 <span className="text-xs hidden xl:inline">Youtube</span>
@@ -392,7 +419,7 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                                 href="https://www.instagram.com/perpus.undip?igsh=MTh4bXFtd3AzbmRmdQ=="
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 hover:text-white transition-colors"
+                                className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
                             >
                                 <IkonInstagram className="w-5 h-5" />
                                 <span className="text-xs hidden xl:inline">Instagram</span>
@@ -401,7 +428,7 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                                 href="https://www.tiktok.com/@perpus.undip.press?_r=1&_t=ZS-97okoKr4q4S"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 hover:text-white transition-colors"
+                                className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
                             >
                                 <IkonTiktok className="w-5 h-5" />
                                 <span className="text-xs hidden xl:inline">TikTok</span>
@@ -422,12 +449,8 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                             <img
                                 src="/images/logo-upt.png"
                                 alt="UPT Perpustakaan Undip"
-                                className="h-10 w-10 object-contain"
+                                className="h-20 w-20 object-contain -my-4"
                             />
-                            <div className="leading-tight text-white">
-                                <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
-                                <span className="block text-xs font-semibold">UPT Perpustakaan</span>
-                            </div>
                         </a>
                         <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
                     </div>
@@ -458,7 +481,7 @@ function KartuGame({ game, tersedia }) {
             <div className="relative">
                 <span
                     className={`absolute top-3 right-3 z-10 text-[11px] font-semibold px-3 py-1 rounded-full ${
-                        tersedia ? "bg-emerald-600 text-white" : "bg-slate-500 text-white"
+                        tersedia ? "bg-sky-800 text-white" : "bg-slate-500 text-white"
                     }`}
                 >
                     {tersedia ? t.tersedia : t.dipinjam}
@@ -606,9 +629,19 @@ const THEMES = {
             { cx: 450, cy: 380, r: 30, fill: WARNA.hijauTua, opacity: "0.10" },
         ],
     },
+    sanksi: {
+        bg: WARNA.krem,
+        blob: [
+            { path: "M80 60 Q220 10 340 100 Q440 180 380 300 Q320 400 180 380 Q40 360 20 220 Q0 100 80 60 Z", fill: WARNA.emas, opacity: "0.18" },
+            { cx: 420, cy: 350, r: 55, fill: WARNA.hijauUtama, opacity: "0.14" },
+            { cx: 60, cy: 400, r: 35, fill: WARNA.hijauTua, opacity: "0.10" },
+        ],
+    },
 };
 
 function CarouselModal({ item, onClose }) {
+    const [entered, setEntered] = useState(false);
+
     useEffect(() => {
         if (!item) return;
         const handleEscape = (e) => { if (e.key === "Escape") onClose(); };
@@ -620,31 +653,64 @@ function CarouselModal({ item, onClose }) {
         };
     }, [item, onClose]);
 
+    useEffect(() => {
+        if (!item) {
+            setEntered(false);
+            return;
+        }
+        setEntered(false);
+        const raf = requestAnimationFrame(() => setEntered(true));
+        return () => cancelAnimationFrame(raf);
+    }, [item]);
+
     if (!item) return null;
 
     const theme = THEMES[item.theme] || THEMES.welcome;
 
     return createPortal(
         <div className="fixed inset-0 z-50" onClick={onClose}>
-            <div className="absolute inset-0 bg-black/60" />
+            <div
+                className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+                    entered ? "opacity-100" : "opacity-0"
+                }`}
+            />
 
             <div className="relative h-full overflow-y-auto p-4 py-8">
                 <div className="flex min-h-full items-center justify-center">
                     <div
-                        className="relative w-[92vw] max-w-7xl max-h-[88vh] rounded-[2rem] shadow-2xl overflow-y-auto"
+                        className={`relative w-[92vw] max-w-7xl max-h-[88vh] rounded-[2rem] shadow-2xl overflow-y-auto ring-1 ring-white/50 transition-all duration-300 ease-out ${
+                            entered ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-3"
+                        }`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="relative p-8 md:p-10 lg:p-12" style={{ backgroundColor: theme.bg }}>
-                            <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full pointer-events-none">
-                                <rect width="500" height="500" fill={theme.bg} />
-                                {theme.blob.map((b, i) =>
-                                    b.path ? (
-                                        <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
-                                    ) : (
-                                        <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
-                                    )
-                                )}
-                            </svg>
+                        <div
+                            className="relative p-8 md:p-10 lg:p-12 backdrop-blur-2xl"
+                            style={{ backgroundColor: item.bgImage ? undefined : `${theme.bg}CC` }}
+                        >
+                            {item.bgImage && (
+                                <>
+                                    <img
+                                        src={item.bgImage}
+                                        alt=""
+                                        className="absolute inset-0 h-full w-full object-cover"
+                                    />
+                                    <div
+                                        className="absolute inset-0"
+                                        style={{ backgroundColor: "rgba(255,255,255,0.45)" }}
+                                    />
+                                </>
+                            )}
+                            {!item.bgImage && (
+                                <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full pointer-events-none">
+                                    {theme.blob.map((b, i) =>
+                                        b.path ? (
+                                            <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
+                                        ) : (
+                                            <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
+                                        )
+                                    )}
+                                </svg>
+                            )}
 
                             <button
                                 onClick={onClose}
@@ -656,10 +722,16 @@ function CarouselModal({ item, onClose }) {
                             </button>
 
                             <div className="relative z-10">
-                                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: WARNA.hijauTua }}>
+                                <h2
+                                    className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-center"
+                                    style={{ color: WARNA.hijauTua, whiteSpace: "pre-line" }}
+                                >
                                     {item.detailTitle}
                                 </h2>
-                                <p className="text-base md:text-lg text-slate-600 leading-8 mb-6 max-w-4xl">
+                                <p
+                                    className="text-base md:text-lg leading-8 mb-6 max-w-5xl font-medium"
+                                    style={{ color: WARNA.hijauTua }}
+                                >
                                     {item.detailDescription}
                                 </p>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -793,6 +865,7 @@ function AnnouncementCarousel({ onModalChange }) {
 
     const item = items[index];
     const theme = THEMES[item.theme] || THEMES.welcome;
+    const punyaFoto = !!item.bgImage;
 
     return (
         <>
@@ -805,29 +878,85 @@ function AnnouncementCarousel({ onModalChange }) {
                     className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md"
                     onClick={() => { clearAutoplay(); setModalItem(item); }}
                 >
-                    <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
-                        <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
-                            <rect width="500" height="500" fill={theme.bg} />
-                            {theme.blob.map((b, i) =>
-                                b.path ? (
-                                    <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
-                                ) : (
-                                    <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
-                                )
-                            )}
-                        </svg>
+                    <div className="absolute inset-0">
+                        {punyaFoto ? (
+                            <>
+                                <img
+                                    src={item.bgImage}
+                                    alt=""
+                                    className="absolute inset-0 h-full w-full object-cover"
+                                />
+                                {/* shape biru melengkung dengan tepi blur, biar transisi ke foto lembut */}
+                                <svg
+                                    className="absolute inset-0 h-full w-full"
+                                    viewBox="0 0 100 100"
+                                    preserveAspectRatio="none"
+                                >
+                                    <defs>
+                                        <filter id="blurLembut" x="-20%" y="-20%" width="140%" height="140%">
+                                            <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" />
+                                        </filter>
+                                        <linearGradient id="fadeBiru" x1="0" y1="0" x2="1" y2="0">
+                                            <stop offset="0%" stopColor={WARNA.hijauTua} stopOpacity="0.55" />
+                                            <stop offset="70%" stopColor={WARNA.hijauTua} stopOpacity="0.30" />
+                                            <stop offset="100%" stopColor={WARNA.hijauTua} stopOpacity="0" />
+                                        </linearGradient>
+                                    </defs>
+                                    <g filter="url(#blurLembut)">
+                                        <path
+                                            d="M0,0 H60 C70,18 52,32 62,48 C72,64 52,80 62,100 H0 Z"
+                                            fill="url(#fadeBiru)"
+                                        />
+                                        <path
+                                            d="M0,0 H46 C54,20 40,34 48,50 C56,66 42,82 50,100 H0 Z"
+                                            fill={WARNA.hijauUtama}
+                                            opacity="0.22"
+                                        />
+                                    </g>
+                                </svg>
+                            </>
+                        ) : (
+                            <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
+                                <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
+                                    <rect width="500" height="500" fill={theme.bg} />
+                                    {theme.blob.map((b, i) =>
+                                        b.path ? (
+                                            <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
+                                        ) : (
+                                            <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
+                                        )
+                                    )}
+                                </svg>
+                            </div>
+                        )}
                     </div>
 
                     <div ref={contentRef} className="relative flex flex-col h-full px-8 md:px-14 lg:px-20 py-10 md:py-14 pb-16 text-center overflow-y-auto">
                         {item.theme === "welcome" ? (
-                            <div className="flex flex-col items-center justify-center flex-1">
+                            <div
+                                className={`flex flex-col flex-1 ${
+                                    punyaFoto
+                                        ? "items-start justify-center text-left"
+                                        : "items-center justify-center text-center"
+                                }`}
+                            >
                                 <h3
-                                    className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 max-w-4xl"
-                                    style={{ color: WARNA.hijauTua }}
+                                    className={`text-xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 ${
+                                        punyaFoto ? "max-w-[92%] sm:max-w-md md:max-w-lg" : "max-w-4xl"
+                                    }`}
+                                    style={{
+                                        color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua,
+                                        whiteSpace: "pre-line",
+                                    }}
                                 >
                                     {item.title}
                                 </h3>
-                                <p className="text-base md:text-lg lg:text-xl text-slate-600 max-w-3xl leading-relaxed">
+                                <p
+                                    className={`text-base md:text-lg lg:text-xl leading-relaxed ${
+                                        punyaFoto ? "max-w-sm md:max-w-md" : "max-w-3xl"
+                                    }`}
+                                    style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
+                                >
                                     {item.description}
                                 </p>
                             </div>
@@ -836,11 +965,14 @@ function AnnouncementCarousel({ onModalChange }) {
                                 <div className="flex flex-col items-center justify-center shrink-0">
                                     <h3
                                         className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 max-w-4xl"
-                                        style={{ color: WARNA.hijauTua }}
+                                        style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
                                     >
                                         {item.title}
                                     </h3>
-                                    <p className="text-base md:text-lg lg:text-xl text-slate-600 max-w-3xl leading-relaxed">
+                                    <p
+                                        className="text-base md:text-lg lg:text-xl max-w-3xl leading-relaxed"
+                                        style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
+                                    >
                                         {item.description}
                                     </p>
                                 </div>
@@ -886,7 +1018,10 @@ function AnnouncementCarousel({ onModalChange }) {
                             </>
                         )}
                         {item.theme === "welcome" ? (
-                            <span className="absolute bottom-8 left-1/2 -translate-x-1/2 text-sm text-slate-400 flex items-center gap-1.5">
+                            <span
+                                className="absolute bottom-8 left-1/2 -translate-x-1/2 text-sm flex items-center gap-1.5"
+                                style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
+                            >
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
                                     <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
                                     <path d="M12 6v6l4 2" />
@@ -894,7 +1029,10 @@ function AnnouncementCarousel({ onModalChange }) {
                                 Klik untuk melihat detail
                             </span>
                         ) : (
-                            <span className="mt-6 mb-2 mx-auto text-sm text-slate-400 flex items-center gap-1.5">
+                            <span
+                                className="mt-6 mb-2 mx-auto text-sm flex items-center gap-1.5"
+                                style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
+                            >
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
                                     <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
                                     <path d="M12 6v6l4 2" />
@@ -933,7 +1071,9 @@ function AnnouncementCarousel({ onModalChange }) {
                                         className="h-1.5 rounded-full transition-all duration-300"
                                         style={{
                                             width: i === index ? 24 : 6,
-                                            backgroundColor: i === index ? WARNA.hijauUtama : "rgba(0,0,0,0.15)",
+                                            backgroundColor: i === index
+                                                ? (punyaFoto ? "#FFFFFF" : WARNA.hijauUtama)
+                                                : (punyaFoto ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
                                         }}
                                     />
                                 ))}
@@ -988,10 +1128,10 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
     const dipinjam = filtered.filter((g) => g.available_copies <= 0);
 
     const kelasSelect =
-        "rounded-md border border-slate-200 text-xs sm:text-sm px-2.5 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2F6F62]/30";
+        "rounded-md border border-slate-200 text-xs sm:text-sm px-2.5 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1B6FA8]/30";
 
     return (
-        <div className="min-h-screen bg-[#FAF7F2] text-[15px]">
+        <div className="min-h-screen bg-white text-[15px]">
             <TopNavbar
                 pencarian={pencarian}
                 setPencarian={setPencarian}
@@ -1012,7 +1152,7 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                                 value={pencarian}
                                 onChange={(e) => setPencarian(e.target.value)}
                                 placeholder={t.cariPlaceholder}
-                                className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition-colors"
+                                className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-none transition-colors"
                             />
                         </div>
 
@@ -1058,7 +1198,7 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                             value={pencarian}
                             onChange={(e) => setPencarian(e.target.value)}
                             placeholder={t.cariPlaceholder}
-                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition-colors"
+                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-none transition-colors"
                         />
 
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -1133,10 +1273,10 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
             {/* Floating Pinjam button */}
             <Link
                 href={modalCarouselOpen ? undefined : "/peminjaman/create"}
-                className={`fixed bottom-4 left-4 right-4 md:bottom-8 md:left-auto md:right-8 md:w-auto z-50 inline-flex items-center justify-center gap-2 px-6 py-3.5 md:py-3 font-semibold text-white bg-emerald-700 rounded-2xl md:rounded-full shadow-xl shadow-emerald-900/25 transition-all duration-200 ${
+                className={`fixed bottom-4 left-4 right-4 md:bottom-8 md:left-auto md:right-8 md:w-auto z-50 inline-flex items-center justify-center gap-2 px-6 py-3.5 md:py-3 font-semibold text-white bg-sky-900 rounded-2xl md:rounded-full shadow-xl shadow-sky-900/25 transition-all duration-200 ${
                     modalCarouselOpen
                         ? "pointer-events-none opacity-60"
-                        : "hover:bg-emerald-800 hover:-translate-y-0.5 hover:shadow-emerald-900/40"
+                        : "hover:bg-sky-950 hover:-translate-y-0.5 hover:shadow-sky-900/40"
                 }`}
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
