@@ -4,6 +4,7 @@ import { Head, Link, router } from "@inertiajs/react";
 import LanguageToggle from "../Components/LanguageToggle";
 import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
+import { asset } from "../lib/asset";
 
 /* Palet warna UPT Perpustakaan Undip */
 const WARNA = {
@@ -360,12 +361,12 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                     {/* Kiri: Logo + Nama Institusi */}
                     <Link href={route("katalog")} className="flex items-center gap-3 shrink-0">
                         <img
-                            src="/assets/logo_undip.png"
+                            src={asset("/assets/logo_undip.png")}
                             alt="Universitas Diponegoro"
                             className="h-14 w-14 object-contain"
                         />
                         <img
-                            src="/images/logo-upt.png"
+                            src={asset("/images/logo-upt.png")}
                             alt="UPT Perpustakaan Undip"
                             className="h-14 w-14 object-contain"
                         />
@@ -415,12 +416,12 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                     <div className="flex items-center justify-between py-3">
                         <Link href={route("katalog")} className="flex items-center gap-2">
                             <img
-                                src="/assets/logo_undip.png"
+                                src={asset("/assets/logo_undip.png")}
                                 alt="Universitas Diponegoro"
                                 className="h-16 w-16 object-contain"
                             />
                             <img
-                                src="/images/logo-upt.png"
+                                src={asset("/images/logo-upt.png")}
                                 alt="UPT Perpustakaan Undip"
                                 className="h-10 w-10 object-contain"
                             />
@@ -1132,7 +1133,7 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
 
             {/* Floating Pinjam button */}
             <Link
-                href={modalCarouselOpen ? undefined : "/peminjaman/create"}
+                href={modalCarouselOpen ? undefined : route("peminjaman.create")}
                 className={`fixed bottom-4 left-4 right-4 md:bottom-8 md:left-auto md:right-8 md:w-auto z-50 inline-flex items-center justify-center gap-2 px-6 py-3.5 md:py-3 font-semibold text-white bg-emerald-700 rounded-2xl md:rounded-full shadow-xl shadow-emerald-900/25 transition-all duration-200 ${
                     modalCarouselOpen
                         ? "pointer-events-none opacity-60"

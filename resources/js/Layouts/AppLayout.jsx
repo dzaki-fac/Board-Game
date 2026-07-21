@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Link, usePage } from "@inertiajs/react";
+import { asset } from "../lib/asset";
 
 function Svg({ className, children }) {
     return (
@@ -163,7 +164,7 @@ export default function Layout({ children }) {
                 {sidebarExpanded && (
                     <div className="px-6 py-6 border-b border-[#255A4F] flex items-center gap-3 shrink-0">
                         <img
-                            src="/images/logo-upt.png"
+                            src={asset("/images/logo-upt.png")}
                             alt="Logo"
                             className="w-20 h-20 object-contain rounded shrink-0"
                             onError={(e) => {

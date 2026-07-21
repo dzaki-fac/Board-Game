@@ -4,6 +4,7 @@ import LanguageToggle from "../Components/LanguageToggle";
 import Footer from "../Components/Footer";
 import ReviewSection from "../Components/ReviewSection";
 import RatingSummary from "../Components/RatingSummary";
+import { asset } from "../lib/asset";
 
 const WARNA = {
     hijauTua: "#173C33",
@@ -299,12 +300,12 @@ function TopNavbar({ bahasa, setBahasa }) {
                     {/* Kiri: Logo + Nama Institusi */}
                     <Link href={route("katalog")} className="flex items-center gap-3 shrink-0">
                         <img
-                            src="/assets/logo_undip.png"
+                            src={asset("/assets/logo_undip.png")}
                             alt="Universitas Diponegoro"
                             className="h-14 w-14 object-contain"
                         />
                         <img
-                            src="/images/logo-upt.png"
+                            src={asset("/images/logo-upt.png")}
                             alt="UPT Perpustakaan Undip"
                             className="h-14 w-14 object-contain"
                         />
@@ -339,12 +340,12 @@ function TopNavbar({ bahasa, setBahasa }) {
                     <div className="flex items-center justify-between py-3">
                         <Link href={route("katalog")} className="flex items-center gap-2">
                             <img
-                                src="/assets/logo_undip.png"
+                                src={asset("/assets/logo_undip.png")}
                                 alt="Universitas Diponegoro"
                                 className="h-16 w-16 object-contain"
                             />
                             <img
-                                src="/images/logo-upt.png"
+                                src={asset("/images/logo-upt.png")}
                                 alt="UPT Perpustakaan Undip"
                                 className="h-10 w-10 object-contain"
                             />

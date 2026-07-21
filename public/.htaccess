@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # Uncomment and set RewriteBase when deploying to a subfolder
+    # (e.g. http://IP_SERVER/projek1/):
+    # RewriteBase /projek1/
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
