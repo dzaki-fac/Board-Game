@@ -1,0 +1,107 @@
+import LanguageToggle from "./LanguageToggle";
+import { WARNA } from "./theme";
+
+/* Ikon media sosial — bentuk generik/monoline, bukan reproduksi logo resmi. */
+function IkonYoutube(props) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+            <rect x="2.5" y="6" width="19" height="12" rx="4" />
+            <path d="M10.5 9.5v5l4.5-2.5-4.5-2.5Z" fill="currentColor" stroke="none" />
+        </svg>
+    );
+}
+function IkonInstagram(props) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+            <rect x="3" y="3" width="18" height="18" rx="5" />
+            <circle cx="12" cy="12" r="4" />
+            <circle cx="17" cy="7" r="0.8" fill="currentColor" stroke="none" />
+        </svg>
+    );
+}
+function IkonTiktok(props) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+            <path d="M13 3v11.2a3 3 0 1 1-2.2-2.9" />
+            <path d="M13 3c.4 2.2 2 3.8 4.2 4.1" />
+        </svg>
+    );
+}
+
+export default function TopNavbar({ bahasa, setBahasa }) {
+    return (
+        <div className="bg-white border-b border-slate-200">
+            <div className="max-w-[1440px] mx-auto px-6 md:px-10">
+                {/* Desktop (md+) */}
+                <div className="hidden md:flex items-center justify-between py-2">
+                    {/* Kiri: Logo + Nama Institusi */}
+                    <a href="/katalog" className="flex items-center gap-4 shrink-0">
+                        <img
+                            src="/assets/logo_undip.png"
+                            alt="Universitas Diponegoro"
+                            className="h-11 w-auto object-contain"
+                        />
+                        {/* Jika logo UPT punya banyak whitespace bawaan, sesuaikan h-11 ini menjadi h-12 atau h-14 */}
+                        <img
+                            src="/images/logo-upt.png"
+                            alt="UPT Perpustakaan Undip"
+                            className="h-10 w-auto object-contain"
+                        />
+                    </a>
+
+                    <div className="flex items-center gap-5 shrink-0">
+                        <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
+                        <div className="flex items-center gap-3" style={{ color: WARNA.hijauUtama }}>
+                            <a
+                                href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
+                            >
+                                <IkonYoutube className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">Youtube</span>
+                            </a>
+                            <a
+                                href="https://www.instagram.com/perpus.undip?igsh=MTh4bXFtd3AzbmRmdQ=="
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
+                            >
+                                <IkonInstagram className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">Instagram</span>
+                            </a>
+                            <a
+                                href="https://www.tiktok.com/@perpus.undip.press?_r=1&_t=ZS-97okoKr4q4S"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
+                            >
+                                <IkonTiktok className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">TikTok</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Mobile (< md) */}
+                <div className="md:hidden">
+                    <div className="flex items-center justify-between py-2">
+                        <a href="/katalog" className="flex items-center gap-3">
+                            <img
+                                src="/assets/logo_undip.png"
+                                alt="Universitas Diponegoro"
+                                className="h-9 w-auto object-contain"
+                            />
+                            <img
+                                src="/images/logo-upt.png"
+                                alt="UPT Perpustakaan Undip"
+                                className="h-8 w-auto object-contain"
+                            />
+                        </a>
+                        <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
