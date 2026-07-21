@@ -10,7 +10,7 @@ export default function Login() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        post("/admin/login");
+        post(route("admin.login.store"));
     }
 
     return (

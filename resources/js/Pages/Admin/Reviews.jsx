@@ -68,7 +68,7 @@ export default function Reviews({ reviews, filters }) {
             sort: overrides.sort ?? sort,
             page: overrides.page ?? undefined,
         }
-        router.get("/admin/reviews", params, { preserveState: true, replace: true })
+        router.get(route("admin.reviews.index"), params, { preserveState: true, replace: true })
     }, [search, rating, dateFilter, dateFrom, dateTo, sort])
 
     const handleSearch = (e) => {
@@ -80,7 +80,7 @@ export default function Reviews({ reviews, filters }) {
     const handleDelete = (reviewId) => {
         if (deleting) return
         setDeleting(reviewId)
-        router.delete(`/admin/reviews/${reviewId}`, {
+        router.delete(route("admin.reviews.destroy", reviewId), {
             preserveScroll: true,
             onSuccess: () => {
                 setDeleting(null)

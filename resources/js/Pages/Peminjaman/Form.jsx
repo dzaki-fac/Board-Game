@@ -110,7 +110,7 @@ export default function Form({ boardgames = [] }) {
             nomor_identitas: getAnggotaNomorIdentitas(a),
         }));
 
-        router.post("/peminjaman", {
+        router.post(route("peminjaman.store"), {
             boardgame_id: data.boardgame_id,
             tanggal_pinjam: data.tanggal_pinjam,
             jam_pinjam: data.jam_pinjam,
@@ -122,7 +122,7 @@ export default function Form({ boardgames = [] }) {
     return (
         <div className="max-w-xl mx-auto p-4">
             <Link
-                href="/katalog"
+                href={route("katalog")}
                 className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-4"
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">

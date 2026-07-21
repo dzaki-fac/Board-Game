@@ -34,7 +34,7 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
 
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      router.get("/admin/permohonan", { search, status: statusFilter, lantai: lantaiFilter }, {
+      router.get(route("admin.permohonan.index"), { search, status: statusFilter, lantai: lantaiFilter }, {
         preserveState: true,
         preserveScroll: true,
         replace: true,
@@ -44,11 +44,11 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
   }, [search, statusFilter, lantaiFilter]);
 
   function approve(id) {
-    router.patch(`/admin/permohonan/${id}/approve`, {}, { preserveScroll: true });
+    router.patch(route("admin.permohonan.approve", id), {}, { preserveScroll: true });
   }
 
   function reject(id) {
-    router.patch(`/admin/permohonan/${id}/reject`, {}, { preserveScroll: true });
+    router.patch(route("admin.permohonan.reject", id), {}, { preserveScroll: true });
   }
 
   return (

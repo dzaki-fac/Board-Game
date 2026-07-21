@@ -142,7 +142,7 @@ export default function Index({ loans, stats }) {
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
                               <Link
-                                href={`/admin/loans/${loan.id}`}
+                                href={route("loans.show", loan.id)}
                                 className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-[#2F6F62]"
                                 title="Detail"
                               >

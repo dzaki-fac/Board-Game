@@ -109,14 +109,14 @@ function PanelLeftIcon({ className }) {
 }
 
 const navItems = [
-    { label: "Beranda", href: "/admin/rules", icon: HouseIcon },
-    { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
-    { label: "Review", href: "/admin/reviews", icon: StarIcon },
-    { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
-    { label: "Peminjaman", href: "/admin/loans", icon: HandHelpingIcon },
-    { label: "Pengembalian", href: "/admin/returns", icon: RotateCwIcon },
-    { label: "Riwayat", href: "/admin/history", icon: HistoryIcon },
-    { label: "Akun", href: "/admin/accounts", icon: UserRoundIcon },
+    { label: "Beranda", href: route("admin.rules"), icon: HouseIcon },
+    { label: "Board Game", href: route("games.index"), icon: Dice5Icon },
+    { label: "Review", href: route("admin.reviews.index"), icon: StarIcon },
+    { label: "Permohonan", href: route("admin.permohonan.index"), icon: ClipboardListIcon },
+    { label: "Peminjaman", href: route("loans.index"), icon: HandHelpingIcon },
+    { label: "Pengembalian", href: route("returns.create"), icon: RotateCwIcon },
+    { label: "Riwayat", href: route("history.index"), icon: HistoryIcon },
+    { label: "Akun", href: route("admin.accounts.index"), icon: UserRoundIcon },
 ];
 
 export default function Layout({ children }) {
@@ -187,8 +187,8 @@ export default function Layout({ children }) {
                         const Icon = item.icon;
                         const isActive =
                             typeof window !== "undefined" &&
-                            (item.href === "/admin"
-                                ? window.location.pathname === "/admin"
+                            (item.href === route("admin.dashboard")
+                                ? window.location.pathname === route("admin.dashboard")
                                 : window.location.pathname.startsWith(
                                       item.href,
                                   ));
@@ -227,7 +227,7 @@ export default function Layout({ children }) {
                     onMouseLeave={hideTooltip}
                 >
                     <Link
-                        href="/admin/logout"
+                        href={route("admin.logout")}
                         method="post"
                         as="button"
                         className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors ${

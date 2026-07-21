@@ -32,7 +32,7 @@ export default function Konfirmasi({ permohonan, gagal, error, peminjams, boardg
                     </div>
 
                     <Link
-                        href="/peminjaman/create"
+                        href={route("peminjaman.create")}
                         className="inline-block w-full rounded-full py-3 text-base font-semibold text-white text-center transition-colors"
                         style={{ backgroundColor: "#2F6F62" }}
                         onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#255A4F")}
@@ -116,7 +116,7 @@ export default function Konfirmasi({ permohonan, gagal, error, peminjams, boardg
                 </div>
 
                 <Link
-                    href="/katalog"
+                    href={route("katalog")}
                     className="inline-block w-full rounded-full py-3 text-base font-semibold text-white text-center transition-colors"
                     style={{ backgroundColor: "#2F6F62" }}
                     onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#255A4F")}

@@ -73,7 +73,7 @@ export default function Create({ loans }) {
 
     function handleSubmit(e) {
         e.preventDefault()
-        post("/admin/returns")
+        post(route("returns.store"))
     }
 
     function isProcessing() {
@@ -123,7 +123,7 @@ export default function Create({ loans }) {
                         </p>
                     </div>
                     <Link
-                        href="/admin/loans"
+                        href={route("loans.index")}
                         className="btn btn-ghost btn-sm gap-2 text-gray-600"
                     >
                         <svg
@@ -384,7 +384,7 @@ export default function Create({ loans }) {
                                     {/* Form Buttons */}
                                     <div className="flex items-center gap-3 pt-2">
                                         <Link
-                                            href="/admin/loans"
+                                            href={route("loans.index")}
                                             className="btn btn-ghost"
                                         >
                                             Batal

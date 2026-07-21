@@ -26,7 +26,7 @@ export default function ReviewSection({ boardgameId, reviews = { data: [] }, avg
         if (submitting) return;
         setSubmitting(true);
         router.post(
-            `/katalog/${boardgameId}/reviews`,
+            route("katalog.reviews.store", boardgameId),
             { rating, comment },
             {
                 preserveScroll: true,
@@ -42,7 +42,7 @@ export default function ReviewSection({ boardgameId, reviews = { data: [] }, avg
 
     const handleFilterClick = (value) => {
         router.get(
-            `/katalog/${boardgameId}`,
+            route("katalog.show", boardgameId),
             { review_rating: value, review_page: 1 },
             { preserveScroll: true }
         );

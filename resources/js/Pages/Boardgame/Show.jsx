@@ -15,7 +15,7 @@ export default function Show({ boardgame }) {
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-slate-900">Detail Board Game</h1>
-        <Link href="/admin/games" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
+        <Link href={route("games.index")} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           Kembali
         </Link>
@@ -179,10 +179,10 @@ export default function Show({ boardgame }) {
 
           {/* Actions */}
           <div className="flex items-center gap-3 pt-3 border-t border-slate-200">
-            <Link href={`/admin/games/${boardgame.id}/edit`} className="btn bg-amber-500 hover:bg-amber-600 text-white border-none btn-sm">
+            <Link href={route("games.edit", boardgame.id)} className="btn bg-amber-500 hover:bg-amber-600 text-white border-none btn-sm">
               Ubah
             </Link>
-            <Link href="/admin/games" className="btn btn-ghost btn-sm">Kembali</Link>
+            <Link href={route("games.index")} className="btn btn-ghost btn-sm">Kembali</Link>
           </div>
         </div>
       </div>

@@ -297,7 +297,7 @@ function TopNavbar({ bahasa, setBahasa }) {
                 {/* Desktop (md+) */}
                 <div className="hidden md:flex items-center justify-between py-3">
                     {/* Kiri: Logo + Nama Institusi */}
-                    <a href="/katalog" className="flex items-center gap-3 shrink-0">
+                    <Link href={route("katalog")} className="flex items-center gap-3 shrink-0">
                         <img
                             src="/assets/logo_undip.png"
                             alt="Universitas Diponegoro"
@@ -312,7 +312,7 @@ function TopNavbar({ bahasa, setBahasa }) {
                             <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
                             <span className="block text-sm font-semibold">UPT Perpustakaan</span>
                         </div>
-                    </a>
+                    </Link>
 
                     {/* Kanan: Bahasa + Sosial Media */}
                     <div className="flex items-center gap-5 shrink-0">
@@ -337,7 +337,7 @@ function TopNavbar({ bahasa, setBahasa }) {
                 {/* Mobile (< md) */}
                 <div className="md:hidden">
                     <div className="flex items-center justify-between py-3">
-                        <a href="/katalog" className="flex items-center gap-2">
+                        <Link href={route("katalog")} className="flex items-center gap-2">
                             <img
                                 src="/assets/logo_undip.png"
                                 alt="Universitas Diponegoro"
@@ -352,7 +352,7 @@ function TopNavbar({ bahasa, setBahasa }) {
                                 <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
                                 <span className="block text-xs font-semibold">UPT Perpustakaan</span>
                             </div>
-                        </a>
+                        </Link>
                         <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
                     </div>
                 </div>
@@ -491,7 +491,7 @@ function TautanEksternal({ link, warna, label, ikon: Ikon }) {
 function KartuGameSerupa({ item }) {
     const [warnaKartu] = warnaKategori(item.kategori);
     return (
-        <Link href={`/katalog/${item.id}`} className="shrink-0 w-44 group">
+        <Link href={route("katalog.show", item.id)} className="shrink-0 w-44 group">
             <div className="w-44 h-44 rounded-2xl overflow-hidden flex items-center justify-center mb-2.5 border border-slate-100 p-4 bg-white">
                 {item.link_foto?.[0] ? (
                     <img src={item.link_foto[0]} alt={item.nama} className="max-w-full max-h-full object-contain" />
@@ -545,7 +545,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
 
             <div className="max-w-[1300px] mx-auto px-4 md:px-6 py-6">
                 <Link
-                    href="/katalog"
+                    href={route("katalog")}
                     className="inline-flex items-center gap-2 text-sm font-medium text-emerald-700 hover:text-emerald-900 hover:bg-emerald-50 rounded-full px-4 py-2 transition-colors mb-4"
                 >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
@@ -655,7 +655,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                             <div className={daftarKomponen.length > 0 ? "" : "mt-auto"}>
                                 {tersedia ? (
                                     <Link
-                                        href={`/peminjaman/create?boardgame_id=${game.id}`}
+                                        href={route("peminjaman.create", { boardgame_id: game.id })}
                                         className="block w-full rounded-full py-3 text-base font-semibold text-white text-center transition-colors"
                                         style={{ backgroundColor: WARNA.hijauUtama }}
                                         onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}

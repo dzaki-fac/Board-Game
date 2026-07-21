@@ -80,7 +80,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
 
     function handleCreate(e) {
         e.preventDefault();
-        create.post("/admin/accounts", {
+        create.post(route("admin.accounts.store"), {
             preserveScroll: true,
             onSuccess: () => closeCreateModal(),
         });
@@ -88,7 +88,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
 
     function handleUpdate(e) {
         e.preventDefault();
-        edit.put(`/admin/accounts/${editingAdmin.id}`, {
+        edit.put(route("admin.accounts.update", editingAdmin.id), {
             preserveScroll: true,
             onSuccess: () => closeEditModal(),
         });
@@ -96,7 +96,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
 
     function handleDelete() {
         if (!deleteTarget) return;
-        router.delete(`/admin/accounts/${deleteTarget.id}`, {
+        router.delete(route("admin.accounts.destroy", deleteTarget.id), {
             preserveScroll: true,
             onSuccess: () => setDeleteTarget(null),
             onError: () => setDeleteTarget(null),

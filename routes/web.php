@@ -23,11 +23,11 @@ Route::post('/katalog/{boardGame}/reviews', [ReviewController::class, 'store'])-
 Route::prefix('admin')->group(function () {
     Route::middleware('guest:admin')->group(function () {
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('admin.login');
-        Route::post('login', [AuthenticatedSessionController::class, 'store']);
+        Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('admin.login.store');
     });
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/', [BoardGameController::class, 'index']);
+        Route::get('/', [BoardGameController::class, 'index'])->name('admin.dashboard');
         
         Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
 

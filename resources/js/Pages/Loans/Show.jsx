@@ -43,8 +43,8 @@ export default function Show({ loan }) {
                     <Link
                         href={
                             loan.status === "borrowed"
-                                ? "/admin/loans"
-                                : "/admin/history"
+                                ? route("loans.index")
+                                : route("history.index")
                         }
                         className="btn btn-ghost btn-sm gap-2 text-gray-600"
                     >
@@ -223,13 +223,13 @@ export default function Show({ loan }) {
                                 </h3>
                                 <div className="space-y-3">
                                     <Link
-                                        href="/admin/history"
+                                        href={route("history.index")}
                                         className="btn btn-outline btn-sm w-full"
                                     >
                                         Kembali ke Riwayat
                                     </Link>
                                     <Link
-                                        href="/admin/loans"
+                                        href={route("loans.index")}
                                         className="btn btn-outline btn-sm w-full"
                                     >
                                         Kembali ke Peminjaman

@@ -358,7 +358,7 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                 {/* Desktop (md+) */}
                 <div className="hidden md:flex items-center justify-between py-3">
                     {/* Kiri: Logo + Nama Institusi */}
-                    <a href="/katalog" className="flex items-center gap-3 shrink-0">
+                    <Link href={route("katalog")} className="flex items-center gap-3 shrink-0">
                         <img
                             src="/assets/logo_undip.png"
                             alt="Universitas Diponegoro"
@@ -373,7 +373,7 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                             <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
                             <span className="block text-sm font-semibold">UPT Perpustakaan</span>
                         </div>
-                    </a>
+                    </Link>
 
                     {/* Kanan: Bahasa + Sosial Media */}
                     <div className="flex items-center gap-5 shrink-0">
@@ -413,7 +413,7 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                 {/* Mobile (< md) */}
                 <div className="md:hidden">
                     <div className="flex items-center justify-between py-3">
-                        <a href="/katalog" className="flex items-center gap-2">
+                        <Link href={route("katalog")} className="flex items-center gap-2">
                             <img
                                 src="/assets/logo_undip.png"
                                 alt="Universitas Diponegoro"
@@ -428,7 +428,7 @@ function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
                                 <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
                                 <span className="block text-xs font-semibold">UPT Perpustakaan</span>
                             </div>
-                        </a>
+                        </Link>
                         <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
                     </div>
                 </div>
@@ -447,8 +447,8 @@ function KartuGame({ game, tersedia }) {
         <div
             role="button"
             tabIndex={0}
-            onClick={() => router.visit(`/katalog/${game.id}`)}
-            onKeyDown={(e) => { if (e.key === 'Enter') router.visit(`/katalog/${game.id}`) }}
+            onClick={() => router.visit(route("katalog.show", game.id))}
+            onKeyDown={(e) => { if (e.key === 'Enter') router.visit(route("katalog.show", game.id)) }}
             className={`group h-full flex flex-col rounded-2xl border transition-all duration-300 overflow-hidden cursor-pointer ${
                 tersedia
                     ? "bg-white border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5"
@@ -545,7 +545,7 @@ function KartuGame({ game, tersedia }) {
                     {tersedia ? (
                         <div onClick={(e) => e.stopPropagation()}>
                             <Link
-                                href={`/katalog/${game.id}`}
+                                href={route("katalog.show", game.id)}
                                 className="block w-full rounded-full py-2 text-sm font-semibold text-white text-center transition-colors"
                                 style={{ backgroundColor: WARNA.hijauUtama }}
                                 onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
