@@ -20,6 +20,7 @@ createInertiaApp({
     return page
   },
   setup({ el, App, props }) {
+    window.__assetBase = props.initialPage.props.assetBase
     createRoot(el).render(<App {...props} />)
   },
 })

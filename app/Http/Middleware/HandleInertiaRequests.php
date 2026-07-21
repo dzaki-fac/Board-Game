@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'flash' => fn () => $request->session()->get('flash'),
             'error' => fn () => $request->session()->get('error'),
+            'assetBase' => fn () => rtrim(parse_url(config('app.url'), PHP_URL_PATH) ?? '', '/') . '/',
         ];
     }
 }
