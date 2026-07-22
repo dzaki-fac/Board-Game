@@ -363,7 +363,7 @@ function CarouselModal({ item, onClose }) {
 
                             <button
                                 onClick={onClose}
-                                className="absolute top-3 right-3 md:top-6 md:right-6 z-10 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors"
+                                className="absolute top-3 right-3 md:top-6 md:right-6 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors touch-manipulation"
                             >
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 md:w-5 md:h-5">
                                     <path d="M18 6 6 18" /><path d="m6 6 12 12" />
@@ -395,7 +395,7 @@ function CarouselModal({ item, onClose }) {
                                 </div>
                                 <button
                                     onClick={onClose}
-                                    className="mt-5 md:mt-8 w-full rounded-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white transition-colors"
+                                    className="mt-5 md:mt-8 w-full rounded-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white transition-colors touch-manipulation"
                                     style={{ backgroundColor: WARNA.hijauUtama }}
                                     onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
                                     onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
@@ -569,21 +569,25 @@ function AnnouncementCarousel({ onModalChange }) {
         startAutoplay();
     }, [startAutoplay]);
 
-    const handlePointerDown = useCallback((e) => {
-        pointerStartX.current = e.clientX;
+    // FIX (swipe gak jalan): Pointer Events kadang tidak konsisten di
+    // berbagai browser/WebView. Diganti ke Touch Events (HP) + Mouse Events
+    // (desktop) — pendekatan klasik yang didukung semua browser tanpa
+    // pengecualian.
+    const startDrag = useCallback((clientX) => {
+        pointerStartX.current = clientX;
         pointerDeltaX.current = 0;
         isDragging.current = false;
     }, []);
 
-    const handlePointerMove = useCallback((e) => {
+    const moveDrag = useCallback((clientX) => {
         if (pointerStartX.current === null) return;
-        pointerDeltaX.current = e.clientX - pointerStartX.current;
+        pointerDeltaX.current = clientX - pointerStartX.current;
         if (Math.abs(pointerDeltaX.current) > 10) {
             isDragging.current = true;
         }
     }, []);
 
-    const handlePointerUp = useCallback(() => {
+    const endDrag = useCallback(() => {
         const threshold = 50;
         if (pointerDeltaX.current > threshold) {
             geser(-1);
@@ -593,6 +597,44 @@ function AnnouncementCarousel({ onModalChange }) {
         pointerStartX.current = null;
         pointerDeltaX.current = 0;
     }, [geser]);
+
+    const resetDrag = useCallback(() => {
+        pointerStartX.current = null;
+        pointerDeltaX.current = 0;
+        isDragging.current = false;
+    }, []);
+
+    const handleTouchStart = useCallback((e) => {
+        startDrag(e.touches[0].clientX);
+    }, [startDrag]);
+
+    const handleTouchMove = useCallback((e) => {
+        moveDrag(e.touches[0].clientX);
+    }, [moveDrag]);
+
+    const handleTouchEnd = useCallback(() => {
+        endDrag();
+    }, [endDrag]);
+
+    // FIX (drag mouse gak kedeteksi): kalau mousemove/mouseup cuma didengar
+    // di div carousel-nya, drag yang agak cepat bikin kursor keluar dari
+    // area itu duluan sebelum tombol mouse dilepas — gesture-nya jadi ke-cancel
+    // sebelum sempat dianggap swipe. Solusinya: begitu mouse ditekan, dengarkan
+    // mousemove & mouseup di `window`, jadi drag tetap terdeteksi walau
+    // kursor sempat keluar dari area carousel.
+    const handleMouseDown = useCallback((e) => {
+        startDrag(e.clientX);
+
+        const onWindowMouseMove = (ev) => moveDrag(ev.clientX);
+        const onWindowMouseUp = () => {
+            endDrag();
+            window.removeEventListener("mousemove", onWindowMouseMove);
+            window.removeEventListener("mouseup", onWindowMouseUp);
+        };
+
+        window.addEventListener("mousemove", onWindowMouseMove);
+        window.addEventListener("mouseup", onWindowMouseUp);
+    }, [startDrag, moveDrag, endDrag]);
 
     // Render isi satu slide (background + teks). Dipakai untuk layer bawah
     // (current) maupun layer atas (incoming) supaya tidak duplikasi JSX.
@@ -607,7 +649,9 @@ function AnnouncementCarousel({ onModalChange }) {
                         <img
                             src={slideItem.bgImage}
                             alt=""
-                            className="absolute inset-0 h-full w-full object-cover"
+                            draggable={false}
+                            onDragStart={(e) => e.preventDefault()}
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
                         />
                         {/* FIX (jank di HP): dulu pakai <feGaussianBlur> di sini — filter SVG
                             itu berat untuk di-render ulang tiap frame crossfade, terutama di
@@ -692,9 +736,6 @@ function AnnouncementCarousel({ onModalChange }) {
                             )}
                         </>
                     )}
-                    {/* "Klik untuk melihat detail" selalu absolute di bawah di mobile,
-                        supaya tidak menyatu/berdempetan dengan judul & deskripsi di
-                        ruang slide yang pendek. Di desktop tetap mengikuti flow lama. */}
                     <span
                         className={`absolute bottom-7 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
                             slideItem.theme === "welcome" ? "md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
@@ -718,24 +759,23 @@ function AnnouncementCarousel({ onModalChange }) {
 
     return (
         <>
-            {/* FIX (tinggi carousel mobile): dulu height selalu 'calc(100dvh - 92px)'
-                di semua ukuran layar, jadi di HP carousel makan hampir 1 layar penuh.
-                Sekarang di mobile tingginya ~25% viewport (dibatasi minimum 200px biar
-                teks tidak kepotong), dan baru full-height mulai breakpoint md ke atas. */}
             <div
                 ref={wrapperRef}
                 className="w-full relative z-10 h-[36vh] min-h-[270px] md:h-[calc(100dvh-92px)] md:min-h-[calc(100dvh-92px)]"
             >
                 <div
                     className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md select-none touch-pan-y"
+                    style={{ touchAction: "pan-y" }}
                     onClick={() => {
                         if (isDragging.current) return;
                         clearAutoplay();
                         setModalItem(activeItem);
                     }}
-                    onPointerDown={handlePointerDown}
-                    onPointerMove={handlePointerMove}
-                    onPointerUp={handlePointerUp}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onTouchCancel={resetDrag}
+                    onMouseDown={handleMouseDown}
                 >
                     {renderSlide(items[current], bottomScrollRef)}
 
@@ -745,8 +785,6 @@ function AnnouncementCarousel({ onModalChange }) {
                             style={{
                                 opacity: incomingShown ? 1 : 0,
                                 transitionDuration: `${TRANSITION_MS}ms`,
-                                // FIX (jank di HP): paksa layer ini di-composite di GPU
-                                // supaya crossfade tidak nge-block main thread.
                                 transform: "translateZ(0)",
                                 backfaceVisibility: "hidden",
                             }}
