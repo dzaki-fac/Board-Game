@@ -27,6 +27,31 @@ function IkonTiktok(props) {
         </svg>
     );
 }
+function IkonDigilib(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      {/* Lingkaran luar */}
+      <circle cx="12" cy="12" r="8" />
+
+      {/* Garis vertikal */}
+      <path d="M12 4C10 6 9 9 9 12s1 6 3 8" />
+      <path d="M12 4c2 2 3 5 3 8s-1 6-3 8" />
+
+      {/* Garis horizontal */}
+      <path d="M4 12h16" />
+      <path d="M6 8h12" />
+      <path d="M6 16h12" />
+    </svg>
+  );
+}
 
 export default function TopNavbar({ bahasa, setBahasa }) {
     return (
@@ -52,6 +77,15 @@ export default function TopNavbar({ bahasa, setBahasa }) {
                     <div className="flex items-center gap-5 shrink-0">
                         <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
                         <div className="flex items-center gap-3" style={{ color: WARNA.hijauUtama }}>
+                            <a
+                                href="https://digilib.undip.ac.id/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
+                            >
+                                <IkonDigilib className="w-5 h-5" />
+                                <span className="text-xs hidden xl:inline">Digilib</span>
+                            </a>
                             <a
                                 href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq"
                                 target="_blank"

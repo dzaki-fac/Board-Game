@@ -138,9 +138,9 @@ function KartuGame({ game, tersedia }) {
                 </span>
 
                 <div
-                className="relative aspect-square flex items-center justify-center"
-                style={{ backgroundColor: bg }}
-            >
+                    className={`relative aspect-square flex items-center justify-center ${!tersedia ? "grayscale" : ""}`}
+                    style={{ backgroundColor: bg }}
+                >
                 {game.link_foto?.[0] ? (
                     <>
                         <img
