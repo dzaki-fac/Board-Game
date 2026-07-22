@@ -383,16 +383,18 @@ function CarouselModal({ item, onClose }) {
                                 >
                                     {item.detailDescription}
                                 </p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
-                                    {item.points.map((point, i) => (
-                                        <div key={i} className="flex items-start gap-3 md:gap-4 p-3 md:p-6 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
-                                            <span className="shrink-0 mt-0.5 w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
-                                                {i + 1}
-                                            </span>
-                                            <p className="text-xs md:text-base text-slate-700 leading-relaxed">{point}</p>
-                                        </div>
-                                    ))}
-                                </div>
+                                <div className="max-h-[260px] md:max-h-[280px] overflow-y-auto pr-1 -mr-1">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
+        {item.points.map((point, i) => (
+            <div key={i} className="flex items-start gap-3 md:gap-4 p-3 md:p-6 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
+                <span className="shrink-0 mt-0.5 w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                    {i + 1}
+                </span>
+                <p className="text-xs md:text-base text-slate-700 leading-relaxed">{point}</p>
+            </div>
+        ))}
+    </div>
+</div>
                                 <button
                                     onClick={onClose}
                                     className="mt-5 md:mt-8 w-full rounded-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white transition-colors touch-manipulation"
