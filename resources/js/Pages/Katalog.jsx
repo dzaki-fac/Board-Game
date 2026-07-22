@@ -122,10 +122,10 @@ function KartuGame({ game, tersedia }) {
             tabIndex={0}
             onClick={() => router.visit(`/katalog/${game.id}`)}
             onKeyDown={(e) => { if (e.key === 'Enter') router.visit(`/katalog/${game.id}`) }}
-            className={`group h-full flex flex-col rounded-2xl border transition-all duration-300 overflow-hidden cursor-pointer ${
+            className={`group h-full flex flex-col rounded-2xl border transition-all duration-300 overflow-hidden cursor-pointer hover:shadow-lg hover:-translate-y-0.5 ${
                 tersedia
-                    ? "bg-white border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5"
-                    : "bg-slate-50 border-slate-100 opacity-75"
+                    ? "bg-white border-slate-100 shadow-sm"
+                    : "bg-white border-slate-200"
             }`}
         >
             <div className="relative">
@@ -138,7 +138,7 @@ function KartuGame({ game, tersedia }) {
                 </span>
 
                 <div
-                className={`relative aspect-square flex items-center justify-center ${!tersedia ? "grayscale" : ""}`}
+                className="relative aspect-square flex items-center justify-center"
                 style={{ backgroundColor: bg }}
             >
                 {game.link_foto?.[0] ? (
@@ -228,12 +228,11 @@ function KartuGame({ game, tersedia }) {
                             </Link>
                         </div>
                     ) : (
-                        <button
-                            disabled
-                            className="w-full rounded-full py-2 text-sm font-semibold bg-slate-200 text-slate-400 cursor-not-allowed"
+                        <div className="w-full rounded-full py-2 text-sm font-semibold text-center"
+                            style={{ backgroundColor: "#F1F5F9", color: "#94A3B8" }}
                         >
                             {t.dipinjam}
-                        </button>
+                        </div>
                     )}
                 </div>
             </div>
