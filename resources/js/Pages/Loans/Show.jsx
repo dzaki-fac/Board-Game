@@ -36,7 +36,7 @@ export default function Show({ loan }) {
                         <h1 className="text-2xl font-bold text-gray-900">
                             Detail Peminjaman
                         </h1>
-                        <p className="text-sm text-[#2F6F62]/60 mt-1">
+                        <p className="text-sm text-[#0E4A73]/60 mt-1">
                             #{loan.id} — {loan.game.nama}
                         </p>
                     </div>
@@ -69,7 +69,7 @@ export default function Show({ loan }) {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Main Info Card */}
                     <div className="lg:col-span-2">
-                        <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
+                        <div className="card bg-white border border-[#D6E8F5] rounded-xl shadow-sm">
                             <div className="card-body p-6 space-y-6">
                                 <h2 className="text-lg font-semibold text-gray-900">
                                     Informasi Peminjaman
@@ -77,10 +77,10 @@ export default function Show({ loan }) {
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#0E4A73]/70 uppercase tracking-wider font-medium">
                                             Board Game
                                         </p>
-                                        <p className="text-sm font-medium text-[#173C33] mt-1">
+                                        <p className="text-sm font-medium text-[#071E30] mt-1">
                                             {loan.game.nama}
                                         </p>
                                     </div>
@@ -125,7 +125,7 @@ export default function Show({ loan }) {
                                         </p>
                                     </div>
                                     <div>
-                                        <p className="text-xs text-[#2F6F62]/70 uppercase tracking-wider font-medium">
+                                        <p className="text-xs text-[#0E4A73]/70 uppercase tracking-wider font-medium">
                                             Status
                                         </p>
                                         <div className="mt-1">
@@ -146,7 +146,7 @@ export default function Show({ loan }) {
                                         <p className="text-xs text-gray-500 uppercase tracking-wider font-medium">
                                             Denda
                                         </p>
-                                        <p className="text-sm font-medium text-[#173C33] mt-1">
+                                        <p className="text-sm font-medium text-[#071E30] mt-1">
                                             {loan.fine_amount
                                                 ? `Rp ${Number(loan.fine_amount).toLocaleString("id-ID")}`
                                                 : "-"}
@@ -170,7 +170,7 @@ export default function Show({ loan }) {
                                                     </thead>
                                                     <tbody>
                                                         {loan.list_peminjam.map((p, i) => (
-                                                            <tr key={i} className="text-[#173C33] border-b border-gray-100 last:border-0">
+                                                            <tr key={i} className="text-[#071E30] border-b border-gray-100 last:border-0">
                                                                 <td className="py-1.5 pr-6 font-medium">{p.nama}</td>
                                                                 <td className="py-1.5 pr-6">{p.nomor_identitas || "-"}</td>
                                                                 <td className="py-1.5">{p.jenis_jaminan?.toUpperCase()}</td>
@@ -216,7 +216,7 @@ export default function Show({ loan }) {
 
                     {/* Sidebar Card */}
                     <div className="space-y-6">
-                        <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
+                        <div className="card bg-white border border-[#D6E8F5] rounded-xl shadow-sm">
                             <div className="card-body p-6">
                                 <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wider mb-4">
                                     Aksi Cepat

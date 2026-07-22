@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             
             BoardGameSeeder::class,
+            RuleSeeder::class,
             // LoanSeeder::class,
             PermohonanSeeder::class,
         ]);

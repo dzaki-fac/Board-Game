@@ -20,7 +20,7 @@ export default function Login() {
                     <h2 className="text-2xl font-bold text-center mb-2">
                         Login Admin
                     </h2>
-                    <p className="text-center text-sm text-[#2F6F62]/70 mb-6">
+                    <p className="text-center text-sm text-[#0E4A73]/70 mb-6">
                         Sistem Peminjaman Board Game
                     </p>
 
@@ -70,7 +70,7 @@ export default function Login() {
 
                         <button
                             type="submit"
-                            className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none w-full"
+                            className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none w-full"
                             disabled={processing}
                         >
                             {processing ? "Memuat..." : "Masuk"}

@@ -145,14 +145,14 @@ export default function Layout({ children }) {
         <div className="min-h-screen">
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-40 bg-[#173C33] flex flex-col transition-all duration-300 ease-in-out ${
+                className={`fixed inset-y-0 left-0 z-40 bg-[#071E30] flex flex-col transition-all duration-300 ease-in-out ${
                     sidebarExpanded ? "w-64" : "w-16"
                 }`}
             >
                 {/* Toggle button */}
                 <button
                     onClick={toggleSidebar}
-                    className={`absolute top-3 w-8 h-8 flex items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-[#255A4F] z-10 ${
+                    className={`absolute top-3 w-8 h-8 flex items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-[#0A3A5C] z-10 ${
                         sidebarExpanded ? 'right-3' : 'left-1/2 -translate-x-1/2'
                     }`}
                 >
@@ -161,7 +161,7 @@ export default function Layout({ children }) {
 
                 {/* Brand */}
                 {sidebarExpanded && (
-                    <div className="px-6 py-6 border-b border-[#255A4F] flex items-center gap-3 shrink-0">
+                    <div className="px-6 py-6 border-b border-[#0A3A5C] flex items-center gap-3 shrink-0">
                         <img
                             src="/images/logo-upt.png"
                             alt="Logo"
@@ -205,8 +205,8 @@ export default function Layout({ children }) {
                                         sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
                                     } ${
                                         isActive
-                                            ? "bg-[#2F6F62] text-white"
-                                            : "text-[#FAF7F2]/70 hover:bg-[#255A4F] hover:text-white"
+                                            ? "bg-[#0E4A73] text-white"
+                                            : "text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white"
                                     }`}
                                 >
                                     <span className="shrink-0 w-5 h-5 flex items-center justify-center">
@@ -221,7 +221,7 @@ export default function Layout({ children }) {
 
                 {/* Logout */}
                 <div
-                    className="px-3 py-4 border-t border-[#255A4F] shrink-0"
+                    className="px-3 py-4 border-t border-[#0A3A5C] shrink-0"
                     ref={(el) => { itemRefs.current["logout"] = el; }}
                     onMouseEnter={() => showTooltip("logout", "Keluar")}
                     onMouseLeave={hideTooltip}
@@ -232,7 +232,7 @@ export default function Layout({ children }) {
                         as="button"
                         className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors ${
                             sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
-                        } text-[#FAF7F2]/70 hover:bg-[#255A4F] hover:text-white w-full`}
+                        } text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white w-full`}
                     >
                         <span className="shrink-0 w-5 h-5 flex items-center justify-center">
                             <LogOutIcon className={iconClass} />
@@ -263,10 +263,10 @@ export default function Layout({ children }) {
                 }`}
             >
                 {/* Topbar */}
-                <div className="navbar bg-white shadow-sm border-b border-[#E8F3EF] px-4 lg:px-6 sticky top-0 z-30 h-16">
+                <div className="navbar bg-white shadow-sm border-b border-[#D6E8F5] px-4 lg:px-6 sticky top-0 z-30 h-16">
                     <div className="flex-1" />
                     <div className="flex-none gap-2 flex items-center">
-                        <span className="text-sm font-medium text-[#173C33] hidden sm:block">
+                        <span className="text-sm font-medium text-[#071E30] hidden sm:block">
                             {admin?.name}
                         </span>
                     </div>

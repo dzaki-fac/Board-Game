@@ -110,14 +110,14 @@ export default function Edit({ boardgame }) {
         <div className="p-6 max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold text-slate-900">Edit Board Game</h1>
-                <Link href="/admin/games" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
+                <Link href="/admin/games" className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     Kembali
                 </Link>
             </div>
 
             <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="bg-[#173C33] text-[#FAF7F2]/80 px-6 py-4">
+                <div className="bg-[#071E30] text-[#FAF7F2]/80 px-6 py-4">
                     <h2 className="text-sm font-semibold uppercase tracking-wider">Form Edit Board Game</h2>
                 </div>
 
@@ -204,7 +204,7 @@ export default function Edit({ boardgame }) {
                         <label className="block text-sm font-medium text-slate-700 mb-3">
                             Kategori
                             {data.kategori?.length > 0 && (
-                                <span className="ml-2 text-xs font-normal text-[#2F6F62]">({data.kategori.length} dipilih)</span>
+                                <span className="ml-2 text-xs font-normal text-[#0E4A73]">({data.kategori.length} dipilih)</span>
                             )}
                         </label>
                         {errors.kategori && <p className="text-xs text-red-500 mb-2">{errors.kategori}</p>}
@@ -212,7 +212,7 @@ export default function Edit({ boardgame }) {
                             {KATEGORI_OPTIONS.map((kat) => (
                                 <label key={kat} className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors text-sm
                                     ${data.kategori?.includes(kat)
-                                        ? 'border-[#2F6F62] bg-[#2F6F62]/10 text-[#173C33] font-medium'
+                                        ? 'border-[#0E4A73] bg-[#0E4A73]/10 text-[#071E30] font-medium'
                                         : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-slate-100'
                                     }`}>
                                     <input
@@ -220,7 +220,7 @@ export default function Edit({ boardgame }) {
                                         checked={data.kategori?.includes(kat) ?? false}
                                         onChange={() => toggleKategori(kat)}
                                         className="checkbox checkbox-xs"
-                                        style={{ '--chkbg': '#2F6F62', '--chkfg': 'white' }}
+                                        style={{ '--chkbg': '#0E4A73', '--chkfg': 'white' }}
                                     />
                                     {kat}
                                 </label>
@@ -245,7 +245,7 @@ export default function Edit({ boardgame }) {
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
                             <label className="block text-sm font-medium text-slate-700">Link Foto</label>
-                            <button type="button" onClick={addLinkFoto} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-xs">
+                            <button type="button" onClick={addLinkFoto} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-xs">
                                 + Tambah link foto
                             </button>
                         </div>
@@ -291,7 +291,7 @@ export default function Edit({ boardgame }) {
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
                             <label className="block text-sm font-medium text-slate-700">Komponen</label>
-                            <button type="button" onClick={addKomponen} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-xs">
+                            <button type="button" onClick={addKomponen} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-xs">
                                 + Tambah komponen
                             </button>
                         </div>
@@ -325,7 +325,7 @@ export default function Edit({ boardgame }) {
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
                             <label className="block text-sm font-medium text-slate-700">Barang Hilang</label>
-                            <button type="button" onClick={addBarangHilang} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-xs">
+                            <button type="button" onClick={addBarangHilang} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-xs">
                                 + Tambah barang hilang
                             </button>
                         </div>
@@ -359,7 +359,7 @@ export default function Edit({ boardgame }) {
                     </div>
 
                     <div className="flex items-center gap-3 pt-3 border-t border-slate-200">
-                        <button type="submit" disabled={processing} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
+                        <button type="submit" disabled={processing} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm">
                             {processing ? 'Menyimpan...' : 'Simpan'}
                         </button>
                         <Link href="/admin/games" className="btn btn-ghost btn-sm">Batal</Link>

@@ -17,8 +17,8 @@ class Admin extends Authenticatable
         ];
     }
 
-    public function isSuperAdmin(): bool
+    public function isAdmin(): bool
     {
-        return $this->role === 'superadmin';
+        return $this->role === 'admin';
     }
 }

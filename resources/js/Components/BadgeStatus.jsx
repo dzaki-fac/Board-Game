@@ -62,9 +62,9 @@ const config = {
   },
   borrowed: {
     label: "Disetujui",
-    bg: "bg-[#E8F3EF]",
-    text: "text-[#2F6F62]",
-    border: "border-[#B8D5C8]",
+    bg: "bg-[#D6E8F5]",
+    text: "text-[#0E4A73]",
+    border: "border-[#A0C4E8]",
   },
   returned: {
     label: "Dikembalikan",

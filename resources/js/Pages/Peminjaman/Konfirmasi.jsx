@@ -34,9 +34,9 @@ export default function Konfirmasi({ permohonan, gagal, error, peminjams, boardg
                     <Link
                         href="/peminjaman/create"
                         className="inline-block w-full rounded-full py-3 text-base font-semibold text-white text-center transition-colors"
-                        style={{ backgroundColor: "#2F6F62" }}
-                        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#255A4F")}
-                        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#2F6F62")}
+                        style={{ backgroundColor: "#0E4A73" }}
+                        onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#0A3A5C")}
+                        onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#0E4A73")}
                     >
                         Kembali ke Form
                     </Link>
@@ -59,7 +59,7 @@ export default function Konfirmasi({ permohonan, gagal, error, peminjams, boardg
 
             <div className="max-w-lg w-full bg-white rounded-3xl shadow-lg ring-1 ring-black/5 p-8 md:p-12 text-center">
                 <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-6">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="#2F6F62" strokeWidth="2.5" className="w-8 h-8">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#0E4A73" strokeWidth="2.5" className="w-8 h-8">
                         <path d="M20 6L9 17l-5-5" />
                     </svg>
                 </div>
@@ -118,9 +118,9 @@ export default function Konfirmasi({ permohonan, gagal, error, peminjams, boardg
                 <Link
                     href="/katalog"
                     className="inline-block w-full rounded-full py-3 text-base font-semibold text-white text-center transition-colors"
-                    style={{ backgroundColor: "#2F6F62" }}
-                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#255A4F")}
-                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#2F6F62")}
+                    style={{ backgroundColor: "#0E4A73" }}
+                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#0A3A5C")}
+                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#0E4A73")}
                 >
                     Kembali ke Katalog
                 </Link>
