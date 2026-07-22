@@ -324,16 +324,16 @@ function CarouselModal({ item, onClose }) {
                 }`}
             />
 
-            <div className="relative h-full overflow-y-auto p-4 py-8">
+            <div className="relative h-full overflow-y-auto p-3 py-6 md:p-4 md:py-8">
                 <div className="flex min-h-full items-center justify-center">
                     <div
-                        className={`relative w-[92vw] max-w-7xl max-h-[88vh] rounded-[2rem] shadow-2xl overflow-y-auto ring-1 ring-white/50 transition-all duration-300 ease-out ${
+                        className={`relative w-full max-w-md md:w-[92vw] md:max-w-7xl max-h-[85vh] md:max-h-[88vh] rounded-2xl md:rounded-[2rem] shadow-2xl overflow-y-auto ring-1 ring-white/50 transition-all duration-300 ease-out ${
                             entered ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-3"
                         }`}
                         onClick={(e) => e.stopPropagation()}
                     >
                         <div
-                            className="relative p-8 md:p-10 lg:p-12 backdrop-blur-2xl"
+                            className="relative p-5 md:p-10 lg:p-12 backdrop-blur-2xl"
                             style={{ backgroundColor: item.bgImage ? undefined : `${theme.bg}CC` }}
                         >
                             {item.bgImage && (
@@ -363,39 +363,39 @@ function CarouselModal({ item, onClose }) {
 
                             <button
                                 onClick={onClose}
-                                className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors"
+                                className="absolute top-3 right-3 md:top-6 md:right-6 z-10 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors"
                             >
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 md:w-5 md:h-5">
                                     <path d="M18 6 6 18" /><path d="m6 6 12 12" />
                                 </svg>
                             </button>
 
                             <div className="relative z-10">
                                 <h2
-                                    className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-center"
+                                    className="text-xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 text-center pr-8 md:pr-0"
                                     style={{ color: WARNA.hijauTua, whiteSpace: "pre-line" }}
                                 >
                                     {item.detailTitle}
                                 </h2>
                                 <p
-                                    className="text-base md:text-lg leading-8 mb-6 max-w-5xl font-medium"
+                                    className="text-sm md:text-lg leading-6 md:leading-8 mb-4 md:mb-6 max-w-5xl font-medium"
                                     style={{ color: WARNA.hijauTua }}
                                 >
                                     {item.detailDescription}
                                 </p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
                                     {item.points.map((point, i) => (
-                                        <div key={i} className="flex items-start gap-4 p-5 md:p-6 rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
-                                            <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                                        <div key={i} className="flex items-start gap-3 md:gap-4 p-3 md:p-6 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
+                                            <span className="shrink-0 mt-0.5 w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
                                                 {i + 1}
                                             </span>
-                                            <p className="text-sm md:text-base text-slate-700 leading-relaxed">{point}</p>
+                                            <p className="text-xs md:text-base text-slate-700 leading-relaxed">{point}</p>
                                         </div>
                                     ))}
                                 </div>
                                 <button
                                     onClick={onClose}
-                                    className="mt-8 w-full rounded-full py-3 text-base font-semibold text-white transition-colors"
+                                    className="mt-5 md:mt-8 w-full rounded-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white transition-colors"
                                     style={{ backgroundColor: WARNA.hijauUtama }}
                                     onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
                                     onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
@@ -471,6 +471,21 @@ function AnnouncementCarousel({ onModalChange }) {
     useEffect(() => {
         bottomScrollRef.current?.scrollTo({ top: 0, behavior: "auto" });
     }, [current]);
+
+    // FIX (jank di HP): preload gambar slide berikutnya & sebelumnya supaya
+    // saat crossfade jalan, <img> sudah ter-decode di cache browser dan
+    // tidak nge-block main thread pas fade-in dimulai.
+    useEffect(() => {
+        if (items.length <= 1) return;
+        const next = items[(index + 1) % items.length];
+        const prev = items[(index - 1 + items.length) % items.length];
+        [next, prev].forEach((it) => {
+            if (it?.bgImage) {
+                const img = new Image();
+                img.src = it.bgImage;
+            }
+        });
+    }, [index, items]);
 
     const clearAutoplay = useCallback(() => {
         if (intervalRef.current !== null) {
@@ -566,22 +581,16 @@ function AnnouncementCarousel({ onModalChange }) {
                             alt=""
                             className="absolute inset-0 h-full w-full object-cover"
                         />
-                        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                            <defs>
-                                <filter id="blurLembut" x="-20%" y="-20%" width="140%" height="140%">
-                                    <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" />
-                                </filter>
-                                <linearGradient id="fadeBiru" x1="0" y1="0" x2="1" y2="0">
-                                    <stop offset="0%" stopColor={WARNA.hijauTua} stopOpacity="0.55" />
-                                    <stop offset="70%" stopColor={WARNA.hijauTua} stopOpacity="0.30" />
-                                    <stop offset="100%" stopColor={WARNA.hijauTua} stopOpacity="0" />
-                                </linearGradient>
-                            </defs>
-                            <g filter="url(#blurLembut)">
-                                <path d="M0,0 H60 C70,18 52,32 62,48 C72,64 52,80 62,100 H0 Z" fill="url(#fadeBiru)" />
-                                <path d="M0,0 H46 C54,20 40,34 48,50 C56,66 42,82 50,100 H0 Z" fill={WARNA.hijauUtama} opacity="0.22" />
-                            </g>
-                        </svg>
+                        {/* FIX (jank di HP): dulu pakai <feGaussianBlur> di sini — filter SVG
+                            itu berat untuk di-render ulang tiap frame crossfade, terutama di
+                            HP kelas menengah-bawah. Diganti gradient overlay biasa (CSS),
+                            jauh lebih murah dan tetap kasih efek gelap-ke-transparan yang sama. */}
+                        <div
+                            className="absolute inset-0"
+                            style={{
+                                background: `linear-gradient(90deg, ${WARNA.hijauTua}CC 0%, ${WARNA.hijauTua}80 35%, ${WARNA.hijauTua}33 65%, transparent 100%)`,
+                            }}
+                        />
                     </>
                 ) : (
                     <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
@@ -600,18 +609,18 @@ function AnnouncementCarousel({ onModalChange }) {
 
                 <div
                     ref={scrollRef}
-                    className="relative flex flex-col h-full px-8 md:px-14 lg:px-20 py-10 md:py-14 pb-16 text-center overflow-y-auto"
+                    className="relative flex flex-col h-full justify-center px-4 md:px-14 lg:px-20 py-3 md:py-14 pb-7 md:pb-16 text-center overflow-y-auto"
                 >
                     {slideItem.theme === "welcome" ? (
-                        <div className={`flex flex-col flex-1 ${punyaFoto ? "items-start justify-center text-left" : "items-center justify-center text-center"}`}>
+                        <div className={`flex flex-col flex-1 items-center justify-center text-center ${punyaFoto ? "md:items-start md:text-left" : ""}`}>
                             <h3
-                                className={`text-xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 ${punyaFoto ? "max-w-[92%] sm:max-w-md md:max-w-lg" : "max-w-4xl"}`}
-                                style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua, whiteSpace: "pre-line" }}
+                                className={`whitespace-normal md:whitespace-pre-line text-balance text-lg md:text-4xl lg:text-5xl font-bold leading-snug md:leading-tight mb-3 md:mb-4 max-w-[95%] md:max-w-none ${punyaFoto ? "md:max-w-md lg:max-w-lg" : "max-w-4xl"}`}
+                                style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
                             >
                                 {slideItem.title}
                             </h3>
                             <p
-                                className={`text-base md:text-lg lg:text-xl leading-relaxed ${punyaFoto ? "max-w-sm md:max-w-md" : "max-w-3xl"}`}
+                                className={`text-xs md:text-lg lg:text-xl leading-snug md:leading-relaxed max-w-[92%] md:max-w-none ${punyaFoto ? "md:max-w-md" : "max-w-3xl"}`}
                                 style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
                             >
                                 {slideItem.description}
@@ -621,68 +630,55 @@ function AnnouncementCarousel({ onModalChange }) {
                         <>
                             <div className="flex flex-col items-center justify-center shrink-0">
                                 <h3
-                                    className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 max-w-4xl"
+                                    className="text-lg md:text-4xl lg:text-5xl font-bold leading-tight mb-2 md:mb-3 max-w-4xl"
                                     style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
                                 >
                                     {slideItem.title}
                                 </h3>
                                 <p
-                                    className="text-base md:text-lg lg:text-xl max-w-3xl leading-relaxed"
+                                    className="text-xs md:text-lg lg:text-xl max-w-3xl leading-snug md:leading-relaxed"
                                     style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
                                 >
                                     {slideItem.description}
                                 </p>
                             </div>
                             {slideItem.points?.length > 0 && (
-                                <>
-                                    <div className="mt-5 grid w-full max-w-4xl mx-auto gap-3 md:hidden">
-                                        {slideItem.points.slice(0, 3).map((point, i) => (
-                                            <div key={i} className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm">
-                                                <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
-                                                    {i + 1}
-                                                </span>
-                                                <p className="text-sm leading-6 text-slate-700">{point}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-
-                                    <div className="mt-5 hidden md:grid w-full max-w-4xl mx-auto gap-4 md:grid-cols-2">
-                                        {slideItem.points.slice(0, 4).map((point, i) => (
-                                            <div key={i} className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm">
-                                                <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
-                                                    {i + 1}
-                                                </span>
-                                                <p className="text-sm leading-6 text-slate-700">{point}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </>
+                                <div className="mt-2 mb-5 md:mt-5 md:mb-0 grid w-full max-w-4xl mx-auto gap-1.5 md:gap-4 md:grid-cols-2">
+                                    {slideItem.points.slice(0, 2).map((point, i) => (
+                                        <div key={i} className="flex items-start gap-2 rounded-lg md:rounded-2xl bg-white/85 p-2 md:p-4 text-left shadow-sm md:hidden">
+                                            <span className="shrink-0 mt-0.5 w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                                                {i + 1}
+                                            </span>
+                                            <p className="text-[10px] leading-snug text-slate-700 line-clamp-2">{point}</p>
+                                        </div>
+                                    ))}
+                                    {slideItem.points.slice(0, 4).map((point, i) => (
+                                        <div key={i} className="hidden md:flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm">
+                                            <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                                                {i + 1}
+                                            </span>
+                                            <p className="text-sm leading-6 text-slate-700">{point}</p>
+                                        </div>
+                                    ))}
+                                </div>
                             )}
                         </>
                     )}
-                    {slideItem.theme === "welcome" ? (
-                        <span
-                            className="absolute bottom-8 left-1/2 -translate-x-1/2 text-sm flex items-center gap-1.5"
-                            style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
-                        >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
-                                <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
-                                <path d="M12 6v6l4 2" />
-                            </svg>
-                            Klik untuk melihat detail
-                        </span>
-                    ) : (
-                        <span
-                            className="mt-6 mb-2 mx-auto text-sm flex items-center gap-1.5"
-                            style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
-                        >
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
-                                <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
-                                <path d="M12 6v6l4 2" />
-                            </svg>
-                            Klik untuk melihat detail
-                        </span>
-                    )}
+                    {/* "Klik untuk melihat detail" selalu absolute di bawah di mobile,
+                        supaya tidak menyatu/berdempetan dengan judul & deskripsi di
+                        ruang slide yang pendek. Di desktop tetap mengikuti flow lama. */}
+                    <span
+                        className={`absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
+                            slideItem.theme === "welcome" ? "md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
+                        }`}
+                        style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3 h-3 md:w-3.5 md:h-3.5">
+                            <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
+                            <path d="M12 6v6l4 2" />
+                        </svg>
+                        Klik untuk melihat detail
+                    </span>
                 </div>
             </div>
         );
@@ -694,10 +690,13 @@ function AnnouncementCarousel({ onModalChange }) {
 
     return (
         <>
+            {/* FIX (tinggi carousel mobile): dulu height selalu 'calc(100dvh - 92px)'
+                di semua ukuran layar, jadi di HP carousel makan hampir 1 layar penuh.
+                Sekarang di mobile tingginya ~25% viewport (dibatasi minimum 200px biar
+                teks tidak kepotong), dan baru full-height mulai breakpoint md ke atas. */}
             <div
                 ref={wrapperRef}
-                className="w-full relative z-10"
-                style={{ height: 'calc(100dvh - 92px)', minHeight: 'calc(100dvh - 92px)' }}
+                className="w-full relative z-10 h-[36vh] min-h-[270px] md:h-[calc(100dvh-92px)] md:min-h-[calc(100dvh-92px)]"
             >
                 <div
                     className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md"
@@ -707,8 +706,15 @@ function AnnouncementCarousel({ onModalChange }) {
 
                     {incomingItem && (
                         <div
-                            className="absolute inset-0 transition-opacity ease-in-out"
-                            style={{ opacity: incomingShown ? 1 : 0, transitionDuration: `${TRANSITION_MS}ms` }}
+                            className="absolute inset-0 transition-opacity ease-in-out will-change-[opacity]"
+                            style={{
+                                opacity: incomingShown ? 1 : 0,
+                                transitionDuration: `${TRANSITION_MS}ms`,
+                                // FIX (jank di HP): paksa layer ini di-composite di GPU
+                                // supaya crossfade tidak nge-block main thread.
+                                transform: "translateZ(0)",
+                                backfaceVisibility: "hidden",
+                            }}
                         >
                             {renderSlide(incomingItem)}
                         </div>
@@ -720,29 +726,29 @@ function AnnouncementCarousel({ onModalChange }) {
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); geser(-1); }}
                                 aria-label="Sebelumnya"
-                                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+                                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-8 h-8 md:w-11 md:h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
                             >
-                                <IkonChevron arah="kiri" className="w-5 h-5" />
+                                <IkonChevron arah="kiri" className="w-4 h-4 md:w-5 md:h-5" />
                             </button>
                             <button
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); geser(1); }}
                                 aria-label="Selanjutnya"
-                                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
+                                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-8 h-8 md:w-11 md:h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
                             >
-                                <IkonChevron arah="kanan" className="w-5 h-5" />
+                                <IkonChevron arah="kanan" className="w-4 h-4 md:w-5 md:h-5" />
                             </button>
 
-                            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-1.5">
+                            <div className="absolute bottom-2 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-1 md:gap-1.5">
                                 {items.map((_, i) => (
                                     <button
                                         key={i}
                                         type="button"
                                         onClick={(e) => { e.stopPropagation(); goToSlide(i); }}
                                         aria-label={`Slide ${i + 1}`}
-                                        className="h-1.5 rounded-full transition-all duration-300"
+                                        className="h-1 md:h-1.5 rounded-full transition-all duration-300"
                                         style={{
-                                            width: i === index ? 24 : 6,
+                                            width: i === index ? 18 : 5,
                                             backgroundColor: i === index
                                                 ? (punyaFotoAktif ? "#FFFFFF" : WARNA.hijauUtama)
                                                 : (punyaFotoAktif ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
