@@ -245,7 +245,7 @@ export default function Form({ boardgames = [] }) {
 
                                 <button
                                     type="button"
-                                    className="btn btn-outline btn-sm border-dashed border-base-300 hover:border-[#2F6F62] hover:text-[#2F6F62] hover:bg-[#E8F3EF]"
+                                    className="btn btn-outline btn-sm border-dashed border-base-300 hover:border-sky-600 hover:text-sky-800 hover:bg-sky-50"
                                     onClick={addAnggota}
                                 >
                                     <svg
@@ -315,7 +315,7 @@ export default function Form({ boardgames = [] }) {
                                                     className={`flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-base-200 transition-colors ${
                                                         data.boardgame_id ==
                                                         bg.id
-                                                            ? "bg-[#E8F3EF] border-l-4 border-[#2F6F62]"
+                                                            ? "bg-sky-50 border-l-4 border-sky-600"
                                                             : "border-l-4 border-transparent"
                                                     } ${!bg.is_available ? "opacity-60" : ""}`}
                                                 >
@@ -344,7 +344,7 @@ export default function Form({ boardgames = [] }) {
                                                             {bg.kode}
                                                         </p>
                                                         {bg.is_available ? (
-                                                            <span className="inline-block rounded-full bg-green-300 px-3 py-1 text-xs font-semibold text-green-900 mt-1">
+                                                            <span className="inline-block rounded-full bg-sky-800 px-3 py-1 text-xs font-semibold text-white mt-1">
                                                                 Tersedia
                                                             </span>
                                                         ) : (
@@ -454,7 +454,7 @@ export default function Form({ boardgames = [] }) {
                     <button
                         type="submit"
                         disabled={processing}
-                        className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none flex-1"
+                        className="btn bg-sky-900 hover:bg-sky-950 text-white border-none flex-1"
                     >
                         {processing ? (
                             <>
