@@ -120,6 +120,7 @@ export default function Form({ boardgames = [] }) {
     }
 
     return (
+        <div className="min-h-screen" style={{ backgroundColor: "#EFF6FF" }}>
         <div className="max-w-xl mx-auto p-4">
             <Link
                 href="/katalog"
@@ -478,6 +479,7 @@ export default function Form({ boardgames = [] }) {
                     </button>
                 </div>
             </form>
+        </div>
         </div>
     );
 }
