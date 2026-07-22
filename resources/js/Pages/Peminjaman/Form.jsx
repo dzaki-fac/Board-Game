@@ -124,7 +124,7 @@ export default function Form({ boardgames = [] }) {
         <div className="max-w-xl mx-auto p-4">
             <Link
                 href="/katalog"
-                className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-800 transition-colors mb-4"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-white bg-sky-800 hover:bg-sky-900 transition-colors mb-4 px-3 py-1.5 rounded-full"
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
                     <path d="M19 12H5" />
