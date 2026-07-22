@@ -433,6 +433,9 @@ function AnnouncementCarousel({ onModalChange }) {
     const mountedRef = useRef(true);
     const transitionTimeoutRef = useRef(null);
     const rafRef = useRef(null);
+    const pointerStartX = useRef(null);
+    const pointerDeltaX = useRef(0);
+    const isDragging = useRef(false);
 
     const TRANSITION_MS = 700;
 
@@ -566,6 +569,37 @@ function AnnouncementCarousel({ onModalChange }) {
         startAutoplay();
     }, [startAutoplay]);
 
+    const handlePointerDown = useCallback((e) => {
+        pointerStartX.current = e.clientX;
+        pointerDeltaX.current = 0;
+        isDragging.current = false;
+    }, []);
+
+    const handlePointerMove = useCallback((e) => {
+        if (pointerStartX.current === null) return;
+        pointerDeltaX.current = e.clientX - pointerStartX.current;
+        if (Math.abs(pointerDeltaX.current) > 10) {
+            isDragging.current = true;
+        }
+    }, []);
+
+    const handlePointerUp = useCallback(() => {
+        const threshold = 50;
+        if (pointerDeltaX.current > threshold) {
+            geser(-1);
+        } else if (pointerDeltaX.current < -threshold) {
+            geser(1);
+        }
+        pointerStartX.current = null;
+        pointerDeltaX.current = 0;
+    }, [geser]);
+
+    const handlePointerCancel = useCallback(() => {
+        pointerStartX.current = null;
+        pointerDeltaX.current = 0;
+        isDragging.current = false;
+    }, []);
+
     // Render isi satu slide (background + teks). Dipakai untuk layer bawah
     // (current) maupun layer atas (incoming) supaya tidak duplikasi JSX.
     function renderSlide(slideItem, scrollRef) {
@@ -579,6 +613,7 @@ function AnnouncementCarousel({ onModalChange }) {
                         <img
                             src={slideItem.bgImage}
                             alt=""
+                            draggable={false}
                             className="absolute inset-0 h-full w-full object-cover"
                         />
                         {/* FIX (jank di HP): dulu pakai <feGaussianBlur> di sini — filter SVG
@@ -668,7 +703,7 @@ function AnnouncementCarousel({ onModalChange }) {
                         supaya tidak menyatu/berdempetan dengan judul & deskripsi di
                         ruang slide yang pendek. Di desktop tetap mengikuti flow lama. */}
                     <span
-                        className={`absolute bottom-2 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
+                        className={`absolute bottom-7 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
                             slideItem.theme === "welcome" ? "md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
                         }`}
                         style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
@@ -699,8 +734,14 @@ function AnnouncementCarousel({ onModalChange }) {
                 className="w-full relative z-10 h-[36vh] min-h-[270px] md:h-[calc(100dvh-92px)] md:min-h-[calc(100dvh-92px)]"
             >
                 <div
-                    className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md"
-                    onClick={() => { clearAutoplay(); setModalItem(activeItem); }}
+                    className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md select-none touch-pan-y"
+                    onDragStart={(e) => e.preventDefault()}
+                    onClick={() => {
+                        if (isDragging.current) return;
+                        clearAutoplay();
+                        setModalItem(activeItem);
+                    }}
+                    onPointerDown={handlePointerDown}
                 >
                     {renderSlide(items[current], bottomScrollRef)}
 
@@ -721,42 +762,23 @@ function AnnouncementCarousel({ onModalChange }) {
                     )}
 
                     {items.length > 1 && (
-                        <>
-                            <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); geser(-1); }}
-                                aria-label="Sebelumnya"
-                                className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 w-8 h-8 md:w-11 md:h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
-                            >
-                                <IkonChevron arah="kiri" className="w-4 h-4 md:w-5 md:h-5" />
-                            </button>
-                            <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); geser(1); }}
-                                aria-label="Selanjutnya"
-                                className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 w-8 h-8 md:w-11 md:h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
-                            >
-                                <IkonChevron arah="kanan" className="w-4 h-4 md:w-5 md:h-5" />
-                            </button>
-
-                            <div className="absolute bottom-2 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-1 md:gap-1.5">
-                                {items.map((_, i) => (
-                                    <button
-                                        key={i}
-                                        type="button"
-                                        onClick={(e) => { e.stopPropagation(); goToSlide(i); }}
-                                        aria-label={`Slide ${i + 1}`}
-                                        className="h-1 md:h-1.5 rounded-full transition-all duration-300"
-                                        style={{
-                                            width: i === index ? 18 : 5,
-                                            backgroundColor: i === index
-                                                ? (punyaFotoAktif ? "#FFFFFF" : WARNA.hijauUtama)
-                                                : (punyaFotoAktif ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
-                                        }}
-                                    />
-                                ))}
-                            </div>
-                        </>
+                        <div className="absolute bottom-2 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-1 md:gap-1.5">
+                            {items.map((_, i) => (
+                                <button
+                                    key={i}
+                                    type="button"
+                                    onClick={(e) => { e.stopPropagation(); goToSlide(i); }}
+                                    aria-label={`Slide ${i + 1}`}
+                                    className="h-1 md:h-1.5 rounded-full transition-all duration-300"
+                                    style={{
+                                        width: i === index ? 18 : 5,
+                                        backgroundColor: i === index
+                                            ? (punyaFotoAktif ? "#FFFFFF" : WARNA.hijauUtama)
+                                            : (punyaFotoAktif ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
+                                    }}
+                                />
+                            ))}
+                        </div>
                     )}
                 </div>
             </div>
