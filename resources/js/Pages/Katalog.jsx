@@ -199,16 +199,16 @@ function KartuGame({ game, tersedia }) {
 
                 <div className="mt-auto">
                     <div className="text-[11px] text-slate-500 mb-3 space-y-0.5">
-                        <div className="flex items-center gap-x-1.5">
-                            <span className="flex items-center gap-1 whitespace-nowrap">
-                                <IkonPemain className="w-3.5 h-3.5 shrink-0" />
-                                {formatPemain(game.jumlah_pemain, t)}
-                            </span>
-                            <span className="flex items-center gap-1 whitespace-nowrap">
-                                <IkonJam className="w-3.5 h-3.5 shrink-0" />
-                                {formatDurasi(game.durasi, t)}
-                            </span>
-                        </div>
+                        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+    <span className="flex items-center gap-1 whitespace-nowrap">
+        <IkonPemain className="w-3.5 h-3.5 shrink-0" />
+        {formatPemain(game.jumlah_pemain, t)}
+    </span>
+    <span className="flex items-center gap-1 whitespace-nowrap">
+        <IkonJam className="w-3.5 h-3.5 shrink-0" />
+        {formatDurasi(game.durasi, t)}
+    </span>
+</div>
                         <div className="flex items-center gap-1 whitespace-nowrap">
                             <IkonRak className="w-3.5 h-3.5 shrink-0" />
                             {t.lantai} {game.lantai}
