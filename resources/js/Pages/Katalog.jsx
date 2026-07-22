@@ -594,12 +594,6 @@ function AnnouncementCarousel({ onModalChange }) {
         pointerDeltaX.current = 0;
     }, [geser]);
 
-    const handlePointerCancel = useCallback(() => {
-        pointerStartX.current = null;
-        pointerDeltaX.current = 0;
-        isDragging.current = false;
-    }, []);
-
     // Render isi satu slide (background + teks). Dipakai untuk layer bawah
     // (current) maupun layer atas (incoming) supaya tidak duplikasi JSX.
     function renderSlide(slideItem, scrollRef) {
@@ -613,7 +607,6 @@ function AnnouncementCarousel({ onModalChange }) {
                         <img
                             src={slideItem.bgImage}
                             alt=""
-                            draggable={false}
                             className="absolute inset-0 h-full w-full object-cover"
                         />
                         {/* FIX (jank di HP): dulu pakai <feGaussianBlur> di sini — filter SVG
@@ -735,13 +728,14 @@ function AnnouncementCarousel({ onModalChange }) {
             >
                 <div
                     className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md select-none touch-pan-y"
-                    onDragStart={(e) => e.preventDefault()}
                     onClick={() => {
                         if (isDragging.current) return;
                         clearAutoplay();
                         setModalItem(activeItem);
                     }}
                     onPointerDown={handlePointerDown}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
                 >
                     {renderSlide(items[current], bottomScrollRef)}
 
