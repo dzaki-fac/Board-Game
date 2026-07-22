@@ -416,22 +416,62 @@ function CarouselModal({ item, onClose }) {
 function AnnouncementCarousel({ onModalChange }) {
     const t = useTeks();
     const items = t.carousel;
+
+    // `index`   = target slide terbaru (dipakai untuk highlight dot & klik modal)
+    // `current` = slide yang sedang full-opacity di layer bawah
+    // `incoming`= slide yang sedang fade-in di layer atas (null kalau tidak ada transisi)
     const [index, setIndex] = useState(0);
+    const [current, setCurrent] = useState(0);
+    const [incoming, setIncoming] = useState(null);
+    const [incomingShown, setIncomingShown] = useState(false);
+
     const [modalItem, setModalItem] = useState(null);
     const [paused, setPaused] = useState(false);
     const wrapperRef = useRef(null);
-    const contentRef = useRef(null);
+    const bottomScrollRef = useRef(null);
     const lastChangeRef = useRef(Date.now());
     const intervalRef = useRef(null);
     const mountedRef = useRef(true);
+    const transitionTimeoutRef = useRef(null);
+    const rafRef = useRef(null);
+
+    const TRANSITION_MS = 700;
 
     useEffect(() => {
         onModalChange?.(!!modalItem);
     }, [modalItem, onModalChange]);
 
+    // Crossfade tanpa celah putih: slide baru dipasang DI ATAS slide lama
+    // (yang tetap full opacity di bawah) lalu perlahan fade-in. Karena selalu
+    // ada layer solid penuh di belakang, tidak pernah ada momen kosong/putih.
     useEffect(() => {
-        contentRef.current?.scrollTo({ top: 0, behavior: "auto" });
-    }, [index]);
+        if (index === current) return;
+
+        setIncoming(index);
+        setIncomingShown(false);
+
+        cancelAnimationFrame(rafRef.current);
+        // double rAF supaya browser sempat paint opacity:0 dulu sebelum transisi ke 1
+        rafRef.current = requestAnimationFrame(() => {
+            rafRef.current = requestAnimationFrame(() => setIncomingShown(true));
+        });
+
+        clearTimeout(transitionTimeoutRef.current);
+        transitionTimeoutRef.current = setTimeout(() => {
+            setCurrent(index);
+            setIncoming(null);
+            setIncomingShown(false);
+        }, TRANSITION_MS);
+
+        return () => {
+            clearTimeout(transitionTimeoutRef.current);
+            cancelAnimationFrame(rafRef.current);
+        };
+    }, [index, current]);
+
+    useEffect(() => {
+        bottomScrollRef.current?.scrollTo({ top: 0, behavior: "auto" });
+    }, [current]);
 
     const clearAutoplay = useCallback(() => {
         if (intervalRef.current !== null) {
@@ -454,7 +494,7 @@ function AnnouncementCarousel({ onModalChange }) {
     const advanceImmediately = useCallback(() => {
         setIndex((i) => (i + 1) % items.length);
         lastChangeRef.current = Date.now();
-    }, []);
+    }, [items.length]);
 
     useEffect(() => {
         if (paused || modalItem || items.length <= 1) {
@@ -471,7 +511,6 @@ function AnnouncementCarousel({ onModalChange }) {
 
     useEffect(() => {
         if (items.length <= 1) return;
-
         const handleVisibility = () => setPaused(document.hidden);
         document.addEventListener('visibilitychange', handleVisibility);
         return () => document.removeEventListener('visibilitychange', handleVisibility);
@@ -513,9 +552,146 @@ function AnnouncementCarousel({ onModalChange }) {
         startAutoplay();
     }, [startAutoplay]);
 
-    const item = items[index];
-    const theme = THEMES[item.theme] || THEMES.welcome;
-    const punyaFoto = !!item.bgImage;
+    // Render isi satu slide (background + teks). Dipakai untuk layer bawah
+    // (current) maupun layer atas (incoming) supaya tidak duplikasi JSX.
+    function renderSlide(slideItem, scrollRef) {
+        const theme = THEMES[slideItem.theme] || THEMES.welcome;
+        const punyaFoto = !!slideItem.bgImage;
+
+        return (
+            <div className="absolute inset-0">
+                {punyaFoto ? (
+                    <>
+                        <img
+                            src={slideItem.bgImage}
+                            alt=""
+                            className="absolute inset-0 h-full w-full object-cover"
+                        />
+                        <svg className="absolute inset-0 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <defs>
+                                <filter id="blurLembut" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" />
+                                </filter>
+                                <linearGradient id="fadeBiru" x1="0" y1="0" x2="1" y2="0">
+                                    <stop offset="0%" stopColor={WARNA.hijauTua} stopOpacity="0.55" />
+                                    <stop offset="70%" stopColor={WARNA.hijauTua} stopOpacity="0.30" />
+                                    <stop offset="100%" stopColor={WARNA.hijauTua} stopOpacity="0" />
+                                </linearGradient>
+                            </defs>
+                            <g filter="url(#blurLembut)">
+                                <path d="M0,0 H60 C70,18 52,32 62,48 C72,64 52,80 62,100 H0 Z" fill="url(#fadeBiru)" />
+                                <path d="M0,0 H46 C54,20 40,34 48,50 C56,66 42,82 50,100 H0 Z" fill={WARNA.hijauUtama} opacity="0.22" />
+                            </g>
+                        </svg>
+                    </>
+                ) : (
+                    <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
+                        <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
+                            <rect width="500" height="500" fill={theme.bg} />
+                            {theme.blob.map((b, i) =>
+                                b.path ? (
+                                    <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
+                                ) : (
+                                    <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
+                                )
+                            )}
+                        </svg>
+                    </div>
+                )}
+
+                <div
+                    ref={scrollRef}
+                    className="relative flex flex-col h-full px-8 md:px-14 lg:px-20 py-10 md:py-14 pb-16 text-center overflow-y-auto"
+                >
+                    {slideItem.theme === "welcome" ? (
+                        <div className={`flex flex-col flex-1 ${punyaFoto ? "items-start justify-center text-left" : "items-center justify-center text-center"}`}>
+                            <h3
+                                className={`text-xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 ${punyaFoto ? "max-w-[92%] sm:max-w-md md:max-w-lg" : "max-w-4xl"}`}
+                                style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua, whiteSpace: "pre-line" }}
+                            >
+                                {slideItem.title}
+                            </h3>
+                            <p
+                                className={`text-base md:text-lg lg:text-xl leading-relaxed ${punyaFoto ? "max-w-sm md:max-w-md" : "max-w-3xl"}`}
+                                style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
+                            >
+                                {slideItem.description}
+                            </p>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="flex flex-col items-center justify-center shrink-0">
+                                <h3
+                                    className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 max-w-4xl"
+                                    style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
+                                >
+                                    {slideItem.title}
+                                </h3>
+                                <p
+                                    className="text-base md:text-lg lg:text-xl max-w-3xl leading-relaxed"
+                                    style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
+                                >
+                                    {slideItem.description}
+                                </p>
+                            </div>
+                            {slideItem.points?.length > 0 && (
+                                <>
+                                    <div className="mt-5 grid w-full max-w-4xl mx-auto gap-3 md:hidden">
+                                        {slideItem.points.slice(0, 3).map((point, i) => (
+                                            <div key={i} className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm">
+                                                <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                                                    {i + 1}
+                                                </span>
+                                                <p className="text-sm leading-6 text-slate-700">{point}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="mt-5 hidden md:grid w-full max-w-4xl mx-auto gap-4 md:grid-cols-2">
+                                        {slideItem.points.slice(0, 4).map((point, i) => (
+                                            <div key={i} className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm">
+                                                <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                                                    {i + 1}
+                                                </span>
+                                                <p className="text-sm leading-6 text-slate-700">{point}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                        </>
+                    )}
+                    {slideItem.theme === "welcome" ? (
+                        <span
+                            className="absolute bottom-8 left-1/2 -translate-x-1/2 text-sm flex items-center gap-1.5"
+                            style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
+                                <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
+                                <path d="M12 6v6l4 2" />
+                            </svg>
+                            Klik untuk melihat detail
+                        </span>
+                    ) : (
+                        <span
+                            className="mt-6 mb-2 mx-auto text-sm flex items-center gap-1.5"
+                            style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
+                                <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
+                                <path d="M12 6v6l4 2" />
+                            </svg>
+                            Klik untuk melihat detail
+                        </span>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
+    const activeItem = items[index];
+    const incomingItem = incoming !== null ? items[incoming] : null;
+    const punyaFotoAktif = !!items[current]?.bgImage;
 
     return (
         <>
@@ -526,171 +702,18 @@ function AnnouncementCarousel({ onModalChange }) {
             >
                 <div
                     className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md"
-                    onClick={() => { clearAutoplay(); setModalItem(item); }}
+                    onClick={() => { clearAutoplay(); setModalItem(activeItem); }}
                 >
-                    <div className="absolute inset-0">
-                        {punyaFoto ? (
-                            <>
-                                <img
-                                    src={item.bgImage}
-                                    alt=""
-                                    className="absolute inset-0 h-full w-full object-cover"
-                                />
-                                {/* shape biru melengkung dengan tepi blur, biar transisi ke foto lembut */}
-                                <svg
-                                    className="absolute inset-0 h-full w-full"
-                                    viewBox="0 0 100 100"
-                                    preserveAspectRatio="none"
-                                >
-                                    <defs>
-                                        <filter id="blurLembut" x="-20%" y="-20%" width="140%" height="140%">
-                                            <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" />
-                                        </filter>
-                                        <linearGradient id="fadeBiru" x1="0" y1="0" x2="1" y2="0">
-                                            <stop offset="0%" stopColor={WARNA.hijauTua} stopOpacity="0.55" />
-                                            <stop offset="70%" stopColor={WARNA.hijauTua} stopOpacity="0.30" />
-                                            <stop offset="100%" stopColor={WARNA.hijauTua} stopOpacity="0" />
-                                        </linearGradient>
-                                    </defs>
-                                    <g filter="url(#blurLembut)">
-                                        <path
-                                            d="M0,0 H60 C70,18 52,32 62,48 C72,64 52,80 62,100 H0 Z"
-                                            fill="url(#fadeBiru)"
-                                        />
-                                        <path
-                                            d="M0,0 H46 C54,20 40,34 48,50 C56,66 42,82 50,100 H0 Z"
-                                            fill={WARNA.hijauUtama}
-                                            opacity="0.22"
-                                        />
-                                    </g>
-                                </svg>
-                            </>
-                        ) : (
-                            <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
-                                <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
-                                    <rect width="500" height="500" fill={theme.bg} />
-                                    {theme.blob.map((b, i) =>
-                                        b.path ? (
-                                            <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
-                                        ) : (
-                                            <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
-                                        )
-                                    )}
-                                </svg>
-                            </div>
-                        )}
-                    </div>
+                    {renderSlide(items[current], bottomScrollRef)}
 
-                    <div ref={contentRef} className="relative flex flex-col h-full px-8 md:px-14 lg:px-20 py-10 md:py-14 pb-16 text-center overflow-y-auto">
-                        {item.theme === "welcome" ? (
-                            <div
-                                className={`flex flex-col flex-1 ${
-                                    punyaFoto
-                                        ? "items-start justify-center text-left"
-                                        : "items-center justify-center text-center"
-                                }`}
-                            >
-                                <h3
-                                    className={`text-xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 ${
-                                        punyaFoto ? "max-w-[92%] sm:max-w-md md:max-w-lg" : "max-w-4xl"
-                                    }`}
-                                    style={{
-                                        color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua,
-                                        whiteSpace: "pre-line",
-                                    }}
-                                >
-                                    {item.title}
-                                </h3>
-                                <p
-                                    className={`text-base md:text-lg lg:text-xl leading-relaxed ${
-                                        punyaFoto ? "max-w-sm md:max-w-md" : "max-w-3xl"
-                                    }`}
-                                    style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
-                                >
-                                    {item.description}
-                                </p>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="flex flex-col items-center justify-center shrink-0">
-                                    <h3
-                                        className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 max-w-4xl"
-                                        style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
-                                    >
-                                        {item.title}
-                                    </h3>
-                                    <p
-                                        className="text-base md:text-lg lg:text-xl max-w-3xl leading-relaxed"
-                                        style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
-                                    >
-                                        {item.description}
-                                    </p>
-                                </div>
-                                {item.points?.length > 0 && (
-                                    <>
-                                        {/* Mobile: 3 poin */}
-                                        <div className="mt-5 grid w-full max-w-4xl mx-auto gap-3 md:hidden">
-                                            {item.points.slice(0, 3).map((point, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm"
-                                                >
-                                                    <span
-                                                        className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                                                        style={{ backgroundColor: WARNA.hijauUtama }}
-                                                    >
-                                                        {i + 1}
-                                                    </span>
-                                                    <p className="text-sm leading-6 text-slate-700">{point}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        {/* Desktop: 4 poin */}
-                                        <div className="mt-5 hidden md:grid w-full max-w-4xl mx-auto gap-4 md:grid-cols-2">
-                                            {item.points.slice(0, 4).map((point, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm"
-                                                >
-                                                    <span
-                                                        className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                                                        style={{ backgroundColor: WARNA.hijauUtama }}
-                                                    >
-                                                        {i + 1}
-                                                    </span>
-                                                    <p className="text-sm leading-6 text-slate-700">{point}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </>
-                                )}
-                            </>
-                        )}
-                        {item.theme === "welcome" ? (
-                            <span
-                                className="absolute bottom-8 left-1/2 -translate-x-1/2 text-sm flex items-center gap-1.5"
-                                style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
-                            >
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
-                                    <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
-                                    <path d="M12 6v6l4 2" />
-                                </svg>
-                                Klik untuk melihat detail
-                            </span>
-                        ) : (
-                            <span
-                                className="mt-6 mb-2 mx-auto text-sm flex items-center gap-1.5"
-                                style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
-                            >
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
-                                    <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
-                                    <path d="M12 6v6l4 2" />
-                                </svg>
-                                Klik untuk melihat detail
-                            </span>
-                        )}
-                    </div>
+                    {incomingItem && (
+                        <div
+                            className="absolute inset-0 transition-opacity ease-in-out"
+                            style={{ opacity: incomingShown ? 1 : 0, transitionDuration: `${TRANSITION_MS}ms` }}
+                        >
+                            {renderSlide(incomingItem)}
+                        </div>
+                    )}
 
                     {items.length > 1 && (
                         <>
@@ -698,7 +721,7 @@ function AnnouncementCarousel({ onModalChange }) {
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); geser(-1); }}
                                 aria-label="Sebelumnya"
-                                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 transition-transform"
+                                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
                             >
                                 <IkonChevron arah="kiri" className="w-5 h-5" />
                             </button>
@@ -706,7 +729,7 @@ function AnnouncementCarousel({ onModalChange }) {
                                 type="button"
                                 onClick={(e) => { e.stopPropagation(); geser(1); }}
                                 aria-label="Selanjutnya"
-                                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 transition-transform"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
                             >
                                 <IkonChevron arah="kanan" className="w-5 h-5" />
                             </button>
@@ -722,8 +745,8 @@ function AnnouncementCarousel({ onModalChange }) {
                                         style={{
                                             width: i === index ? 24 : 6,
                                             backgroundColor: i === index
-                                                ? (punyaFoto ? "#FFFFFF" : WARNA.hijauUtama)
-                                                : (punyaFoto ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
+                                                ? (punyaFotoAktif ? "#FFFFFF" : WARNA.hijauUtama)
+                                                : (punyaFotoAktif ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
                                         }}
                                     />
                                 ))}
