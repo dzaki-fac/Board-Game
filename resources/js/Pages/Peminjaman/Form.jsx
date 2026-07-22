@@ -145,12 +145,12 @@ export default function Form({ boardgames = [] }) {
             <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
-                        <h2 className="card-title text-base mb-3">
+                        <h2 className="card-title text-base !mb-0">
                             Data Peminjam
                         </h2>
 
                         <div className="form-control">
-                                <label className="label pb-1">
+                                <label className="label !pt-0 !pb-1">
                                     <span className="label-text font-medium">
                                         Daftar Peminjam
                                     </span>
@@ -270,7 +270,7 @@ export default function Form({ boardgames = [] }) {
 
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
-                        <h2 className="card-title text-base mb-3">
+                        <h2 className="card-title text-base !mb-0">
                             Pilihan Board Game
                         </h2>
 
@@ -281,7 +281,7 @@ export default function Form({ boardgames = [] }) {
                         )}
 
                         <div className="form-control mb-3">
-                            <label className="label">
+                            <label className="label !pt-0 !pb-1">
                                 <span className="label-text font-medium">
                                     Cari board game
                                 </span>
@@ -375,13 +375,13 @@ export default function Form({ boardgames = [] }) {
 
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
-                        <h2 className="card-title text-base mb-3">
+                        <h2 className="card-title text-base !mb-0">
                             Waktu Peminjaman
                         </h2>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div className="form-control">
-                                <label className="label">
+                                <label className="label !pt-0 !pb-1">
                                     <span className="label-text font-medium">
                                         Tanggal pinjam
                                     </span>
@@ -406,7 +406,7 @@ export default function Form({ boardgames = [] }) {
                             </div>
 
                             <div className="form-control">
-                                <label className="label">
+                                <label className="label !pt-0 !pb-1">
                                     <span className="label-text font-medium">
                                         Jam pinjam
                                     </span>
@@ -429,7 +429,7 @@ export default function Form({ boardgames = [] }) {
 
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
-                        <h2 className="card-title text-base mb-3">Catatan</h2>
+                        <h2 className="card-title text-base !mb-0">Catatan</h2>
 
                         <div className="form-control">
                             <textarea
