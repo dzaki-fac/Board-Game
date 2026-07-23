@@ -44,7 +44,9 @@ export default function RatingDetail({ averageRating = 0, reviewsCount = 0, rati
                                 style={{ width: `${percentage}%`, backgroundColor: WARNA.hijauUtama }}
                             />
                         </div>
-                        <span className="w-10 text-right text-xs text-slate-500 tabular-nums">{count}</span>
+                        <span className="w-20 text-right text-xs text-slate-500 tabular-nums">
+                            {percentage}% <span className="text-slate-400">({count})</span>
+                        </span>
                     </div>
                 ))}
             </div>
