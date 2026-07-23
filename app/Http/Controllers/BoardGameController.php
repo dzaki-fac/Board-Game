@@ -56,6 +56,7 @@ class BoardGameController extends Controller
     {
         $games = BoardGame::withAvg('reviews', 'rating')
             ->withCount('reviews')
+            ->withCount('loans')
             ->orderBy('available_copies', 'desc')
             ->orderBy('nama')
             ->get([

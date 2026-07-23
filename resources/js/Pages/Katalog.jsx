@@ -214,9 +214,9 @@ function KartuGame({ game, tersedia }) {
                 })()}
 
                 <div className="mb-2">
-                    <h3 className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2">
+                    <p className="text-xs font-medium text-slate-700 mt-2 line-clamp-2">
                         {game.nama}
-                    </h3>
+                    </p>
                     <p className="text-xs text-slate-500 mt-0.5 truncate">{game.penerbit ?? "\u00A0"}</p>
                     <div className="mt-1">
                         <RatingSummary
@@ -316,6 +316,14 @@ const THEMES = {
             { path: "M80 60 Q220 10 340 100 Q440 180 380 300 Q320 400 180 380 Q40 360 20 220 Q0 100 80 60 Z", fill: WARNA.emas, opacity: "0.18" },
             { cx: 420, cy: 350, r: 55, fill: WARNA.hijauUtama, opacity: "0.14" },
             { cx: 60, cy: 400, r: 35, fill: WARNA.hijauTua, opacity: "0.10" },
+        ],
+    },
+    populer: {
+        bg: WARNA.krem,
+        blob: [
+            { path: "M100 30 Q240 0 320 100 Q400 200 320 300 Q240 400 120 380 Q0 360 20 220 Q40 80 100 30 Z", fill: WARNA.hijauUtama, opacity: "0.18" },
+            { cx: 420, cy: 340, r: 50, fill: WARNA.emas, opacity: "0.14" },
+            { cx: 60, cy: 400, r: 30, fill: WARNA.hijauTua, opacity: "0.10" },
         ],
     },
 };
@@ -443,6 +451,82 @@ function CarouselModal({ item, onClose }) {
             </div>
         </div>,
         document.body
+    );
+}
+
+function ProdukPopuler({ games }) {
+    const trackRef = useRef(null);
+    const posRef = useRef(0);
+    const rafRef = useRef(null);
+    const pausedRef = useRef(false);
+
+    const populer = useMemo(() => {
+        return [...games]
+            .sort((a, b) => (b.loans_count ?? 0) - (a.loans_count ?? 0))
+            .slice(0, 10);
+    }, [games]);
+
+    // Digandakan 2x supaya loop-nya mulus tanpa jeda/loncat
+    const loopedPopuler = useMemo(() => [...populer, ...populer], [populer]);
+
+    useEffect(() => {
+        if (populer.length === 0) return;
+        const track = trackRef.current;
+        if (!track) return;
+
+        const KECEPATAN = 0.6; // px per frame, kecil = pelan
+
+        function step() {
+            if (!pausedRef.current && track) {
+                posRef.current += KECEPATAN;
+                const setengah = track.scrollWidth / 2;
+                if (posRef.current >= setengah) {
+                    posRef.current -= setengah;
+                }
+                track.style.transform = `translateX(-${posRef.current}px)`;
+            }
+            rafRef.current = requestAnimationFrame(step);
+        }
+
+        rafRef.current = requestAnimationFrame(step);
+        return () => cancelAnimationFrame(rafRef.current);
+    }, [populer.length]);
+
+    if (populer.length === 0) return null;
+
+    return (
+        <div className="max-w-[1440px] mx-auto px-6 md:px-10 pt-8 relative">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-5 text-center md:text-left">
+                Produk Paling Populer
+            </h2>
+
+            <div
+                onMouseEnter={() => { pausedRef.current = true; }}
+                onMouseLeave={() => { pausedRef.current = false; }}
+                onTouchStart={() => { pausedRef.current = true; }}
+                onTouchEnd={() => { pausedRef.current = false; }}
+                className="overflow-hidden pb-2"
+            >
+                <div ref={trackRef} className="flex gap-4 w-max will-change-transform">
+                    {loopedPopuler.map((game, i) => (
+                        <div
+                            key={`${game.id}-${i}`}
+                            onClick={() => router.visit(`/katalog/${game.id}`)}
+                            className="shrink-0 w-40 cursor-pointer"
+                        >
+                            <div className="aspect-square rounded-xl overflow-hidden bg-slate-100">
+                                {game.link_foto?.[0] && (
+                                    <img src={game.link_foto[0]} alt={game.nama} className="w-full h-full object-cover" />
+                                )}
+                            </div>
+                            <p className="text-xs font-medium text-slate-700 mt-2 line-clamp-2 text-center">
+                                {game.nama}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
     );
 }
 
@@ -676,6 +760,68 @@ function AnnouncementCarousel({ onModalChange }) {
         const theme = THEMES[slideItem.theme] || THEMES.welcome;
         const punyaFoto = !!slideItem.bgImage;
 
+        if (slideItem.theme === "populer") {
+            const punyaFotoPopuler = !!slideItem.bgImage;
+
+            return (
+                <div className="absolute inset-0">
+                    {punyaFotoPopuler ? (
+                        <>
+                            <img
+                                src={slideItem.bgImage}
+                                alt=""
+                                className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                            />
+                            <div
+                                className="absolute inset-0"
+                                style={{ backgroundColor: "rgba(255,255,255,0.55)" }}
+                            />
+                        </>
+                    ) : (
+                        <div className="absolute inset-0" style={{ backgroundColor: theme.bg }} />
+                    )}
+
+                    <div
+                        ref={scrollRef}
+                        className="relative flex flex-col h-full justify-center px-4 md:px-14 lg:px-20 py-6 md:py-10 text-center overflow-y-auto"
+                    >
+                        <p
+                            className="text-xs md:text-lg lg:text-xl mb-4 md:mb-6 font-medium"
+                            style={{ color: WARNA.hijauTua }}
+                        >
+                            {slideItem.description}
+                        </p>
+
+                        <div className="flex justify-center gap-3 md:gap-6 flex-wrap">
+                            {slideItem.gamesPopuler.map((game) => (
+                                <div
+                                    key={game.id}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        router.visit(`/katalog/${game.id}`);
+                                    }}
+                                    className="cursor-pointer w-20 md:w-32 shrink-0"
+                                >
+                                    <div className="aspect-square rounded-xl overflow-hidden bg-white shadow-sm">
+                                        {game.link_foto?.[0] && (
+                                            <img
+                                                src={game.link_foto[0]}
+                                                alt={game.nama}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        )}
+                                    </div>
+                                    <p className="text-[10px] md:text-xs font-medium text-slate-700 mt-1.5 line-clamp-2">
+                                        {game.nama}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div className="absolute inset-0">
                 {punyaFoto ? (
@@ -795,7 +941,7 @@ function AnnouncementCarousel({ onModalChange }) {
         <>
             <div
                 ref={wrapperRef}
-                className="w-full relative z-10 h-[36vh] min-h-[270px] md:h-[calc(100dvh-92px)] md:min-h-[calc(100dvh-92px)]"
+                className="w-full relative z-10 h-[36vh] min-h-[270px] md:h-[60vh] md:min-h-[420px]"
             >
                 <div
                     className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md select-none touch-pan-y"
@@ -854,6 +1000,8 @@ function AnnouncementCarousel({ onModalChange }) {
     );
 }
 
+
+
 /* ========================= Halaman Katalog ========================= */
 
 function IsiKatalog({ games, bahasa, setBahasa }) {
@@ -875,6 +1023,20 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
         });
         return ["Semua", ...Array.from(set).sort()];
     }, [games]);
+
+    const gamePalingPopuler = useMemo(() => {
+        return [...games]
+            .sort((a, b) => (b.loans_count ?? 0) - (a.loans_count ?? 0))
+            .slice(0, 4);
+    }, [games]);
+
+    const slidePopuler = useMemo(() => ({
+        theme: "populer",
+        bgImage: "https://images.unsplash.com/photo-1719494206741-79831f9f4d51?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        title: "Board Game Paling Populer",
+        description: "Board game yang paling sering dipinjam di perpustakaan.",
+        gamesPopuler: gamePalingPopuler, // <- data game asli, bukan cuma nama
+    }), [gamePalingPopuler]);
 
     const filtered = useMemo(() => {
         return games.filter((g) => {
@@ -900,7 +1062,8 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
         <div className="min-h-screen bg-white text-[15px]">
             <TopNavbar bahasa={bahasa} setBahasa={setBahasa} />
 
-            <AnnouncementCarousel onModalChange={setModalCarouselOpen} />
+            <AnnouncementCarousel onModalChange={setModalCarouselOpen}/>
+            <ProdukPopuler games={games} />
 
             {/* Filter & sort, ala baris filter Amazon */}
             <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
