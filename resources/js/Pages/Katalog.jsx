@@ -165,12 +165,38 @@ function KartuGame({ game, tersedia }) {
             </div>
 
             {/* supaya semua kartu dalam satu baris tingginya sama */}
-            <div className="p-4 flex flex-col flex-1">
-                <div className="flex flex-wrap gap-1 mb-2">
-                    {(Array.isArray(game.kategori) && game.kategori.length > 0
-                        ? game.kategori
-                        : [game.kategori ?? t.umum]
-                    ).map((k, i) => {
+                <div className="p-4 flex flex-col flex-1">
+                    {(() => {
+        const kategoriArr = Array.isArray(game.kategori) && game.kategori.length > 0
+            ? game.kategori
+            : [game.kategori ?? t.umum];
+        const MAKS_MOBILE = 2;
+        const sisa = kategoriArr.length - MAKS_MOBILE;
+
+        return (
+            <>
+                <div className="flex sm:hidden flex-nowrap gap-1 mb-2 overflow-hidden">
+                    {kategoriArr.slice(0, MAKS_MOBILE).map((k, i) => {
+                        const [kw, kb] = warnaKategori(k);
+                        return (
+                            <span
+                                key={i}
+                                className="inline-block shrink self-start truncate max-w-[45%] text-[9px] font-medium px-2 py-0.5 rounded-full"
+                                style={{ backgroundColor: kb, color: kw }}
+                            >
+                                {k}
+                            </span>
+                        );
+                    })}
+                    {sisa > 0 && (
+                        <span className="inline-block shrink-0 self-start whitespace-nowrap text-[9px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                            +{sisa}
+                        </span>
+                    )}
+                </div>
+
+                <div className="hidden sm:flex flex-wrap gap-1 mb-2">
+                    {kategoriArr.map((k, i) => {
                         const [kw, kb] = warnaKategori(k);
                         return (
                             <span
@@ -183,6 +209,9 @@ function KartuGame({ game, tersedia }) {
                         );
                     })}
                 </div>
+            </>
+        );
+    })()}
 
                 <div className="mb-2">
                     <h3 className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2">
@@ -199,16 +228,16 @@ function KartuGame({ game, tersedia }) {
 
                 <div className="mt-auto">
                     <div className="text-[11px] text-slate-500 mb-3 space-y-0.5">
-                        <div className="flex items-center gap-x-1.5">
-                            <span className="flex items-center gap-1 whitespace-nowrap">
-                                <IkonPemain className="w-3.5 h-3.5 shrink-0" />
-                                {formatPemain(game.jumlah_pemain, t)}
-                            </span>
-                            <span className="flex items-center gap-1 whitespace-nowrap">
-                                <IkonJam className="w-3.5 h-3.5 shrink-0" />
-                                {formatDurasi(game.durasi, t)}
-                            </span>
-                        </div>
+                        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+    <span className="flex items-center gap-1 whitespace-nowrap">
+        <IkonPemain className="w-3.5 h-3.5 shrink-0" />
+        {formatPemain(game.jumlah_pemain, t)}
+    </span>
+    <span className="flex items-center gap-1 whitespace-nowrap">
+        <IkonJam className="w-3.5 h-3.5 shrink-0" />
+        {formatDurasi(game.durasi, t)}
+    </span>
+</div>
                         <div className="flex items-center gap-1 whitespace-nowrap">
                             <IkonRak className="w-3.5 h-3.5 shrink-0" />
                             {t.lantai} {game.lantai}
@@ -363,7 +392,7 @@ function CarouselModal({ item, onClose }) {
 
                             <button
                                 onClick={onClose}
-                                className="absolute top-3 right-3 md:top-6 md:right-6 z-10 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors"
+                                className="absolute top-3 right-3 md:top-6 md:right-6 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors touch-manipulation"
                             >
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 md:w-5 md:h-5">
                                     <path d="M18 6 6 18" /><path d="m6 6 12 12" />
@@ -383,19 +412,21 @@ function CarouselModal({ item, onClose }) {
                                 >
                                     {item.detailDescription}
                                 </p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
-                                    {item.points.map((point, i) => (
-                                        <div key={i} className="flex items-start gap-3 md:gap-4 p-3 md:p-6 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
-                                            <span className="shrink-0 mt-0.5 w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
-                                                {i + 1}
-                                            </span>
-                                            <p className="text-xs md:text-base text-slate-700 leading-relaxed">{point}</p>
-                                        </div>
-                                    ))}
-                                </div>
+                                <div className="max-h-[260px] md:max-h-[280px] overflow-y-auto pr-1 -mr-1">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
+        {item.points.map((point, i) => (
+            <div key={i} className="flex items-start gap-3 md:gap-4 p-3 md:p-6 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
+                <span className="shrink-0 mt-0.5 w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                    {i + 1}
+                </span>
+                <p className="text-xs md:text-base text-slate-700 leading-relaxed">{point}</p>
+            </div>
+        ))}
+    </div>
+</div>
                                 <button
                                     onClick={onClose}
-                                    className="mt-5 md:mt-8 w-full rounded-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white transition-colors"
+                                    className="mt-5 md:mt-8 w-full rounded-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white transition-colors touch-manipulation"
                                     style={{ backgroundColor: WARNA.hijauUtama }}
                                     onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
                                     onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
@@ -569,37 +600,72 @@ function AnnouncementCarousel({ onModalChange }) {
         startAutoplay();
     }, [startAutoplay]);
 
-    const handlePointerDown = useCallback((e) => {
-        pointerStartX.current = e.clientX;
+    // FIX (swipe gak jalan): Pointer Events kadang tidak konsisten di
+    // berbagai browser/WebView. Diganti ke Touch Events (HP) + Mouse Events
+    // (desktop) — pendekatan klasik yang didukung semua browser tanpa
+    // pengecualian.
+    const startDrag = useCallback((clientX) => {
+        pointerStartX.current = clientX;
         pointerDeltaX.current = 0;
         isDragging.current = false;
+    }, []);
 
-        const handleMove = (ev) => {
-            if (pointerStartX.current === null) return;
-            pointerDeltaX.current = ev.clientX - pointerStartX.current;
-            if (Math.abs(pointerDeltaX.current) > 10) {
-                isDragging.current = true;
-            }
-        };
+    const moveDrag = useCallback((clientX) => {
+        if (pointerStartX.current === null) return;
+        pointerDeltaX.current = clientX - pointerStartX.current;
+        if (Math.abs(pointerDeltaX.current) > 10) {
+            isDragging.current = true;
+        }
+    }, []);
 
-        const handleUp = () => {
-            const threshold = 50;
-            if (pointerDeltaX.current > threshold) {
-                geser(-1);
-            } else if (pointerDeltaX.current < -threshold) {
-                geser(1);
-            }
-            pointerStartX.current = null;
-            pointerDeltaX.current = 0;
-            window.removeEventListener("pointermove", handleMove);
-            window.removeEventListener("pointerup", handleUp);
-            window.removeEventListener("pointercancel", handleUp);
-        };
-
-        window.addEventListener("pointermove", handleMove);
-        window.addEventListener("pointerup", handleUp);
-        window.addEventListener("pointercancel", handleUp);
+    const endDrag = useCallback(() => {
+        const threshold = 50;
+        if (pointerDeltaX.current > threshold) {
+            geser(-1);
+        } else if (pointerDeltaX.current < -threshold) {
+            geser(1);
+        }
+        pointerStartX.current = null;
+        pointerDeltaX.current = 0;
     }, [geser]);
+
+    const resetDrag = useCallback(() => {
+        pointerStartX.current = null;
+        pointerDeltaX.current = 0;
+        isDragging.current = false;
+    }, []);
+
+    const handleTouchStart = useCallback((e) => {
+        startDrag(e.touches[0].clientX);
+    }, [startDrag]);
+
+    const handleTouchMove = useCallback((e) => {
+        moveDrag(e.touches[0].clientX);
+    }, [moveDrag]);
+
+    const handleTouchEnd = useCallback(() => {
+        endDrag();
+    }, [endDrag]);
+
+    // FIX (drag mouse gak kedeteksi): kalau mousemove/mouseup cuma didengar
+    // di div carousel-nya, drag yang agak cepat bikin kursor keluar dari
+    // area itu duluan sebelum tombol mouse dilepas — gesture-nya jadi ke-cancel
+    // sebelum sempat dianggap swipe. Solusinya: begitu mouse ditekan, dengarkan
+    // mousemove & mouseup di `window`, jadi drag tetap terdeteksi walau
+    // kursor sempat keluar dari area carousel.
+    const handleMouseDown = useCallback((e) => {
+        startDrag(e.clientX);
+
+        const onWindowMouseMove = (ev) => moveDrag(ev.clientX);
+        const onWindowMouseUp = () => {
+            endDrag();
+            window.removeEventListener("mousemove", onWindowMouseMove);
+            window.removeEventListener("mouseup", onWindowMouseUp);
+        };
+
+        window.addEventListener("mousemove", onWindowMouseMove);
+        window.addEventListener("mouseup", onWindowMouseUp);
+    }, [startDrag, moveDrag, endDrag]);
 
     // Render isi satu slide (background + teks). Dipakai untuk layer bawah
     // (current) maupun layer atas (incoming) supaya tidak duplikasi JSX.
@@ -615,7 +681,8 @@ function AnnouncementCarousel({ onModalChange }) {
                             src={slideItem.bgImage}
                             alt=""
                             draggable={false}
-                            className="absolute inset-0 h-full w-full object-cover"
+                            onDragStart={(e) => e.preventDefault()}
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
                         />
                         {/* FIX (jank di HP): dulu pakai <feGaussianBlur> di sini — filter SVG
                             itu berat untuk di-render ulang tiap frame crossfade, terutama di
@@ -700,9 +767,6 @@ function AnnouncementCarousel({ onModalChange }) {
                             )}
                         </>
                     )}
-                    {/* "Klik untuk melihat detail" selalu absolute di bawah di mobile,
-                        supaya tidak menyatu/berdempetan dengan judul & deskripsi di
-                        ruang slide yang pendek. Di desktop tetap mengikuti flow lama. */}
                     <span
                         className={`absolute bottom-7 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
                             slideItem.theme === "welcome" ? "md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
@@ -726,23 +790,23 @@ function AnnouncementCarousel({ onModalChange }) {
 
     return (
         <>
-            {/* FIX (tinggi carousel mobile): dulu height selalu 'calc(100dvh - 92px)'
-                di semua ukuran layar, jadi di HP carousel makan hampir 1 layar penuh.
-                Sekarang di mobile tingginya ~25% viewport (dibatasi minimum 200px biar
-                teks tidak kepotong), dan baru full-height mulai breakpoint md ke atas. */}
             <div
                 ref={wrapperRef}
                 className="w-full relative z-10 h-[36vh] min-h-[270px] md:h-[calc(100dvh-92px)] md:min-h-[calc(100dvh-92px)]"
             >
                 <div
                     className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md select-none touch-pan-y"
-                    onDragStart={(e) => e.preventDefault()}
+                    style={{ touchAction: "pan-y" }}
                     onClick={() => {
                         if (isDragging.current) return;
                         clearAutoplay();
                         setModalItem(activeItem);
                     }}
-                    onPointerDown={handlePointerDown}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
+                    onTouchCancel={resetDrag}
+                    onMouseDown={handleMouseDown}
                 >
                     {renderSlide(items[current], bottomScrollRef)}
 
@@ -752,8 +816,6 @@ function AnnouncementCarousel({ onModalChange }) {
                             style={{
                                 opacity: incomingShown ? 1 : 0,
                                 transitionDuration: `${TRANSITION_MS}ms`,
-                                // FIX (jank di HP): paksa layer ini di-composite di GPU
-                                // supaya crossfade tidak nge-block main thread.
                                 transform: "translateZ(0)",
                                 backfaceVisibility: "hidden",
                             }}
