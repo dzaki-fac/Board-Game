@@ -20,3 +20,15 @@ export function labelKesulitan(nilai, t) {
     if (nilai <= 3.5) return t.sedang;
     return t.berat;
 }
+
+export function parseKomponenNama(nama, bahasa) {
+    if (!nama) return "";
+    // Coba tangkap pola "Teks Inggris (Teks Indonesia)"
+    const match = nama.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+    if (!match) {
+        // Tidak ada kurung sama sekali — cuma ada satu versi teks, tampilkan apa adanya
+        return nama;
+    }
+    const [, inggris, indonesia] = match;
+    return bahasa === "EN" ? inggris.trim() : indonesia.trim();
+}

@@ -10,9 +10,10 @@ import BadgeUsia from "../Components/BadgeUsia";
 import TautanEksternal from "../Components/TautanEksternal";
 import SeksiGameSerupa from "../Components/SeksiGameSerupa";
 import { WARNA, warnaKategori } from "../Components/theme";
-import { BahasaContext, TEKS, useTeks } from "../Components/BahasaContext";
+import { BahasaContext, TEKS, useTeks, useBahasaState } from "../Components/BahasaContext";
 import { IkonPemain, IkonJam, IkonRak, IkonLabel, IkonPanahBawah, IkonPlay, IkonBuku } from "../Components/icons";
-import { formatPemain, formatDurasi } from "../Components/format";
+import { DESKRIPSI_EN } from "../Components/deskripsiEn";
+import { formatPemain, formatDurasi, parseKomponenNama } from "../Components/format";
 
 function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingDistribution, selectedReviewRating, bahasa, setBahasa }) {
     const t = useTeks();
@@ -21,6 +22,10 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
     const daftarKomponen = useMemo(() => game.komponen ?? [], [game.komponen]);
     const [tampilkanKomponen, setTampilkanKomponen] = useState(false);
     const adaBadge = game.tingkat_kesulitan || game.usia_minimum;
+
+    const deskripsiTampil = bahasa === "EN"
+        ? (DESKRIPSI_EN[game.nama] ?? game.deskripsi)
+        : game.deskripsi;
 
     return (
         <div className="min-h-screen bg-white text-[15px]">
@@ -83,13 +88,13 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                                 </div>
                             </div>
 
-                            {game.deskripsi && (
+                            {deskripsiTampil && (
                                 <div className="mb-5">
                                     <h3 className="text-sm font-semibold text-slate-800 mb-1.5">
                                         {t.deskripsiGame}
                                     </h3>
                                     <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-line text-justify">
-                                        {game.deskripsi}
+                                        {deskripsiTampil}
                                     </p>
                                 </div>
                             )}
@@ -122,7 +127,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                                             {daftarKomponen.map((item, i) => (
                                                 <li key={i} className="flex items-start gap-2 text-sm text-slate-600 leading-snug">
                                                     <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: warna }} />
-                                                    <span className="font-medium capitalize">{item.nama}</span>
+                                                    <span className="font-medium capitalize">{parseKomponenNama(item.nama, bahasa)}</span>
                                                     <span className="text-slate-400 ml-auto">x{item.jumlah}</span>
                                                 </li>
                                             ))}
@@ -173,7 +178,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
 }
 
 export default function Detail({ game, gameSerupa = [], reviews = [], avgRating = null, totalReviews = 0, ratingDistribution = [], selectedReviewRating = 'all' }) {
-    const [bahasa, setBahasa] = useState("ID");
+    const [bahasa, setBahasa] = useBahasaState();
 
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>

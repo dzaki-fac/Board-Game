@@ -81,3 +81,11 @@
         @apply bg-red-100 text-red-700 border-red-200 rounded-md;
     }
 }
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

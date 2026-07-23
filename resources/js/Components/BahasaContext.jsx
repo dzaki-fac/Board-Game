@@ -1,5 +1,19 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
+const KUNCI_PENYIMPANAN = "bahasa";
+
+export function useBahasaState() {
+    const [bahasa, setBahasa] = useState(() => {
+        if (typeof window === "undefined") return "ID";
+        return localStorage.getItem(KUNCI_PENYIMPANAN) || "ID";
+    });
+
+    useEffect(() => {
+        localStorage.setItem(KUNCI_PENYIMPANAN, bahasa);
+    }, [bahasa]);
+
+    return [bahasa, setBahasa];
+}
 
 export const TEKS = {
     ID: {
