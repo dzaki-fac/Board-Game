@@ -12,8 +12,8 @@ import SeksiGameSerupa from "../Components/SeksiGameSerupa";
 import { WARNA, warnaKategori } from "../Components/theme";
 import { BahasaContext, TEKS, useTeks, useBahasaState } from "../Components/BahasaContext";
 import { IkonPemain, IkonJam, IkonRak, IkonLabel, IkonPanahBawah, IkonPlay, IkonBuku } from "../Components/icons";
-import { formatPemain, formatDurasi } from "../Components/format";
 import { DESKRIPSI_EN } from "../Components/deskripsiEn";
+import { formatPemain, formatDurasi, parseKomponenNama } from "../Components/format";
 
 function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingDistribution, selectedReviewRating, bahasa, setBahasa }) {
     const t = useTeks();
@@ -127,7 +127,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                                             {daftarKomponen.map((item, i) => (
                                                 <li key={i} className="flex items-start gap-2 text-sm text-slate-600 leading-snug">
                                                     <span className="mt-1.5 w-1 h-1 rounded-full shrink-0" style={{ backgroundColor: warna }} />
-                                                    <span className="font-medium capitalize">{item.nama}</span>
+                                                    <span className="font-medium capitalize">{parseKomponenNama(item.nama, bahasa)}</span>
                                                     <span className="text-slate-400 ml-auto">x{item.jumlah}</span>
                                                 </li>
                                             ))}
