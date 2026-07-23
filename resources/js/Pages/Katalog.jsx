@@ -165,53 +165,53 @@ function KartuGame({ game, tersedia }) {
             </div>
 
             {/* supaya semua kartu dalam satu baris tingginya sama */}
-                <div className="p-4 flex flex-col flex-1">
-                    {(() => {
-        const kategoriArr = Array.isArray(game.kategori) && game.kategori.length > 0
-            ? game.kategori
-            : [game.kategori ?? t.umum];
-        const MAKS_MOBILE = 2;
-        const sisa = kategoriArr.length - MAKS_MOBILE;
+            <div className="p-4 flex flex-col flex-1">
+                {(() => {
+                    const kategoriArr = Array.isArray(game.kategori) && game.kategori.length > 0
+                        ? game.kategori
+                        : [game.kategori ?? t.umum];
+                    const MAKS_MOBILE = 2;
+                    const sisa = kategoriArr.length - MAKS_MOBILE;
 
-        return (
-            <>
-                <div className="flex sm:hidden flex-nowrap gap-1 mb-2 overflow-hidden">
-                    {kategoriArr.slice(0, MAKS_MOBILE).map((k, i) => {
-                        const [kw, kb] = warnaKategori(k);
-                        return (
-                            <span
-                                key={i}
-                                className="inline-block shrink self-start truncate max-w-[45%] text-[9px] font-medium px-2 py-0.5 rounded-full"
-                                style={{ backgroundColor: kb, color: kw }}
-                            >
-                                {k}
-                            </span>
-                        );
-                    })}
-                    {sisa > 0 && (
-                        <span className="inline-block shrink-0 self-start whitespace-nowrap text-[9px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
-                            +{sisa}
-                        </span>
-                    )}
-                </div>
+                    return (
+                        <>
+                            <div className="flex sm:hidden flex-nowrap gap-1 mb-2 overflow-hidden">
+                                {kategoriArr.slice(0, MAKS_MOBILE).map((k, i) => {
+                                    const [kw, kb] = warnaKategori(k);
+                                    return (
+                                        <span
+                                            key={i}
+                                            className="inline-block shrink self-start truncate max-w-[45%] text-[9px] font-medium px-2 py-0.5 rounded-full"
+                                            style={{ backgroundColor: kb, color: kw }}
+                                        >
+                                            {k}
+                                        </span>
+                                    );
+                                })}
+                                {sisa > 0 && (
+                                    <span className="inline-block shrink-0 self-start whitespace-nowrap text-[9px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                                        +{sisa}
+                                    </span>
+                                )}
+                            </div>
 
-                <div className="hidden sm:flex flex-wrap gap-1 mb-2">
-                    {kategoriArr.map((k, i) => {
-                        const [kw, kb] = warnaKategori(k);
-                        return (
-                            <span
-                                key={i}
-                                className="inline-block self-start text-[11px] font-medium px-2.5 py-1 rounded-full"
-                                style={{ backgroundColor: kb, color: kw }}
-                            >
-                                {k}
-                            </span>
-                        );
-                    })}
-                </div>
-            </>
-        );
-    })()}
+                            <div className="hidden sm:flex flex-wrap gap-1 mb-2">
+                                {kategoriArr.map((k, i) => {
+                                    const [kw, kb] = warnaKategori(k);
+                                    return (
+                                        <span
+                                            key={i}
+                                            className="inline-block self-start text-[11px] font-medium px-2.5 py-1 rounded-full"
+                                            style={{ backgroundColor: kb, color: kw }}
+                                        >
+                                            {k}
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    );
+                })()}
 
                 <div className="mb-2">
                     <h3 className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2">
@@ -226,24 +226,27 @@ function KartuGame({ game, tersedia }) {
                     </div>
                 </div>
 
-                <div className="mt-auto">
-                    <div className="text-[11px] text-slate-500 mb-3 space-y-0.5">
-                        <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
-    <span className="flex items-center gap-1 whitespace-nowrap">
-        <IkonPemain className="w-3.5 h-3.5 shrink-0" />
-        {formatPemain(game.jumlah_pemain, t)}
-    </span>
-    <span className="flex items-center gap-1 whitespace-nowrap">
-        <IkonJam className="w-3.5 h-3.5 shrink-0" />
-        {formatDurasi(game.durasi, t)}
-    </span>
-</div>
-                        <div className="flex items-center gap-1 whitespace-nowrap">
-                            <IkonRak className="w-3.5 h-3.5 shrink-0" />
-                            {t.lantai} {game.lantai}
-                        </div>
+                {/* Info pemain/durasi/lantai — sekarang nempel rapat di bawah rating,
+                    TIDAK lagi didorong oleh mt-auto */}
+                <div className="text-[11px] text-slate-500 mb-3 space-y-0.5">
+                    <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                        <span className="flex items-center gap-1 whitespace-nowrap">
+                            <IkonPemain className="w-3.5 h-3.5 shrink-0" />
+                            {formatPemain(game.jumlah_pemain, t)}
+                        </span>
+                        <span className="flex items-center gap-1 whitespace-nowrap">
+                            <IkonJam className="w-3.5 h-3.5 shrink-0" />
+                            {formatDurasi(game.durasi, t)}
+                        </span>
                     </div>
+                    <div className="flex items-center gap-1 whitespace-nowrap">
+                        <IkonRak className="w-3.5 h-3.5 shrink-0" />
+                        {t.lantai} {game.lantai}
+                    </div>
+                </div>
 
+                {/* Cuma tombol ini yang didorong ke bawah kartu */}
+                <div className="mt-auto">
                     {tersedia ? (
                         <div onClick={(e) => e.stopPropagation()}>
                             <Link
