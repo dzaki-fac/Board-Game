@@ -5,7 +5,7 @@ import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
 import TopNavbar from "../Components/TopNavbar";
 import { WARNA, warnaKategori } from "../Components/theme";
-import { BahasaContext, TEKS, useTeks } from "../Components/BahasaContext";
+import { BahasaContext, TEKS, useTeks, useBahasaState } from "../Components/BahasaContext";
 
 /* ========================= Ikon-ikon kecil ========================= */
 
@@ -1215,8 +1215,7 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
 }
 
 export default function Katalog({ games }) {
-    const [bahasa, setBahasa] = useState("ID");
-
+    const [bahasa, setBahasa] = useBahasaState();
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
             <Head title="Katalog Board Game" />
