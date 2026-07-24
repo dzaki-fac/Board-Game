@@ -1215,7 +1215,17 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
 }
 
 export default function Katalog({ games }) {
-    const [bahasa, setBahasa] = useState("ID");
+    const [bahasa, setBahasaState] = useState(() => {
+        if (typeof window === "undefined") return "ID";
+        return localStorage.getItem("bahasa") || "ID";
+    });
+
+    const setBahasa = (b) => {
+        setBahasaState(b);
+        if (typeof window !== "undefined") {
+            localStorage.setItem("bahasa", b);
+        }
+    };
 
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
