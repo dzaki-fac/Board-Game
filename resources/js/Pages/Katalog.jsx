@@ -1,11 +1,13 @@
 import { createPortal } from "react-dom";
-import { useMemo, useState, useRef, useEffect, useCallback } from "react";
+import { useMemo, useState, useRef, useEffect, useCallback, memo } from "react";
 import { Head, Link, router } from "@inertiajs/react";
+import { motion } from "framer-motion";
 import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
 import TopNavbar from "../Components/TopNavbar";
 import { WARNA, warnaKategori } from "../Components/theme";
 import { BahasaContext, TEKS, useTeks, useBahasaState } from "../Components/BahasaContext";
+import { AnimatedSection, Reveal, StaggerGrid, MotionButton, MotionLink } from "../Components/animations";
 
 /* ========================= Ikon-ikon kecil ========================= */
 
@@ -122,13 +124,13 @@ function KartuGame({ game, tersedia }) {
             tabIndex={0}
             onClick={() => router.visit(`/katalog/${game.id}`)}
             onKeyDown={(e) => { if (e.key === 'Enter') router.visit(`/katalog/${game.id}`) }}
-            className={`group h-full flex flex-col rounded-2xl border transition-all duration-300 overflow-hidden cursor-pointer hover:shadow-lg hover:-translate-y-0.5 ${
+            className={`group h-full flex flex-col rounded-2xl border overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
                 tersedia
                     ? "bg-white border-slate-100 shadow-sm"
                     : "bg-white border-slate-200"
             }`}
         >
-            <div className="relative">
+            <div className="relative overflow-hidden">
                 <span
                     className={`absolute top-3 right-3 z-10 text-[11px] font-semibold px-3 py-1 rounded-full ${
                         tersedia ? "bg-sky-800 text-white" : "bg-slate-500 text-white"
@@ -138,11 +140,11 @@ function KartuGame({ game, tersedia }) {
                 </span>
 
                 <div
-                    className={`relative aspect-square flex items-center justify-center ${!tersedia ? "grayscale" : ""}`}
+                    className={`relative aspect-square flex items-center justify-center overflow-hidden ${!tersedia ? "grayscale" : ""}`}
                     style={{ backgroundColor: bg }}
                 >
                 {game.link_foto?.[0] ? (
-                    <>
+                    <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-105">
                         <img
                             src={game.link_foto[0]}
                             alt={game.nama}
@@ -157,14 +159,13 @@ function KartuGame({ game, tersedia }) {
                                 className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                             />
                         )}
-                    </>
+                    </div>
                 ) : (
                     <IkonDadu pip={pipDariJumlahPemain(game.jumlah_pemain)} color={warna} />
                 )}
             </div>
             </div>
 
-            {/* supaya semua kartu dalam satu baris tingginya sama */}
             <div className="p-4 flex flex-col flex-1">
                 {(() => {
                     const kategoriArr = Array.isArray(game.kategori) && game.kategori.length > 0
@@ -226,8 +227,6 @@ function KartuGame({ game, tersedia }) {
                     </div>
                 </div>
 
-                {/* Info pemain/durasi/lantai — sekarang nempel rapat di bawah rating,
-                    TIDAK lagi didorong oleh mt-auto */}
                 <div className="text-[11px] text-slate-500 mb-3 space-y-0.5">
                     <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
                         <span className="flex items-center gap-1 whitespace-nowrap">
@@ -245,13 +244,12 @@ function KartuGame({ game, tersedia }) {
                     </div>
                 </div>
 
-                {/* Cuma tombol ini yang didorong ke bawah kartu */}
                 <div className="mt-auto">
                     {tersedia ? (
                         <div onClick={(e) => e.stopPropagation()}>
                             <Link
                                 href={`/katalog/${game.id}`}
-                                className="block w-full rounded-full py-2 text-sm font-semibold text-white text-center transition-colors"
+                                className="block w-full rounded-full py-2 text-sm font-semibold text-white text-center transition-all duration-200 active:scale-95 hover:scale-[1.02]"
                                 style={{ backgroundColor: WARNA.hijauUtama }}
                                 onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
                                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
@@ -268,6 +266,25 @@ function KartuGame({ game, tersedia }) {
                     )}
                 </div>
             </div>
+        </div>
+    );
+}
+
+/* ========================= Parallax Background (lightweight) ========================= */
+/* Single reveal on scroll, no continuous scroll-linked update */
+
+function ParallaxBg({ children }) {
+    return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <motion.div
+                className="absolute inset-0"
+                initial={{ y: 15 }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+            >
+                {children}
+            </motion.div>
         </div>
     );
 }
@@ -402,14 +419,14 @@ function CarouselModal({ item, onClose }) {
                                 </svg>
                             )}
 
-                            <button
+                            <MotionButton
                                 onClick={onClose}
                                 className="absolute top-3 right-3 md:top-6 md:right-6 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors touch-manipulation"
                             >
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 md:w-5 md:h-5">
                                     <path d="M18 6 6 18" /><path d="m6 6 12 12" />
                                 </svg>
-                            </button>
+                            </MotionButton>
 
                             <div className="relative z-10">
                                 <h2
@@ -436,15 +453,15 @@ function CarouselModal({ item, onClose }) {
         ))}
     </div>
 </div>
-                                <button
+                                <MotionButton
                                     onClick={onClose}
-                                    className="mt-5 md:mt-8 w-full rounded-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white transition-colors touch-manipulation"
+                                    className="mt-5 md:mt-8 w-full rounded-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white touch-manipulation"
                                     style={{ backgroundColor: WARNA.hijauUtama }}
-                                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
-                                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
+                                    whileHover={{ scale: 1.02, backgroundColor: WARNA.hijauHover }}
+                                    whileTap={{ scale: 0.97 }}
                                 >
                                     {t.tutup}
-                                </button>
+                                </MotionButton>
                             </div>
                         </div>
                     </div>
@@ -532,7 +549,7 @@ function ProdukPopuler({ games }) {
     );
 }
 
-function AnnouncementCarousel({ onModalChange }) {
+const AnnouncementCarousel = memo(function AnnouncementCarousel({ onModalChange }) {
     const t = useTeks();
     const items = t.carousel;
 
@@ -546,6 +563,7 @@ function AnnouncementCarousel({ onModalChange }) {
 
     const [modalItem, setModalItem] = useState(null);
     const [paused, setPaused] = useState(false);
+    const [grabbing, setGrabbing] = useState(false);
     const wrapperRef = useRef(null);
     const bottomScrollRef = useRef(null);
     const lastChangeRef = useRef(Date.now());
@@ -553,9 +571,7 @@ function AnnouncementCarousel({ onModalChange }) {
     const mountedRef = useRef(true);
     const transitionTimeoutRef = useRef(null);
     const rafRef = useRef(null);
-    const pointerStartX = useRef(null);
-    const pointerDeltaX = useRef(0);
-    const isDragging = useRef(false);
+    const dragOccurredRef = useRef(false);
 
     const TRANSITION_MS = 700;
 
@@ -689,72 +705,31 @@ function AnnouncementCarousel({ onModalChange }) {
         startAutoplay();
     }, [startAutoplay]);
 
-    // FIX (swipe gak jalan): Pointer Events kadang tidak konsisten di
-    // berbagai browser/WebView. Diganti ke Touch Events (HP) + Mouse Events
-    // (desktop) — pendekatan klasik yang didukung semua browser tanpa
-    // pengecualian.
-    const startDrag = useCallback((clientX) => {
-        pointerStartX.current = clientX;
-        pointerDeltaX.current = 0;
-        isDragging.current = false;
-    }, []);
+    const handleDragStart = useCallback(() => {
+        setGrabbing(true);
+        dragOccurredRef.current = false;
+        clearAutoplay();
+    }, [clearAutoplay]);
 
-    const moveDrag = useCallback((clientX) => {
-        if (pointerStartX.current === null) return;
-        pointerDeltaX.current = clientX - pointerStartX.current;
-        if (Math.abs(pointerDeltaX.current) > 10) {
-            isDragging.current = true;
+    const handleDrag = useCallback((_, info) => {
+        if (Math.abs(info.offset.x) > 5) {
+            dragOccurredRef.current = true;
         }
     }, []);
 
-    const endDrag = useCallback(() => {
-        const threshold = 50;
-        if (pointerDeltaX.current > threshold) {
+    const handleDragEnd = useCallback((_, info) => {
+        setGrabbing(false);
+        const threshold = 80;
+        const offsetX = info.offset.x;
+        const velocityX = info.velocity.x;
+        if (offsetX > threshold || velocityX > 500) {
             geser(-1);
-        } else if (pointerDeltaX.current < -threshold) {
+        } else if (offsetX < -threshold || velocityX < -500) {
             geser(1);
+        } else {
+            startAutoplay();
         }
-        pointerStartX.current = null;
-        pointerDeltaX.current = 0;
-    }, [geser]);
-
-    const resetDrag = useCallback(() => {
-        pointerStartX.current = null;
-        pointerDeltaX.current = 0;
-        isDragging.current = false;
-    }, []);
-
-    const handleTouchStart = useCallback((e) => {
-        startDrag(e.touches[0].clientX);
-    }, [startDrag]);
-
-    const handleTouchMove = useCallback((e) => {
-        moveDrag(e.touches[0].clientX);
-    }, [moveDrag]);
-
-    const handleTouchEnd = useCallback(() => {
-        endDrag();
-    }, [endDrag]);
-
-    // FIX (drag mouse gak kedeteksi): kalau mousemove/mouseup cuma didengar
-    // di div carousel-nya, drag yang agak cepat bikin kursor keluar dari
-    // area itu duluan sebelum tombol mouse dilepas — gesture-nya jadi ke-cancel
-    // sebelum sempat dianggap swipe. Solusinya: begitu mouse ditekan, dengarkan
-    // mousemove & mouseup di `window`, jadi drag tetap terdeteksi walau
-    // kursor sempat keluar dari area carousel.
-    const handleMouseDown = useCallback((e) => {
-        startDrag(e.clientX);
-
-        const onWindowMouseMove = (ev) => moveDrag(ev.clientX);
-        const onWindowMouseUp = () => {
-            endDrag();
-            window.removeEventListener("mousemove", onWindowMouseMove);
-            window.removeEventListener("mouseup", onWindowMouseUp);
-        };
-
-        window.addEventListener("mousemove", onWindowMouseMove);
-        window.addEventListener("mouseup", onWindowMouseUp);
-    }, [startDrag, moveDrag, endDrag]);
+    }, [geser, startAutoplay]);
 
     // Render isi satu slide (background + teks). Dipakai untuk layer bawah
     // (current) maupun layer atas (incoming) supaya tidak duplikasi JSX.
@@ -768,7 +743,7 @@ function AnnouncementCarousel({ onModalChange }) {
             return (
                 <div className="absolute inset-0">
                     {punyaFotoPopuler ? (
-                        <>
+                        <ParallaxBg>
                             <img
                                 src={slideItem.bgImage}
                                 alt=""
@@ -778,9 +753,11 @@ function AnnouncementCarousel({ onModalChange }) {
                                 className="absolute inset-0"
                                 style={{ backgroundColor: "rgba(255,255,255,0.55)" }}
                             />
-                        </>
+                        </ParallaxBg>
                     ) : (
-                        <div className="absolute inset-0" style={{ backgroundColor: theme.bg }} />
+                        <ParallaxBg>
+                            <div className="absolute inset-0" style={{ backgroundColor: theme.bg }} />
+                        </ParallaxBg>
                     )}
 
                     <div
@@ -827,7 +804,7 @@ function AnnouncementCarousel({ onModalChange }) {
         return (
             <div className="absolute inset-0">
                 {punyaFoto ? (
-                    <>
+                    <ParallaxBg>
                         <img
                             src={slideItem.bgImage}
                             alt=""
@@ -835,30 +812,28 @@ function AnnouncementCarousel({ onModalChange }) {
                             onDragStart={(e) => e.preventDefault()}
                             className="absolute inset-0 h-full w-full object-cover pointer-events-none"
                         />
-                        {/* FIX (jank di HP): dulu pakai <feGaussianBlur> di sini — filter SVG
-                            itu berat untuk di-render ulang tiap frame crossfade, terutama di
-                            HP kelas menengah-bawah. Diganti gradient overlay biasa (CSS),
-                            jauh lebih murah dan tetap kasih efek gelap-ke-transparan yang sama. */}
                         <div
                             className="absolute inset-0"
                             style={{
                                 background: `linear-gradient(90deg, ${WARNA.hijauTua}CC 0%, ${WARNA.hijauTua}80 35%, ${WARNA.hijauTua}33 65%, transparent 100%)`,
                             }}
                         />
-                    </>
+                    </ParallaxBg>
                 ) : (
-                    <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
-                        <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
-                            <rect width="500" height="500" fill={theme.bg} />
-                            {theme.blob.map((b, i) =>
-                                b.path ? (
-                                    <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
-                                ) : (
-                                    <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
-                                )
-                            )}
-                        </svg>
-                    </div>
+                    <ParallaxBg>
+                        <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
+                            <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
+                                <rect width="500" height="500" fill={theme.bg} />
+                                {theme.blob.map((b, i) =>
+                                    b.path ? (
+                                        <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
+                                    ) : (
+                                        <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
+                                    )
+                                )}
+                            </svg>
+                        </div>
+                    </ParallaxBg>
                 )}
 
                 <div
@@ -866,7 +841,7 @@ function AnnouncementCarousel({ onModalChange }) {
                     className="relative flex flex-col h-full justify-center px-4 md:px-14 lg:px-20 py-3 md:py-14 pb-7 md:pb-16 text-center overflow-y-auto"
                 >
                     {slideItem.theme === "welcome" ? (
-                        <div className={`flex flex-col flex-1 items-center justify-center text-center ${punyaFoto ? "md:items-start md:text-left" : ""}`}>
+                        <div className={`flex flex-col items-center text-center ${punyaFoto ? "md:items-start md:text-left" : ""}`}>
                             <h3
                                 className={`whitespace-normal md:whitespace-pre-line text-balance text-lg md:text-4xl lg:text-5xl font-bold leading-snug md:leading-tight mb-3 md:mb-4 max-w-[95%] md:max-w-none ${punyaFoto ? "md:max-w-md lg:max-w-lg" : "max-w-4xl"}`}
                                 style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
@@ -874,7 +849,7 @@ function AnnouncementCarousel({ onModalChange }) {
                                 {slideItem.title}
                             </h3>
                             <p
-                                className={`text-xs md:text-base lg:text-lg leading-snug md:leading-relaxed max-w-[92%] md:max-w-none ${punyaFoto ? "md:max-w-none" : "max-w-3xl"}`}
+                                className={`text-xs md:text-lg lg:text-xl leading-snug md:leading-relaxed max-w-[92%] md:max-w-none ${punyaFoto ? "md:max-w-md" : "max-w-3xl"}`}
                                 style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
                             >
                                 {slideItem.description}
@@ -919,7 +894,7 @@ function AnnouncementCarousel({ onModalChange }) {
                         </>
                     )}
                     <span
-                        className={`absolute bottom-7 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
+                        className={`absolute bottom-16 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
                             slideItem.theme === "welcome" ? "md:absolute md:bottom-12 md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
                         }`}
                         style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
@@ -945,19 +920,24 @@ function AnnouncementCarousel({ onModalChange }) {
                 ref={wrapperRef}
                 className="w-full relative z-10 h-[36vh] min-h-[270px] md:h-[60vh] md:min-h-[420px]"
             >
-                <div
-                    className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md select-none touch-pan-y"
+                <motion.div
+                    className={`relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 transition-shadow hover:shadow-md select-none touch-pan-y ${
+                        items.length > 1
+                            ? grabbing ? 'cursor-grabbing' : 'cursor-grab'
+                            : 'cursor-pointer'
+                    }`}
                     style={{ touchAction: "pan-y" }}
+                    drag={items.length > 1 ? "x" : false}
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.15}
+                    onDragStart={handleDragStart}
+                    onDrag={handleDrag}
+                    onDragEnd={handleDragEnd}
                     onClick={() => {
-                        if (isDragging.current) return;
+                        if (dragOccurredRef.current) return;
                         clearAutoplay();
                         setModalItem(activeItem);
                     }}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                    onTouchEnd={handleTouchEnd}
-                    onTouchCancel={resetDrag}
-                    onMouseDown={handleMouseDown}
                 >
                     {renderSlide(items[current], bottomScrollRef)}
 
@@ -978,7 +958,7 @@ function AnnouncementCarousel({ onModalChange }) {
                     {items.length > 1 && (
                         <div className="absolute bottom-2 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-1 md:gap-1.5">
                             {items.map((_, i) => (
-                                <button
+                                <MotionButton
                                     key={i}
                                     type="button"
                                     onClick={(e) => { e.stopPropagation(); goToSlide(i); }}
@@ -990,17 +970,19 @@ function AnnouncementCarousel({ onModalChange }) {
                                             ? (punyaFotoAktif ? "#FFFFFF" : WARNA.hijauUtama)
                                             : (punyaFotoAktif ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
                                     }}
+                                    whileHover={{ scale: 1.3 }}
+                                    whileTap={{ scale: 0.9 }}
                                 />
                             ))}
                         </div>
                     )}
-                </div>
+                </motion.div>
             </div>
 
             <CarouselModal item={modalItem} onClose={() => setModalItem(null)} />
         </>
     );
-}
+});
 
 
 
@@ -1061,13 +1043,25 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
         "rounded-md border border-slate-200 text-xs sm:text-sm px-2.5 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1B6FA8]/30";
 
     return (
-        <div className="min-h-screen bg-white text-[15px]">
-            <TopNavbar bahasa={bahasa} setBahasa={setBahasa} />
+        <motion.div
+            className="min-h-screen bg-white text-[15px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+            <div>
+                <TopNavbar bahasa={bahasa} setBahasa={setBahasa} />
+            </div>
 
-            <AnnouncementCarousel onModalChange={setModalCarouselOpen}/>
-            <ProdukPopuler games={games} />
+            <div>
+                <AnnouncementCarousel onModalChange={setModalCarouselOpen}/>
+            </div>
+            <div>
+                <ProdukPopuler games={games} />
+            </div>
 
             {/* Filter & sort, ala baris filter Amazon */}
+            <AnimatedSection delay={0.2}>
             <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-3">
                     {/* Desktop (lg+) */}
@@ -1157,53 +1151,64 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
 
                             <span className="text-xs text-slate-500 ml-auto">{filtered.length} {t.boardGame}</span>
                         </div>
-                    </div>
                 </div>
             </div>
+            </div>
+            </AnimatedSection>
 
             <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-10">
-                <h2 className="text-lg font-semibold text-slate-800 mb-4">
-                    {t.tersediaDipinjam} ({tersedia.length})
-                </h2>
+                <Reveal>
+                    <h2 className="text-lg font-semibold text-slate-800 mb-4">
+                        {t.tersediaDipinjam} ({tersedia.length})
+                    </h2>
+                </Reveal>
                 {tersedia.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5 mb-12">
+                    <StaggerGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5 mb-12">
                         {tersedia.map((game) => (
                             <KartuGame key={game.id} game={game} tersedia />
                         ))}
-                    </div>
+                    </StaggerGrid>
                 ) : (
-                    <p className="text-sm text-slate-500 mb-12">
-                        {t.tidakCocok}
-                    </p>
+                    <Reveal>
+                        <p className="text-sm text-slate-500 mb-12">
+                            {t.tidakCocok}
+                        </p>
+                    </Reveal>
                 )}
 
                 {dipinjam.length > 0 && (
                     <>
-                        <div className="flex items-center gap-3 mb-4">
-                            <h2 className="text-lg font-semibold text-slate-500">
-                                {t.sedangDipinjam} ({dipinjam.length})
-                            </h2>
-                            <div className="h-px flex-1 bg-slate-200" />
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5">
+                        <Reveal>
+                            <div className="flex items-center gap-3 mb-4">
+                                <h2 className="text-lg font-semibold text-slate-500">
+                                    {t.sedangDipinjam} ({dipinjam.length})
+                                </h2>
+                                <div className="h-px flex-1 bg-slate-200" />
+                            </div>
+                        </Reveal>
+                        <StaggerGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5">
                             {dipinjam.map((game) => (
                                 <KartuGame key={game.id} game={game} tersedia={false} />
                             ))}
-                        </div>
+                        </StaggerGrid>
                     </>
                 )}
             </div>
 
-            <Footer />
+            <Reveal>
+                <Footer />
+            </Reveal>
 
             {/* Floating Pinjam button */}
-            <Link
+            <MotionLink
                 href={modalCarouselOpen ? undefined : "/peminjaman/create"}
-                className={`fixed bottom-4 left-4 right-4 md:bottom-8 md:left-auto md:right-8 md:w-auto z-50 inline-flex items-center justify-center gap-2 px-6 py-3.5 md:py-3 font-semibold text-white bg-sky-900 rounded-2xl md:rounded-full shadow-xl shadow-sky-900/25 transition-all duration-200 ${
+                className={`fixed bottom-4 left-4 right-4 md:bottom-8 md:left-auto md:right-8 md:w-auto z-50 inline-flex items-center justify-center gap-2 px-6 py-3.5 md:py-3 font-semibold text-white bg-sky-900 rounded-2xl md:rounded-full shadow-xl shadow-sky-900/25 ${
                     modalCarouselOpen
                         ? "pointer-events-none opacity-60"
-                        : "hover:bg-sky-950 hover:-translate-y-0.5 hover:shadow-sky-900/40"
+                        : ""
                 }`}
+                whileHover={modalCarouselOpen ? {} : { scale: 1.04, boxShadow: "0 10px 30px -5px rgba(8, 47, 73, 0.5)" }}
+                whileTap={modalCarouselOpen ? {} : { scale: 0.97 }}
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
                     <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -1211,8 +1216,8 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                     <path d="M16 10a4 4 0 01-8 0" />
                 </svg>
                 {t.pinjam}
-            </Link>
-        </div>
+            </MotionLink>
+        </motion.div>
     );
 }
 
