@@ -68,6 +68,8 @@ export const TEKS = {
         belumAdaReview: "Belum ada review untuk board game ini.",
         belumAdaRating: "Belum ada rating",
         pinjamSekarang: "Pinjam Sekarang",
+        klikDetail: "Klik untuk melihat detail",
+        tutup: "Tutup",
         tataCaraPoin: [
             "Peminjam melakukan peminjaman langsung di meja layanan kepada petugas yang bertugas",
             "Peminjam memilih board game yang ingin dipinjam, lalu melengkapi form peminjaman sebelum mengambil barangnya",
@@ -201,6 +203,8 @@ export const TEKS = {
         belumAdaReview: "No reviews for this board game yet.",
         belumAdaRating: "No ratings yet",
         pinjamSekarang: "Borrow Now",
+        klikDetail: "Click to view details",
+        tutup: "Close",
         tataCaraPoin: [
             "Fill out the borrowing form through the system before picking up the board game",
             "Hand over an ID card (student card/ID/KTP) to staff as a deposit",
@@ -279,3 +283,4 @@ export const BahasaContext = createContext(TEKS.ID);
 export function useTeks() {
     return useContext(BahasaContext);
 }
+

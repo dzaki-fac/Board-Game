@@ -5,7 +5,7 @@ import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
 import TopNavbar from "../Components/TopNavbar";
 import { WARNA, warnaKategori } from "../Components/theme";
-import { BahasaContext, TEKS, useTeks } from "../Components/BahasaContext";
+import { BahasaContext, TEKS, useTeks, useBahasaState } from "../Components/BahasaContext";
 
 /* ========================= Ikon-ikon kecil ========================= */
 
@@ -330,6 +330,7 @@ const THEMES = {
 
 function CarouselModal({ item, onClose }) {
     const [entered, setEntered] = useState(false);
+    const t = useTeks();
 
     useEffect(() => {
         if (!item) return;
@@ -442,7 +443,7 @@ function CarouselModal({ item, onClose }) {
                                     onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
                                     onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
                                 >
-                                    Tutup
+                                    {t.tutup}
                                 </button>
                             </div>
                         </div>
@@ -459,6 +460,7 @@ function ProdukPopuler({ games }) {
     const posRef = useRef(0);
     const rafRef = useRef(null);
     const pausedRef = useRef(false);
+    const t = useTeks();
 
     const populer = useMemo(() => {
         return [...games]
@@ -497,7 +499,7 @@ function ProdukPopuler({ games }) {
     return (
         <div className="max-w-[1440px] mx-auto px-6 md:px-10 pt-8 relative">
             <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-5 text-center md:text-left">
-                Produk Paling Populer
+                {t.produkPopuler}
             </h2>
 
             <div
@@ -872,7 +874,7 @@ function AnnouncementCarousel({ onModalChange }) {
                                 {slideItem.title}
                             </h3>
                             <p
-                                className={`text-xs md:text-base lg:text-lg leading-snug md:leading-relaxed max-w-[92%] md:max-w-none whitespace-nowrap ${punyaFoto ? "md:max-w-none" : "max-w-3xl"}`}
+                                className={`text-xs md:text-base lg:text-lg leading-snug md:leading-relaxed max-w-[92%] md:max-w-none ${punyaFoto ? "md:max-w-none" : "max-w-3xl"}`}
                                 style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
                             >
                                 {slideItem.description}
@@ -926,7 +928,7 @@ function AnnouncementCarousel({ onModalChange }) {
                             <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
                             <path d="M12 6v6l4 2" />
                         </svg>
-                        Klik untuk melihat detail
+                        {t.klikDetail}
                     </span>
                 </div>
             </div>
@@ -1208,24 +1210,14 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                     <path d="M3 6h18" />
                     <path d="M16 10a4 4 0 01-8 0" />
                 </svg>
-                Pinjam
+                {t.pinjam}
             </Link>
         </div>
     );
 }
 
 export default function Katalog({ games }) {
-    const [bahasa, setBahasaState] = useState(() => {
-        if (typeof window === "undefined") return "ID";
-        return localStorage.getItem("bahasa") || "ID";
-    });
-
-    const setBahasa = (b) => {
-        setBahasaState(b);
-        if (typeof window !== "undefined") {
-            localStorage.setItem("bahasa", b);
-        }
-    };
+    const [bahasa, setBahasa] = useBahasaState();
 
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
