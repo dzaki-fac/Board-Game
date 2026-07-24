@@ -3,11 +3,7 @@ import { motion } from "framer-motion";
 let reducedMotionCache = null;
 
 export function useReducedMotion() {
-    if (typeof window === "undefined") return false;
-    if (reducedMotionCache === null) {
-        reducedMotionCache = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    }
-    return reducedMotionCache;
+    return false;
 }
 
 const defaultTransition = {
@@ -61,7 +57,8 @@ export function Reveal({ children, className, delay = 0, ...props }) {
         <motion.div
             variants={defaultRevealVariants}
             initial="hidden"
-            animate="visible"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0, margin: "0px 0px -100px 0px" }}
             transition={{ ...defaultTransition, delay }}
             className={className}
             {...props}
@@ -93,7 +90,8 @@ export function StaggerGrid({ children, className, staggerDelay = 0.05, ...props
         <motion.div
             variants={staggerContainerVariants}
             initial="hidden"
-            animate="visible"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0, margin: "0px 0px -100px 0px" }}
             className={className}
             {...props}
         >

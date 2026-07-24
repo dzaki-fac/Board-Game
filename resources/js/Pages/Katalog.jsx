@@ -895,7 +895,7 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ onModalChange 
                     )}
                     <span
                         className={`absolute bottom-16 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
-                            slideItem.theme === "welcome" ? "md:absolute md:bottom-12 md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
+                            slideItem.theme === "welcome" ? "md:absolute md:bottom- md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
                         }`}
                         style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
                     >
