@@ -25,7 +25,8 @@ export default function Edit({ boardgame }) {
         usia_minimum: boardgame.usia_minimum ?? '',
         jumlah_pemain: boardgame.jumlah_pemain ?? '',
         durasi: boardgame.durasi ?? '',
-        link_foto: boardgame.link_foto ?? [],
+        existing_fotos: boardgame.link_foto?.filter(Boolean) ?? [],
+        new_fotos: [],
         lantai: boardgame.lantai,
         komponen: boardgame.komponen ?? [],
         barang_hilang: boardgame.barang_hilang ?? [],
@@ -36,7 +37,8 @@ export default function Edit({ boardgame }) {
     })
 
     const [komponenList, setKomponenList] = useState(boardgame.komponen?.length ? boardgame.komponen : [{ jumlah: '1', nama: '' }])
-    const [linkFotoList, setLinkFotoList] = useState(boardgame.link_foto?.length ? boardgame.link_foto : [''])
+    const [existingFotos, setExistingFotos] = useState(boardgame.link_foto?.filter(Boolean) ?? [])
+    const [newFotoList, setNewFotoList] = useState([{ file: null, preview: null }])
     const [barangHilangList, setBarangHilangList] = useState(boardgame.barang_hilang?.length ? boardgame.barang_hilang.map(b => typeof b === 'string' ? { jumlah: '1', nama: b } : b) : [])
 
     const toggleKategori = (value) => {
@@ -47,20 +49,35 @@ export default function Edit({ boardgame }) {
         setData('kategori', updated)
     }
 
-    const updateLinkFoto = (index, value) => {
-        const updated = linkFotoList.map((item, i) => i === index ? value : item)
-        setLinkFotoList(updated)
-        setData('link_foto', updated.filter(u => u.trim()))
+    const removeExistingFoto = (index) => {
+        const updated = existingFotos.filter((_, i) => i !== index)
+        setExistingFotos(updated)
+        setData('existing_fotos', updated)
     }
 
-    const addLinkFoto = () => {
-        setLinkFotoList([...linkFotoList, ''])
+    const updateNewFoto = (index, file) => {
+        const updated = newFotoList.map((item, i) => {
+            if (i === index) {
+                if (item.preview) URL.revokeObjectURL(item.preview)
+                return { file, preview: file ? URL.createObjectURL(file) : null }
+            }
+            return item
+        })
+        setNewFotoList(updated)
+        const files = updated.filter(u => u.file).map(u => u.file)
+        setData('new_fotos', files.length > 0 ? files : [])
     }
 
-    const removeLinkFoto = (index) => {
-        const updated = linkFotoList.filter((_, i) => i !== index)
-        setLinkFotoList(updated)
-        setData('link_foto', updated.filter(u => u.trim()))
+    const addNewFoto = () => {
+        setNewFotoList([...newFotoList, { file: null, preview: null }])
+    }
+
+    const removeNewFoto = (index) => {
+        const updated = newFotoList.filter((_, i) => i !== index)
+        if (newFotoList[index]?.preview) URL.revokeObjectURL(newFotoList[index].preview)
+        setNewFotoList(updated)
+        const files = updated.filter(u => u.file).map(u => u.file)
+        setData('new_fotos', files.length > 0 ? files : [])
     }
 
     const updateBarangHilang = (index, field, value) => {
@@ -241,51 +258,80 @@ export default function Edit({ boardgame }) {
                         {errors.deskripsi && <p className="text-xs text-red-500 mt-1">{errors.deskripsi}</p>}
                     </div>
 
-                    {/* Link Foto - mini editor */}
+                    {/* Foto */}
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
-                            <label className="block text-sm font-medium text-slate-700">Link Foto</label>
-                            <button type="button" onClick={addLinkFoto} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-xs">
-                                + Tambah link foto
+                            <label className="block text-sm font-medium text-slate-700">Foto</label>
+                            <button type="button" onClick={addNewFoto} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-xs">
+                                + Tambah foto
                             </button>
                         </div>
                         {errors.link_foto && <p className="text-xs text-red-500 mb-2">{errors.link_foto}</p>}
+
+                        {/* Existing photos */}
+                        {existingFotos.length > 0 && (
+                            <div className="mb-3">
+                                <p className="text-xs text-slate-500 mb-2">Foto saat ini:</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {existingFotos.map((url, i) => (
+                                        <div key={`existing-${i}`} className="relative group">
+                                            <img
+                                                src={url}
+                                                alt={`Foto ${i + 1}`}
+                                                className="w-20 h-20 object-cover rounded-lg border border-slate-200 shadow-sm"
+                                                onError={(e) => { e.target.style.display = 'none' }}
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeExistingFoto(i)}
+                                                className="absolute -top-1.5 -right-1.5 btn btn-circle btn-xs bg-red-500 hover:bg-red-600 text-white border-none"
+                                                title="Hapus foto"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* New file uploads */}
                         <div className="space-y-1.5">
-                            {linkFotoList.map((url, index) => (
-                                <div key={index} className="flex items-center gap-2 bg-slate-50 rounded-md px-2 py-1">
+                            {newFotoList.map((item, index) => (
+                                <div key={`new-${index}`} className="flex items-center gap-2 bg-slate-50 rounded-md px-2 py-1">
                                     <input
-                                        type="text"
-                                        value={url}
-                                        onChange={(e) => updateLinkFoto(index, e.target.value)}
-                                        className="input input-bordered input-xs w-full"
-                                        placeholder="https://example.com/foto.jpg"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => updateNewFoto(index, e.target.files[0] || null)}
+                                        className="file-input file-input-bordered file-input-sm w-full text-sm"
                                     />
-                                    <button type="button" onClick={() => removeLinkFoto(index)} className="btn btn-ghost btn-xs btn-square text-red-500 hover:bg-red-100" title="Hapus">
+                                    <button type="button" onClick={() => removeNewFoto(index)} className="btn btn-ghost btn-xs btn-square text-red-500 hover:bg-red-100 flex-shrink-0" title="Hapus">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                     </button>
                                 </div>
                             ))}
                         </div>
-                    </div>
 
-                    {/* Image Previews */}
-                    {linkFotoList.filter(u => u.trim()).length > 0 && (
-                        <div className="border-t border-slate-200 pt-5">
-                            <label className="block text-sm font-medium text-slate-700 mb-3">Preview Foto</label>
-                            <div className="flex flex-wrap gap-3">
-                                {linkFotoList.filter(u => u.trim()).map((url, i) => (
-                                    <div key={i} className="relative group">
+                        {/* Preview new uploads */}
+                        {newFotoList.some(f => f.preview) && (
+                            <div className="mt-3">
+                                <p className="text-xs text-slate-500 mb-2">Preview foto baru:</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {newFotoList.filter(f => f.preview).map((item, i) => (
                                         <img
-                                            src={url}
-                                            alt={`Foto ${i + 1}`}
-                                            className="w-24 h-24 object-cover rounded-lg border border-slate-200 shadow-sm"
-                                            onError={(e) => { e.target.style.display = 'none' }}
+                                            key={i}
+                                            src={item.preview}
+                                            alt={`Preview ${i + 1}`}
+                                            className="w-20 h-20 object-cover rounded-lg border border-slate-200 shadow-sm"
                                         />
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                        {(errors['link_foto.0'] || errors['link_foto.1'] || errors['link_foto.2']) && (
+                            <p className="text-xs text-red-500 mt-2">Setiap file harus berupa gambar (jpeg, png, jpg, gif, webp) maksimal 5MB.</p>
+                        )}
+                    </div>
 
                     {/* Komponen */}
                     <div className="border-t border-slate-200 pt-5">
