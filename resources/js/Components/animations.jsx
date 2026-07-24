@@ -61,8 +61,7 @@ export function Reveal({ children, className, delay = 0, ...props }) {
         <motion.div
             variants={defaultRevealVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
+            animate="visible"
             transition={{ ...defaultTransition, delay }}
             className={className}
             {...props}
@@ -94,8 +93,7 @@ export function StaggerGrid({ children, className, staggerDelay = 0.05, ...props
         <motion.div
             variants={staggerContainerVariants}
             initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
+            animate="visible"
             className={className}
             {...props}
         >
