@@ -140,7 +140,6 @@ export default function ReviewSection({ boardgameId, reviews = { data: [] }, avg
 
             {reviewItems.length === 0 ? (
                 <div className="text-center py-10">
-                    <IkonBintang className="w-8 h-8 mx-auto mb-3 text-slate-300" />
                     <p className="text-sm text-slate-500">{t.belumAdaReview}</p>
                 </div>
             ) : (

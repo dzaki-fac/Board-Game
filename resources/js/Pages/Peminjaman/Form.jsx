@@ -1,5 +1,6 @@
 import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useMemo, useState } from "react";
+import { Reveal } from "../../Components/animations";
 
 export default function Form({ boardgames = [] }) {
     const { props } = usePage();
@@ -120,11 +121,14 @@ export default function Form({ boardgames = [] }) {
     }
 
     return (
-        <div className="min-h-screen" style={{ backgroundColor: "#EFF6FF" }}>
+        <div
+            className="min-h-screen"
+            style={{ backgroundColor: "#EFF6FF" }}
+        >
         <div className="max-w-xl mx-auto p-4">
             <Link
                 href="/katalog"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-white bg-sky-800 hover:bg-sky-900 transition-colors mb-4 px-3 py-1.5 rounded-full"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-white bg-sky-800 hover:bg-sky-900 mb-4 px-3 py-1.5 rounded-full transition-transform active:scale-95 hover:scale-[1.03]"
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">
                     <path d="M19 12H5" />
@@ -132,10 +136,12 @@ export default function Form({ boardgames = [] }) {
                 </svg>
                 Kembali ke Katalog
             </Link>
-            <h1 className="text-2xl font-bold mb-1">Form Peminjaman</h1>
-            <p className="text-sm text-slate-500 mb-6">
-                Isi data berikut untuk mengajukan peminjaman boardgame
-            </p>
+            <div>
+                <h1 className="text-2xl font-bold mb-1">Form Peminjaman</h1>
+                <p className="text-sm text-slate-500 mb-6">
+                    Isi data berikut untuk mengajukan peminjaman boardgame
+                </p>
+            </div>
 
             {flash.success && (
                 <div className="alert alert-success mb-4 shadow-sm">
@@ -144,6 +150,7 @@ export default function Form({ boardgames = [] }) {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
+                <Reveal>
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
                         <h2 className="card-title text-base !mb-0">
@@ -246,7 +253,7 @@ export default function Form({ boardgames = [] }) {
 
                                 <button
                                     type="button"
-                                    className="btn btn-outline btn-sm border-dashed border-base-300 hover:border-sky-600 hover:text-sky-800 hover:bg-sky-50"
+                                    className="btn btn-outline btn-sm border-dashed border-base-300 hover:border-sky-600 hover:text-sky-800 hover:bg-sky-50 transition-transform active:scale-95 hover:scale-[1.02]"
                                     onClick={addAnggota}
                                 >
                                     <svg
@@ -268,7 +275,9 @@ export default function Form({ boardgames = [] }) {
                             </div>
                     </div>
                 </div>
+                </Reveal>
 
+                <Reveal>
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
                         <h2 className="card-title text-base !mb-0">
@@ -373,7 +382,9 @@ export default function Form({ boardgames = [] }) {
                         )}
                     </div>
                 </div>
+                </Reveal>
 
+                <Reveal>
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
                         <h2 className="card-title text-base !mb-0">
@@ -427,7 +438,9 @@ export default function Form({ boardgames = [] }) {
                         </div>
                     </div>
                 </div>
+                </Reveal>
 
+                <Reveal>
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
                         <h2 className="card-title text-base !mb-0">Catatan</h2>
@@ -450,12 +463,14 @@ export default function Form({ boardgames = [] }) {
                         </div>
                     </div>
                 </div>
+                </Reveal>
 
+                <Reveal>
                 <div className="flex gap-3 pt-1">
                     <button
                         type="submit"
                         disabled={processing}
-                        className="btn bg-sky-900 hover:bg-sky-950 text-white border-none flex-1"
+                        className="btn bg-sky-900 hover:bg-sky-950 text-white border-none flex-1 transition-transform active:scale-95 hover:scale-[1.02]"
                     >
                         {processing ? (
                             <>
@@ -468,7 +483,7 @@ export default function Form({ boardgames = [] }) {
                     </button>
                     <button
                         type="button"
-                        className="btn btn-ghost"
+                        className="btn btn-ghost transition-transform active:scale-95 hover:scale-[1.02]"
                         onClick={() => {
                             reset();
                             setAnggota([{ nama: "", jenis_jaminan: "ktm", nim: "", nik: "" }]);
@@ -478,6 +493,7 @@ export default function Form({ boardgames = [] }) {
                         Atur Ulang
                     </button>
                 </div>
+                </Reveal>
             </form>
         </div>
         </div>
