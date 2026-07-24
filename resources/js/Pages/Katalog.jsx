@@ -5,7 +5,7 @@ import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
 import TopNavbar from "../Components/TopNavbar";
 import { WARNA, warnaKategori } from "../Components/theme";
-import { BahasaContext, TEKS, useTeks, useBahasaState } from "../Components/BahasaContext";
+import { BahasaContext, TEKS, useTeks } from "../Components/BahasaContext";
 
 /* ========================= Ikon-ikon kecil ========================= */
 
@@ -872,7 +872,7 @@ function AnnouncementCarousel({ onModalChange }) {
                                 {slideItem.title}
                             </h3>
                             <p
-                                className={`text-xs md:text-lg lg:text-xl leading-snug md:leading-relaxed max-w-[92%] md:max-w-none ${punyaFoto ? "md:max-w-md" : "max-w-3xl"}`}
+                                className={`text-xs md:text-base lg:text-lg leading-snug md:leading-relaxed max-w-[92%] md:max-w-none whitespace-nowrap ${punyaFoto ? "md:max-w-none" : "max-w-3xl"}`}
                                 style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
                             >
                                 {slideItem.description}
@@ -882,20 +882,20 @@ function AnnouncementCarousel({ onModalChange }) {
                         <>
                             <div className="flex flex-col items-center justify-center shrink-0">
                                 <h3
-                                    className="text-lg md:text-4xl lg:text-5xl font-bold leading-tight mb-2 md:mb-3 max-w-4xl"
+                                    className="text-lg md:text-3xl lg:text-4xl font-bold leading-tight mb-1.5 md:mb-2 max-w-4xl"
                                     style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
                                 >
                                     {slideItem.title}
                                 </h3>
                                 <p
-                                    className="text-xs md:text-lg lg:text-xl max-w-3xl leading-snug md:leading-relaxed"
+                                    className="text-xs md:text-base lg:text-lg max-w-3xl leading-snug md:leading-relaxed"
                                     style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
                                 >
                                     {slideItem.description}
                                 </p>
                             </div>
                             {slideItem.points?.length > 0 && (
-                                <div className="mt-2 mb-5 md:mt-5 md:mb-0 grid w-full max-w-4xl mx-auto gap-1.5 md:gap-4 md:grid-cols-2">
+                                <div className="mt-2 mb-5 md:mt-5 md:mb-0 grid w-full max-w-4xl mx-auto gap-1.5 md:gap-3 md:grid-cols-2">
                                     {slideItem.points.slice(0, 2).map((point, i) => (
                                         <div key={i} className="flex items-start gap-2 rounded-lg md:rounded-2xl bg-white/85 p-2 md:p-4 text-left shadow-sm md:hidden">
                                             <span className="shrink-0 mt-0.5 w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
@@ -909,7 +909,7 @@ function AnnouncementCarousel({ onModalChange }) {
                                             <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
                                                 {i + 1}
                                             </span>
-                                            <p className="text-sm leading-6 text-slate-700">{point}</p>
+                                            <p className="text-sm leading-6 text-slate-700 line-clamp-2">{point}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -918,7 +918,7 @@ function AnnouncementCarousel({ onModalChange }) {
                     )}
                     <span
                         className={`absolute bottom-7 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
-                            slideItem.theme === "welcome" ? "md:absolute md:bottom-8 md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
+                            slideItem.theme === "welcome" ? "md:absolute md:bottom-12 md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
                         }`}
                         style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
                     >
@@ -1215,7 +1215,8 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
 }
 
 export default function Katalog({ games }) {
-    const [bahasa, setBahasa] = useBahasaState();
+    const [bahasa, setBahasa] = useState("ID");
+
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
             <Head title="Katalog Board Game" />
