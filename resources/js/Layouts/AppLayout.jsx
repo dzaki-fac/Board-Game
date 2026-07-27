@@ -9,15 +9,6 @@ function Svg({ className, children }) {
     );
 }
 
-function HouseIcon({ className }) {
-    return (
-        <Svg className={className}>
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-        </Svg>
-    );
-}
-
 function Dice5Icon({ className }) {
     return (
         <Svg className={className}>
@@ -121,7 +112,6 @@ function FileTextIcon({ className }) {
 }
 
 const navItems = [
-    { label: "Beranda", href: "/admin/home", icon: HouseIcon },
     { label: "Tata Tertib", href: "/admin/rules", icon: FileTextIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Review", href: "/admin/reviews", icon: StarIcon },
@@ -133,7 +123,8 @@ const navItems = [
 ];
 
 export default function Layout({ children }) {
-    const admin = usePage().props.auth?.admin;
+    const { props, url } = usePage();
+    const admin = props.auth?.admin;
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
     const [tooltip, setTooltip] = useState({ show: false, label: "", top: 0 });
     const itemRefs = useRef({});
@@ -199,12 +190,9 @@ export default function Layout({ children }) {
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isActive =
-                            typeof window !== "undefined" &&
-                            (item.href === "/admin"
-                                ? window.location.pathname === "/admin"
-                                : window.location.pathname.startsWith(
-                                      item.href,
-                                  ));
+                            item.href === "/admin"
+                                ? url === "/admin"
+                                : url.startsWith(item.href);
                         return (
                             <li
                                 key={item.href}
