@@ -88,7 +88,7 @@ export const TEKS = {
         ],
         carousel: [
             {
-                title: "Selamat Datang di\nUPT Perpustakaan Universitas Diponegoro",
+                title: "Selamat Datang di\nUPT Perpustakaan dan UNDIP Press",
                 description: "Temukan, pilih, dan pinjam board game favoritmu melalui katalog digital UPT Perpustakaan Universitas Diponegoro.",
                 detailTitle: "Selamat Datang di Board Game\nUPT Perpustakaan Undip",
                 detailDescription: "Katalog board game ini membantu pemustaka mencari informasi permainan, melihat detail board game, dan mengajukan peminjaman secara online.",
@@ -221,7 +221,7 @@ export const TEKS = {
         ],
         carousel: [
             {
-                title: "Welcome to\nUPT Library of Diponegoro University",
+                title: "Welcome to\nUPT Perpustakaan and UNDIP Press",
                 description: "Discover, choose, and borrow your favorite board games through the digital catalog of UPT Library of Diponegoro University.",
                 detailTitle: "Welcome to Board Game\nUPT Library Undip",
                 detailDescription: "This board game catalog helps students find game information, view board game details, and submit borrowing requests online.",

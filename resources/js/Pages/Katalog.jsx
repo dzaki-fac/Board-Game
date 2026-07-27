@@ -841,13 +841,13 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ onModalChange 
                     className="relative flex flex-col h-full justify-center px-4 md:px-14 lg:px-20 py-3 md:py-14 pb-7 md:pb-16 text-center overflow-y-auto"
                 >
                     {slideItem.theme === "welcome" ? (
-                        <div className={`flex flex-col items-center text-center ${punyaFoto ? "md:items-start md:text-left" : ""}`}>
-                            <h3
-                                className={`whitespace-normal md:whitespace-pre-line text-balance text-lg md:text-4xl lg:text-5xl font-bold leading-snug md:leading-tight mb-3 md:mb-4 max-w-[95%] md:max-w-none ${punyaFoto ? "md:max-w-md lg:max-w-lg" : "max-w-4xl"}`}
-                                style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
-                            >
-                                {slideItem.title}
-                            </h3>
+                        <div className="flex flex-col items-center text-center">
+    <h3
+        className="whitespace-pre-line text-balance text-lg md:text-3xl lg:text-4xl font-bold leading-snug md:leading-tight mb-3 md:mb-4 max-w-[95%] md:max-w-3xl mx-auto"
+        style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
+    >
+        {slideItem.title}
+    </h3>
                             <p
                                 className={`text-xs md:text-lg lg:text-xl leading-snug md:leading-relaxed max-w-[92%] md:max-w-none ${punyaFoto ? "md:max-w-md" : "max-w-3xl"}`}
                                 style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
