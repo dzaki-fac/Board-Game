@@ -41,6 +41,11 @@ class BoardGame extends Model
         return $this->hasMany(BoardGameReview::class, 'boardgame_id');
     }
 
+    public function loans()
+    {
+        return $this->hasMany(Loan::class, 'boardgame_id');
+    }
+
     protected function casts(): array
     {
         return [

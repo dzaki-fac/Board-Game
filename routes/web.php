@@ -47,14 +47,15 @@ Route::prefix('admin')->group(function () {
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
 
         Route::get('rules', [HomeController::class, 'rules'])->name('admin.rules');
+        Route::put('rules/{rule}', [HomeController::class, 'updateRule'])->name('admin.rules.update')->middleware('role-admin');
 
         Route::get('reviews', [AdminReviewController::class, 'index'])->name('admin.reviews.index');
         Route::delete('reviews/{boardGameReview}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
 
         Route::get('accounts', [AdminAccountController::class, 'index'])->name('admin.accounts.index');
-        Route::post('accounts', [AdminAccountController::class, 'store'])->name('admin.accounts.store')->middleware('superadmin');
+        Route::post('accounts', [AdminAccountController::class, 'store'])->name('admin.accounts.store')->middleware('role-admin');
         Route::put('accounts/{admin}', [AdminAccountController::class, 'update'])->name('admin.accounts.update');
-        Route::delete('accounts/{admin}', [AdminAccountController::class, 'destroy'])->name('admin.accounts.destroy')->middleware('superadmin');
+        Route::delete('accounts/{admin}', [AdminAccountController::class, 'destroy'])->name('admin.accounts.destroy')->middleware('role-admin');
 
         Route::any('{any?}', fn () => abort(404))->where('any', '.*');
     });

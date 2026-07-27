@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 export default function Account({ admins: { data: admins, links, from, to, total } }) {
     const { auth, flash, error } = usePage().props;
     const currentAdmin = auth?.admin;
-    const isSuperAdmin = currentAdmin?.role === "superadmin";
+    const isSuperAdmin = currentAdmin?.role === "admin";
     const currentAdminId = currentAdmin?.id;
 
     const create = useForm({
@@ -118,14 +118,13 @@ export default function Account({ admins: { data: admins, links, from, to, total
 
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold">Daftar Akun Admin</h1>
+                {isSuperAdmin && (
+                    <button onClick={openCreateModal} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                        Tambah Admin
+                    </button>
+                )}
             </div>
-
-            {isSuperAdmin && (
-                <button onClick={openCreateModal} className="fixed bottom-6 right-6 z-50 btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none rounded-full shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
-                    Tambah Admin
-                </button>
-            )}
 
             <div className="overflow-x-auto">
                 <table className="table table-zebra w-full">
@@ -154,14 +153,14 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                 <td>
                                     {admin.name}
                                     {admin.id === currentAdminId && (
-                                        <span className="badge badge-xs ml-2 bg-[#E8F3EF] text-[#2F6F62] border-[#B8D5C8] rounded">Anda</span>
+                                        <span className="badge badge-xs ml-2 bg-[#D6E8F5] text-[#0E4A73] border-[#B8D5C8] rounded">Anda</span>
                                     )}
                                 </td>
                                 <td className="font-mono text-sm">{admin.nip}</td>
                                 <td>{admin.email}</td>
                                 <td>
-                                    <span className={`badge badge-sm rounded ${admin.role === "superadmin" ? "bg-[#FDF3E1] text-[#B98A4A] border-[#E8D5B0]" : "bg-[#E8F3EF] text-[#2F6F62] border-[#B8D5C8]"}`}>
-                                        {admin.role === "superadmin" ? "Superadmin" : "Admin"}
+                                    <span className={`badge badge-sm rounded ${admin.role === "admin" ? "bg-[#FDF3E1] text-[#B98A4A] border-[#E8D5B0]" : "bg-[#D6E8F5] text-[#0E4A73] border-[#B8D5C8]"}`}>
+                                        {admin.role === "admin" ? "Admin" : "Petugas"}
                                     </span>
                                 </td>
                                 <td>
@@ -302,8 +301,8 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                     value={create.data.role}
                                     onChange={(e) => create.setData("role", e.target.value)}
                                 >
+                                    <option value="petugas">Petugas</option>
                                     <option value="admin">Admin</option>
-                                    <option value="superadmin">Superadmin</option>
                                 </select>
                                 {create.errors.role && (
                                     <label className="label">
@@ -316,7 +315,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                 <button type="button" className="btn btn-ghost" onClick={closeCreateModal}>
                                     Batal
                                 </button>
-                                <button type="submit" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none" disabled={create.processing}>
+                                <button type="submit" className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none" disabled={create.processing}>
                                     {create.processing ? "Menyimpan..." : "Simpan"}
                                 </button>
                             </div>
@@ -437,12 +436,12 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                     onChange={(e) => edit.setData("role", e.target.value)}
                                     disabled={editingAdmin?.id === currentAdminId}
                                 >
+                                    <option value="petugas">Petugas</option>
                                     <option value="admin">Admin</option>
-                                    <option value="superadmin">Superadmin</option>
                                 </select>
                                 {editingAdmin?.id === currentAdminId && (
                                     <label className="label">
-                                        <span className="label-text-alt text-[#2F6F62]/70">Tidak dapat mengubah role sendiri</span>
+                                        <span className="label-text-alt text-[#0E4A73]/70">Tidak dapat mengubah role sendiri</span>
                                     </label>
                                 )}
                                 {edit.errors.role && (
@@ -456,7 +455,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                 <button type="button" className="btn btn-ghost" onClick={closeEditModal}>
                                     Batal
                                 </button>
-                                <button type="submit" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none" disabled={edit.processing}>
+                                <button type="submit" className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none" disabled={edit.processing}>
                                     {edit.processing ? "Menyimpan..." : "Simpan"}
                                 </button>
                             </div>
@@ -508,7 +507,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                 href={link.url || '#'}
                                 preserveState
                                 replace
-                                className={`btn btn-sm min-w-9 ${link.active ? 'bg-[#2F6F62] text-white border-none' : 'btn-ghost text-gray-600'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
+                                className={`btn btn-sm min-w-9 ${link.active ? 'bg-[#0E4A73] text-white border-none' : 'btn-ghost text-gray-600'} ${!link.url ? 'pointer-events-none opacity-40' : ''}`}
                                 dangerouslySetInnerHTML={{ __html: link.label }}
                             />
                         ))}

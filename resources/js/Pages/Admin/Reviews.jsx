@@ -270,7 +270,7 @@ export default function Reviews({ reviews, filters }) {
                                     href={link.url || "#"}
                                     preserveState
                                     replace
-                                    className={`btn btn-xs ${link.active ? "bg-[#2F6F62] text-white" : "btn-ghost"} ${!link.url ? "pointer-events-none opacity-40" : ""}`}
+                                    className={`btn btn-xs ${link.active ? "bg-[#0E4A73] text-white" : "btn-ghost"} ${!link.url ? "pointer-events-none opacity-40" : ""}`}
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                 />
                             ))}

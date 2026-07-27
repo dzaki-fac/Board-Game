@@ -9,15 +9,6 @@ function Svg({ className, children }) {
     );
 }
 
-function HouseIcon({ className }) {
-    return (
-        <Svg className={className}>
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-        </Svg>
-    );
-}
-
 function Dice5Icon({ className }) {
     return (
         <Svg className={className}>
@@ -108,8 +99,20 @@ function PanelLeftIcon({ className }) {
     );
 }
 
+function FileTextIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+        </Svg>
+    );
+}
+
 const navItems = [
-    { label: "Beranda", href: "/admin/rules", icon: HouseIcon },
+    { label: "Tata Tertib", href: "/admin/rules", icon: FileTextIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Review", href: "/admin/reviews", icon: StarIcon },
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
@@ -120,7 +123,8 @@ const navItems = [
 ];
 
 export default function Layout({ children }) {
-    const admin = usePage().props.auth?.admin;
+    const { props, url } = usePage();
+    const admin = props.auth?.admin;
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
     const [tooltip, setTooltip] = useState({ show: false, label: "", top: 0 });
     const itemRefs = useRef({});
@@ -145,14 +149,14 @@ export default function Layout({ children }) {
         <div className="min-h-screen">
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-40 bg-[#173C33] flex flex-col transition-all duration-300 ease-in-out ${
+                className={`fixed inset-y-0 left-0 z-40 bg-[#071E30] flex flex-col transition-all duration-300 ease-in-out ${
                     sidebarExpanded ? "w-64" : "w-16"
                 }`}
             >
                 {/* Toggle button */}
                 <button
                     onClick={toggleSidebar}
-                    className={`absolute top-3 w-8 h-8 flex items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-[#255A4F] z-10 ${
+                    className={`absolute top-3 w-8 h-8 flex items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-[#0A3A5C] z-10 ${
                         sidebarExpanded ? 'right-3' : 'left-1/2 -translate-x-1/2'
                     }`}
                 >
@@ -161,7 +165,7 @@ export default function Layout({ children }) {
 
                 {/* Brand */}
                 {sidebarExpanded && (
-                    <div className="px-6 py-6 border-b border-[#255A4F] flex items-center gap-3 shrink-0">
+                    <div className="px-6 py-6 border-b border-[#0A3A5C] flex items-center gap-3 shrink-0">
                         <img
                             src="/images/logo-upt.png"
                             alt="Logo"
@@ -186,12 +190,9 @@ export default function Layout({ children }) {
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isActive =
-                            typeof window !== "undefined" &&
-                            (item.href === "/admin"
-                                ? window.location.pathname === "/admin"
-                                : window.location.pathname.startsWith(
-                                      item.href,
-                                  ));
+                            item.href === "/admin"
+                                ? url === "/admin"
+                                : url.startsWith(item.href);
                         return (
                             <li
                                 key={item.href}
@@ -205,8 +206,8 @@ export default function Layout({ children }) {
                                         sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
                                     } ${
                                         isActive
-                                            ? "bg-[#2F6F62] text-white"
-                                            : "text-[#FAF7F2]/70 hover:bg-[#255A4F] hover:text-white"
+                                            ? "bg-[#0E4A73] text-white"
+                                            : "text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white"
                                     }`}
                                 >
                                     <span className="shrink-0 w-5 h-5 flex items-center justify-center">
@@ -221,7 +222,7 @@ export default function Layout({ children }) {
 
                 {/* Logout */}
                 <div
-                    className="px-3 py-4 border-t border-[#255A4F] shrink-0"
+                    className="px-3 py-4 border-t border-[#0A3A5C] shrink-0"
                     ref={(el) => { itemRefs.current["logout"] = el; }}
                     onMouseEnter={() => showTooltip("logout", "Keluar")}
                     onMouseLeave={hideTooltip}
@@ -232,7 +233,7 @@ export default function Layout({ children }) {
                         as="button"
                         className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors ${
                             sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
-                        } text-[#FAF7F2]/70 hover:bg-[#255A4F] hover:text-white w-full`}
+                        } text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white w-full`}
                     >
                         <span className="shrink-0 w-5 h-5 flex items-center justify-center">
                             <LogOutIcon className={iconClass} />
@@ -263,10 +264,10 @@ export default function Layout({ children }) {
                 }`}
             >
                 {/* Topbar */}
-                <div className="navbar bg-white shadow-sm border-b border-[#E8F3EF] px-4 lg:px-6 sticky top-0 z-30 h-16">
+                <div className="navbar bg-white shadow-sm border-b border-[#D6E8F5] px-4 lg:px-6 sticky top-0 z-30 h-16">
                     <div className="flex-1" />
                     <div className="flex-none gap-2 flex items-center">
-                        <span className="text-sm font-medium text-[#173C33] hidden sm:block">
+                        <span className="text-sm font-medium text-[#071E30] hidden sm:block">
                             {admin?.name}
                         </span>
                     </div>

@@ -28,7 +28,7 @@ class AdminAccountController extends Controller
             'email' => 'required|email|unique:admins,email',
             'nip' => 'required|string|max:30|unique:admins,nip',
             'password' => 'required|string|min:8|confirmed',
-            'role' => 'required|in:admin,superadmin',
+            'role' => 'required|in:petugas,admin',
         ]);
 
         Admin::create([
@@ -46,7 +46,7 @@ class AdminAccountController extends Controller
     {
         $currentAdmin = Auth::guard('admin')->user();
 
-        if (!$currentAdmin->isSuperAdmin() && $admin->id !== $currentAdmin->id) {
+        if (!$currentAdmin->isAdmin() && $admin->id !== $currentAdmin->id) {
             abort(403, 'Anda hanya dapat mengedit akun sendiri.');
         }
 
@@ -59,7 +59,7 @@ class AdminAccountController extends Controller
             'email' => 'required|email|unique:admins,email,' . $admin->id,
             'nip' => 'required|string|max:30|unique:admins,nip,' . $admin->id,
             'password' => 'nullable|string|min:8|confirmed',
-            'role' => 'required|in:admin,superadmin',
+            'role' => 'required|in:petugas,admin',
         ]);
 
         $data = [

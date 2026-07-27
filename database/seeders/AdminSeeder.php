@@ -11,11 +11,11 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         Admin::create([
-            'name' => 'Super Admin',
-            'email' => 'superadmin@perpus.ac.id',
+            'name' => 'Admin Utama',
+            'email' => 'admin@perpus.ac.id',
             'nip' => '199001012010011001',
-            'password' => Hash::make('superadmin123'),
-            'role' => 'superadmin',
+            'password' => Hash::make('admin123'),
+            'role' => 'admin',
         ]);
 
         Admin::create([
@@ -23,7 +23,7 @@ class AdminSeeder extends Seeder
             'email' => 'admin1@perpus.ac.id',
             'nip' => '199002012010011002',
             'password' => Hash::make('admin123'),
-            'role' => 'admin',
+            'role' => 'petugas',
         ]);
 
         Admin::create([
@@ -31,7 +31,7 @@ class AdminSeeder extends Seeder
             'email' => 'admin2@perpus.ac.id',
             'nip' => '199003012010011003',
             'password' => Hash::make('admin123'),
-            'role' => 'admin',
+            'role' => 'petugas',
         ]);
 
         Admin::create([
@@ -39,7 +39,7 @@ class AdminSeeder extends Seeder
             'email' => 'admin3@perpus.ac.id',
             'nip' => '199004012010011004',
             'password' => Hash::make('admin123'),
-            'role' => 'admin',
+            'role' => 'petugas',
         ]);
     }
 }

@@ -1,3 +1,5 @@
+import { WARNA } from "./theme";
+
 export default function RatingDetail({ averageRating = 0, reviewsCount = 0, ratingDistribution = [] }) {
     if (reviewsCount === 0) return null;
 
@@ -17,8 +19,8 @@ export default function RatingDetail({ averageRating = 0, reviewsCount = 0, rati
                                     <path d="M12 2.5l2.9 6.1 6.6.8-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.1 1.2-6.6-4.8-4.6 6.6-.8L12 2.5z" />
                                 </svg>
                                 {(penuh || setengah) && (
-                                    <svg viewBox="0 0 24 24" className="absolute inset-0 w-4 h-4 md:w-5 md:h-5 text-yellow-400" fill="currentColor"
-                                        style={setengah && !penuh ? { clipPath: "inset(0 50% 0 0)" } : undefined}>
+                                    <svg viewBox="0 0 24 24" className="absolute inset-0 w-4 h-4 md:w-5 md:h-5" fill="currentColor"
+                                        style={{ color: WARNA.hijauUtama, clipPath: setengah && !penuh ? "inset(0 50% 0 0)" : undefined }}>
                                         <path d="M12 2.5l2.9 6.1 6.6.8-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.1 1.2-6.6-4.8-4.6 6.6-.8L12 2.5z" />
                                     </svg>
                                 )}
@@ -33,16 +35,18 @@ export default function RatingDetail({ averageRating = 0, reviewsCount = 0, rati
                 {ratingDistribution.map(({ star, count, percentage }) => (
                     <div key={star} className="flex items-center gap-2 text-sm">
                         <span className="w-6 text-right text-slate-600 shrink-0 tabular-nums">{star}</span>
-                        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 text-yellow-400 shrink-0" fill="currentColor">
+                        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 shrink-0" fill="currentColor" style={{ color: WARNA.hijauUtama }}>
                             <path d="M12 2.5l2.9 6.1 6.6.8-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.1 1.2-6.6-4.8-4.6 6.6-.8L12 2.5z" />
                         </svg>
                         <div className="flex-1 h-2.5 bg-slate-100 rounded-full overflow-hidden">
                             <div
-                                className="h-full bg-yellow-400 rounded-full transition-all"
-                                style={{ width: `${percentage}%` }}
+                                className="h-full rounded-full transition-all"
+                                style={{ width: `${percentage}%`, backgroundColor: WARNA.hijauUtama }}
                             />
                         </div>
-                        <span className="w-10 text-right text-xs text-slate-500 tabular-nums">{count}</span>
+                        <span className="w-20 text-right text-xs text-slate-500 tabular-nums">
+                            {percentage}% <span className="text-slate-400">({count})</span>
+                        </span>
                     </div>
                 ))}
             </div>

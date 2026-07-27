@@ -191,7 +191,7 @@ class PermohonanController extends Controller
     public function reject(Permohonan $permohonan)
     {
         $admin = Auth::guard('admin')->user();
-        if (!$admin->isSuperAdmin() && $permohonan->boardgame->lantai != $admin->lantai) {
+        if (!$admin->isAdmin() && $permohonan->boardgame->lantai != $admin->lantai) {
             abort(403, 'Anda tidak memiliki akses ke board game di lantai ini.');
         }
 

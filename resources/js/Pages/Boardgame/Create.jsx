@@ -35,7 +35,7 @@ export default function Create() {
     })
 
     const [komponenList, setKomponenList] = useState([{ jumlah: '1', nama: '' }])
-    const [linkFotoList, setLinkFotoList] = useState([''])
+    const [linkFotoList, setLinkFotoList] = useState([{ file: null, preview: null }])
     const [barangHilangList, setBarangHilangList] = useState([])
 
     const toggleKategori = (value) => {
@@ -46,20 +46,29 @@ export default function Create() {
         setData('kategori', updated)
     }
 
-    const updateLinkFoto = (index, value) => {
-        const updated = linkFotoList.map((item, i) => i === index ? value : item)
+    const updateLinkFoto = (index, file) => {
+        const updated = linkFotoList.map((item, i) => {
+            if (i === index) {
+                if (item.preview) URL.revokeObjectURL(item.preview)
+                return { file, preview: file ? URL.createObjectURL(file) : null }
+            }
+            return item
+        })
         setLinkFotoList(updated)
-        setData('link_foto', updated.filter(u => u.trim()))
+        const files = updated.filter(u => u.file).map(u => u.file)
+        setData('link_foto', files.length > 0 ? files : [])
     }
 
     const addLinkFoto = () => {
-        setLinkFotoList([...linkFotoList, ''])
+        setLinkFotoList([...linkFotoList, { file: null, preview: null }])
     }
 
     const removeLinkFoto = (index) => {
         const updated = linkFotoList.filter((_, i) => i !== index)
+        if (linkFotoList[index]?.preview) URL.revokeObjectURL(linkFotoList[index].preview)
         setLinkFotoList(updated)
-        setData('link_foto', updated.filter(u => u.trim()))
+        const files = updated.filter(u => u.file).map(u => u.file)
+        setData('link_foto', files.length > 0 ? files : [])
     }
 
     const updateBarangHilang = (index, field, value) => {
@@ -109,14 +118,14 @@ export default function Create() {
         <div className="p-6 max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold text-slate-900">Tambah Board Game</h1>
-                <Link href="/admin/games" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
+                <Link href="/admin/games" className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     Kembali
                 </Link>
             </div>
 
             <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="bg-[#173C33] text-[#FAF7F2]/80 px-6 py-4">
+                <div className="bg-[#071E30] text-[#FAF7F2]/80 px-6 py-4">
                     <h2 className="text-sm font-semibold uppercase tracking-wider">Form Tambah Board Game</h2>
                 </div>
 
@@ -195,7 +204,7 @@ export default function Create() {
                         <label className="block text-sm font-medium text-slate-700 mb-3">
                             Kategori
                             {data.kategori?.length > 0 && (
-                                <span className="ml-2 text-xs font-normal text-[#2F6F62]">({data.kategori.length} dipilih)</span>
+                                <span className="ml-2 text-xs font-normal text-[#0E4A73]">({data.kategori.length} dipilih)</span>
                             )}
                         </label>
                         {errors.kategori && <p className="text-xs text-red-500 mb-2">{errors.kategori}</p>}
@@ -203,7 +212,7 @@ export default function Create() {
                             {KATEGORI_OPTIONS.map((kat) => (
                                 <label key={kat} className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors text-sm
                                     ${data.kategori?.includes(kat)
-                                        ? 'border-[#2F6F62] bg-[#2F6F62]/10 text-[#173C33] font-medium'
+                                        ? 'border-[#0E4A73] bg-[#0E4A73]/10 text-[#071E30] font-medium'
                                         : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-slate-300 hover:bg-slate-100'
                                     }`}>
                                     <input
@@ -211,7 +220,7 @@ export default function Create() {
                                         checked={data.kategori?.includes(kat) ?? false}
                                         onChange={() => toggleKategori(kat)}
                                         className="checkbox checkbox-xs"
-                                        style={{ '--chkbg': '#2F6F62', '--chkfg': 'white' }}
+                                        style={{ '--chkbg': '#0E4A73', '--chkfg': 'white' }}
                                     />
                                     {kat}
                                 </label>
@@ -232,45 +241,46 @@ export default function Create() {
                         {errors.deskripsi && <p className="text-xs text-red-500 mt-1">{errors.deskripsi}</p>}
                     </div>
 
-                    {/* Link Foto - mini editor */}
+                    {/* Foto - file upload */}
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
-                            <label className="block text-sm font-medium text-slate-700">Link Foto</label>
-                            <button type="button" onClick={addLinkFoto} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-xs">
-                                + Tambah link foto
+                            <label className="block text-sm font-medium text-slate-700">Foto</label>
+                            <button type="button" onClick={addLinkFoto} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-xs">
+                                + Tambah foto
                             </button>
                         </div>
                         {errors.link_foto && <p className="text-xs text-red-500 mb-2">{errors.link_foto}</p>}
                         <div className="space-y-1.5">
-                            {linkFotoList.map((url, index) => (
+                            {linkFotoList.map((item, index) => (
                                 <div key={index} className="flex items-center gap-2 bg-slate-50 rounded-md px-2 py-1">
                                     <input
-                                        type="text"
-                                        value={url}
-                                        onChange={(e) => updateLinkFoto(index, e.target.value)}
-                                        className="input input-bordered input-xs w-full"
-                                        placeholder="https://example.com/foto.jpg"
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => updateLinkFoto(index, e.target.files[0] || null)}
+                                        className="file-input file-input-bordered file-input-sm w-full text-sm"
                                     />
-                                    <button type="button" onClick={() => removeLinkFoto(index)} className="btn btn-ghost btn-xs btn-square text-red-500 hover:bg-red-100" title="Hapus">
+                                    <button type="button" onClick={() => removeLinkFoto(index)} className="btn btn-ghost btn-xs btn-square text-red-500 hover:bg-red-100 flex-shrink-0" title="Hapus">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                                     </button>
                                 </div>
                             ))}
                         </div>
+                        {(errors['link_foto.0'] || errors['link_foto.1'] || errors['link_foto.2']) && (
+                            <p className="text-xs text-red-500 mt-2">Setiap file harus berupa gambar (jpeg, png, jpg, gif, webp) maksimal 5MB.</p>
+                        )}
                     </div>
 
                     {/* Image Previews */}
-                    {linkFotoList.filter(u => u.trim()).length > 0 && (
+                    {linkFotoList.filter(u => u.preview).length > 0 && (
                         <div className="border-t border-slate-200 pt-5">
                             <label className="block text-sm font-medium text-slate-700 mb-3">Preview Foto</label>
                             <div className="flex flex-wrap gap-3">
-                                {linkFotoList.filter(u => u.trim()).map((url, i) => (
+                                {linkFotoList.filter(u => u.preview).map((item, i) => (
                                     <div key={i} className="relative group">
                                         <img
-                                            src={url}
+                                            src={item.preview}
                                             alt={`Foto ${i + 1}`}
                                             className="w-24 h-24 object-cover rounded-lg border border-slate-200 shadow-sm"
-                                            onError={(e) => { e.target.style.display = 'none' }}
                                         />
                                     </div>
                                 ))}
@@ -282,7 +292,7 @@ export default function Create() {
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
                             <label className="block text-sm font-medium text-slate-700">Komponen</label>
-                            <button type="button" onClick={addKomponen} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-xs">
+                            <button type="button" onClick={addKomponen} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-xs">
                                 + Tambah komponen
                             </button>
                         </div>
@@ -316,7 +326,7 @@ export default function Create() {
                     <div className="border-t border-slate-200 pt-5">
                         <div className="flex items-center justify-between mb-3">
                             <label className="block text-sm font-medium text-slate-700">Barang Hilang</label>
-                            <button type="button" onClick={addBarangHilang} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-xs">
+                            <button type="button" onClick={addBarangHilang} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-xs">
                                 + Tambah barang hilang
                             </button>
                         </div>
@@ -350,7 +360,7 @@ export default function Create() {
                     </div>
 
                     <div className="flex items-center gap-3 pt-3 border-t border-slate-200">
-                        <button type="submit" disabled={processing} className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
+                        <button type="submit" disabled={processing} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm">
                             {processing ? 'Menyimpan...' : 'Simpan'}
                         </button>
                         <Link href="/admin/games" className="btn btn-ghost btn-sm">Batal</Link>

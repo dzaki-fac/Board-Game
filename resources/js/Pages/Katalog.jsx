@@ -1,221 +1,13 @@
 import { createPortal } from "react-dom";
-import { useMemo, useState, useRef, useEffect, useCallback, createContext, useContext } from "react";
+import { useMemo, useState, useRef, useEffect, useCallback, memo } from "react";
 import { Head, Link, router } from "@inertiajs/react";
-import LanguageToggle from "../Components/LanguageToggle";
+import { motion } from "framer-motion";
 import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
-
-/* Palet warna UPT Perpustakaan Undip */
-const WARNA = {
-    hijauTua: "#173C33",   // top bar paling gelap
-    hijauUtama: "#2F6F62", // hero & tombol utama
-    hijauHover: "#255A4F",
-    emas: "#B98A4A",       // aksen tombol pencarian
-    emasHover: "#A5763A",
-    krem: "#FAF7F2",
-};
-
-const KATEGORI_COLORS = {
-    "Strategy": ["#2F6F62", "#E8F3EF"],
-    "Party": ["#E8A33D", "#FDF3E1"],
-    "Family": ["#3F8F63", "#E9F5EE"],
-    "Cooperative": ["#C0562F", "#FBEAE1"],
-    "Card Game": ["#3D5A80", "#EAF0F7"],
-    "Abstract": ["#8E5FB0", "#F1E9F7"],
-    "Puzzle": ["#A13D5C", "#F8E7ED"],
-    "Simulation / Economic": ["#5B5F66", "#EEEFF1"],
-};
-const DEFAULT_COLOR = ["#5B5F66", "#EEEFF1"];
-
-/* Kamus dan Konteks bahasa */
-const TEKS = {
-    ID: {
-        cariPlaceholder: "Cari nama board game...",
-        masuk: "Masuk",
-        favorit: "Favorit",
-        riwayat: "Riwayat",
-        filter: "Filter:",
-        kategori: "Kategori",
-        lantai: "Lantai",
-        status: "Status",
-        semua: "Semua",
-        tersedia: "Tersedia",
-        dipinjam: "Dipinjam",
-        umum: "Umum",
-        boardGame: "board game",
-        tersediaDipinjam: "Tersedia untuk Dipinjam",
-        sedangDipinjam: "Sedang Dipinjam",
-        pinjam: "Pinjam",
-        lihatDetail: "Lihat Detail",
-        tidakCocok: "Tidak ada board game yang cocok dengan filter ini.",
-        rekomendasi: "Rekomendasi",
-        produkPopuler: "Produk Paling Populer",
-        informasi: "Informasi",
-        tataCaraJudul: "Tata Cara Peminjaman",
-        pemain: "Pemain",
-        menit: "Menit",
-        tataCaraPoin: [
-            "Peminjam melakukan peminjaman langsung di meja layanan kepada petugas yang bertugas",
-            "Peminjam memilih board game yang ingin dipinjam, lalu melengkapi form peminjaman sebelum mengambil barangnya",
-            "Peminjam menyerahkan satu kartu identitas (KTM/KTP/Kartu Anggota Perpustakaan) kepada petugas sebagai jaminan",
-            "Peminjam bersama petugas memeriksa kelengkapan komponen (kartu, dadu, pion, papan, dan lain-lain) sesuai lembar daftar isi pada kotak, sebelum board game dibawa ke meja permainan",
-            "Peminjam hanya boleh memainkan board game di lantai tempat board game tersebut dipinjam, tidak membawanya ke lantai lain maupun membawanya pulang",
-            "Peminjam menjaga kelengkapan komponen permainan selama masa peminjaman berlangsung, dan tidak memindahtangankan board game ke kelompok lain secara sepihak.",
-            "Peminjam meminjam dan mengembalikan board game pada hari yang sama, paling lambat sebelum jam operasional perpustakaan berakhir",
-            "Peminjam menerima kembali kartu identitasnya setelah board game diperiksa petugas dan dinyatakan lengkap",
-        ],
-        sanksiJudul: "Sanksi Kerusakan / Kehilangan",
-        sanksiPoin: [
-            "Komponen hilang: wajib ganti sesuai jenis komponen",
-            "Board game rusak: wajib ganti unit yang sama",
-            "Board game hilang: ganti unit baru atau denda sesuai ketentuan",
-        ],
-        carousel: [
-            {
-                title: "Selamat Datang di UPT Perpustakaan Universitas Diponegoro",
-                description: "Temukan, pilih, dan pinjam board game favoritmu melalui katalog digital UPT Perpustakaan Universitas Diponegoro.",
-                detailTitle: "Selamat Datang di Board Game UPT Perpustakaan Undip",
-                detailDescription: "Katalog board game ini membantu pemustaka mencari informasi permainan, melihat detail board game, dan mengajukan peminjaman secara online.",
-                points: [
-                    "Cari board game berdasarkan nama, kategori, lantai, dan status.",
-                    "Lihat detail board game sebelum mengajukan peminjaman.",
-                    "Ajukan peminjaman melalui tombol Pinjam.",
-                    "Gunakan board game hanya di area perpustakaan.",
-                ],
-                theme: "welcome",
-            },
-            {
-                title: "Tata Cara Peminjaman",
-                description: "Ikuti prosedur peminjaman sebelum mengambil board game.",
-                detailTitle: "Tata Cara Peminjaman Board Game",
-                detailDescription: "Pemustaka wajib mengikuti prosedur peminjaman board game di UPT Perpustakaan Universitas Diponegoro.",
-                points: [
-                    "Peminjam melakukan peminjaman langsung di meja layanan kepada petugas yang bertugas",
-                    "Peminjam memilih board game yang ingin dipinjam, lalu melengkapi form peminjaman sebelum mengambil barangnya",
-                    "Peminjam menyerahkan satu kartu identitas (KTM/KTP/Kartu Anggota Perpustakaan) kepada petugas sebagai jaminan",
-                    "Peminjam bersama petugas memeriksa kelengkapan komponen (kartu, dadu, pion, papan, dan lain-lain) sesuai lembar daftar isi pada kotak, sebelum board game dibawa ke meja permainan",
-                    "Peminjam hanya boleh memainkan board game di lantai tempat board game tersebut dipinjam, tidak membawanya ke lantai lain maupun membawanya pulang",
-                    "Peminjam menjaga kelengkapan komponen permainan selama masa peminjaman berlangsung, dan tidak memindahtangankan board game ke kelompok lain secara sepihak.",
-                    "Peminjam meminjam dan mengembalikan board game pada hari yang sama, paling lambat sebelum jam operasional perpustakaan berakhir",
-                    "Peminjam menerima kembali kartu identitasnya setelah board game diperiksa petugas dan dinyatakan lengkap",
-                ],
-                theme: "procedure",
-            },
-            {
-                title: "Ketentuan Penggunaan",
-                description: "Jaga kelengkapan dan kondisi board game selama masa peminjaman.",
-                detailTitle: "Ketentuan Penggunaan Board Game",
-                detailDescription: "Peminjam bertanggung jawab menjaga kondisi dan kelengkapan board game selama digunakan.",
-                points: [
-                    "Peminjam bertanggung jawab penuh atas keutuhan fisik board game yang digunakannya selama masa peminjaman",
-                    "Jika ada komponen yang hilang atau rusak, peminjam wajib menggantinya dengan board game yang judul dan penerbitnya sama persis",
-                    "Kerusakan yang dimaksud mencakup antara lain kartu yang sobek, kotak yang penyok cukup parah, atau komponen permainan yang hilang sebagian, bukan hanya kehilangan seluruh set",
-                    "Apabila board game tersebut sudah tidak beredar lagi di pasaran, peminjam dapat menggantinya dengan board game lain yang setara, baik dari segi jenis permainan maupun harga, bukan dalam bentuk uang tunai.",
-                    "Peminjam diberi waktu paling lama empat belas hari kerja sejak kehilangan atau kerusakan dilaporkan untuk menyelesaikan penggantian",
-                    "Selama proses penggantian belum diselesaikan, kartu identitas peminjam ditahan oleh petugas layanan",
-                    "Selama kasus penggantian ini belum terselesaikan, peminjam belum diperkenankan meminjam board game lain",
-                ],
-                theme: "rules",
-            },
-        ],
-    },
-    EN: {
-        cariPlaceholder: "Search board game name...",
-        masuk: "Sign In",
-        favorit: "Favorites",
-        riwayat: "History",
-        filter: "Filter:",
-        kategori: "Category",
-        lantai: "Floor",
-        status: "Status",
-        semua: "All",
-        tersedia: "Available",
-        dipinjam: "Borrowed",
-        umum: "General",
-        boardGame: "board games",
-        tersediaDipinjam: "Available to Borrow",
-        sedangDipinjam: "Currently Borrowed",
-        pinjam: "Borrow",
-        lihatDetail: "View Details",
-        tidakCocok: "No board games match this filter.",
-        rekomendasi: "Recommended",
-        produkPopuler: "Most Popular Titles",
-        informasi: "Information",
-        tataCaraJudul: "How to Borrow",
-        pemain: "Players",
-        menit: "Minutes",
-        tataCaraPoin: [
-            "Fill out the borrowing form through the system before picking up the board game",
-            "Hand over an ID card (student card/ID/KTP) to staff as a deposit",
-            "Board games may only be played inside the library, not taken home",
-            "Return it the same day, by the planned return time entered when borrowing",
-            "Keep all components (cards, dice, pawns, board, etc.) intact during use",
-            "Your ID card is returned once the board game is checked and confirmed complete",
-        ],
-        sanksiJudul: "Damage / Loss Penalty",
-        sanksiPoin: [
-            "Missing component: must be replaced with the matching piece",
-            "Damaged game: must be replaced with the same unit",
-            "Lost game: replace with a new unit or pay a fine per policy",
-        ],
-        carousel: [
-            {
-                title: "Welcome to UPT Library of Diponegoro University",
-                description: "Discover, choose, and borrow your favorite board games through the digital catalog of UPT Library of Diponegoro University.",
-                detailTitle: "Welcome to Board Game UPT Library Undip",
-                detailDescription: "This board game catalog helps students find game information, view board game details, and submit borrowing requests online.",
-                points: [
-                    "Search board games by name, category, floor, and status.",
-                    "View board game details before submitting a borrowing request.",
-                    "Submit a borrowing request through the Borrow button.",
-                    "Play board games only in the library area.",
-                ],
-                theme: "welcome",
-            },
-            {
-                title: "How to Borrow",
-                description: "Follow the borrowing procedure before taking a board game.",
-                detailTitle: "How to Borrow Board Games",
-                detailDescription: "Students must follow the board game borrowing procedure at UPT Library of Diponegoro University.",
-                points: [
-                    "Fill out the borrowing form through the system before picking up the board game.",
-                    "Hand over your ID card as a deposit.",
-                    "Board games may only be played in the library area.",
-                    "Return on the same day according to the planned return time.",
-                ],
-                theme: "procedure",
-            },
-            {
-                title: "Usage Rules",
-                description: "Keep the board game components and condition during the borrowing period.",
-                detailTitle: "Board Game Usage Rules",
-                detailDescription: "Borrowers are responsible for maintaining the condition and completeness of the board game during use.",
-                points: [
-                    "Keep components such as cards, dice, pawns, boards, and rulebooks.",
-                    "Report to staff if any components are damaged or missing.",
-                    "ID cards are returned after the board game is checked.",
-                    "Use board games properly in the library area.",
-                ],
-                theme: "rules",
-            },
-        ],
-    },
-};
-
-const BahasaContext = createContext(TEKS.ID);
-function useTeks() {
-    return useContext(BahasaContext);
-}
-
-function warnaKategori(kategori) {
-    if (Array.isArray(kategori)) {
-        for (const k of kategori) {
-            if (KATEGORI_COLORS[k]) return KATEGORI_COLORS[k];
-        }
-        return DEFAULT_COLOR;
-    }
-    return KATEGORI_COLORS[kategori] ?? DEFAULT_COLOR;
-}
+import TopNavbar from "../Components/TopNavbar";
+import { WARNA, warnaKategori } from "../Components/theme";
+import { BahasaContext, TEKS, useTeks, useBahasaState } from "../Components/BahasaContext";
+import { AnimatedSection, Reveal, StaggerGrid, MotionButton, MotionLink } from "../Components/animations";
 
 /* ========================= Ikon-ikon kecil ========================= */
 
@@ -303,33 +95,6 @@ function IkonRak(props) {
     );
 }
 
-/* Ikon media sosial — bentuk generik/monoline, bukan reproduksi logo resmi. */
-function IkonYoutube(props) {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
-            <rect x="2.5" y="6" width="19" height="12" rx="4" />
-            <path d="M10.5 9.5v5l4.5-2.5-4.5-2.5Z" fill="currentColor" stroke="none" />
-        </svg>
-    );
-}
-function IkonInstagram(props) {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
-            <rect x="3" y="3" width="18" height="18" rx="5" />
-            <circle cx="12" cy="12" r="4" />
-            <circle cx="17" cy="7" r="0.8" fill="currentColor" stroke="none" />
-        </svg>
-    );
-}
-function IkonTiktok(props) {
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
-            <path d="M13 3v11.2a3 3 0 1 1-2.2-2.9" />
-            <path d="M13 3c.4 2.2 2 3.8 4.2 4.1" />
-        </svg>
-    );
-}
-
 function pipDariJumlahPemain(text) {
     const match = (text || "").match(/\d+/);
     return match ? parseInt(match[0], 10) : 2;
@@ -347,96 +112,6 @@ function formatDurasi(text, t) {
     return `${angka} ${t.menit}`;
 }
 
-/* ========================= Navbar utama ========================= */
-
-function TopNavbar({ pencarian, setPencarian, bahasa, setBahasa }) {
-    const t = useTeks();
-
-    return (
-        <div style={{ backgroundColor: WARNA.hijauTua }}>
-            <div className="max-w-[1440px] mx-auto px-6 md:px-10">
-                {/* Desktop (md+) */}
-                <div className="hidden md:flex items-center justify-between py-3">
-                    {/* Kiri: Logo + Nama Institusi */}
-                    <a href="/katalog" className="flex items-center gap-3 shrink-0">
-                        <img
-                            src="/assets/logo_undip.png"
-                            alt="Universitas Diponegoro"
-                            className="h-14 w-14 object-contain"
-                        />
-                        <img
-                            src="/images/logo-upt.png"
-                            alt="UPT Perpustakaan Undip"
-                            className="h-14 w-14 object-contain"
-                        />
-                        <div className="leading-tight text-white">
-                            <span className="block text-[11px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
-                            <span className="block text-sm font-semibold">UPT Perpustakaan</span>
-                        </div>
-                    </a>
-
-                    {/* Kanan: Bahasa + Sosial Media */}
-                    <div className="flex items-center gap-5 shrink-0">
-                        <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
-                        <div className="flex items-center gap-3 text-white/80">
-                            <a
-                                href="https://youtube.com/@perpustakaanundip?si=RgDQgwp-UlPD7ryq"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 hover:text-white transition-colors"
-                            >
-                                <IkonYoutube className="w-5 h-5" />
-                                <span className="text-xs hidden xl:inline">Youtube</span>
-                            </a>
-                            <a
-                                href="https://www.instagram.com/perpus.undip?igsh=MTh4bXFtd3AzbmRmdQ=="
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 hover:text-white transition-colors"
-                            >
-                                <IkonInstagram className="w-5 h-5" />
-                                <span className="text-xs hidden xl:inline">Instagram</span>
-                            </a>
-                            <a
-                                href="https://www.tiktok.com/@perpus.undip.press?_r=1&_t=ZS-97okoKr4q4S"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 hover:text-white transition-colors"
-                            >
-                                <IkonTiktok className="w-5 h-5" />
-                                <span className="text-xs hidden xl:inline">TikTok</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Mobile (< md) */}
-                <div className="md:hidden">
-                    <div className="flex items-center justify-between py-3">
-                        <a href="/katalog" className="flex items-center gap-2">
-                            <img
-                                src="/assets/logo_undip.png"
-                                alt="Universitas Diponegoro"
-                                className="h-16 w-16 object-contain"
-                            />
-                            <img
-                                src="/images/logo-upt.png"
-                                alt="UPT Perpustakaan Undip"
-                                className="h-10 w-10 object-contain"
-                            />
-                            <div className="leading-tight text-white">
-                                <span className="block text-[10px] text-emerald-100/90 tracking-wide">Universitas Diponegoro</span>
-                                <span className="block text-xs font-semibold">UPT Perpustakaan</span>
-                            </div>
-                        </a>
-                        <LanguageToggle bahasa={bahasa} setBahasa={setBahasa} />
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 /* ========================= Kartu board game ========================= */
 
 function KartuGame({ game, tersedia }) {
@@ -449,27 +124,27 @@ function KartuGame({ game, tersedia }) {
             tabIndex={0}
             onClick={() => router.visit(`/katalog/${game.id}`)}
             onKeyDown={(e) => { if (e.key === 'Enter') router.visit(`/katalog/${game.id}`) }}
-            className={`group h-full flex flex-col rounded-2xl border transition-all duration-300 overflow-hidden cursor-pointer ${
+            className={`group h-full flex flex-col rounded-2xl border overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
                 tersedia
-                    ? "bg-white border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5"
-                    : "bg-slate-50 border-slate-100 opacity-75"
+                    ? "bg-white border-slate-100 shadow-sm"
+                    : "bg-white border-slate-200"
             }`}
         >
-            <div className="relative">
+            <div className="relative overflow-hidden">
                 <span
                     className={`absolute top-3 right-3 z-10 text-[11px] font-semibold px-3 py-1 rounded-full ${
-                        tersedia ? "bg-emerald-600 text-white" : "bg-slate-500 text-white"
+                        tersedia ? "bg-sky-800 text-white" : "bg-slate-500 text-white"
                     }`}
                 >
                     {tersedia ? t.tersedia : t.dipinjam}
                 </span>
 
                 <div
-                className={`relative aspect-square flex items-center justify-center ${!tersedia ? "grayscale" : ""}`}
-                style={{ backgroundColor: bg }}
-            >
+                    className={`relative aspect-square flex items-center justify-center overflow-hidden ${!tersedia ? "grayscale" : ""}`}
+                    style={{ backgroundColor: bg }}
+                >
                 {game.link_foto?.[0] ? (
-                    <>
+                    <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-105">
                         <img
                             src={game.link_foto[0]}
                             alt={game.nama}
@@ -484,37 +159,65 @@ function KartuGame({ game, tersedia }) {
                                 className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                             />
                         )}
-                    </>
+                    </div>
                 ) : (
                     <IkonDadu pip={pipDariJumlahPemain(game.jumlah_pemain)} color={warna} />
                 )}
             </div>
             </div>
 
-            {/* supaya semua kartu dalam satu baris tingginya sama */}
             <div className="p-4 flex flex-col flex-1">
-                <div className="flex flex-wrap gap-1 mb-2">
-                    {(Array.isArray(game.kategori) && game.kategori.length > 0
+                {(() => {
+                    const kategoriArr = Array.isArray(game.kategori) && game.kategori.length > 0
                         ? game.kategori
-                        : [game.kategori ?? t.umum]
-                    ).map((k, i) => {
-                        const [kw, kb] = warnaKategori(k);
-                        return (
-                            <span
-                                key={i}
-                                className="inline-block self-start text-[11px] font-medium px-2.5 py-1 rounded-full"
-                                style={{ backgroundColor: kb, color: kw }}
-                            >
-                                {k}
-                            </span>
-                        );
-                    })}
-                </div>
+                        : [game.kategori ?? t.umum];
+                    const MAKS_MOBILE = 2;
+                    const sisa = kategoriArr.length - MAKS_MOBILE;
+
+                    return (
+                        <>
+                            <div className="flex sm:hidden flex-nowrap gap-1 mb-2 overflow-hidden">
+                                {kategoriArr.slice(0, MAKS_MOBILE).map((k, i) => {
+                                    const [kw, kb] = warnaKategori(k);
+                                    return (
+                                        <span
+                                            key={i}
+                                            className="inline-block shrink self-start truncate max-w-[45%] text-[9px] font-medium px-2 py-0.5 rounded-full"
+                                            style={{ backgroundColor: kb, color: kw }}
+                                        >
+                                            {k}
+                                        </span>
+                                    );
+                                })}
+                                {sisa > 0 && (
+                                    <span className="inline-block shrink-0 self-start whitespace-nowrap text-[9px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                                        +{sisa}
+                                    </span>
+                                )}
+                            </div>
+
+                            <div className="hidden sm:flex flex-wrap gap-1 mb-2">
+                                {kategoriArr.map((k, i) => {
+                                    const [kw, kb] = warnaKategori(k);
+                                    return (
+                                        <span
+                                            key={i}
+                                            className="inline-block self-start text-[11px] font-medium px-2.5 py-1 rounded-full"
+                                            style={{ backgroundColor: kb, color: kw }}
+                                        >
+                                            {k}
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                        </>
+                    );
+                })()}
 
                 <div className="mb-2">
-                    <h3 className="text-sm font-semibold text-slate-800 leading-snug line-clamp-2">
+                    <p className="text-xs font-medium text-slate-700 mt-2 line-clamp-2">
                         {game.nama}
-                    </h3>
+                    </p>
                     <p className="text-xs text-slate-500 mt-0.5 truncate">{game.penerbit ?? "\u00A0"}</p>
                     <div className="mt-1">
                         <RatingSummary
@@ -524,29 +227,29 @@ function KartuGame({ game, tersedia }) {
                     </div>
                 </div>
 
-                <div className="mt-auto">
-                    <div className="text-[11px] text-slate-500 mb-3 space-y-0.5">
-                        <div className="flex items-center gap-x-1.5">
-                            <span className="flex items-center gap-1 whitespace-nowrap">
-                                <IkonPemain className="w-3.5 h-3.5 shrink-0" />
-                                {formatPemain(game.jumlah_pemain, t)}
-                            </span>
-                            <span className="flex items-center gap-1 whitespace-nowrap">
-                                <IkonJam className="w-3.5 h-3.5 shrink-0" />
-                                {formatDurasi(game.durasi, t)}
-                            </span>
-                        </div>
-                        <div className="flex items-center gap-1 whitespace-nowrap">
-                            <IkonRak className="w-3.5 h-3.5 shrink-0" />
-                            {t.lantai} {game.lantai}
-                        </div>
+                <div className="text-[11px] text-slate-500 mb-3 space-y-0.5">
+                    <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                        <span className="flex items-center gap-1 whitespace-nowrap">
+                            <IkonPemain className="w-3.5 h-3.5 shrink-0" />
+                            {formatPemain(game.jumlah_pemain, t)}
+                        </span>
+                        <span className="flex items-center gap-1 whitespace-nowrap">
+                            <IkonJam className="w-3.5 h-3.5 shrink-0" />
+                            {formatDurasi(game.durasi, t)}
+                        </span>
                     </div>
+                    <div className="flex items-center gap-1 whitespace-nowrap">
+                        <IkonRak className="w-3.5 h-3.5 shrink-0" />
+                        {t.lantai} {game.lantai}
+                    </div>
+                </div>
 
+                <div className="mt-auto">
                     {tersedia ? (
                         <div onClick={(e) => e.stopPropagation()}>
                             <Link
                                 href={`/katalog/${game.id}`}
-                                className="block w-full rounded-full py-2 text-sm font-semibold text-white text-center transition-colors"
+                                className="block w-full rounded-full py-2 text-sm font-semibold text-white text-center transition-all duration-200 active:scale-95 hover:scale-[1.02]"
                                 style={{ backgroundColor: WARNA.hijauUtama }}
                                 onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
                                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
@@ -555,15 +258,33 @@ function KartuGame({ game, tersedia }) {
                             </Link>
                         </div>
                     ) : (
-                        <button
-                            disabled
-                            className="w-full rounded-full py-2 text-sm font-semibold bg-slate-200 text-slate-400 cursor-not-allowed"
+                        <div className="w-full rounded-full py-2 text-sm font-semibold text-center"
+                            style={{ backgroundColor: "#F1F5F9", color: "#94A3B8" }}
                         >
                             {t.dipinjam}
-                        </button>
+                        </div>
                     )}
                 </div>
             </div>
+        </div>
+    );
+}
+
+/* ========================= Parallax Background (lightweight) ========================= */
+/* Single reveal on scroll, no continuous scroll-linked update */
+
+function ParallaxBg({ children }) {
+    return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <motion.div
+                className="absolute inset-0"
+                initial={{ y: 15 }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+            >
+                {children}
+            </motion.div>
         </div>
     );
 }
@@ -606,9 +327,28 @@ const THEMES = {
             { cx: 450, cy: 380, r: 30, fill: WARNA.hijauTua, opacity: "0.10" },
         ],
     },
+    sanksi: {
+        bg: WARNA.krem,
+        blob: [
+            { path: "M80 60 Q220 10 340 100 Q440 180 380 300 Q320 400 180 380 Q40 360 20 220 Q0 100 80 60 Z", fill: WARNA.emas, opacity: "0.18" },
+            { cx: 420, cy: 350, r: 55, fill: WARNA.hijauUtama, opacity: "0.14" },
+            { cx: 60, cy: 400, r: 35, fill: WARNA.hijauTua, opacity: "0.10" },
+        ],
+    },
+    populer: {
+        bg: WARNA.krem,
+        blob: [
+            { path: "M100 30 Q240 0 320 100 Q400 200 320 300 Q240 400 120 380 Q0 360 20 220 Q40 80 100 30 Z", fill: WARNA.hijauUtama, opacity: "0.18" },
+            { cx: 420, cy: 340, r: 50, fill: WARNA.emas, opacity: "0.14" },
+            { cx: 60, cy: 400, r: 30, fill: WARNA.hijauTua, opacity: "0.10" },
+        ],
+    },
 };
 
 function CarouselModal({ item, onClose }) {
+    const [entered, setEntered] = useState(false);
+    const t = useTeks();
+
     useEffect(() => {
         if (!item) return;
         const handleEscape = (e) => { if (e.key === "Escape") onClose(); };
@@ -620,67 +360,108 @@ function CarouselModal({ item, onClose }) {
         };
     }, [item, onClose]);
 
+    useEffect(() => {
+        if (!item) {
+            setEntered(false);
+            return;
+        }
+        setEntered(false);
+        const raf = requestAnimationFrame(() => setEntered(true));
+        return () => cancelAnimationFrame(raf);
+    }, [item]);
+
     if (!item) return null;
 
     const theme = THEMES[item.theme] || THEMES.welcome;
 
     return createPortal(
         <div className="fixed inset-0 z-50" onClick={onClose}>
-            <div className="absolute inset-0 bg-black/60" />
+            <div
+                className={`absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ease-out ${
+                    entered ? "opacity-100" : "opacity-0"
+                }`}
+            />
 
-            <div className="relative h-full overflow-y-auto p-4 py-8">
+            <div className="relative h-full overflow-y-auto p-3 py-6 md:p-4 md:py-8">
                 <div className="flex min-h-full items-center justify-center">
                     <div
-                        className="relative w-[92vw] max-w-7xl max-h-[88vh] rounded-[2rem] shadow-2xl overflow-y-auto"
+                        className={`relative w-full max-w-md md:w-[92vw] md:max-w-7xl max-h-[85vh] md:max-h-[88vh] rounded-2xl md:rounded-[2rem] shadow-2xl overflow-y-auto ring-1 ring-white/50 transition-all duration-300 ease-out ${
+                            entered ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-3"
+                        }`}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="relative p-8 md:p-10 lg:p-12" style={{ backgroundColor: theme.bg }}>
-                            <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full pointer-events-none">
-                                <rect width="500" height="500" fill={theme.bg} />
-                                {theme.blob.map((b, i) =>
-                                    b.path ? (
-                                        <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
-                                    ) : (
-                                        <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
-                                    )
-                                )}
-                            </svg>
+                        <div
+                            className="relative p-5 md:p-10 lg:p-12 backdrop-blur-2xl"
+                            style={{ backgroundColor: item.bgImage ? undefined : `${theme.bg}CC` }}
+                        >
+                            {item.bgImage && (
+                                <>
+                                    <img
+                                        src={item.bgImage}
+                                        alt=""
+                                        className="absolute inset-0 h-full w-full object-cover"
+                                    />
+                                    <div
+                                        className="absolute inset-0"
+                                        style={{ backgroundColor: "rgba(255,255,255,0.45)" }}
+                                    />
+                                </>
+                            )}
+                            {!item.bgImage && (
+                                <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full pointer-events-none">
+                                    {theme.blob.map((b, i) =>
+                                        b.path ? (
+                                            <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
+                                        ) : (
+                                            <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
+                                        )
+                                    )}
+                                </svg>
+                            )}
 
-                            <button
+                            <MotionButton
                                 onClick={onClose}
-                                className="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors"
+                                className="absolute top-3 right-3 md:top-6 md:right-6 z-20 w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/80 hover:bg-white flex items-center justify-center text-slate-500 hover:text-slate-700 shadow-sm transition-colors touch-manipulation"
                             >
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4 md:w-5 md:h-5">
                                     <path d="M18 6 6 18" /><path d="m6 6 12 12" />
                                 </svg>
-                            </button>
+                            </MotionButton>
 
                             <div className="relative z-10">
-                                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: WARNA.hijauTua }}>
+                                <h2
+                                    className="text-xl md:text-4xl lg:text-5xl font-bold mb-3 md:mb-4 text-center pr-8 md:pr-0"
+                                    style={{ color: WARNA.hijauTua, whiteSpace: "pre-line" }}
+                                >
                                     {item.detailTitle}
                                 </h2>
-                                <p className="text-base md:text-lg text-slate-600 leading-8 mb-6 max-w-4xl">
+                                <p
+                                    className="text-sm md:text-lg leading-6 md:leading-8 mb-4 md:mb-6 max-w-5xl font-medium"
+                                    style={{ color: WARNA.hijauTua }}
+                                >
                                     {item.detailDescription}
                                 </p>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    {item.points.map((point, i) => (
-                                        <div key={i} className="flex items-start gap-4 p-5 md:p-6 rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
-                                            <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
-                                                {i + 1}
-                                            </span>
-                                            <p className="text-sm md:text-base text-slate-700 leading-relaxed">{point}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                                <button
+                                <div className="max-h-[260px] md:max-h-[280px] overflow-y-auto pr-1 -mr-1">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 md:gap-4">
+        {item.points.map((point, i) => (
+            <div key={i} className="flex items-start gap-3 md:gap-4 p-3 md:p-6 rounded-xl md:rounded-2xl bg-white/70 backdrop-blur-sm shadow-sm">
+                <span className="shrink-0 mt-0.5 w-6 h-6 md:w-7 md:h-7 rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                    {i + 1}
+                </span>
+                <p className="text-xs md:text-base text-slate-700 leading-relaxed">{point}</p>
+            </div>
+        ))}
+    </div>
+</div>
+                                <MotionButton
                                     onClick={onClose}
-                                    className="mt-8 w-full rounded-full py-3 text-base font-semibold text-white transition-colors"
+                                    className="mt-5 md:mt-8 w-full rounded-full py-2.5 md:py-3 text-sm md:text-base font-semibold text-white touch-manipulation"
                                     style={{ backgroundColor: WARNA.hijauUtama }}
-                                    onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
-                                    onMouseOut={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauUtama)}
+                                    whileHover={{ scale: 1.02, backgroundColor: WARNA.hijauHover }}
+                                    whileTap={{ scale: 0.97 }}
                                 >
-                                    Tutup
-                                </button>
+                                    {t.tutup}
+                                </MotionButton>
                             </div>
                         </div>
                     </div>
@@ -691,25 +472,159 @@ function CarouselModal({ item, onClose }) {
     );
 }
 
-function AnnouncementCarousel({ onModalChange }) {
+function ProdukPopuler({ games }) {
+    const trackRef = useRef(null);
+    const posRef = useRef(0);
+    const rafRef = useRef(null);
+    const pausedRef = useRef(false);
+    const t = useTeks();
+
+    const populer = useMemo(() => {
+        return [...games]
+            .sort((a, b) => (b.loans_count ?? 0) - (a.loans_count ?? 0))
+            .slice(0, 10);
+    }, [games]);
+
+    // Digandakan 2x supaya loop-nya mulus tanpa jeda/loncat
+    const loopedPopuler = useMemo(() => [...populer, ...populer], [populer]);
+
+    useEffect(() => {
+        if (populer.length === 0) return;
+        const track = trackRef.current;
+        if (!track) return;
+
+        const KECEPATAN = 0.6; // px per frame, kecil = pelan
+
+        function step() {
+            if (!pausedRef.current && track) {
+                posRef.current += KECEPATAN;
+                const setengah = track.scrollWidth / 2;
+                if (posRef.current >= setengah) {
+                    posRef.current -= setengah;
+                }
+                track.style.transform = `translateX(-${posRef.current}px)`;
+            }
+            rafRef.current = requestAnimationFrame(step);
+        }
+
+        rafRef.current = requestAnimationFrame(step);
+        return () => cancelAnimationFrame(rafRef.current);
+    }, [populer.length]);
+
+    if (populer.length === 0) return null;
+
+    return (
+        <div className="max-w-[1440px] mx-auto px-6 md:px-10 pt-8 relative">
+            <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-5 text-center md:text-left">
+                {t.produkPopuler}
+            </h2>
+
+            <div
+                onMouseEnter={() => { pausedRef.current = true; }}
+                onMouseLeave={() => { pausedRef.current = false; }}
+                onTouchStart={() => { pausedRef.current = true; }}
+                onTouchEnd={() => { pausedRef.current = false; }}
+                className="overflow-hidden pb-2"
+            >
+                <div ref={trackRef} className="flex gap-4 w-max will-change-transform">
+                    {loopedPopuler.map((game, i) => (
+                        <div
+                            key={`${game.id}-${i}`}
+                            onClick={() => router.visit(`/katalog/${game.id}`)}
+                            className="shrink-0 w-40 cursor-pointer"
+                        >
+                            <div className="aspect-square rounded-xl overflow-hidden bg-slate-100">
+                                {game.link_foto?.[0] && (
+                                    <img src={game.link_foto[0]} alt={game.nama} className="w-full h-full object-cover" />
+                                )}
+                            </div>
+                            <p className="text-xs font-medium text-slate-700 mt-2 line-clamp-2 text-center">
+                                {game.nama}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+const AnnouncementCarousel = memo(function AnnouncementCarousel({ onModalChange }) {
     const t = useTeks();
     const items = t.carousel;
+
+    // `index`   = target slide terbaru (dipakai untuk highlight dot & klik modal)
+    // `current` = slide yang sedang full-opacity di layer bawah
+    // `incoming`= slide yang sedang fade-in di layer atas (null kalau tidak ada transisi)
     const [index, setIndex] = useState(0);
+    const [current, setCurrent] = useState(0);
+    const [incoming, setIncoming] = useState(null);
+    const [incomingShown, setIncomingShown] = useState(false);
+
     const [modalItem, setModalItem] = useState(null);
     const [paused, setPaused] = useState(false);
+    const [grabbing, setGrabbing] = useState(false);
     const wrapperRef = useRef(null);
-    const contentRef = useRef(null);
+    const bottomScrollRef = useRef(null);
     const lastChangeRef = useRef(Date.now());
     const intervalRef = useRef(null);
     const mountedRef = useRef(true);
+    const transitionTimeoutRef = useRef(null);
+    const rafRef = useRef(null);
+    const dragOccurredRef = useRef(false);
+
+    const TRANSITION_MS = 700;
 
     useEffect(() => {
         onModalChange?.(!!modalItem);
     }, [modalItem, onModalChange]);
 
+    // Crossfade tanpa celah putih: slide baru dipasang DI ATAS slide lama
+    // (yang tetap full opacity di bawah) lalu perlahan fade-in. Karena selalu
+    // ada layer solid penuh di belakang, tidak pernah ada momen kosong/putih.
     useEffect(() => {
-        contentRef.current?.scrollTo({ top: 0, behavior: "auto" });
-    }, [index]);
+        if (index === current) return;
+
+        setIncoming(index);
+        setIncomingShown(false);
+
+        cancelAnimationFrame(rafRef.current);
+        // double rAF supaya browser sempat paint opacity:0 dulu sebelum transisi ke 1
+        rafRef.current = requestAnimationFrame(() => {
+            rafRef.current = requestAnimationFrame(() => setIncomingShown(true));
+        });
+
+        clearTimeout(transitionTimeoutRef.current);
+        transitionTimeoutRef.current = setTimeout(() => {
+            setCurrent(index);
+            setIncoming(null);
+            setIncomingShown(false);
+        }, TRANSITION_MS);
+
+        return () => {
+            clearTimeout(transitionTimeoutRef.current);
+            cancelAnimationFrame(rafRef.current);
+        };
+    }, [index, current]);
+
+    useEffect(() => {
+        bottomScrollRef.current?.scrollTo({ top: 0, behavior: "auto" });
+    }, [current]);
+
+    // FIX (jank di HP): preload gambar slide berikutnya & sebelumnya supaya
+    // saat crossfade jalan, <img> sudah ter-decode di cache browser dan
+    // tidak nge-block main thread pas fade-in dimulai.
+    useEffect(() => {
+        if (items.length <= 1) return;
+        const next = items[(index + 1) % items.length];
+        const prev = items[(index - 1 + items.length) % items.length];
+        [next, prev].forEach((it) => {
+            if (it?.bgImage) {
+                const img = new Image();
+                img.src = it.bgImage;
+            }
+        });
+    }, [index, items]);
 
     const clearAutoplay = useCallback(() => {
         if (intervalRef.current !== null) {
@@ -732,7 +647,7 @@ function AnnouncementCarousel({ onModalChange }) {
     const advanceImmediately = useCallback(() => {
         setIndex((i) => (i + 1) % items.length);
         lastChangeRef.current = Date.now();
-    }, []);
+    }, [items.length]);
 
     useEffect(() => {
         if (paused || modalItem || items.length <= 1) {
@@ -749,7 +664,6 @@ function AnnouncementCarousel({ onModalChange }) {
 
     useEffect(() => {
         if (items.length <= 1) return;
-
         const handleVisibility = () => setPaused(document.hidden);
         document.addEventListener('visibilitychange', handleVisibility);
         return () => document.removeEventListener('visibilitychange', handleVisibility);
@@ -791,162 +705,286 @@ function AnnouncementCarousel({ onModalChange }) {
         startAutoplay();
     }, [startAutoplay]);
 
-    const item = items[index];
-    const theme = THEMES[item.theme] || THEMES.welcome;
+    const handleDragStart = useCallback(() => {
+        setGrabbing(true);
+        dragOccurredRef.current = false;
+        clearAutoplay();
+    }, [clearAutoplay]);
+
+    const handleDrag = useCallback((_, info) => {
+        if (Math.abs(info.offset.x) > 5) {
+            dragOccurredRef.current = true;
+        }
+    }, []);
+
+    const handleDragEnd = useCallback((_, info) => {
+        setGrabbing(false);
+        const threshold = 80;
+        const offsetX = info.offset.x;
+        const velocityX = info.velocity.x;
+        if (offsetX > threshold || velocityX > 500) {
+            geser(-1);
+        } else if (offsetX < -threshold || velocityX < -500) {
+            geser(1);
+        } else {
+            startAutoplay();
+        }
+    }, [geser, startAutoplay]);
+
+    // Render isi satu slide (background + teks). Dipakai untuk layer bawah
+    // (current) maupun layer atas (incoming) supaya tidak duplikasi JSX.
+    function renderSlide(slideItem, scrollRef) {
+        const theme = THEMES[slideItem.theme] || THEMES.welcome;
+        const punyaFoto = !!slideItem.bgImage;
+
+        if (slideItem.theme === "populer") {
+            const punyaFotoPopuler = !!slideItem.bgImage;
+
+            return (
+                <div className="absolute inset-0">
+                    {punyaFotoPopuler ? (
+                        <ParallaxBg>
+                            <img
+                                src={slideItem.bgImage}
+                                alt=""
+                                className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                            />
+                            <div
+                                className="absolute inset-0"
+                                style={{ backgroundColor: "rgba(255,255,255,0.55)" }}
+                            />
+                        </ParallaxBg>
+                    ) : (
+                        <ParallaxBg>
+                            <div className="absolute inset-0" style={{ backgroundColor: theme.bg }} />
+                        </ParallaxBg>
+                    )}
+
+                    <div
+                        ref={scrollRef}
+                        className="relative flex flex-col h-full justify-center px-4 md:px-14 lg:px-20 py-6 md:py-10 text-center overflow-y-auto"
+                    >
+                        <p
+                            className="text-xs md:text-lg lg:text-xl mb-4 md:mb-6 font-medium"
+                            style={{ color: WARNA.hijauTua }}
+                        >
+                            {slideItem.description}
+                        </p>
+
+                        <div className="flex justify-center gap-3 md:gap-6 flex-wrap">
+                            {slideItem.gamesPopuler.map((game) => (
+                                <div
+                                    key={game.id}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        router.visit(`/katalog/${game.id}`);
+                                    }}
+                                    className="cursor-pointer w-20 md:w-32 shrink-0"
+                                >
+                                    <div className="aspect-square rounded-xl overflow-hidden bg-white shadow-sm">
+                                        {game.link_foto?.[0] && (
+                                            <img
+                                                src={game.link_foto[0]}
+                                                alt={game.nama}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        )}
+                                    </div>
+                                    <p className="text-[10px] md:text-xs font-medium text-slate-700 mt-1.5 line-clamp-2">
+                                        {game.nama}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="absolute inset-0">
+                {punyaFoto ? (
+                    <ParallaxBg>
+                        <img
+                            src={slideItem.bgImage}
+                            alt=""
+                            draggable={false}
+                            onDragStart={(e) => e.preventDefault()}
+                            className="absolute inset-0 h-full w-full object-cover pointer-events-none"
+                        />
+                        <div
+                            className="absolute inset-0"
+                            style={{
+                                background: `linear-gradient(90deg, ${WARNA.hijauTua}CC 0%, ${WARNA.hijauTua}80 35%, ${WARNA.hijauTua}33 65%, transparent 100%)`,
+                            }}
+                        />
+                    </ParallaxBg>
+                ) : (
+                    <ParallaxBg>
+                        <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
+                            <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
+                                <rect width="500" height="500" fill={theme.bg} />
+                                {theme.blob.map((b, i) =>
+                                    b.path ? (
+                                        <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
+                                    ) : (
+                                        <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
+                                    )
+                                )}
+                            </svg>
+                        </div>
+                    </ParallaxBg>
+                )}
+
+                <div
+                    ref={scrollRef}
+                    className="relative flex flex-col h-full justify-center px-4 md:px-14 lg:px-20 py-3 md:py-14 pb-7 md:pb-16 text-center overflow-y-auto"
+                >
+                    {slideItem.theme === "welcome" ? (
+                        <div className="flex flex-col items-center text-center">
+    <h3
+        className="whitespace-pre-line text-balance text-lg md:text-3xl lg:text-4xl font-bold leading-snug md:leading-tight mb-3 md:mb-4 max-w-[95%] md:max-w-3xl mx-auto"
+        style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
+    >
+        {slideItem.title}
+    </h3>
+                            <p
+                                className={`text-xs md:text-lg lg:text-xl leading-snug md:leading-relaxed max-w-[92%] md:max-w-none ${punyaFoto ? "md:max-w-md" : "max-w-3xl"}`}
+                                style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
+                            >
+                                {slideItem.description}
+                            </p>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="flex flex-col items-center justify-center shrink-0">
+                                <h3
+                                    className="text-lg md:text-3xl lg:text-4xl font-bold leading-tight mb-1.5 md:mb-2 max-w-4xl"
+                                    style={{ color: punyaFoto ? "#FFFFFF" : WARNA.hijauTua }}
+                                >
+                                    {slideItem.title}
+                                </h3>
+                                <p
+                                    className="text-xs md:text-base lg:text-lg max-w-3xl leading-snug md:leading-relaxed"
+                                    style={{ color: punyaFoto ? "rgba(255,255,255,0.92)" : "#475569" }}
+                                >
+                                    {slideItem.description}
+                                </p>
+                            </div>
+                            {slideItem.points?.length > 0 && (
+                                <div className="mt-2 mb-5 md:mt-5 md:mb-0 grid w-full max-w-4xl mx-auto gap-1.5 md:gap-3 md:grid-cols-2">
+                                    {slideItem.points.slice(0, 2).map((point, i) => (
+                                        <div key={i} className="flex items-start gap-2 rounded-lg md:rounded-2xl bg-white/85 p-2 md:p-4 text-left shadow-sm md:hidden">
+                                            <span className="shrink-0 mt-0.5 w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                                                {i + 1}
+                                            </span>
+                                            <p className="text-[10px] leading-snug text-slate-700 line-clamp-2">{point}</p>
+                                        </div>
+                                    ))}
+                                    {slideItem.points.slice(0, 4).map((point, i) => (
+                                        <div key={i} className="hidden md:flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm">
+                                            <span className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold" style={{ backgroundColor: WARNA.hijauUtama }}>
+                                                {i + 1}
+                                            </span>
+                                            <p className="text-sm leading-6 text-slate-700 line-clamp-2">{point}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </>
+                    )}
+                    <span
+                        className={`absolute bottom-16 left-1/2 -translate-x-1/2 text-[10px] flex items-center gap-1.5 md:static md:translate-x-0 md:text-sm md:mx-auto ${
+                            slideItem.theme === "welcome" ? "md:absolute md:bottom- md:left-1/2 md:-translate-x-1/2" : "md:mt-6 md:mb-2"
+                        }`}
+                        style={{ color: punyaFoto ? "rgba(255,255,255,0.85)" : "#94a3b8" }}
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3 h-3 md:w-3.5 md:h-3.5">
+                            <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
+                            <path d="M12 6v6l4 2" />
+                        </svg>
+                        {t.klikDetail}
+                    </span>
+                </div>
+            </div>
+        );
+    }
+
+    const activeItem = items[index];
+    const incomingItem = incoming !== null ? items[incoming] : null;
+    const punyaFotoAktif = !!items[current]?.bgImage;
 
     return (
         <>
             <div
                 ref={wrapperRef}
-                className="w-full relative z-10"
-                style={{ height: 'calc(100dvh - 92px)', minHeight: 'calc(100dvh - 92px)' }}
+                className="w-full relative z-10 h-[36vh] min-h-[270px] md:h-[60vh] md:min-h-[420px]"
             >
-                <div
-                    className="relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 cursor-pointer transition-shadow hover:shadow-md"
-                    onClick={() => { clearAutoplay(); setModalItem(item); }}
+                <motion.div
+                    className={`relative w-full h-full overflow-hidden shadow-sm ring-1 ring-black/5 transition-shadow hover:shadow-md select-none touch-pan-y ${
+                        items.length > 1
+                            ? grabbing ? 'cursor-grabbing' : 'cursor-grab'
+                            : 'cursor-pointer'
+                    }`}
+                    style={{ touchAction: "pan-y" }}
+                    drag={items.length > 1 ? "x" : false}
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.15}
+                    onDragStart={handleDragStart}
+                    onDrag={handleDrag}
+                    onDragEnd={handleDragEnd}
+                    onClick={() => {
+                        if (dragOccurredRef.current) return;
+                        clearAutoplay();
+                        setModalItem(activeItem);
+                    }}
                 >
-                    <div className="absolute inset-0" style={{ backgroundColor: theme.bg }}>
-                        <svg viewBox="0 0 500 500" preserveAspectRatio="xMidYMid slice" className="h-full w-full">
-                            <rect width="500" height="500" fill={theme.bg} />
-                            {theme.blob.map((b, i) =>
-                                b.path ? (
-                                    <path key={i} d={b.path} fill={b.fill} opacity={b.opacity} />
-                                ) : (
-                                    <circle key={i} cx={b.cx} cy={b.cy} r={b.r} fill={b.fill} opacity={b.opacity} />
-                                )
-                            )}
-                        </svg>
-                    </div>
+                    {renderSlide(items[current], bottomScrollRef)}
 
-                    <div ref={contentRef} className="relative flex flex-col h-full px-8 md:px-14 lg:px-20 py-10 md:py-14 pb-16 text-center overflow-y-auto">
-                        {item.theme === "welcome" ? (
-                            <div className="flex flex-col items-center justify-center flex-1">
-                                <h3
-                                    className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 max-w-4xl"
-                                    style={{ color: WARNA.hijauTua }}
-                                >
-                                    {item.title}
-                                </h3>
-                                <p className="text-base md:text-lg lg:text-xl text-slate-600 max-w-3xl leading-relaxed">
-                                    {item.description}
-                                </p>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="flex flex-col items-center justify-center shrink-0">
-                                    <h3
-                                        className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 max-w-4xl"
-                                        style={{ color: WARNA.hijauTua }}
-                                    >
-                                        {item.title}
-                                    </h3>
-                                    <p className="text-base md:text-lg lg:text-xl text-slate-600 max-w-3xl leading-relaxed">
-                                        {item.description}
-                                    </p>
-                                </div>
-                                {item.points?.length > 0 && (
-                                    <>
-                                        {/* Mobile: 3 poin */}
-                                        <div className="mt-5 grid w-full max-w-4xl mx-auto gap-3 md:hidden">
-                                            {item.points.slice(0, 3).map((point, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm"
-                                                >
-                                                    <span
-                                                        className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                                                        style={{ backgroundColor: WARNA.hijauUtama }}
-                                                    >
-                                                        {i + 1}
-                                                    </span>
-                                                    <p className="text-sm leading-6 text-slate-700">{point}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-
-                                        {/* Desktop: 4 poin */}
-                                        <div className="mt-5 hidden md:grid w-full max-w-4xl mx-auto gap-4 md:grid-cols-2">
-                                            {item.points.slice(0, 4).map((point, i) => (
-                                                <div
-                                                    key={i}
-                                                    className="flex items-start gap-3 rounded-2xl bg-white/85 p-4 text-left shadow-sm"
-                                                >
-                                                    <span
-                                                        className="shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                                                        style={{ backgroundColor: WARNA.hijauUtama }}
-                                                    >
-                                                        {i + 1}
-                                                    </span>
-                                                    <p className="text-sm leading-6 text-slate-700">{point}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </>
-                                )}
-                            </>
-                        )}
-                        {item.theme === "welcome" ? (
-                            <span className="absolute bottom-8 left-1/2 -translate-x-1/2 text-sm text-slate-400 flex items-center gap-1.5">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
-                                    <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
-                                    <path d="M12 6v6l4 2" />
-                                </svg>
-                                Klik untuk melihat detail
-                            </span>
-                        ) : (
-                            <span className="mt-6 mb-2 mx-auto text-sm text-slate-400 flex items-center gap-1.5">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-3.5 h-3.5">
-                                    <path d="M12 2a10 10 0 1 0 10 10h-2a8 8 0 1 1-8-8V2z" />
-                                    <path d="M12 6v6l4 2" />
-                                </svg>
-                                Klik untuk melihat detail
-                            </span>
-                        )}
-                    </div>
+                    {incomingItem && (
+                        <div
+                            className="absolute inset-0 transition-opacity ease-in-out will-change-[opacity]"
+                            style={{
+                                opacity: incomingShown ? 1 : 0,
+                                transitionDuration: `${TRANSITION_MS}ms`,
+                                transform: "translateZ(0)",
+                                backfaceVisibility: "hidden",
+                            }}
+                        >
+                            {renderSlide(incomingItem)}
+                        </div>
+                    )}
 
                     {items.length > 1 && (
-                        <>
-                            <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); geser(-1); }}
-                                aria-label="Sebelumnya"
-                                className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 transition-transform"
-                            >
-                                <IkonChevron arah="kiri" className="w-5 h-5" />
-                            </button>
-                            <button
-                                type="button"
-                                onClick={(e) => { e.stopPropagation(); geser(1); }}
-                                aria-label="Selanjutnya"
-                                className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white shadow-lg text-slate-700 flex items-center justify-center hover:scale-105 transition-transform"
-                            >
-                                <IkonChevron arah="kanan" className="w-5 h-5" />
-                            </button>
-
-                            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-1.5">
-                                {items.map((_, i) => (
-                                    <button
-                                        key={i}
-                                        type="button"
-                                        onClick={(e) => { e.stopPropagation(); goToSlide(i); }}
-                                        aria-label={`Slide ${i + 1}`}
-                                        className="h-1.5 rounded-full transition-all duration-300"
-                                        style={{
-                                            width: i === index ? 24 : 6,
-                                            backgroundColor: i === index ? WARNA.hijauUtama : "rgba(0,0,0,0.15)",
-                                        }}
-                                    />
-                                ))}
-                            </div>
-                        </>
+                        <div className="absolute bottom-2 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-1 md:gap-1.5">
+                            {items.map((_, i) => (
+                                <MotionButton
+                                    key={i}
+                                    type="button"
+                                    onClick={(e) => { e.stopPropagation(); goToSlide(i); }}
+                                    aria-label={`Slide ${i + 1}`}
+                                    className="h-1 md:h-1.5 rounded-full transition-all duration-300"
+                                    style={{
+                                        width: i === index ? 18 : 5,
+                                        backgroundColor: i === index
+                                            ? (punyaFotoAktif ? "#FFFFFF" : WARNA.hijauUtama)
+                                            : (punyaFotoAktif ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
+                                    }}
+                                    whileHover={{ scale: 1.3 }}
+                                    whileTap={{ scale: 0.9 }}
+                                />
+                            ))}
+                        </div>
                     )}
-                </div>
+                </motion.div>
             </div>
 
             <CarouselModal item={modalItem} onClose={() => setModalItem(null)} />
         </>
     );
-}
+});
+
+
 
 /* ========================= Halaman Katalog ========================= */
 
@@ -970,6 +1008,20 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
         return ["Semua", ...Array.from(set).sort()];
     }, [games]);
 
+    const gamePalingPopuler = useMemo(() => {
+        return [...games]
+            .sort((a, b) => (b.loans_count ?? 0) - (a.loans_count ?? 0))
+            .slice(0, 4);
+    }, [games]);
+
+    const slidePopuler = useMemo(() => ({
+        theme: "populer",
+        bgImage: "https://images.unsplash.com/photo-1719494206741-79831f9f4d51?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+        title: "Board Game Paling Populer",
+        description: "Board game yang paling sering dipinjam di perpustakaan.",
+        gamesPopuler: gamePalingPopuler, // <- data game asli, bukan cuma nama
+    }), [gamePalingPopuler]);
+
     const filtered = useMemo(() => {
         return games.filter((g) => {
             const cocokNama = g.nama.toLowerCase().includes(pencarian.toLowerCase());
@@ -988,20 +1040,28 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
     const dipinjam = filtered.filter((g) => g.available_copies <= 0);
 
     const kelasSelect =
-        "rounded-md border border-slate-200 text-xs sm:text-sm px-2.5 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#2F6F62]/30";
+        "rounded-md border border-slate-200 text-xs sm:text-sm px-2.5 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1B6FA8]/30";
 
     return (
-        <div className="min-h-screen bg-[#FAF7F2] text-[15px]">
-            <TopNavbar
-                pencarian={pencarian}
-                setPencarian={setPencarian}
-                bahasa={bahasa}
-                setBahasa={setBahasa}
-            />
+        <motion.div
+            className="min-h-screen bg-white text-[15px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+            <div>
+                <TopNavbar bahasa={bahasa} setBahasa={setBahasa} />
+            </div>
 
-            <AnnouncementCarousel onModalChange={setModalCarouselOpen} />
+            <div>
+                <AnnouncementCarousel onModalChange={setModalCarouselOpen}/>
+            </div>
+            <div>
+                <ProdukPopuler games={games} />
+            </div>
 
             {/* Filter & sort, ala baris filter Amazon */}
+            <AnimatedSection delay={0.2}>
             <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-3">
                     {/* Desktop (lg+) */}
@@ -1012,7 +1072,7 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                                 value={pencarian}
                                 onChange={(e) => setPencarian(e.target.value)}
                                 placeholder={t.cariPlaceholder}
-                                className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition-colors"
+                                className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-none transition-colors"
                             />
                         </div>
 
@@ -1058,7 +1118,7 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
                             value={pencarian}
                             onChange={(e) => setPencarian(e.target.value)}
                             placeholder={t.cariPlaceholder}
-                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 outline-none transition-colors"
+                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-white focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-none transition-colors"
                         />
 
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -1091,67 +1151,78 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
 
                             <span className="text-xs text-slate-500 ml-auto">{filtered.length} {t.boardGame}</span>
                         </div>
-                    </div>
                 </div>
             </div>
+            </div>
+            </AnimatedSection>
 
             <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-10">
-                <h2 className="text-lg font-semibold text-slate-800 mb-4">
-                    {t.tersediaDipinjam} ({tersedia.length})
-                </h2>
+                <Reveal>
+                    <h2 className="text-lg font-semibold text-slate-800 mb-4">
+                        {t.tersediaDipinjam} ({tersedia.length})
+                    </h2>
+                </Reveal>
                 {tersedia.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5 mb-12">
+                    <StaggerGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5 mb-12">
                         {tersedia.map((game) => (
                             <KartuGame key={game.id} game={game} tersedia />
                         ))}
-                    </div>
+                    </StaggerGrid>
                 ) : (
-                    <p className="text-sm text-slate-500 mb-12">
-                        {t.tidakCocok}
-                    </p>
+                    <Reveal>
+                        <p className="text-sm text-slate-500 mb-12">
+                            {t.tidakCocok}
+                        </p>
+                    </Reveal>
                 )}
 
                 {dipinjam.length > 0 && (
                     <>
-                        <div className="flex items-center gap-3 mb-4">
-                            <h2 className="text-lg font-semibold text-slate-500">
-                                {t.sedangDipinjam} ({dipinjam.length})
-                            </h2>
-                            <div className="h-px flex-1 bg-slate-200" />
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5">
+                        <Reveal>
+                            <div className="flex items-center gap-3 mb-4">
+                                <h2 className="text-lg font-semibold text-slate-500">
+                                    {t.sedangDipinjam} ({dipinjam.length})
+                                </h2>
+                                <div className="h-px flex-1 bg-slate-200" />
+                            </div>
+                        </Reveal>
+                        <StaggerGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5">
                             {dipinjam.map((game) => (
                                 <KartuGame key={game.id} game={game} tersedia={false} />
                             ))}
-                        </div>
+                        </StaggerGrid>
                     </>
                 )}
             </div>
 
-            <Footer />
+            <Reveal>
+                <Footer />
+            </Reveal>
 
             {/* Floating Pinjam button */}
-            <Link
+            <MotionLink
                 href={modalCarouselOpen ? undefined : "/peminjaman/create"}
-                className={`fixed bottom-4 left-4 right-4 md:bottom-8 md:left-auto md:right-8 md:w-auto z-50 inline-flex items-center justify-center gap-2 px-6 py-3.5 md:py-3 font-semibold text-white bg-emerald-700 rounded-2xl md:rounded-full shadow-xl shadow-emerald-900/25 transition-all duration-200 ${
+                className={`fixed bottom-4 left-4 right-4 md:bottom-8 md:left-auto md:right-8 md:w-auto z-50 inline-flex items-center justify-center gap-2 px-6 py-3.5 md:py-3 font-semibold text-white bg-sky-900 rounded-2xl md:rounded-full shadow-xl shadow-sky-900/25 ${
                     modalCarouselOpen
                         ? "pointer-events-none opacity-60"
-                        : "hover:bg-emerald-800 hover:-translate-y-0.5 hover:shadow-emerald-900/40"
+                        : ""
                 }`}
+                whileHover={modalCarouselOpen ? {} : { scale: 1.04, boxShadow: "0 10px 30px -5px rgba(8, 47, 73, 0.5)" }}
+                whileTap={modalCarouselOpen ? {} : { scale: 0.97 }}
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
                     <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
                     <path d="M3 6h18" />
                     <path d="M16 10a4 4 0 01-8 0" />
                 </svg>
-                Pinjam
-            </Link>
-        </div>
+                {t.pinjam}
+            </MotionLink>
+        </motion.div>
     );
 }
 
 export default function Katalog({ games }) {
-    const [bahasa, setBahasa] = useState("ID");
+    const [bahasa, setBahasa] = useBahasaState();
 
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
