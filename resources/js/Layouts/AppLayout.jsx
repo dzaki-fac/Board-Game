@@ -9,15 +9,6 @@ function Svg({ className, children }) {
     );
 }
 
-function HouseIcon({ className }) {
-    return (
-        <Svg className={className}>
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-        </Svg>
-    );
-}
-
 function Dice5Icon({ className }) {
     return (
         <Svg className={className}>
@@ -80,11 +71,22 @@ function HistoryIcon({ className }) {
     );
 }
 
-function UserRoundIcon({ className }) {
+function UserIcon({ className }) {
     return (
         <Svg className={className}>
             <circle cx="12" cy="8" r="5" />
             <path d="M20 21a8 8 0 0 0-16 0" />
+        </Svg>
+    );
+}
+
+function UsersIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </Svg>
     );
 }
@@ -120,18 +122,7 @@ function FileTextIcon({ className }) {
     );
 }
 
-function UserPenIcon({ className }) {
-    return (
-        <Svg className={className}>
-            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-            <path d="M20 21a8 8 0 1 0-16 0" />
-            <path d="m17 7 1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L18 12" />
-        </Svg>
-    );
-}
-
 const navItems = [
-    { label: "Beranda", href: "/admin", icon: HouseIcon },
     { label: "Tata Tertib", href: "/admin/rules", icon: FileTextIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Review", href: "/admin/reviews", icon: StarIcon },
@@ -139,7 +130,7 @@ const navItems = [
     { label: "Peminjaman", href: "/admin/loans", icon: HandHelpingIcon },
     { label: "Pengembalian", href: "/admin/returns", icon: RotateCwIcon },
     { label: "Riwayat", href: "/admin/history", icon: HistoryIcon },
-    { label: "Akun", href: "/admin/accounts", icon: UserRoundIcon },
+    { label: "Akun", href: "/admin/accounts", icon: UsersIcon },
 ];
 
 export default function Layout({ children }) {
@@ -253,7 +244,7 @@ export default function Layout({ children }) {
                         onMouseLeave={hideTooltip}
                     >
                         <span className="shrink-0 w-5 h-5 flex items-center justify-center">
-                            <UserPenIcon className={iconClass} />
+                            <UserIcon className={iconClass} />
                         </span>
                         {sidebarExpanded && (
                             <span className="truncate">{admin?.name || "Akun"}</span>
