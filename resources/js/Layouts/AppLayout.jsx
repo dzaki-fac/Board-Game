@@ -134,13 +134,13 @@ function ImageIcon({ className }) {
 
 const navItems = [
     { label: "Tata Tertib", href: "/admin/rules", icon: FileTextIcon },
-    { label: "Carousel", href: "/admin/carousel", icon: ImageIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Review", href: "/admin/reviews", icon: StarIcon },
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
     { label: "Peminjaman", href: "/admin/loans", icon: HandHelpingIcon },
     { label: "Pengembalian", href: "/admin/returns", icon: RotateCwIcon },
     { label: "Riwayat", href: "/admin/history", icon: HistoryIcon },
+    { label: "Carousel", href: "/admin/carousel", icon: ImageIcon },
     { label: "Akun", href: "/admin/accounts", icon: UsersIcon },
 ];
 
@@ -176,37 +176,34 @@ export default function Layout({ children }) {
                     sidebarExpanded ? "w-64" : "w-16"
                 }`}
             >
-                {/* Toggle button */}
-                <button
-                    onClick={toggleSidebar}
-                    className={`absolute top-3 w-8 h-8 flex items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-[#0A3A5C] z-10 ${
-                        sidebarExpanded ? 'right-3' : 'left-1/2 -translate-x-1/2'
-                    }`}
-                >
-                    <PanelLeftIcon className={iconClass} />
-                </button>
-
                 {/* Brand */}
-                {sidebarExpanded && (
-                    <div className="px-6 py-6 border-b border-[#0A3A5C] flex items-center gap-3 shrink-0">
+                <div className={`px-6 py-6 border-b border-[#0A3A5C] flex items-center shrink-0 ${sidebarExpanded ? 'gap-3' : 'justify-center'}`}>
+                    {sidebarExpanded ? (
+                        <>
+                            <img
+                                src="/images/logo-upt.png"
+                                alt="Logo"
+                                className="w-20 h-20 object-contain rounded shrink-0"
+                                onError={(e) => { e.target.style.display = "none"; }}
+                            />
+                            <div className="flex-1 min-w-0">
+                                <h2 className="text-base font-bold text-white tracking-tight leading-tight">
+                                    Sistem Peminjaman Board Game
+                                </h2>
+                            </div>
+                        </>
+                    ) : (
                         <img
-                            src="/images/logo-upt.png"
+                            src="/favicon.ico"
                             alt="Logo"
-                            className="w-20 h-20 object-contain rounded shrink-0"
-                            onError={(e) => {
-                                e.target.style.display = "none";
-                            }}
+                            className="w-8 h-8 object-contain"
+                            onError={(e) => { e.target.style.display = "none"; }}
                         />
-                        <div className="flex-1 min-w-0">
-                            <h2 className="text-base font-bold text-white tracking-tight leading-tight">
-                                Sistem Peminjaman Board Game
-                            </h2>
-                        </div>
-                    </div>
-                )}
+                    )}
+                </div>
 
                 {/* Nav Items */}
-                <ul className={`flex-1 px-3 space-y-1 overflow-y-auto ${sidebarExpanded ? 'py-4' : 'py-4 pt-14'}`}>
+                <ul className="flex-1 px-3 space-y-1 overflow-y-auto py-4">
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isActive =
@@ -333,6 +330,14 @@ export default function Layout({ children }) {
             >
                 {/* Topbar */}
                 <div className="navbar bg-white shadow-sm border-b border-[#D6E8F5] px-4 lg:px-6 sticky top-0 z-30 h-16">
+                    <div className="flex-none">
+                        <button
+                            onClick={toggleSidebar}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                        >
+                            <PanelLeftIcon className="w-5 h-5" />
+                        </button>
+                    </div>
                     <div className="flex-1" />
                     <div className="flex-none gap-2 flex items-center" />
                 </div>
