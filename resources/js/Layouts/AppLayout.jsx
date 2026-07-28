@@ -235,7 +235,14 @@ export default function Layout({ children }) {
                 {/* Account Dropdown */}
                 <div className="relative px-3 py-4 border-t border-[#0A3A5C] shrink-0">
                     <button
-                        onClick={() => setAccountDropdown(!accountDropdown)}
+                        onClick={() => {
+                            if (!sidebarExpanded) {
+                                setSidebarExpanded(true);
+                                setTimeout(() => setAccountDropdown(true), 300);
+                            } else {
+                                setAccountDropdown(!accountDropdown);
+                            }
+                        }}
                         className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors w-full ${
                             sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
                         } text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white`}
@@ -259,8 +266,10 @@ export default function Layout({ children }) {
                             />
                             <div
                                 ref={dropdownRef}
-                                className={`absolute bottom-full left-3 right-3 mb-2 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 ${
-                                    !sidebarExpanded && 'left-1/2 -translate-x-1/2 w-48'
+                                className={`absolute bottom-full mb-2 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 ${
+                                    sidebarExpanded
+                                        ? 'left-3 right-3'
+                                        : 'left-1/2 -translate-x-1/2 w-48'
                                 }`}
                             >
                                 <button

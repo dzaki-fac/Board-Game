@@ -143,7 +143,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
                             <th>Email</th>
                             <th>Role</th>
                             <th>Tanggal Dibuat</th>
-                            <th>Aksi</th>
+                            {isSuperAdmin && <th>Aksi</th>}
                         </tr>
                     </thead>
                     <tbody>
@@ -176,26 +176,28 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                         { year: "numeric", month: "long", day: "numeric" }
                                     )}
                                 </td>
-                                <td>
-                                    {isSuperAdmin && (
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => openEditModal(admin)}
-                                                className="btn btn-sm btn-outline btn-warning"
-                                            >
-                                                Edit
-                                            </button>
-                                            {admin.id !== currentAdminId && (
+                                {isSuperAdmin && (
+                                    <td>
+                                        {admin.role === "admin" && (
+                                            <div className="flex gap-2">
                                                 <button
-                                                    onClick={() => setDeleteTarget(admin)}
-                                                    className="btn btn-sm btn-outline btn-error"
+                                                    onClick={() => openEditModal(admin)}
+                                                    className="btn btn-sm btn-outline btn-warning"
                                                 >
-                                                    Hapus
+                                                    Edit
                                                 </button>
-                                            )}
-                                        </div>
-                                    )}
-                                </td>
+                                                {admin.id !== currentAdminId && (
+                                                    <button
+                                                        onClick={() => setDeleteTarget(admin)}
+                                                        className="btn btn-sm btn-outline btn-error"
+                                                    >
+                                                        Hapus
+                                                    </button>
+                                                )}
+                                            </div>
+                                        )}
+                                    </td>
+                                )}
                             </tr>
                         ))}
                     </tbody>
@@ -338,7 +340,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
             {editingAdmin && (
                 <dialog className="modal modal-open" onClick={closeEditModal}>
                     <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-                        <h3 className="font-bold text-lg mb-4">Edit Admin</h3>
+                        <h3 className="font-bold text-lg mb-4">Edit Akun</h3>
                         <form onSubmit={handleUpdate} className="space-y-4">
                             <div className="form-control">
                                 <label className="label" htmlFor="edit-name">
