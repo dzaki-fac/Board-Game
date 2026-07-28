@@ -177,28 +177,34 @@ export default function Layout({ children }) {
                 }`}
             >
                 {/* Brand */}
-                <div className={`px-6 py-6 border-b border-[#0A3A5C] flex items-center shrink-0 ${sidebarExpanded ? 'gap-3' : 'justify-center'}`}>
+                <div className="px-6 py-6 border-b border-[#0A3A5C] flex items-center justify-center shrink-0">
                     {sidebarExpanded ? (
-                        <>
+                        <a href="/katalog" className="flex items-center gap-3">
+                            <img
+                                src="/assets/logo_undip.png"
+                                alt="Universitas Diponegoro"
+                                className="h-11 w-auto object-contain"
+                            />
                             <img
                                 src="/images/logo-upt.png"
-                                alt="Logo"
-                                className="w-20 h-20 object-contain rounded shrink-0"
+                                alt="UPT Perpustakaan Undip"
+                                className="h-10 w-auto object-contain"
+                            />
+                        </a>
+                    ) : (
+                        <div className="flex flex-col items-center gap-1">
+                            <img
+                                src="/assets/logo_undip.png"
+                                alt="Universitas Diponegoro"
+                                className="h-6 w-auto object-contain"
+                            />
+                            <img
+                                src="/favicon.ico"
+                                alt=""
+                                className="w-5 h-5 object-contain"
                                 onError={(e) => { e.target.style.display = "none"; }}
                             />
-                            <div className="flex-1 min-w-0">
-                                <h2 className="text-base font-bold text-white tracking-tight leading-tight">
-                                    Sistem Peminjaman Board Game
-                                </h2>
-                            </div>
-                        </>
-                    ) : (
-                        <img
-                            src="/favicon.ico"
-                            alt="Logo"
-                            className="w-8 h-8 object-contain"
-                            onError={(e) => { e.target.style.display = "none"; }}
-                        />
+                        </div>
                     )}
                 </div>
 
