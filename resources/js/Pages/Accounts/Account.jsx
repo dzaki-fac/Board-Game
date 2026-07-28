@@ -51,6 +51,13 @@ export default function Account({ admins: { data: admins, links, from, to, total
         }
     }, [edit.errors, editingAdmin]);
 
+    useEffect(() => {
+        if (window.location.search.includes("edit=me") && currentAdmin) {
+            window.history.replaceState({}, "", window.location.pathname);
+            openEditModal(currentAdmin);
+        }
+    }, []);
+
     function openCreateModal() {
         create.reset();
         setShowCreateModal(true);
@@ -170,7 +177,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                     )}
                                 </td>
                                 <td>
-                                    {(isSuperAdmin || admin.id === currentAdminId) && (
+                                    {isSuperAdmin && (
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => openEditModal(admin)}
@@ -178,7 +185,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                             >
                                                 Edit
                                             </button>
-                                            {isSuperAdmin && admin.id !== currentAdminId && (
+                                            {admin.id !== currentAdminId && (
                                                 <button
                                                     onClick={() => setDeleteTarget(admin)}
                                                     className="btn btn-sm btn-outline btn-error"

@@ -1,11 +1,20 @@
 import { useState, useRef } from "react";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, usePage, router } from "@inertiajs/react";
 
 function Svg({ className, children }) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
             {children}
         </svg>
+    );
+}
+
+function HouseIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+        </Svg>
     );
 }
 
@@ -111,7 +120,18 @@ function FileTextIcon({ className }) {
     );
 }
 
+function UserPenIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+            <path d="M20 21a8 8 0 1 0-16 0" />
+            <path d="m17 7 1.5-1.5a2.5 2.5 0 0 1 3.5 3.5L18 12" />
+        </Svg>
+    );
+}
+
 const navItems = [
+    { label: "Beranda", href: "/admin", icon: HouseIcon },
     { label: "Tata Tertib", href: "/admin/rules", icon: FileTextIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Review", href: "/admin/reviews", icon: StarIcon },
@@ -123,11 +143,12 @@ const navItems = [
 ];
 
 export default function Layout({ children }) {
-    const { props, url } = usePage();
-    const admin = props.auth?.admin;
+    const admin = usePage().props.auth?.admin;
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
     const [tooltip, setTooltip] = useState({ show: false, label: "", top: 0 });
+    const [accountDropdown, setAccountDropdown] = useState(false);
     const itemRefs = useRef({});
+    const dropdownRef = useRef(null);
 
     const toggleSidebar = () => setSidebarExpanded((prev) => !prev);
 
@@ -178,9 +199,6 @@ export default function Layout({ children }) {
                             <h2 className="text-base font-bold text-white tracking-tight leading-tight">
                                 Sistem Peminjaman Board Game
                             </h2>
-                            <p className="text-[10px] text-[#FAF7F2]/60 mt-0.5 leading-tight">
-                                UPT Perpustakaan Universitas Diponegoro
-                            </p>
                         </div>
                     </div>
                 )}
@@ -190,9 +208,12 @@ export default function Layout({ children }) {
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isActive =
-                            item.href === "/admin"
-                                ? url === "/admin"
-                                : url.startsWith(item.href);
+                            typeof window !== "undefined" &&
+                            (item.href === "/admin"
+                                ? window.location.pathname === "/admin"
+                                : window.location.pathname.startsWith(
+                                      item.href,
+                                  ));
                         return (
                             <li
                                 key={item.href}
@@ -220,26 +241,62 @@ export default function Layout({ children }) {
                     })}
                 </ul>
 
-                {/* Logout */}
-                <div
-                    className="px-3 py-4 border-t border-[#0A3A5C] shrink-0"
-                    ref={(el) => { itemRefs.current["logout"] = el; }}
-                    onMouseEnter={() => showTooltip("logout", "Keluar")}
-                    onMouseLeave={hideTooltip}
-                >
-                    <Link
-                        href="/admin/logout"
-                        method="post"
-                        as="button"
-                        className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors ${
+                {/* Account Dropdown */}
+                <div className="relative px-3 py-4 border-t border-[#0A3A5C] shrink-0">
+                    <button
+                        onClick={() => setAccountDropdown(!accountDropdown)}
+                        className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors w-full ${
                             sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
-                        } text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white w-full`}
+                        } text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white`}
+                        ref={(el) => { itemRefs.current["account"] = el; }}
+                        onMouseEnter={() => showTooltip("account", admin?.name || "Akun")}
+                        onMouseLeave={hideTooltip}
                     >
                         <span className="shrink-0 w-5 h-5 flex items-center justify-center">
-                            <LogOutIcon className={iconClass} />
+                            <UserPenIcon className={iconClass} />
                         </span>
-                        {sidebarExpanded && <span>Keluar</span>}
-                    </Link>
+                        {sidebarExpanded && (
+                            <span className="truncate">{admin?.name || "Akun"}</span>
+                        )}
+                    </button>
+
+                    {accountDropdown && (
+                        <>
+                            <div
+                                className="fixed inset-0 z-40"
+                                onClick={() => setAccountDropdown(false)}
+                            />
+                            <div
+                                ref={dropdownRef}
+                                className={`absolute bottom-full left-3 right-3 mb-2 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 ${
+                                    !sidebarExpanded && 'left-1/2 -translate-x-1/2 w-48'
+                                }`}
+                            >
+                                <button
+                                    onClick={() => {
+                                        setAccountDropdown(false);
+                                        router.visit('/admin/accounts', { data: { edit: 'me' } });
+                                    }}
+                                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                >
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Edit Akun
+                                </button>
+                                <hr className="mx-3 my-1 border-gray-100" />
+                                <Link
+                                    href="/admin/logout"
+                                    method="post"
+                                    as="button"
+                                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                >
+                                    <LogOutIcon className="w-4 h-4" />
+                                    Keluar
+                                </Link>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {/* Floating Tooltip */}
@@ -266,11 +323,7 @@ export default function Layout({ children }) {
                 {/* Topbar */}
                 <div className="navbar bg-white shadow-sm border-b border-[#D6E8F5] px-4 lg:px-6 sticky top-0 z-30 h-16">
                     <div className="flex-1" />
-                    <div className="flex-none gap-2 flex items-center">
-                        <span className="text-sm font-medium text-[#071E30] hidden sm:block">
-                            {admin?.name}
-                        </span>
-                    </div>
+                    <div className="flex-none gap-2 flex items-center" />
                 </div>
 
                 {/* Page Content */}

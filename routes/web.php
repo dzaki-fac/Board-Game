@@ -27,7 +27,7 @@ Route::prefix('admin')->group(function () {
     });
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/', [BoardGameController::class, 'index']);
+        Route::get('/', fn () => redirect('/admin/rules'));
         
         Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
 
