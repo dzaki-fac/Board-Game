@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\CarouselController;
 use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
@@ -48,6 +49,9 @@ Route::prefix('admin')->group(function () {
 
         Route::get('rules', [HomeController::class, 'rules'])->name('admin.rules');
         Route::put('rules/{rule}', [HomeController::class, 'updateRule'])->name('admin.rules.update')->middleware('role-admin');
+
+        Route::get('carousel', [CarouselController::class, 'index'])->name('admin.carousel.index');
+        Route::put('carousel/{carousel}', [CarouselController::class, 'update'])->name('admin.carousel.update')->middleware('role-admin');
 
         Route::get('reviews', [AdminReviewController::class, 'index'])->name('admin.reviews.index');
         Route::delete('reviews/{boardGameReview}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BoardGame;
 use App\Models\BoardGameReview;
+use App\Models\Carousel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -81,8 +82,20 @@ class BoardGameController extends Controller
             ->sortByDesc('reviews_avg_rating')
             ->values();
 
+        $carousels = Carousel::orderBy('sort_order')->get()->map(fn ($c) => [
+            'id' => $c->id,
+            'title' => $c->title,
+            'description' => $c->description,
+            'detailTitle' => $c->detail_title,
+            'detailDescription' => $c->detail_description,
+            'points' => $c->points ?? [],
+            'theme' => $c->theme,
+            'bgImage' => $c->bg_image,
+        ]);
+
         return Inertia::render('Katalog', [
             'games' => $games,
+            'carousels' => $carousels,
         ]);
     }
 

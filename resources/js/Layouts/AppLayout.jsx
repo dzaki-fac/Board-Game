@@ -122,8 +122,19 @@ function FileTextIcon({ className }) {
     );
 }
 
+function ImageIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+        </Svg>
+    );
+}
+
 const navItems = [
     { label: "Tata Tertib", href: "/admin/rules", icon: FileTextIcon },
+    { label: "Carousel", href: "/admin/carousel", icon: ImageIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Review", href: "/admin/reviews", icon: StarIcon },
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
@@ -161,7 +172,7 @@ export default function Layout({ children }) {
         <div className="min-h-screen">
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-40 bg-[#071E30] flex flex-col transition-all duration-300 ease-in-out ${
+                className={`fixed inset-y-0 left-0 z-40 bg-[#071E30] flex flex-col transition-[width] duration-300 ease-in-out ${
                     sidebarExpanded ? "w-64" : "w-16"
                 }`}
             >
@@ -316,7 +327,7 @@ export default function Layout({ children }) {
 
             {/* Main Content */}
             <div
-                className={`min-h-screen flex flex-col transition-all duration-300 ease-in-out ${
+                className={`min-h-screen flex flex-col transition-[margin-left] duration-300 ease-in-out ${
                     sidebarExpanded ? "ml-64" : "ml-16"
                 }`}
             >

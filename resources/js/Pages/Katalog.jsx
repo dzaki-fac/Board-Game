@@ -549,9 +549,9 @@ function ProdukPopuler({ games }) {
     );
 }
 
-const AnnouncementCarousel = memo(function AnnouncementCarousel({ onModalChange }) {
+const AnnouncementCarousel = memo(function AnnouncementCarousel({ carousels, onModalChange }) {
     const t = useTeks();
-    const items = t.carousel;
+    const items = carousels;
 
     // `index`   = target slide terbaru (dipakai untuk highlight dot & klik modal)
     // `current` = slide yang sedang full-opacity di layer bawah
@@ -988,7 +988,7 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ onModalChange 
 
 /* ========================= Halaman Katalog ========================= */
 
-function IsiKatalog({ games, bahasa, setBahasa }) {
+function IsiKatalog({ games, carousels, bahasa, setBahasa }) {
     const t = useTeks();
     const [pencarian, setPencarian] = useState("");
     const [kategoriAktif, setKategoriAktif] = useState("Semua");
@@ -1054,7 +1054,7 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
             </div>
 
             <div>
-                <AnnouncementCarousel onModalChange={setModalCarouselOpen}/>
+                <AnnouncementCarousel carousels={carousels} onModalChange={setModalCarouselOpen}/>
             </div>
             <div>
                 <ProdukPopuler games={games} />
@@ -1221,13 +1221,13 @@ function IsiKatalog({ games, bahasa, setBahasa }) {
     );
 }
 
-export default function Katalog({ games }) {
+export default function Katalog({ games, carousels }) {
     const [bahasa, setBahasa] = useBahasaState();
 
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
             <Head title="Katalog Board Game" />
-            <IsiKatalog games={games} bahasa={bahasa} setBahasa={setBahasa} />
+            <IsiKatalog games={games} carousels={carousels} bahasa={bahasa} setBahasa={setBahasa} />
         </BahasaContext.Provider>
     );
 }
