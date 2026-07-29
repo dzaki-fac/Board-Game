@@ -110,7 +110,7 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
             <button
               type="button"
               onClick={() => setOpen((prev) => !prev)}
-              className="flex items-center gap-2 h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F6F62] transition-colors min-w-[130px]"
+              className="flex items-center gap-2 h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0E4A73] transition-colors min-w-[130px]"
             >
               {statusFilter ? (
                 <BadgeStatus status={statusFilter} />
@@ -124,15 +124,15 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
             {open && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-                <div className="absolute z-20 mt-1 bg-white border border-[#E8F3EF] rounded-xl shadow-lg py-1 min-w-[160px]">
+                <div className="absolute z-20 mt-1 bg-white border border-[#D6E8F5] rounded-xl shadow-lg py-1 min-w-[160px]">
                   <button
                     type="button"
                     onClick={() => { setStatusFilter(""); setOpen(false) }}
-                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${!statusFilter ? "bg-[#E8F3EF]" : ""}`}
+                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#D6E8F5] transition-colors ${!statusFilter ? "bg-[#D6E8F5]" : ""}`}
                   >
                     <span className="text-gray-500">Semua Status</span>
                     {!statusFilter && (
-                      <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-4 h-4 ml-auto text-[#0E4A73]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     )}
@@ -142,11 +142,11 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
                       key={opt.value}
                       type="button"
                       onClick={() => { setStatusFilter(opt.value); setOpen(false) }}
-                      className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${statusFilter === opt.value ? "bg-[#E8F3EF]" : ""}`}
+                      className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#D6E8F5] transition-colors ${statusFilter === opt.value ? "bg-[#D6E8F5]" : ""}`}
                     >
                       <BadgeStatus status={opt.value} />
                       {statusFilter === opt.value && (
-                        <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg className="w-4 h-4 ml-auto text-[#0E4A73]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       )}
@@ -162,7 +162,7 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
             <button
               type="button"
               onClick={() => setOpenLantai((prev) => !prev)}
-              className="flex items-center gap-2 h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F6F62] transition-colors min-w-[130px]"
+              className="flex items-center gap-2 h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0E4A73] transition-colors min-w-[130px]"
             >
               {lantaiFilter ? (
                 <span>Lantai {lantaiFilter}</span>
@@ -176,15 +176,15 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
             {openLantai && (
               <>
                 <div className="fixed inset-0 z-10" onClick={() => setOpenLantai(false)} />
-                <div className="absolute z-20 mt-1 bg-white border border-[#E8F3EF] rounded-xl shadow-lg py-1 min-w-[160px]">
+                <div className="absolute z-20 mt-1 bg-white border border-[#D6E8F5] rounded-xl shadow-lg py-1 min-w-[160px]">
                   <button
                     type="button"
                     onClick={() => { setLantaiFilter(""); setOpenLantai(false) }}
-                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${!lantaiFilter ? "bg-[#E8F3EF]" : ""}`}
+                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#D6E8F5] transition-colors ${!lantaiFilter ? "bg-[#D6E8F5]" : ""}`}
                   >
                     <span className="text-gray-500">Semua Lantai</span>
                     {!lantaiFilter && (
-                      <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg className="w-4 h-4 ml-auto text-[#0E4A73]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                     )}
@@ -194,11 +194,11 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
                       key={l}
                       type="button"
                       onClick={() => { setLantaiFilter(String(l)); setOpenLantai(false) }}
-                      className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${lantaiFilter === String(l) ? "bg-[#E8F3EF]" : ""}`}
+                      className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#D6E8F5] transition-colors ${lantaiFilter === String(l) ? "bg-[#D6E8F5]" : ""}`}
                     >
                       <span>Lantai {l}</span>
                       {lantaiFilter === String(l) && (
-                        <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg className="w-4 h-4 ml-auto text-[#0E4A73]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="20 6 9 17 4 12" />
                         </svg>
                       )}
@@ -279,7 +279,7 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
               key={link.label}
               href={link.url}
               dangerouslySetInnerHTML={{ __html: link.label }}
-              className={`px-2 ${link.active ? "font-bold text-[#2F6F62]" : ""}`}
+              className={`px-2 ${link.active ? "font-bold text-[#0E4A73]" : ""}`}
               preserveScroll
             />
           ) : (

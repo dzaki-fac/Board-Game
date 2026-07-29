@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\CarouselController;
 use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
@@ -27,7 +28,7 @@ Route::prefix('admin')->group(function () {
     });
 
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/', [BoardGameController::class, 'index']);
+        Route::get('/', fn () => redirect('/admin/rules'));
         
         Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
 
@@ -47,14 +48,18 @@ Route::prefix('admin')->group(function () {
         Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('admin.logout');
 
         Route::get('rules', [HomeController::class, 'rules'])->name('admin.rules');
+        Route::put('rules/{rule}', [HomeController::class, 'updateRule'])->name('admin.rules.update')->middleware('role-admin');
+
+        Route::get('carousel', [CarouselController::class, 'index'])->name('admin.carousel.index');
+        Route::put('carousel/{carousel}', [CarouselController::class, 'update'])->name('admin.carousel.update')->middleware('role-admin');
 
         Route::get('reviews', [AdminReviewController::class, 'index'])->name('admin.reviews.index');
         Route::delete('reviews/{boardGameReview}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');
 
         Route::get('accounts', [AdminAccountController::class, 'index'])->name('admin.accounts.index');
-        Route::post('accounts', [AdminAccountController::class, 'store'])->name('admin.accounts.store')->middleware('superadmin');
+        Route::post('accounts', [AdminAccountController::class, 'store'])->name('admin.accounts.store')->middleware('role-admin');
         Route::put('accounts/{admin}', [AdminAccountController::class, 'update'])->name('admin.accounts.update');
-        Route::delete('accounts/{admin}', [AdminAccountController::class, 'destroy'])->name('admin.accounts.destroy')->middleware('superadmin');
+        Route::delete('accounts/{admin}', [AdminAccountController::class, 'destroy'])->name('admin.accounts.destroy')->middleware('role-admin');
 
         Route::any('{any?}', fn () => abort(404))->where('any', '.*');
     });

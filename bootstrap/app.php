@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Middleware\EnsureAdminIsSuperAdmin;
+use App\Http\Middleware\EnsureAdminRole;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -19,9 +19,10 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->redirectGuestsTo(fn (Request $request) => route('admin.login'));
+        $middleware->redirectUsersTo(fn (Request $request) => route('admin.rules'));
 
         $middleware->alias([
-            'superadmin' => EnsureAdminIsSuperAdmin::class,
+            'role-admin' => EnsureAdminRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

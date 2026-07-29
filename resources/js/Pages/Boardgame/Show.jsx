@@ -15,14 +15,14 @@ export default function Show({ boardgame }) {
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-slate-900">Detail Board Game</h1>
-        <Link href="/admin/games" className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm">
+        <Link href="/admin/games" className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
           Kembali
         </Link>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
-          <div className="bg-[#173C33] text-[#FAF7F2]/80 px-6 py-4">
+          <div className="bg-[#071E30] text-[#FAF7F2]/80 px-6 py-4">
           <h2 className="text-sm font-semibold uppercase tracking-wider">{boardgame.nama}</h2>
         </div>
 
@@ -109,7 +109,7 @@ export default function Show({ boardgame }) {
             {kategoriList.length > 0 ? (
               <div className="flex flex-wrap gap-2">
                 {kategoriList.map((kat, i) => (
-                  <span key={i} className="badge badge-sm bg-[#2F6F62]/10 text-[#173C33] border border-[#2F6F62]/30 font-medium">
+                  <span key={i} className="badge badge-sm bg-[#0E4A73]/10 text-[#071E30] border border-[#0E4A73]/30 font-medium">
                     {kat}
                   </span>
                 ))}
@@ -135,7 +135,7 @@ export default function Show({ boardgame }) {
                 href={boardgame.link_tutorial}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-[#2F6F62] hover:text-[#173C33] hover:underline"
+                className="inline-flex items-center gap-1.5 text-sm text-[#0E4A73] hover:text-[#071E30] hover:underline"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                 {boardgame.link_tutorial}

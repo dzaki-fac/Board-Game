@@ -144,10 +144,10 @@ export default function Index({ histories, stats, filters }) {
                     {statCards.map((card) => (
                         <div
                             key={card.title}
-                            className="stats shadow border border-[#E8F3EF] bg-white rounded-xl"
+                            className="stats shadow border border-[#D6E8F5] bg-white rounded-xl"
                         >
                             <div className="stat">
-                                <div className="stat-title text-[#2F6F62]/70 text-xs font-medium uppercase tracking-wider">
+                                <div className="stat-title text-[#0E4A73]/70 text-xs font-medium uppercase tracking-wider">
                                     {card.title}
                                 </div>
                                 <div className={`stat-value text-3xl font-bold ${card.color}`}>
@@ -160,7 +160,7 @@ export default function Index({ histories, stats, filters }) {
                 </div>
 
                 {/* Filters Card */}
-                <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
+                <div className="card bg-white border border-[#D6E8F5] rounded-xl shadow-sm">
                     <div className="card-body p-6">
                         <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter</h2>
 
@@ -197,14 +197,14 @@ export default function Index({ histories, stats, filters }) {
 
                             {/* Status Filter */}
                             <div>
-                                <label className="text-xs font-medium text-[#2F6F62]/70 uppercase tracking-wider block mb-1.5">
+                                <label className="text-xs font-medium text-[#0E4A73]/70 uppercase tracking-wider block mb-1.5">
                                     Status
                                 </label>
                                 <div className="relative">
                                     <button
                                         type="button"
                                         onClick={() => setOpen((prev) => !prev)}
-                                        className="flex items-center gap-2 w-full h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2F6F62] transition-colors"
+                                        className="flex items-center gap-2 w-full h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0E4A73] transition-colors"
                                     >
                                         {statusFilter ? (
                                             <BadgeStatus status={statusFilter} />
@@ -226,15 +226,15 @@ export default function Index({ histories, stats, filters }) {
                                     {open && (
                                         <>
                                             <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-                                            <div className="absolute z-20 mt-1 w-full bg-white border border-[#E8F3EF] rounded-xl shadow-lg py-1">
+                                            <div className="absolute z-20 mt-1 w-full bg-white border border-[#D6E8F5] rounded-xl shadow-lg py-1">
                                                 <button
                                                     type="button"
                                                     onClick={() => { setStatusFilter(""); setOpen(false) }}
-                                                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${!statusFilter ? "bg-[#E8F3EF]" : ""}`}
+                                                    className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#D6E8F5] transition-colors ${!statusFilter ? "bg-[#D6E8F5]" : ""}`}
                                                 >
                                                         <span className="text-gray-500">Semua</span>
                                                     {!statusFilter && (
-                                                        <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                        <svg className="w-4 h-4 ml-auto text-[#0E4A73]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                             <polyline points="20 6 9 17 4 12" />
                                                         </svg>
                                                     )}
@@ -244,11 +244,11 @@ export default function Index({ histories, stats, filters }) {
                                                         key={opt}
                                                         type="button"
                                                         onClick={() => { setStatusFilter(opt); setOpen(false) }}
-                                                        className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#E8F3EF] transition-colors ${statusFilter === opt ? "bg-[#E8F3EF]" : ""}`}
+                                                        className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#D6E8F5] transition-colors ${statusFilter === opt ? "bg-[#D6E8F5]" : ""}`}
                                                     >
                                                         <BadgeStatus status={opt} />
                                                         {statusFilter === opt && (
-                                                            <svg className="w-4 h-4 ml-auto text-[#2F6F62]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                            <svg className="w-4 h-4 ml-auto text-[#0E4A73]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                                 <polyline points="20 6 9 17 4 12" />
                                                             </svg>
                                                         )}
@@ -262,7 +262,7 @@ export default function Index({ histories, stats, filters }) {
 
                             {/* Period Filter */}
                             <div>
-                                <label className="text-xs font-medium text-[#2F6F62]/70 uppercase tracking-wider block mb-1.5">
+                                <label className="text-xs font-medium text-[#0E4A73]/70 uppercase tracking-wider block mb-1.5">
                                     Periode
                                 </label>
                                 <select
@@ -376,7 +376,7 @@ export default function Index({ histories, stats, filters }) {
                         <div className="mt-4 flex justify-end">
                             <button
                                 onClick={handleExport}
-                                className="btn bg-[#2F6F62] hover:bg-[#255A4F] text-white border-none btn-sm gap-2"
+                                className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm gap-2"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -399,7 +399,7 @@ export default function Index({ histories, stats, filters }) {
                 </div>
 
                 {/* History Table Card */}
-                <div className="card bg-white border border-[#E8F3EF] rounded-xl shadow-sm">
+                <div className="card bg-white border border-[#D6E8F5] rounded-xl shadow-sm">
                     <div className="card-body p-0">
                         <div className="px-6 py-4 border-b border-gray-100">
                             <h2 className="text-lg font-semibold text-gray-900">
@@ -455,15 +455,15 @@ export default function Index({ histories, stats, filters }) {
                                             {(histories.data || []).map((loan) => (
                                                 <tr
                                                     key={loan.id}
-                                                    className="hover:bg-[#FAF7F2] transition-colors border-b border-[#E8F3EF]"
+                                                    className="hover:bg-[#FAF7F2] transition-colors border-b border-[#D6E8F5]"
                                                 >
                                                     <td className="px-6 py-4">
-                                                        <span className="text-sm font-mono text-[#2F6F62]/70">
+                                                        <span className="text-sm font-mono text-[#0E4A73]/70">
                                                             #{loan.id}
                                                         </span>
                                                     </td>
                                                     <td className="px-6 py-4">
-                                                        <span className="font-medium text-[#173C33]">
+                                                        <span className="font-medium text-[#071E30]">
                                                             {(() => {
                                                                 const list = Array.isArray(loan.list_peminjam) ? loan.list_peminjam : [];
                                                                 return list[0]?.nama || "-";
@@ -485,16 +485,16 @@ export default function Index({ histories, stats, filters }) {
                                                     <td className="px-6 py-4 text-gray-700">
                                                         {loan.game.nama}
                                                     </td>
-                                                    <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">
+                                                    <td className="px-6 py-4 text-[#0E4A73]/70 text-sm">
                                                         {loan.game.lantai ?? '-'}
                                                     </td>
-                                                    <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">
+                                                    <td className="px-6 py-4 text-[#0E4A73]/70 text-sm">
                                                         {formatDateTime(loan.borrowed_at)}
                                                     </td>
                                                     <td className="px-6 py-4 text-gray-500 text-sm">
                                                         {loan.approved_by || '-'}
                                                     </td>
-                                                    <td className="px-6 py-4 text-[#2F6F62]/70 text-sm">
+                                                    <td className="px-6 py-4 text-[#0E4A73]/70 text-sm">
                                                         {formatDateTime(loan.returned_at)}
                                                     </td>
                                                     <td className="px-6 py-4 text-gray-500 text-sm">
@@ -506,7 +506,7 @@ export default function Index({ histories, stats, filters }) {
                                                     <td className="px-6 py-4">
                                                         <BadgeCondition value={loan.return_condition} />
                                                     </td>
-                                                    <td className="px-6 py-4 text-sm text-[#2F6F62]/70">
+                                                    <td className="px-6 py-4 text-sm text-[#0E4A73]/70">
                                                         {loan.fine_amount
                                                             ? `Rp ${Number(loan.fine_amount).toLocaleString("id-ID")}`
                                                             : "-"}
@@ -515,7 +515,7 @@ export default function Index({ histories, stats, filters }) {
                                                         <div className="flex items-center justify-end gap-1">
                                                             <Link
                                                                 href={`/admin/loans/${loan.id}`}
-                                                                className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-[#2F6F62]"
+                                                                className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-[#0E4A73]"
                                                                 title="Detail"
                                                             >
                                                                 <svg
@@ -569,7 +569,7 @@ export default function Index({ histories, stats, filters }) {
 
                                 {/* Pagination */}
                                 {histories.links && histories.links.length > 3 && (
-                                    <div className="flex items-center justify-center gap-1 px-6 py-4 border-t border-[#E8F3EF]">
+                                    <div className="flex items-center justify-center gap-1 px-6 py-4 border-t border-[#D6E8F5]">
                                         {histories.links.map((link, i) =>
                                             link.url ? (
                                                 <Link
@@ -578,7 +578,7 @@ export default function Index({ histories, stats, filters }) {
                                                     preserveScroll
                                                     className={`btn btn-sm min-w-9 ${
                                                         link.active
-                                                            ? "bg-[#2F6F62] text-white border-none"
+                                                            ? "bg-[#0E4A73] text-white border-none"
                                                             : "btn-ghost text-gray-600"
                                                     }`}
                                                     dangerouslySetInnerHTML={{

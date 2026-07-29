@@ -12,6 +12,10 @@ class AuthenticatedSessionController extends Controller
 {
     public function create()
     {
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.rules');
+        }
+
         return Inertia::render('Accounts/Login');
     }
 
@@ -32,7 +36,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.accounts.index'));
+        return redirect()->intended(route('admin.rules'));
     }
 
     public function destroy(Request $request)

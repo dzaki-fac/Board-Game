@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BoardGame;
 use App\Models\BoardGameReview;
+use App\Models\Carousel;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -56,6 +57,7 @@ class BoardGameController extends Controller
     {
         $games = BoardGame::withAvg('reviews', 'rating')
             ->withCount('reviews')
+            ->withCount('loans')
             ->orderBy('available_copies', 'desc')
             ->orderBy('nama')
             ->get([
@@ -80,8 +82,20 @@ class BoardGameController extends Controller
             ->sortByDesc('reviews_avg_rating')
             ->values();
 
+        $carousels = Carousel::orderBy('sort_order')->get()->map(fn ($c) => [
+            'id' => $c->id,
+            'title' => $c->title,
+            'description' => $c->description,
+            'detailTitle' => $c->detail_title,
+            'detailDescription' => $c->detail_description,
+            'points' => $c->points ?? [],
+            'theme' => $c->theme,
+            'bgImage' => $c->bg_image,
+        ]);
+
         return Inertia::render('Katalog', [
             'games' => $games,
+            'carousels' => $carousels,
         ]);
     }
 
@@ -159,7 +173,7 @@ class BoardGameController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'kode' => 'required|string|max:255',
+            'kode' => 'required|string|max:255|unique:board_games,kode',
             'box' => 'required|integer',
             'nama' => 'required|string|max:255',
             'penerbit' => 'nullable|string|max:255',
@@ -172,7 +186,7 @@ class BoardGameController extends Controller
             'jumlah_pemain' => 'nullable|string|max:255',
             'durasi' => 'nullable|string|max:255',
             'link_foto' => 'nullable|array',
-            'link_foto.*' => 'nullable|string|max:255',
+            'link_foto.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
             'komponen' => 'required|array',
             'komponen.*.jumlah' => 'nullable|integer|min:1',
             'komponen.*.nama' => 'nullable|string|max:255',
@@ -185,6 +199,16 @@ class BoardGameController extends Controller
             'populer' => 'boolean',
         ]);
 
+        $fotoPaths = [];
+        if ($request->hasFile('link_foto')) {
+            foreach ($request->file('link_foto') as $file) {
+                if ($file && $file->isValid()) {
+                    $path = $file->store('boardgames', 'public');
+                    $fotoPaths[] = '/storage/' . $path;
+                }
+            }
+        }
+        $validated['link_foto'] = $fotoPaths;
         $validated['available_copies'] = $validated['jumlah'];
 
         BoardGame::create($validated);
@@ -203,7 +227,7 @@ class BoardGameController extends Controller
     public function update(Request $request, BoardGame $boardGame)
     {
         $validated = $request->validate([
-            'kode' => 'required|string|max:255',
+            'kode' => 'required|string|max:255|unique:board_games,kode,' . $boardGame->id,
             'box' => 'required|integer',
             'nama' => 'required|string|max:255',
             'penerbit' => 'nullable|string|max:255',
@@ -216,7 +240,6 @@ class BoardGameController extends Controller
             'jumlah_pemain' => 'nullable|string|max:255',
             'durasi' => 'nullable|string|max:255',
             'link_foto' => 'nullable|array',
-            'link_foto.*' => 'nullable|string|max:255',
             'komponen' => 'required|array',
             'komponen.*.jumlah' => 'nullable|integer|min:1',
             'komponen.*.nama' => 'nullable|string|max:255',
@@ -229,6 +252,21 @@ class BoardGameController extends Controller
             'populer' => 'boolean',
             'available_copies' => 'required|integer|max:' . $boardGame->jumlah,
         ]);
+
+        $existingFotos = array_filter($request->input('existing_fotos', []), fn($url) => !empty($url));
+        $fotoPaths = array_values($existingFotos);
+
+        if ($request->hasFile('new_fotos')) {
+            foreach ($request->file('new_fotos') as $file) {
+                if ($file && $file->isValid()) {
+                    $path = $file->store('boardgames', 'public');
+                    $fotoPaths[] = '/storage/' . $path;
+                }
+            }
+        }
+
+        $validated['link_foto'] = $fotoPaths;
+        unset($validated['existing_fotos'], $validated['new_fotos']);
 
         $boardGame->update($validated);
 

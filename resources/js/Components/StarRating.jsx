@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { WARNA } from "./theme";
 
 function Bintang({ terisi, setengah, setHover, hover, onClick }) {
     return (
         <span
-            className="relative inline-block w-5 h-5 cursor-pointer"
+            className="relative inline-block w-5 h-5 cursor-pointer transition-transform hover:scale-110 active:scale-95"
             onClick={onClick}
             onMouseEnter={() => setHover?.(hover)}
             onMouseLeave={() => setHover?.(0)}
@@ -14,9 +15,9 @@ function Bintang({ terisi, setengah, setHover, hover, onClick }) {
             {(terisi || (setengah && !terisi)) && (
                 <svg
                     viewBox="0 0 24 24"
-                    className="absolute inset-0 w-5 h-5 text-amber-400"
+                    className="absolute inset-0 w-5 h-5"
                     fill="currentColor"
-                    style={{ clipPath: setengah && !terisi ? "inset(0 50% 0 0)" : undefined }}
+                    style={{ color: WARNA.hijauUtama, clipPath: setengah && !terisi ? "inset(0 50% 0 0)" : undefined }}
                 >
                     <path d="M12 2.5l2.9 6.1 6.6.8-4.8 4.6 1.2 6.6L12 17.5l-5.9 3.1 1.2-6.6-4.8-4.6 6.6-.8L12 2.5z" />
                 </svg>

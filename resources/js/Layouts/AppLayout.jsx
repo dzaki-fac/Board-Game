@@ -1,20 +1,11 @@
 import { useState, useRef } from "react";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, usePage, router } from "@inertiajs/react";
 
 function Svg({ className, children }) {
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
             {children}
         </svg>
-    );
-}
-
-function HouseIcon({ className }) {
-    return (
-        <Svg className={className}>
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-        </Svg>
     );
 }
 
@@ -80,11 +71,22 @@ function HistoryIcon({ className }) {
     );
 }
 
-function UserRoundIcon({ className }) {
+function UserIcon({ className }) {
     return (
         <Svg className={className}>
             <circle cx="12" cy="8" r="5" />
             <path d="M20 21a8 8 0 0 0-16 0" />
+        </Svg>
+    );
+}
+
+function UsersIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </Svg>
     );
 }
@@ -108,22 +110,47 @@ function PanelLeftIcon({ className }) {
     );
 }
 
+function FileTextIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <polyline points="10 9 9 9 8 9" />
+        </Svg>
+    );
+}
+
+function ImageIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+        </Svg>
+    );
+}
+
 const navItems = [
-    { label: "Beranda", href: "/admin/rules", icon: HouseIcon },
+    { label: "Tata Tertib", href: "/admin/rules", icon: FileTextIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
     { label: "Review", href: "/admin/reviews", icon: StarIcon },
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
     { label: "Peminjaman", href: "/admin/loans", icon: HandHelpingIcon },
     { label: "Pengembalian", href: "/admin/returns", icon: RotateCwIcon },
     { label: "Riwayat", href: "/admin/history", icon: HistoryIcon },
-    { label: "Akun", href: "/admin/accounts", icon: UserRoundIcon },
+    { label: "Carousel", href: "/admin/carousel", icon: ImageIcon },
+    { label: "Akun", href: "/admin/accounts", icon: UsersIcon },
 ];
 
 export default function Layout({ children }) {
     const admin = usePage().props.auth?.admin;
     const [sidebarExpanded, setSidebarExpanded] = useState(false);
     const [tooltip, setTooltip] = useState({ show: false, label: "", top: 0 });
+    const [accountDropdown, setAccountDropdown] = useState(false);
     const itemRefs = useRef({});
+    const dropdownRef = useRef(null);
 
     const toggleSidebar = () => setSidebarExpanded((prev) => !prev);
 
@@ -145,44 +172,44 @@ export default function Layout({ children }) {
         <div className="min-h-screen">
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-40 bg-[#173C33] flex flex-col transition-all duration-300 ease-in-out ${
+                className={`fixed inset-y-0 left-0 z-40 bg-[#071E30] flex flex-col transition-[width] duration-300 ease-in-out ${
                     sidebarExpanded ? "w-64" : "w-16"
                 }`}
             >
-                {/* Toggle button */}
-                <button
-                    onClick={toggleSidebar}
-                    className={`absolute top-3 w-8 h-8 flex items-center justify-center rounded-lg text-white/70 hover:text-white hover:bg-[#255A4F] z-10 ${
-                        sidebarExpanded ? 'right-3' : 'left-1/2 -translate-x-1/2'
-                    }`}
-                >
-                    <PanelLeftIcon className={iconClass} />
-                </button>
-
                 {/* Brand */}
-                {sidebarExpanded && (
-                    <div className="px-6 py-6 border-b border-[#255A4F] flex items-center gap-3 shrink-0">
-                        <img
-                            src="/images/logo-upt.png"
-                            alt="Logo"
-                            className="w-20 h-20 object-contain rounded shrink-0"
-                            onError={(e) => {
-                                e.target.style.display = "none";
-                            }}
-                        />
-                        <div className="flex-1 min-w-0">
-                            <h2 className="text-base font-bold text-white tracking-tight leading-tight">
-                                Sistem Peminjaman Board Game
-                            </h2>
-                            <p className="text-[10px] text-[#FAF7F2]/60 mt-0.5 leading-tight">
-                                UPT Perpustakaan Universitas Diponegoro
-                            </p>
+                <div className="px-6 py-6 border-b border-[#0A3A5C] flex items-center justify-center shrink-0">
+                    {sidebarExpanded ? (
+                        <a href="/katalog" className="flex items-center gap-3">
+                            <img
+                                src="/assets/logo_undip.png"
+                                alt="Universitas Diponegoro"
+                                className="h-11 w-auto object-contain"
+                            />
+                            <img
+                                src="/images/logo-upt.png"
+                                alt="UPT Perpustakaan Undip"
+                                className="h-10 w-auto object-contain"
+                            />
+                        </a>
+                    ) : (
+                        <div className="flex flex-col items-center gap-1">
+                            <img
+                                src="/assets/logo_undip.png"
+                                alt="Universitas Diponegoro"
+                                className="h-6 w-auto object-contain"
+                            />
+                            <img
+                                src="/favicon.ico"
+                                alt=""
+                                className="w-5 h-5 object-contain"
+                                onError={(e) => { e.target.style.display = "none"; }}
+                            />
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
 
                 {/* Nav Items */}
-                <ul className={`flex-1 px-3 space-y-1 overflow-y-auto ${sidebarExpanded ? 'py-4' : 'py-4 pt-14'}`}>
+                <ul className="flex-1 px-3 space-y-1 overflow-y-auto py-4">
                     {navItems.map((item) => {
                         const Icon = item.icon;
                         const isActive =
@@ -205,8 +232,8 @@ export default function Layout({ children }) {
                                         sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
                                     } ${
                                         isActive
-                                            ? "bg-[#2F6F62] text-white"
-                                            : "text-[#FAF7F2]/70 hover:bg-[#255A4F] hover:text-white"
+                                            ? "bg-[#0E4A73] text-white"
+                                            : "text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white"
                                     }`}
                                 >
                                     <span className="shrink-0 w-5 h-5 flex items-center justify-center">
@@ -219,26 +246,71 @@ export default function Layout({ children }) {
                     })}
                 </ul>
 
-                {/* Logout */}
-                <div
-                    className="px-3 py-4 border-t border-[#255A4F] shrink-0"
-                    ref={(el) => { itemRefs.current["logout"] = el; }}
-                    onMouseEnter={() => showTooltip("logout", "Keluar")}
-                    onMouseLeave={hideTooltip}
-                >
-                    <Link
-                        href="/admin/logout"
-                        method="post"
-                        as="button"
-                        className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors ${
+                {/* Account Dropdown */}
+                <div className="relative px-3 py-4 border-t border-[#0A3A5C] shrink-0">
+                    <button
+                        onClick={() => {
+                            if (!sidebarExpanded) {
+                                setSidebarExpanded(true);
+                                setTimeout(() => setAccountDropdown(true), 300);
+                            } else {
+                                setAccountDropdown(!accountDropdown);
+                            }
+                        }}
+                        className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors w-full ${
                             sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
-                        } text-[#FAF7F2]/70 hover:bg-[#255A4F] hover:text-white w-full`}
+                        } text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white`}
+                        ref={(el) => { itemRefs.current["account"] = el; }}
+                        onMouseEnter={() => showTooltip("account", admin?.name || "Akun")}
+                        onMouseLeave={hideTooltip}
                     >
                         <span className="shrink-0 w-5 h-5 flex items-center justify-center">
-                            <LogOutIcon className={iconClass} />
+                            <UserIcon className={iconClass} />
                         </span>
-                        {sidebarExpanded && <span>Keluar</span>}
-                    </Link>
+                        {sidebarExpanded && (
+                            <span className="truncate">{admin?.name || "Akun"}</span>
+                        )}
+                    </button>
+
+                    {accountDropdown && (
+                        <>
+                            <div
+                                className="fixed inset-0 z-40"
+                                onClick={() => setAccountDropdown(false)}
+                            />
+                            <div
+                                ref={dropdownRef}
+                                className={`absolute bottom-full mb-2 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50 ${
+                                    sidebarExpanded
+                                        ? 'left-3 right-3'
+                                        : 'left-1/2 -translate-x-1/2 w-48'
+                                }`}
+                            >
+                                <button
+                                    onClick={() => {
+                                        setAccountDropdown(false);
+                                        router.visit('/admin/accounts', { data: { edit: 'me' } });
+                                    }}
+                                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                                >
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Edit Akun
+                                </button>
+                                <hr className="mx-3 my-1 border-gray-100" />
+                                <Link
+                                    href="/admin/logout"
+                                    method="post"
+                                    as="button"
+                                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                                >
+                                    <LogOutIcon className="w-4 h-4" />
+                                    Keluar
+                                </Link>
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 {/* Floating Tooltip */}
@@ -258,18 +330,22 @@ export default function Layout({ children }) {
 
             {/* Main Content */}
             <div
-                className={`min-h-screen flex flex-col transition-all duration-300 ease-in-out ${
+                className={`min-h-screen flex flex-col transition-[margin-left] duration-300 ease-in-out ${
                     sidebarExpanded ? "ml-64" : "ml-16"
                 }`}
             >
                 {/* Topbar */}
-                <div className="navbar bg-white shadow-sm border-b border-[#E8F3EF] px-4 lg:px-6 sticky top-0 z-30 h-16">
-                    <div className="flex-1" />
-                    <div className="flex-none gap-2 flex items-center">
-                        <span className="text-sm font-medium text-[#173C33] hidden sm:block">
-                            {admin?.name}
-                        </span>
+                <div className="navbar bg-white shadow-sm border-b border-[#D6E8F5] px-4 lg:px-6 sticky top-0 z-30 h-16">
+                    <div className="flex-none">
+                        <button
+                            onClick={toggleSidebar}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                        >
+                            <PanelLeftIcon className="w-5 h-5" />
+                        </button>
                     </div>
+                    <div className="flex-1" />
+                    <div className="flex-none gap-2 flex items-center" />
                 </div>
 
                 {/* Page Content */}
