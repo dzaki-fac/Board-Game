@@ -484,9 +484,9 @@ export default function Create({ loans }) {
                                             onChange={(e) => setData("fine_amount", e.target.value === "" ? null : e.target.value)}
                                             onWheel={(e) => e.target.blur()}
                                             className="input input-bordered w-full"
-                                            placeholder="Masukkan denda jika ada"
+                                            placeholder="cth: 125000"
                                             min="0"
-                                            step="0.01"
+                                            step="1"
                                         />
                                         {errors.fine_amount && (
                                             <p className="text-red-500 text-xs mt-1">
