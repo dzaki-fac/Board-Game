@@ -51,7 +51,9 @@ Route::prefix('admin')->group(function () {
         Route::put('rules/{rule}', [HomeController::class, 'updateRule'])->name('admin.rules.update')->middleware('role-admin');
 
         Route::get('carousel', [CarouselController::class, 'index'])->name('admin.carousel.index');
+        Route::post('carousel', [CarouselController::class, 'store'])->name('admin.carousel.store')->middleware('role-admin');
         Route::put('carousel/{carousel}', [CarouselController::class, 'update'])->name('admin.carousel.update')->middleware('role-admin');
+        Route::delete('carousel/{carousel}', [CarouselController::class, 'destroy'])->name('admin.carousel.destroy')->middleware('role-admin');
 
         Route::get('reviews', [AdminReviewController::class, 'index'])->name('admin.reviews.index');
         Route::delete('reviews/{boardGameReview}', [AdminReviewController::class, 'destroy'])->name('admin.reviews.destroy');

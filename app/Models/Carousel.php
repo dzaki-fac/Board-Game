@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Carousel extends Model
 {
@@ -22,5 +23,16 @@ class Carousel extends Model
         return [
             'points' => 'array',
         ];
+    }
+
+    public function getBgImageUrlAttribute(): string
+    {
+        if (!$this->bg_image) {
+            return '';
+        }
+        if (filter_var($this->bg_image, FILTER_VALIDATE_URL)) {
+            return $this->bg_image;
+        }
+        return Storage::url($this->bg_image);
     }
 }
