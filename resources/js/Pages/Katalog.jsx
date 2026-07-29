@@ -1061,7 +1061,6 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa }) {
             </div>
 
             {/* Filter & sort, ala baris filter Amazon */}
-            <AnimatedSection delay={0.2}>
             <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-slate-200 shadow-sm">
                 <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-3">
                     {/* Desktop (lg+) */}
@@ -1154,7 +1153,6 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa }) {
                 </div>
             </div>
             </div>
-            </AnimatedSection>
 
             <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-10">
                 <Reveal>
