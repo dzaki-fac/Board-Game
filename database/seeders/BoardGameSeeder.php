@@ -14,7 +14,7 @@ class BoardGameSeeder extends Seeder
     {
         $games = [
             [
-                'kode' => '18/Y/PK/1/LT-3',
+                'kode' => '18/Y/PK/1',
                 'box' => 1,
                 'lantai' => 3,
                 'nama' => 'Yak',
@@ -28,7 +28,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '60-90 Menit',
                 'link_foto' => ['https://m.media-amazon.com/images/I/61gzzBjUbsL._AC_UF350,350_QL80_.jpg', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgvMm6MuTaNqkbKJQG4c0lMynnlAIkBHD6LnzrDZyWI0hDar4YkiVXY_g&s=10'],
-                'link_panduan' => 'https://cdn.1j1ju.com/medias/a2/6b/c9-yak-rulebook.pdf',
                 'komponen' => [
                     ['nama' => 'rulebook', 'jumlah' => 1],
                     ['nama' => 'Punchboard front', 'jumlah' => 1],
@@ -57,7 +56,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '20/I/PK/1/LT-2',
+                'kode' => '20/I/PK/1',
                 'box' => 1,
                 'lantai' => 2,
                 'nama' => 'Imhotep',
@@ -71,7 +70,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '40 Menit',
                 'link_foto' => ['https://zatu.com/cdn/shop/files/Imhotep_grande.jpg?v=1760984874', 'https://modelshop.com.mt/wp-content/uploads/2021/09/imhotep-board-game-2.jpg'],
-                'link_panduan' => 'https://cdn.shopify.com/s/files/1/0104/6331/3977/files/692384_imhotep_manual.pdf?v=1780594007',
                 'komponen' => [
                     ['nama' => 'wooden cubes (kubus kayu)', 'jumlah' => 120],
                     ['nama' => 'site boards (papan lokasi)', 'jumlah' => 5],
@@ -88,7 +86,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '23/U/PK/1/LT-1',
+                'kode' => '23/U/PK/1',
                 'box' => 1,
                 'lantai' => 1,
                 'nama' => 'Ubongo',
@@ -102,7 +100,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '35 Menit',
                 'link_foto' => ['https://levelupstore.co.za/cdn/shop/products/699345_1_1200x.jpg?v=1676116824', 'https://thamesandkosmos.com/cdn/shop/products/Ubongo3D_Contents2.jpg?v=1663616998'],
-                'link_panduan' => 'https://www.manua.ls/thames-and-kosmos/ubongo-3d/manual',
                 'komponen' => [
                     ['nama' => 'x12 Ubin', 'jumlah' => 4],
                     ['nama' => 'Papan Puzzle', 'jumlah' => 36],
@@ -121,7 +118,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '28/1830RRB/PK/1/LT-1',
+                'kode' => '28/1830RRB/PK/1',
                 'box' => 1,
                 'lantai' => 1,
                 'nama' => '1830 : Railways & Robber Barons (1986)',
@@ -135,7 +132,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-7 Pemain',
                 'durasi' => '180-300 Menit',
                 'link_foto' => ['https://www.doubledanegames.com/wp-content/uploads/2022/11/sq-1830-box.jpg', 'https://store.asmodee.com/cdn/shop/products/LK0043-3_400x@2x.jpg?v=1691184549'],
-                'link_panduan' => 'https://www.lookout-spiele.de/upload/en_1830re.html_Rules_1830-RE_EN.pdf',
                 'komponen' => [
                     ['nama' => 'double-sided gameboard (papan permainan dua sisi)', 'jumlah' => 1],
                     ['nama' => 'cards (kartu)', 'jumlah' => 117],
@@ -152,7 +148,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '42/BN/PK/1/LT-1',
+                'kode' => '42/BN/PK/1',
                 'box' => 1,
                 'lantai' => 1,
                 'nama' => 'Block Ness',
@@ -166,7 +162,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://boardgamesq8.com/image/cache/catalog/InShot20221214161130779-800x800.jpg', 'https://m.media-amazon.com/images/I/81DPrfZdPTS.jpg'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/5f085bff75bbabcaa8fcd15c2a24c9fe-Block-Ness-Rules-USA.pdf',
                 'komponen' => [
                     ['nama' => 'papan Loch', 'jumlah' => 1],
                     ['nama' => 'monster dengan warna berbeda (masing-masing terdiri dari 12 bagian: 1 kepala, 10 segmen tubuh, dan 1 ekor)', 'jumlah' => 4],
@@ -178,7 +173,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '49/ML/PK/1/LT-1',
+                'kode' => '49/ML/PK/1',
                 'box' => 1,
                 'lantai' => 1,
                 'nama' => 'Meeple Land',
@@ -192,7 +187,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '1-4 Pemain',
                 'durasi' => '20-40 Menit',
                 'link_foto' => ['https://365games.co.uk/cdn/shop/files/7cd0f6e8-b7bf-42f3-8446-593637cd9c44.jpg?v=1773312589&width=1445', 'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//90/MTA-20106277/blue_orange_meeple_land_board_game_full02_mpyr6eyf.jpg'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2020/09/MeepleLand-Rules-EN.pdf',
                 'komponen' => [
                     ['nama' => 'papan Plot individu', 'jumlah' => 4],
                     ['nama' => 'papan Parking Lot', 'jumlah' => 1],
@@ -214,7 +208,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '54/P/PK/1/LT-2',
+                'kode' => '54/P/PK/1',
                 'box' => 1,
                 'lantai' => 2,
                 'nama' => 'Photosynthesis',
@@ -228,7 +222,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '60-90 Menit',
                 'link_foto' => ['https://www.calendarclub.ca/cdn/shop/products/Photosynthesis.jpg?v=1756406827', 'https://www.rei.com/media/955fa38e-6970-40c1-87a4-86050410ef27.jpg?size=784x588'],
-                'link_panduan' => 'https://www.blueorangegames.com/webroot/img/games/rules/0d34bfea9b65afb5e81a3fc5ef1adf80-Photosynthesis-Rules-US-v2-1.pdf',
                 'komponen' => [
                     ['nama' => 'Papan Permainan', 'jumlah' => 1],
                     ['nama' => 'Segmen Matahari', 'jumlah' => 1],
@@ -250,7 +243,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '3/P/PK/2/LT-2',
+                'kode' => '3/P/PK/2',
                 'box' => 2,
                 'lantai' => 2,
                 'nama' => 'Pengoloo',
@@ -264,7 +257,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://i5.walmartimages.com/seo/Blue-Orange-Games-Pengoloo-Wooden-Memory-Building-Game-For-Kids_ab099095-3346-4efd-8c6c-a013a25d7ce0.10dbde98b8153a8ee325b59a7c226272.jpeg', 'https://images.thenile.io/r1000/0803979002705.jpg'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/pengoloo_rules.pdf',
                 'komponen' => [
                     ['nama' => 'penguins', 'jumlah' => 12],
                     ['nama' => 'telur (2 merah, 2 kuning, 2 hijau, 2 biru, 2 ungu, 2 orange)', 'jumlah' => 12],
@@ -278,7 +270,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '9/TO/PK/2/LT-3',
+                'kode' => '9/TO/PK/2',
                 'box' => 2,
                 'lantai' => 3,
                 'nama' => 'Tongues Out',
@@ -292,7 +284,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://www.clubjouet.com/PREXTRA/docs/472BO-TONGUESOUT-002.jpg', 'https://cdn.ruparupa.io/fit-in/400x400/filters:format(webp)/filters:quality(90)/ruparupa-com/image/upload/Products/10655701_2.jpg'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/aaafca687f82c19d1055805e18797154-Tongues-Out-rules-US-FR.pdf',
                 'komponen' => [
                     ['nama' => 'dogs', 'jumlah' => 12],
                     ['nama' => 'rules book', 'jumlah' => 1],
@@ -305,7 +296,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '15/TM/PK/2/LT-3',
+                'kode' => '15/TM/PK/2',
                 'box' => 2,
                 'lantai' => 3,
                 'nama' => 'The Mind',
@@ -319,7 +310,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://store.asmodee.com/cdn/shop/files/PAN202109-image0_2000.jpg?v=1760644366', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSVSJPeYxskcf3ZvOQyqkajZjRzWRBE5BdV3S5s9LxI4Q&s=10'],
-                'link_panduan' => 'https://cdn.1j1ju.com/medias/4c/1e/25-the-mind-rulebook.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 120],
                     ['nama' => 'Panduan bermain', 'jumlah' => 1],
@@ -330,7 +320,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '16/TN7/PK/2/LT-1',
+                'kode' => '16/TN7/PK/2',
                 'box' => 2,
                 'lantai' => 1,
                 'nama' => 'The Nasty 7',
@@ -344,7 +334,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '3-6 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://theboardbartender.ca/cdn/shop/products/TheNasty7.jpg?v=1628450821', 'https://cf.geekdo-images.com/LFRHmInEpwGiPTMiVue2Tw__imagepage/img/1HfewlsxskJmFkBO-XWx8d7ggWM=/fit-in/900x600/filters:no_upscale():strip_icc()/pic4293064.jpg'],
-                'link_panduan' => 'https://www.scribd.com/document/617737378/The-Nasty-7',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 110],
                     ['nama' => 'Panduan bermain', 'jumlah' => 1],
@@ -355,7 +344,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '17/ASGOS/PK/2/LT-1',
+                'kode' => '17/ASGOS/PK/2',
                 'box' => 2,
                 'lantai' => 1,
                 'nama' => 'Azul Stained Glass of Sintra',
@@ -369,7 +358,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '30-45 Menit',
                 'link_foto' => ['https://m.media-amazon.com/images/I/81wZjdzNIsS._AC_SX679_.jpg', 'https://m.media-amazon.com/images/I/81zYhtTWywS._AC_SL1500_.jpg'],
-                'link_panduan' => 'https://board-game-rules.com/wp-content/uploads/2025/01/azul-stained-glass-of-sintra_Official-Rules.pdf',
                 'komponen' => [
                     ['nama' => 'factory displays (pajangan pabrik)', 'jumlah' => 9],
                     ['nama' => 'palace boards (papan istana)', 'jumlah' => 4],
@@ -389,7 +377,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '41/B/PK/2/LT-2',
+                'kode' => '41/B/PK/2',
                 'box' => 2,
                 'lantai' => 2,
                 'nama' => 'Bendomino',
@@ -403,7 +391,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://i5.walmartimages.com/seo/Blue-Orange-Bendomino-Game-28-Pieces_946f1e85-4b78-4af3-b0e3-afd6c2b9794e_1.5aac88814d3414440b69470026a7335e.jpeg', 'https://blueorangegames.eu/wp-content/uploads/2017/05/Bendomino.jpg'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/bendo_classic_rules.pdf',
                 'komponen' => [
                     ['nama' => 'rule book', 'jumlah' => 1],
                     ['nama' => 'domino', 'jumlah' => 28],
@@ -414,7 +401,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '45/CA/PK/2/LT-3',
+                'kode' => '45/CA/PK/2',
                 'box' => 2,
                 'lantai' => 3,
                 'nama' => 'Cupcake Academy',
@@ -428,7 +415,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15-20 Menit',
                 'link_foto' => ['https://i.zst.com.br/thumbs/12/35/19/-1378563286.jpg', 'https://www.m-g.com.au/wp-content/uploads/2021/10/blue-orange-cupcake-academy.png'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2020/04/CupcakeAcademy-Rules-EN.pdf',
                 'komponen' => [
                     ['nama' => 'bahasa rules book', 'jumlah' => 8],
                     ['nama' => 'cupcake cups (4 pink, 4 hijau, 4 kuning, 4 biru, 4 orange)', 'jumlah' => 20],
@@ -444,7 +430,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '48/FC/PK/2/LT-2',
+                'kode' => '48/FC/PK/2',
                 'box' => 2,
                 'lantai' => 2,
                 'nama' => 'Fish Club',
@@ -458,7 +444,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://www.funlearning.co.uk/wp-content/uploads/2021/03/CLD0070-F1.jpg', 'https://m.media-amazon.com/images/I/71TEF1V53sL._AC_SL1500_.jpg'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2020/07/FishClub-Rules-EN.pdf?x75567',
                 'komponen' => [
                     ['nama' => 'aquarium (akuarium)', 'jumlah' => 1],
                     ['nama' => 'red fish (ikan merah)', 'jumlah' => 9],
@@ -475,7 +460,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '57/SM/PK/2/LT-2',
+                'kode' => '57/SM/PK/2',
                 'box' => 2,
                 'lantai' => 2,
                 'nama' => 'Snack Match',
@@ -489,7 +474,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://blueorangegames.eu/wp-content/uploads/2022/12/SnackMatch-3DBox.jpg', 'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/104/MTA-184823186/blue_orange_games_opened_-_snack_match_board_game_no_retur_-_d_full27_eypmtfz4.webp'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2023/04/SnackMatch-Rules-FR.pdf',
                 'komponen' => [
                     ['nama' => 'bahasa rules book', 'jumlah' => 6],
                     ['nama' => 'card (72 picnic cards, 8 bonus cards)', 'jumlah' => 80],
@@ -500,7 +484,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '59/WDI/PK/2/LT-3',
+                'kode' => '59/WDI/PK/2',
                 'box' => 2,
                 'lantai' => 3,
                 'nama' => 'Who Did It',
@@ -514,7 +498,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://image.astronauts.cloud/product-images/2024/2/HobbyIndonesiaWhoDidItBoardGame_4be4a486-a87a-458b-b0c0-07982a960f3b_900x900.png', 'https://static.lelekan.ua/image/cache/catalog/igri/hto-napudyv/hto_napudyv_01-800x800.jpg'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/6f5f651fe76b7994e36914e37a13407b-Who-did-it-rules-us.jpg',
                 'komponen' => [
                     ['nama' => 'Poop Token', 'jumlah' => 13],
                     ['nama' => 'Rules book', 'jumlah' => 8],
@@ -526,7 +509,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '1/CB/PK/3/LT-1',
+                'kode' => '1/CB/PK/3',
                 'box' => 3,
                 'lantai' => 1,
                 'nama' => 'Cookie Box',
@@ -540,7 +523,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://cf.geekdo-images.com/yf376XCJUCW_lvO3aS3h2w__imagepage/img/z61p-RfRYG7mlzKyPDPvGhfi-js=/fit-in/900x600/filters:no_upscale():strip_icc()/pic3151052.jpg', 'https://cdn.svc.asmodee.net/production-asmodeeit/uploads/image-converter/2022/09/Cookie2-1024x1024.webp'],
-                'link_panduan' => 'https://cdnfile.koreaboardgames.com/_data/QR/Rules_EN/cookiebox_rules_EN_web.pdf',
                 'komponen' => [
                     ['nama' => 'Bel', 'jumlah' => 1],
                     ['nama' => 'kartu pesanan', 'jumlah' => 30],
@@ -552,7 +534,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '2/K/PK/3/LT-2',
+                'kode' => '2/K/PK/3',
                 'box' => 3,
                 'lantai' => 2,
                 'nama' => 'Kingdomino',
@@ -566,7 +548,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQByFMyOipn2ZuWjtKFiw0HRkWgjQYG2VliwM_z0NDHEw&s=10', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2M5M2NA2IThNtBdZiOB9bUeeZeawmO9OMIVmFoctuaEoE16ZGK-KuL7c&s=10'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/cfa0f38157341a002eab1100aab478ea-Kingdomino-Rules-US-2nd-Edition.pdf',
                 'komponen' => [
                     ['nama' => 'Domino', 'jumlah' => 48],
                     ['nama' => 'Kartu Persegi', 'jumlah' => 4],
@@ -580,7 +561,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '8/TCGCP/PK/3/LT-3',
+                'kode' => '8/TCGCP/PK/3',
                 'box' => 3,
                 'lantai' => 3,
                 'nama' => 'Taco Cat Goat Cheese Pizza',
@@ -594,7 +575,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-8 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://m.media-amazon.com/images/I/81FaGDdNgnL.jpg', 'https://s3-ap-southeast-2.amazonaws.com/wc-prod-pim/JPEG_1000x1000/VR76954_C_taco_cat_goat_cheese_pizza_board_game.jpg'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2023/05/TacoCat-Rules-EN.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 64],
                     ['nama' => 'Panduan Bermain', 'jumlah' => 2],
@@ -605,7 +585,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '10/GB/PK/3/LT-1',
+                'kode' => '10/GB/PK/3',
                 'box' => 3,
                 'lantai' => 1,
                 'nama' => 'Geistes Blitz',
@@ -619,7 +599,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-8 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://corners.ge/wp-content/uploads/2025/01/Geistesblitz-5-VOR-12.jpg', 'https://redcoast.myshopify.com/cdn/shop/products/product-image-1185587109_1010x.jpg?v=1575424250'],
-                'link_panduan' => 'https://cdn.1j1ju.com/medias/b2/07/26-geistes-blitz-rulebook.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 60],
                     ['nama' => 'Ornamen kursi', 'jumlah' => 1],
@@ -635,7 +614,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '19/S/PK/3/LT-3',
+                'kode' => '19/S/PK/3',
                 'box' => 3,
                 'lantai' => 3,
                 'nama' => 'Specific',
@@ -649,7 +628,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://image.astronauts.cloud/product-images/2024/2/HobbyIndonesiaSpecificBoardGame_f0088eb0-3595-4c01-8a9d-36ac6cdbf9bf_900x900.png', 'https://littlejordantoys.com/wp-content/uploads/2022/03/SPECIFIC1.jpg'],
-                'link_panduan' => 'https://en.gigamic.com/index.php?controller=attachment&id_attachment=618',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 28],
                     ['nama' => 'Dadu', 'jumlah' => 3],
@@ -661,7 +639,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '26/ATN/PK/3/LT-1',
+                'kode' => '26/ATN/PK/3',
                 'box' => 3,
                 'lantai' => 1,
                 'nama' => 'Archaeology: The New',
@@ -675,7 +653,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-5 Pemain',
                 'durasi' => '45 Menit',
                 'link_foto' => ['https://cf.geekdo-images.com/GrPuR1uUv8ayILW3V6nTlg__imagepage/img/_yHRKeYowohBm6NQNhoWB5fXIa8=/fit-in/900x600/filters:no_upscale():strip_icc()/pic5426071.jpg', 'https://monstergeekbg.com/cdn/shop/products/original_d843dd9a-9be4-4903-9073-ccdb35174d0f.jpg?v=1628521569'],
-                'link_panduan' => 'https://www.orderofgamers.com/downloads/ArchaeologyTheNewExpedition_v1.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 106],
                     ['nama' => 'Buku panduan bermain', 'jumlah' => 1],
@@ -687,7 +664,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '30/P/PK/3/LT-3',
+                'kode' => '30/P/PK/3',
                 'box' => 3,
                 'lantai' => 3,
                 'nama' => 'Parade',
@@ -701,7 +678,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '30 Menit',
                 'link_foto' => ['https://zatu.com/cdn/shop/files/ParadeParade-InsideParade-Back_grande.jpg?v=1760985071', 'https://mercular.s3.ap-southeast-1.amazonaws.com/images/products/2020/03/Parade-2.jpg'],
-                'link_panduan' => 'https://cdn.1j1ju.com/medias/8f/7e/8f-parade-rulebook.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 66],
                     ['nama' => 'Panduan Bermain', 'jumlah' => 1],
@@ -713,7 +689,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '32/PL/PK/3/LT-2',
+                'kode' => '32/PL/PK/3',
                 'box' => 3,
                 'lantai' => 2,
                 'nama' => 'Project L',
@@ -727,7 +703,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '1-4 Pemain',
                 'durasi' => '20-40 Menit',
                 'link_foto' => ['https://imgcdn.gamefound.com/extralarge/projects/2912/07548e99-3bb3-4163-b275-6402cf6183e5.jpg', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqgwliUAsNxPsGvNgkEjJBGzmiiuVohAbvWoEFtMjfA&s=10'],
-                'link_panduan' => 'https://cdn.1j1ju.com/medias/82/ee/c6-project-l-rulebook.pdf',
                 'komponen' => [
                     ['nama' => 'puzzle putih', 'jumlah' => 32],
                     ['nama' => 'puzzle hitam', 'jumlah' => 20],
@@ -740,7 +715,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '33/S/PK/3/LT-3',
+                'kode' => '33/S/PK/3',
                 'box' => 3,
                 'lantai' => 3,
                 'nama' => 'Scout',
@@ -754,7 +729,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '3-5 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://wobgames.net/wp-content/uploads/2022/05/scout-cardgame-japanese-english.webp', 'https://i.etsystatic.com/37518322/r/il/95ccfe/5164435942/il_fullxfull.5164435942_l0jf.jpg'],
-                'link_panduan' => 'https://officialgamerules.org/wp-content/uploads/2025/03/new_edition_scout_rules_eng.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 45],
                     ['nama' => 'Kartu Uang', 'jumlah' => 23],
@@ -769,7 +743,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '44/C/PK/3/LT-2',
+                'kode' => '44/C/PK/3',
                 'box' => 3,
                 'lantai' => 2,
                 'nama' => 'Cubeez',
@@ -783,7 +757,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://cdn11.bigcommerce.com/s-15h1lhwmjz/images/stencil/1280x1280/products/1232/43853/f240fc1c-c166-4cd9-bcc8-7a6115525935__85244.1720411563.PNG?c=1', 'https://cdn11.bigcommerce.com/s-15h1lhwmjz/images/stencil/1280x1280/products/1232/43854/e32c6348-73ed-49f3-a1ef-1bb4a63d5834__20243.1720411562.PNG?c=1'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/3d77e4318ec9e4a172693a553cf8935a-Cubeez-rules-us.pdf',
                 'komponen' => [
                     ['nama' => 'bahasa rules book', 'jumlah' => 8],
                     ['nama' => 'challege card', 'jumlah' => 50],
@@ -795,7 +768,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '51/NSL/PK/3/LT-2',
+                'kode' => '51/NSL/PK/3',
                 'box' => 3,
                 'lantai' => 2,
                 'nama' => 'Next Station: London',
@@ -809,7 +782,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '1-4 Pemain',
                 'durasi' => '15-20 Menit',
                 'link_foto' => ['https://s3.amazonaws.com/mindgames.ca/wp-content/uploads/2024/04/81407-1.webp', 'https://i.etsystatic.com/42770788/r/il/9ed53c/7273554928/il_570xN.7273554928_sy3p.jpg'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/Next_Station_London_rules_USA.pdf',
                 'komponen' => [
                     ['nama' => 'Pensil berwarna', 'jumlah' => 4],
                     ['nama' => 'Kartu Square', 'jumlah' => 9],
@@ -824,7 +796,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '52/PD/PK/3/LT-1',
+                'kode' => '52/PD/PK/3',
                 'box' => 3,
                 'lantai' => 1,
                 'nama' => 'Panic Diner',
@@ -838,7 +810,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://blueorangegames.eu/wp-content/uploads/2019/04/PanicDiner-3DBox.jpg', 'https://veselosidim.ru/images/detailed/21/lifestyleltd-panic-diner-03.jpg'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2019/09/PanicDiner-Rules-EN-FR.pdf',
                 'komponen' => [
                     ['nama' => 'papan permainan', 'jumlah' => 1],
                     ['nama' => 'mesin pencuci piring (tutup kotak)', 'jumlah' => 1],
@@ -856,7 +827,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '58/V/PK/3/LT-3',
+                'kode' => '58/V/PK/3',
                 'box' => 3,
                 'lantai' => 3,
                 'nama' => 'Volto',
@@ -870,7 +841,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://www.ludijeux.fr/cdn/shop/files/volto_decbb450-9dbe-4d19-a414-d2c87502467f_grande.jpg?v=1719912489', 'https://www.ludijeux.fr/cdn/shop/files/volto-p-image-83142-grande_1024x1024.jpg?v=1719912496'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2022/07/Volto-Rules-EN.pdf',
                 'komponen' => [
                     ['nama' => 'rules book', 'jumlah' => 1],
                     ['nama' => 'mask (10 merah, 10 putih)', 'jumlah' => 20],
@@ -882,7 +852,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '61/C/PK/3/LT-2',
+                'kode' => '61/C/PK/3',
                 'box' => 3,
                 'lantai' => 2,
                 'nama' => 'Celestia',
@@ -896,7 +866,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '45 Menit',
                 'link_foto' => ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCLoOE42keWJuJV4z8CHx8ohsTbFg8sZTXqy123_R0FQ&s=10', 'https://i0.wp.com/opinionatedgamers.com/wp-content/uploads/2016/03/celestia.jpg?resize=454%2C386&ssl=1'],
-                'link_panduan' => 'https://cdn.1j1ju.com/medias/ba/60/48-celestia-rulebook.pdf',
                 'komponen' => [
                     ['nama' => 'aircraft (pesawat)', 'jumlah' => 1],
                     ['nama' => 'adventurer pawns (bidak petualang)', 'jumlah' => 6],
@@ -911,7 +880,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '13/RH/PK/4/LT-3',
+                'kode' => '13/RH/PK/4',
                 'box' => 4,
                 'lantai' => 3,
                 'nama' => 'Rhino Hero',
@@ -925,7 +894,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-5 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://www.habausa.com/cdn/shop/files/games-rhino-hero-4789-1_720x.jpg?v=1698432047', 'https://m.media-amazon.com/images/I/81AIZostl1L.jpg'],
-                'link_panduan' => 'https://manualzz.com/doc/55397656/haba-4789-rhino-hero-owner-manual?p=3',
                 'komponen' => [
                     ['nama' => 'rules', 'jumlah' => 1],
                     ['nama' => 'fondation', 'jumlah' => 1],
@@ -939,7 +907,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '14/SC/PK/4/LT-2',
+                'kode' => '14/SC/PK/4',
                 'box' => 4,
                 'lantai' => 2,
                 'nama' => 'Speed Cups',
@@ -953,7 +921,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://www.asdesjeux.com/cdn/shop/products/jeux-enfants-enfants-5-ans-speed-cups-2-fr-1173760705.jpg?v=1750837927', 'https://kassemstore.com/wp-content/uploads/2024/06/7299999082842-3.jpg'],
-                'link_panduan' => 'https://www.ultraboardgames.com/speed-cups/game-rules.php',
                 'komponen' => [
                     ['nama' => 'picture cards', 'jumlah' => 24],
                     ['nama' => 'cups (4 sets of 5 color each)', 'jumlah' => 20],
@@ -964,7 +931,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '24/TN/PK/4/LT-2',
+                'kode' => '24/TN/PK/4',
                 'box' => 4,
                 'lantai' => 2,
                 'nama' => 'The Number',
@@ -978,7 +945,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcR_MKKyvSZhlR-xd9UA9GfpoXDuANPMIA47VflmvBWlxDmSurGvJIR3crBqkKMTKOr2mElcDW_c9csz1pZMHGIWqPmpq5pG_V4nX5lbFcCKiWyy57N-0MR6', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQmeKhKwC7ha0-6wCx2iDo-JDJSJ4UwwcwiGexkxF84LvytGoywcad7ko0e_lYLirvkRJzFBA6Km-BXw1eH2gML_WypxQ0TiLBjzJV5BJlpCSWaHRgHx_MG1g'],
-                'link_panduan' => 'https://cdn.svc.asmodee.net/production-rprod/storage/games/the-number/EN/tn-en01-rules-1678271742YxsxF.pdf',
                 'komponen' => [
                     ['nama' => 'player boards (papan pemain)', 'jumlah' => 5],
                     ['nama' => 'number tiles (ubin angka)', 'jumlah' => 5],
@@ -991,7 +957,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '29/PB/PK/4/LT-2',
+                'kode' => '29/PB/PK/4',
                 'box' => 4,
                 'lantai' => 2,
                 'nama' => 'Pandemic (Base)',
@@ -1005,7 +971,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '45 Menit',
                 'link_foto' => ['https://zatu.com/cdn/shop/files/Pandemic-2013.jpg?v=1760985299&width=843', 'https://static.gamesmen.com.au/media/catalog/product/cache/57ddbad6affa8d28869fa47188b75842/p/a/pandemic_board_game_4_.jpg'],
-                'link_panduan' => 'https://cdn.svc.asmodee.net/production-zman/uploads/2024/09/Pandemic_Rulebook.pdf',
                 'komponen' => [
                     ['nama' => 'Role Cards', 'jumlah' => 7],
                     ['nama' => 'Pawns', 'jumlah' => 7],
@@ -1025,7 +990,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '46/DR/PK/4/LT-3',
+                'kode' => '46/DR/PK/4',
                 'box' => 4,
                 'lantai' => 3,
                 'nama' => 'Doctor Rat',
@@ -1039,7 +1004,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://static.wixstatic.com/media/9b81af_b0fa4867680b49fdb609d644fcf12a7e~mv2.jpg/v1/fill/w_480,h_514,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/9b81af_b0fa4867680b49fdb609d644fcf12a7e~mv2.jpg', 'https://goblingames.mk/wp/wp-content/uploads/2023/12/Doctor-Rat1.jpg'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2023/08/DoctorRat-Rules-EN.pdf',
                 'komponen' => [
                     ['nama' => 'cards (kartu)', 'jumlah' => 129],
                     ['nama' => 'special action tokens (token aksi khusus)', 'jumlah' => 5],
@@ -1056,7 +1020,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '55/SE/PK/4/LT-1',
+                'kode' => '55/SE/PK/4',
                 'box' => 4,
                 'lantai' => 1,
                 'nama' => 'Sherlock Express',
@@ -1070,7 +1034,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//110/MTA-38687546/blue_orange_blue_orange_sherlock_express_board_game_full04_ig6zo7ir.jpg', 'https://m.media-amazon.com/images/I/718y+HUHCgL.jpg'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2019/02/SherlockExpress-Rules-EN.pdf',
                 'komponen' => [
                     ['nama' => 'suspect cards', 'jumlah' => 27],
                     ['nama' => 'alibi cards', 'jumlah' => 36],
@@ -1082,7 +1045,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '60/WW/PK/4/LT-2',
+                'kode' => '60/WW/PK/4',
                 'box' => 4,
                 'lantai' => 2,
                 'nama' => 'Wonder Woods',
@@ -1096,7 +1059,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '20-30 Menit',
                 'link_foto' => ['https://m.media-amazon.com/images/I/71QCU+cTkUL.jpg', 'https://www.bellalunatoys.com/cdn/shop/files/wonder-woods-mushroom-hunting-game-1_1800x1800.jpg?v=1721837851'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/18bbe18ec189a4939f7398c7ef004027-Wonder-Woods-Rules-US-FR.pdf',
                 'komponen' => [
                     ['nama' => 'Keranjang Kayu', 'jumlah' => 35],
                     ['nama' => 'Jamur Kayu', 'jumlah' => 56],
@@ -1111,7 +1073,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '4/RF/PK/5/LT-3',
+                'kode' => '4/RF/PK/5',
                 'box' => 5,
                 'lantai' => 3,
                 'nama' => 'Ramen Fury',
@@ -1125,7 +1087,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '15-20 Menit',
                 'link_foto' => ['https://image.astronauts.cloud/product-images/2024/1/RamenFuryBoardGame_1b9c47d7-eb58-41a7-a862-e48670871185_900x900.png', 'https://m.media-amazon.com/images/I/91izymg7STL._AC_UF894,1000_QL80_.jpg'],
-                'link_panduan' => 'https://cdn.svc.asmodee.net/production-mixlore/uploads/2024/05/SITEMIXLORE_RAMEN_FURY_RULES_EN.pdf',
                 'komponen' => [
                     ['nama' => 'kartu Mangkuk Ramen', 'jumlah' => 15],
                     ['nama' => 'kartu Bahan', 'jumlah' => 89],
@@ -1138,7 +1099,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '6/S/PK/5/LT-2',
+                'kode' => '6/S/PK/5',
                 'box' => 5,
                 'lantai' => 2,
                 'nama' => 'Sequence',
@@ -1152,7 +1113,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-12 Pemain',
                 'durasi' => '30 Menit',
                 'link_foto' => ['https://m.media-amazon.com/images/I/816K0RyrhzL._SL1500_.jpg', 'https://m.media-amazon.com/images/I/81RzQEc0GTL._SL1500_.jpg'],
-                'link_panduan' => 'https://www.boardgameswizard.com/wp-content/uploads/2020/03/Sequence-Rules-PDF.pdf',
                 'komponen' => [
                     ['nama' => 'instruction card', 'jumlah' => 1],
                     ['nama' => 'game board', 'jumlah' => 1],
@@ -1165,7 +1125,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '7/SIEB/PK/5/LT-2',
+                'kode' => '7/SIEB/PK/5',
                 'box' => 5,
                 'lantai' => 2,
                 'nama' => 'Spot it (Eco Blister/Peg)',
@@ -1179,7 +1139,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-8 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDxhUT45Pm0bh1tDMnkd40SUeqZD3FhOoCBx6AO-JULWagzV1car-NW8OK&s=10', 'https://store.asmodee.com/cdn/shop/files/SPR103ML-image5_2000_535x.jpg?v=1721231097'],
-                'link_panduan' => 'https://www.zygomatic-games.com/wp-content/uploads/2024/05/spot-it_variants_en_220x275mm_20240528.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 55],
                     ['nama' => 'Kaleng', 'jumlah' => 1],
@@ -1192,7 +1151,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '11/GB/PK/5/LT-3',
+                'kode' => '11/GB/PK/5',
                 'box' => 5,
                 'lantai' => 3,
                 'nama' => 'Get Bit',
@@ -1206,7 +1165,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://tabletopmerchant.com/cdn/shop/files/GetBitNew01_900x.jpg?v=1712955780', 'https://www.boardgamebandit.ca/cdn/shop/products/get-bit-deluxe-edition-game-contents_1024x1024.jpg?v=1642824880'],
-                'link_panduan' => 'http://djnutte.com/BoardGameFiles/Rules/GetBit.pdf',
                 'komponen' => [
                     ['nama' => 'Figures', 'jumlah' => 6],
                     ['nama' => 'Hungry shark', 'jumlah' => 1],
@@ -1218,7 +1176,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '22/RL/PK/5/LT-1',
+                'kode' => '22/RL/PK/5',
                 'box' => 5,
                 'lantai' => 1,
                 'nama' => 'Rustling Leaves',
@@ -1232,7 +1190,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2 Pemain',
                 'durasi' => '20 Menit',
                 'link_foto' => ['https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//97/MTA-38026607/kosmos_rustling_leaves_board_game_full01_rbn7p20a.jpg', 'https://zatu.com/cdn/shop/files/Rustling-Leaves-1-3.jpg?v=1760982213&width=500'],
-                'link_panduan' => null,
                 'komponen' => [
                     ['nama' => 'lembar skor', 'jumlah' => 1],
                     ['nama' => 'dadu', 'jumlah' => 2],
@@ -1244,7 +1201,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '34/TE/PK/5/LT-3',
+                'kode' => '34/TE/PK/5',
                 'box' => 5,
                 'lantai' => 3,
                 'nama' => 'Timeline Events',
@@ -1258,7 +1215,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-8 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://www.boardgamebliss.com/cdn/shop/products/TIMEECO02EN_1-B.jpg?crop=center&height=1200&v=1611942227&width=1200', 'https://www.gaminglib.com/cdn/shop/products/timeline-events-eco-blister-815651.jpg?v=1702904258'],
-                'link_panduan' => 'https://cdn.svc.asmodee.net/production-asmodeeit/uploads/2022/09/Timeline_ITA.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 55],
                     ['nama' => 'Kaleng', 'jumlah' => 1],
@@ -1270,7 +1226,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '35/TI/PK/5/LT-3',
+                'kode' => '35/TI/PK/5',
                 'box' => 5,
                 'lantai' => 3,
                 'nama' => 'Timeline Inventions',
@@ -1284,7 +1240,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-8 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://bonhomiegames.uk/WebRoot/Store10/Shops/3d7ba8af-1f8f-4927-ae85-334434e8a130/5B8D/50C8/DADE/E2BD/A84B/0A48/3521/C5CE/TImeline_Card_Game_Inventions_Eco_Pack.jpg', 'https://www.zygomatic-games.com/wp-content/uploads/2019/08/zigomatic-timeline-inventions-02.jpg'],
-                'link_panduan' => 'https://board-game-rules.com/wp-content/uploads/2025/01/timeline-inventions_Official-Rules.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 55],
                     ['nama' => 'Kaleng', 'jumlah' => 1],
@@ -1296,7 +1251,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '36/WP/PK/5/LT-1',
+                'kode' => '36/WP/PK/5',
                 'box' => 5,
                 'lantai' => 1,
                 'nama' => 'Wrong Party',
@@ -1310,7 +1265,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '3-10 Pemain',
                 'durasi' => '30-45 Menit',
                 'link_foto' => ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNt4_h-pnpT7-XzsCTh2Mfa5CjCAO1rDHn0F2F9RP_9GyfQ659GjlPkMw&s=10', 'https://m.media-amazon.com/images/I/51-3NTjj3JL._SX522_.jpg'],
-                'link_panduan' => 'https://www.unstablegameswiki.com/images/a/a1/Wrong-Party-Rules.pdf',
                 'komponen' => [
                     ['nama' => 'Panduan buku', 'jumlah' => 1],
                     ['nama' => 'Kartu', 'jumlah' => 152],
@@ -1323,7 +1277,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '47/DENV/PK/5/LT-2',
+                'kode' => '47/DENV/PK/5',
                 'box' => 5,
                 'lantai' => 2,
                 'nama' => 'Dr. Eureka New Version',
@@ -1337,7 +1291,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://image.astronauts.cloud/product-images/2024/2/HobbyIndonesiaDr_da195624-bc11-4b12-9171-fe92ad2ee9ec_900x900.jpg', 'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full/catalog-image/106/MTA-167884170/brd-24346_mainan-anak-dr-eureka-board-game_full01-664a62f7.jpg'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/515e35a87778ccf712a66746d0722b38-DR-EUREKA-USA-RULES.pdf',
                 'komponen' => [
                     ['nama' => 'Buku Panduan Bermain', 'jumlah' => 8],
                     ['nama' => 'Kartu', 'jumlah' => 54],
@@ -1353,7 +1306,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '50/MR/PK/5/LT-2',
+                'kode' => '50/MR/PK/5',
                 'box' => 5,
                 'lantai' => 2,
                 'nama' => 'Moon River',
@@ -1367,7 +1320,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '45-60 Menit',
                 'link_foto' => ['https://blueorangegames.eu/wp-content/uploads/2023/07/MoonRiver-3DBox.jpg', 'https://www.toysoupcanada.com/cdn/shop/files/moonriver2_1200x1200.jpg?v=1743438935'],
-                'link_panduan' => 'https://blueorangegames.com/webroot/img/games/rules/3f8fb6c5e8abbbdfa6b0d9df71ae5101-Moon-River-RULES-USA.pdf',
                 'komponen' => [
                     ['nama' => 'reservation boards (papan reservasi)', 'jumlah' => 4],
                     ['nama' => 'ranchero meeples (meeple ranchero)', 'jumlah' => 8],
@@ -1384,7 +1336,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '53/PJ/PK/5/LT-1',
+                'kode' => '53/PJ/PK/5',
                 'box' => 5,
                 'lantai' => 1,
                 'nama' => 'Pengo Jump',
@@ -1398,7 +1350,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//catalog-image/119/MTA-95756978/pen_pengo_jump_board_game_full06_p5265j4r.jpeg', 'https://leisuregames.com/cdn/shop/products/pengo-jump_1024x1024.webp?v=1666009042'],
-                'link_panduan' => 'http://blueorangegames.eu/wp-content/uploads/2023/04/PengoJump-Rules-ML.pdf',
                 'komponen' => [
                     ['nama' => 'rules book', 'jumlah' => 1],
                     ['nama' => 'sea board', 'jumlah' => 1],
@@ -1415,7 +1366,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '5/RA/PK/6/LT-2',
+                'kode' => '5/RA/PK/6',
                 'box' => 6,
                 'lantai' => 2,
                 'nama' => 'Resistance Avalon',
@@ -1429,7 +1380,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '5-10 Pemain',
                 'durasi' => '30 Menit',
                 'link_foto' => ['https://down-id.img.susercontent.com/file/0ef3194c3fb606b4ff03cdc4dff7b48e', 'https://down-id.img.susercontent.com/file/f007f8e1ef1d0d2a5e0a635958bba5f8.webp'],
-                'link_panduan' => 'https://avalon.fun/pdfs/rules.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 26],
                     ['nama' => 'Karton Kecil', 'jumlah' => 25],
@@ -1444,7 +1394,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '12/HG/PK/6/LT-3',
+                'kode' => '12/HG/PK/6',
                 'box' => 6,
                 'lantai' => 3,
                 'nama' => 'Halli Galli',
@@ -1458,7 +1408,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-6 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://images.thimbletoys.com/images/items/2030032a1.jpg', 'https://i.ebayimg.com/images/g/qnoAAOSwgM9oNXWB/s-l1200.png'],
-                'link_panduan' => 'https://world-of-board-games.com.sg/docs/Halli-Galli.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 56],
                     ['nama' => 'Bell', 'jumlah' => 1],
@@ -1470,7 +1419,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '27/C/PK/6/LT-3',
+                'kode' => '27/C/PK/6',
                 'box' => 6,
                 'lantai' => 3,
                 'nama' => 'Carcassonne',
@@ -1484,7 +1433,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-5 Pemain',
                 'durasi' => '35-45 Menit',
                 'link_foto' => ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvgzX1Nt9MkUIJ8FxZp9UFlmSnZA5XxOv6gehGzkVnM1TXXXCUM_NhvMne&s=10', 'https://i.ebayimg.com/images/g/fnUAAeSwwWFpL2yr/s-l1200.jpg'],
-                'link_panduan' => 'https://www.hans-im-glueck.de/wp-content/uploads/2024/11/Carcassonne-v3_Rulesheet_EN_web.pdf',
                 'komponen' => [
                     ['nama' => 'Ubin Permainan', 'jumlah' => 84],
                     ['nama' => 'Papan Bermain', 'jumlah' => 1],
@@ -1498,7 +1446,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '37/UM/PK/6/LT-1',
+                'kode' => '37/UM/PK/6',
                 'box' => 6,
                 'lantai' => 1,
                 'nama' => 'UNLOCK! Mystery',
@@ -1512,7 +1460,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '1-6 Pemain',
                 'durasi' => '60 Menit',
                 'link_foto' => ['https://down-id.img.susercontent.com/file/1e7e8add80b8ab36f49d601df6b9e136', 'https://down-id.img.susercontent.com/file/e6a033c5aaf00e79aaf300fe70a43dd7'],
-                'link_panduan' => 'https://cdn.1j1ju.com/medias/b4/12/aa-unlock-mystery-adventures-rulebook.pdf',
                 'komponen' => [
                     ['nama' => 'Petualangan (186 Kartu)', 'jumlah' => 3],
                     ['nama' => 'Kartu tutorial', 'jumlah' => 10],
@@ -1524,7 +1471,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '38/UT/PK/6/LT-3',
+                'kode' => '38/UT/PK/6',
                 'box' => 6,
                 'lantai' => 3,
                 'nama' => 'UNLOCK! Timeless',
@@ -1538,7 +1485,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '1-6 Pemain',
                 'durasi' => '60 Menit',
                 'link_foto' => ['https://store.asmodee.com/cdn/shop/products/UNL06-image1_2000_400x@2x.jpg?v=1690580048', 'https://store.asmodee.com/cdn/shop/products/UNL06-image3_2000_400x@2x.jpg?v=1690580048'],
-                'link_panduan' => 'https://cdn.1j1ju.com/medias/40/97/e1-unlock-timeless-adventures-rulebook.pdf',
                 'komponen' => [
                     ['nama' => 'kartu tutorial', 'jumlah' => 10],
                     ['nama' => 'petualangan (180 kartu + 3 lembar kertas)', 'jumlah' => 3],
@@ -1550,7 +1496,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '39/USW/PK/6/LT-1',
+                'kode' => '39/USW/PK/6',
                 'box' => 6,
                 'lantai' => 1,
                 'nama' => 'UNLOCK! Stars Wars',
@@ -1564,7 +1510,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '1-6 Pemain',
                 'durasi' => '60 Menit',
                 'link_foto' => ['https://www.m-g.com.au/wp-content/uploads/2022/08/3558380073277_SWU001_Unlock_Star_Wars.jpg', 'https://www.m-g.com.au/wp-content/uploads/2022/08/3558380073277_SWU001_Unlock_Star_Wars_3.jpg'],
-                'link_panduan' => 'https://www.scribd.com/document/647304017/7f-unlock-star-wars-rulebookk',
                 'komponen' => [
                     ['nama' => 'Petualangan (180 Kartu)', 'jumlah' => 3],
                     ['nama' => 'Booklet', 'jumlah' => 1],
@@ -1579,7 +1524,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '40/S/PK/6/LT-1',
+                'kode' => '40/S/PK/6',
                 'box' => 6,
                 'lantai' => 1,
                 'nama' => 'Spellbook',
@@ -1593,7 +1538,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2-4 Pemain',
                 'durasi' => '30-45 Menit',
                 'link_foto' => ['https://down-id.img.susercontent.com/file/id-11134207-7r98s-llvosfyte4jwb9', 'https://www.miniaturemarket.com/media/01/54/ef/1752295810/scspel01en-2.jpg'],
-                'link_panduan' => 'https://hobbygames.ru/download/rules/spellbook-rules.pdf',
                 'komponen' => [
                     ['nama' => 'rule book', 'jumlah' => 1],
                     ['nama' => 'pouch', 'jumlah' => 1],
@@ -1611,7 +1555,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '21/P/PK/7/LT-1',
+                'kode' => '21/P/PK/7',
                 'box' => 7,
                 'lantai' => 1,
                 'nama' => 'Polis',
@@ -1625,7 +1569,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '1-2 Pemain',
                 'durasi' => '30-45 Menit',
                 'link_foto' => ['https://i5.walmartimages.com/asr/7b7bdd89-9e1b-4b39-96fa-ad5000cc45b9.6f5722639397c21db57a1d605e9f13ab.jpeg?odnHeight=768&odnWidth=768&odnBg=FFFFFF', 'https://m.media-amazon.com/images/I/61Ry6ZtA1+L.jpg'],
-                'link_panduan' => 'https://tesera.ru/images/items/1907075/Polisrules_EN.pdf',
                 'komponen' => [
                     ['nama' => 'Papan utama', 'jumlah' => 1],
                     ['nama' => 'Papan pribadi', 'jumlah' => 2],
@@ -1642,7 +1585,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '25/A/PK/7/LT-1',
+                'kode' => '25/A/PK/7',
                 'box' => 7,
                 'lantai' => 1,
                 'nama' => 'Atiwa',
@@ -1656,7 +1599,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '1-4 Pemain',
                 'durasi' => '60-90 Menit',
                 'link_foto' => ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSah1Dg3nLDaLPyG4kVSJZ2x9szCyVf3kDrLQzyhCiyQg&s=10', 'https://ugi-games.com/wp-content/uploads/2022/07/14648-lookout-games-atiwa-juego-mesa-espanol-2.jpg'],
-                'link_panduan' => 'https://gusandco.net/wp-content/uploads/2022/12/en_atiwa.html_Atiwa_Rules_161_EN_WEB_compressed.pdf',
                 'komponen' => [
                     ['nama' => 'booklet', 'jumlah' => 1],
                     ['nama' => 'rule book', 'jumlah' => 1],
@@ -1680,7 +1622,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '31/CB/PK/7/LT-3',
+                'kode' => '31/CB/PK/7',
                 'box' => 7,
                 'lantai' => 3,
                 'nama' => 'Catan (Base)',
@@ -1694,7 +1636,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '3-4 Pemain',
                 'durasi' => '60-120 Menit',
                 'link_foto' => ['https://catanshop.com/images/thumbs/0002217_catan-zip_600.jpeg', 'https://www.game.co.uk/images/imgzoom/89/89028999_xxl_a2.jpg'],
-                'link_panduan' => 'https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf',
                 'komponen' => [
                     ['nama' => 'Kartu', 'jumlah' => 120],
                     ['nama' => 'Karton Hexagonal', 'jumlah' => 19],
@@ -1716,7 +1657,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '43/B/PK/7/LT-1',
+                'kode' => '43/B/PK/7',
                 'box' => 7,
                 'lantai' => 1,
                 'nama' => 'Brix',
@@ -1730,7 +1671,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '2 Pemain',
                 'durasi' => '15 Menit',
                 'link_foto' => ['https://blueorangegames.eu/wp-content/uploads/2018/06/Brix-3DBox.jpg', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-dIxs62ihpepJPG3ox7qjg4E8qxkD5gBWG113dYxGWl3bWDeW4VsOITo&s=10'],
-                'link_panduan' => 'https://blueorangegames.eu/wp-content/uploads/2018/06/BRIX_rules_ML.pdf?x75567',
                 'komponen' => [
                     ['nama' => 'bricks (balok)', 'jumlah' => 22],
                     ['nama' => 'rulebook (buku peraturan)', 'jumlah' => 1],
@@ -1741,7 +1681,7 @@ class BoardGameSeeder extends Seeder
                 'populer' => false,
             ],
             [
-                'kode' => '56/SQ/PK/7/LT-1',
+                'kode' => '56/SQ/PK/7',
                 'box' => 7,
                 'lantai' => 1,
                 'nama' => 'Slide Quest',
@@ -1755,7 +1695,6 @@ class BoardGameSeeder extends Seeder
                 'jumlah_pemain' => '1-4 Pemain',
                 'durasi' => '20-30 Menit',
                 'link_foto' => ['https://www.okkazeo.com/images/jeux/28171.jpg', 'https://down-id.img.susercontent.com/file/1dc611cd381c033cdc746ccef2b2b0ae'],
-                'link_panduan' => 'https://www.ultraboardgames.com/slide-quest/game-rules.php',
                 'komponen' => [
                     ['nama' => 'papan dengan perangkap', 'jumlah' => 1],
                     ['nama' => 'tuas', 'jumlah' => 4],
