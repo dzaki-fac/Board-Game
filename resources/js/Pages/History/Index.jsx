@@ -1,5 +1,5 @@
 import { Head, Link, router } from "@inertiajs/react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import BadgeStatus from "../../Components/BadgeStatus"
 import BadgeCondition from "../../Components/BadgeCondition"
 
@@ -15,17 +15,31 @@ function formatDateTime(date) {
     })
 }
 
-export default function Index({ histories, stats, filters }) {
+export default function Index({ histories, stats, filters, boardGameOptions }) {
     const isInitialMount = useRef(true)
     const debounceRef = useRef(null)
     const [search, setSearch] = useState(filters?.search || "")
     const [statusFilter, setStatusFilter] = useState(filters?.status || "")
+    const [boardGameId, setBoardGameId] = useState(filters?.board_game_id || "")
+    const [boardGameSearch, setBoardGameSearch] = useState("")
+    const [boardGameOpen, setBoardGameOpen] = useState(false)
     const [open, setOpen] = useState(false)
     const [period, setPeriod] = useState(filters?.period || "all")
     const [dateFrom, setDateFrom] = useState(filters?.date_from || "")
     const [dateTo, setDateTo] = useState(filters?.date_to || "")
     const [month, setMonth] = useState(filters?.month || "")
     const [year, setYear] = useState(filters?.year || "")
+
+    const selectedBoardGame = useMemo(() => {
+        if (!boardGameId) return null
+        return boardGameOptions.find((g) => String(g.id) === String(boardGameId)) || null
+    }, [boardGameId, boardGameOptions])
+
+    const filteredBoardGames = useMemo(() => {
+        if (!boardGameSearch) return boardGameOptions
+        const q = boardGameSearch.toLowerCase()
+        return boardGameOptions.filter((g) => g.name.toLowerCase().includes(q))
+    }, [boardGameOptions, boardGameSearch])
 
     useEffect(() => {
         if (isInitialMount.current) {
@@ -36,6 +50,7 @@ export default function Index({ histories, stats, filters }) {
         clearTimeout(debounceRef.current)
         debounceRef.current = setTimeout(() => {
             const params = { search, status: statusFilter, period }
+            if (boardGameId) params.board_game_id = boardGameId
 
             if (period === "custom") {
                 if (dateFrom) params.date_from = dateFrom
@@ -54,7 +69,7 @@ export default function Index({ histories, stats, filters }) {
             })
         }, 400)
         return () => clearTimeout(debounceRef.current)
-    }, [search, statusFilter, period, dateFrom, dateTo, month, year])
+    }, [search, statusFilter, period, dateFrom, dateTo, month, year, boardGameId])
 
     const statCards = [
         {
@@ -164,7 +179,7 @@ export default function Index({ histories, stats, filters }) {
                     <div className="card-body p-6">
                         <h2 className="text-lg font-semibold text-gray-900 mb-4">Filter</h2>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-end">
                             {/* Search */}
                             <div>
                                 <label className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-1.5">
@@ -195,6 +210,76 @@ export default function Index({ histories, stats, filters }) {
                                 </div>
                             </div>
 
+                            {/* Board Game Filter */}
+                            <div>
+                                <label className="text-xs font-medium text-[#0E4A73]/70 uppercase tracking-wider block mb-1.5">
+                                    Board Game
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        value={boardGameOpen ? boardGameSearch : (selectedBoardGame ? selectedBoardGame.name : "")}
+                                        onChange={(e) => {
+                                            setBoardGameSearch(e.target.value)
+                                            setBoardGameOpen(true)
+                                        }}
+                                        onFocus={() => {
+                                            if (!boardGameOpen) setBoardGameSearch("")
+                                            setBoardGameOpen(true)
+                                        }}
+                                        placeholder="Semua Board Game"
+                                        className="input input-bordered input-sm w-full"
+                                    />
+                                    {boardGameId && (
+                                        <button
+                                            type="button"
+                                            onClick={() => {
+                                                setBoardGameId("")
+                                                setBoardGameSearch("")
+                                                setBoardGameOpen(false)
+                                            }}
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                        </button>
+                                    )}
+                                    {boardGameOpen && (
+                                        <>
+                                            <div className="fixed inset-0 z-10" onClick={() => { setBoardGameOpen(false); setBoardGameSearch("") }} />
+                                            <div className="absolute z-20 mt-1 w-full bg-white border border-[#D6E8F5] rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                                {filteredBoardGames.length === 0 ? (
+                                                    <div className="px-3 py-4 text-sm text-gray-400 text-center">
+                                                        Board game tidak ditemukan
+                                                    </div>
+                                                ) : (
+                                                    filteredBoardGames.map((game) => (
+                                                        <button
+                                                            key={game.id}
+                                                            type="button"
+                                                            onClick={() => {
+                                                                setBoardGameId(String(game.id))
+                                                                setBoardGameSearch("")
+                                                                setBoardGameOpen(false)
+                                                            }}
+                                                            className={`flex items-center gap-3 w-full px-3 py-2.5 text-sm hover:bg-[#D6E8F5] transition-colors text-left ${String(boardGameId) === String(game.id) ? "bg-[#D6E8F5]" : ""}`}
+                                                        >
+                                                            <span className="flex-1 text-sm text-gray-900 truncate">{game.name}</span>
+                                                            {String(boardGameId) === String(game.id) && (
+                                                                <svg className="w-4 h-4 text-[#0E4A73] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                                    <polyline points="20 6 9 17 4 12" />
+                                                                </svg>
+                                                            )}
+                                                        </button>
+                                                    ))
+                                                )}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+
                             {/* Status Filter */}
                             <div>
                                 <label className="text-xs font-medium text-[#0E4A73]/70 uppercase tracking-wider block mb-1.5">
@@ -207,7 +292,7 @@ export default function Index({ histories, stats, filters }) {
                                         className="flex items-center gap-2 w-full h-9 px-3 rounded-lg border border-gray-300 bg-white text-sm text-gray-700 hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-[#0E4A73] transition-colors"
                                     >
                                         {statusFilter ? (
-                                            <BadgeStatus status={statusFilter} />
+                                            <span className="text-sm text-gray-900">{statusFilter === "returned" ? "Dikembalikan" : "Hilang"}</span>
                                         ) : (
                                              <span className="text-gray-500">Semua</span>
                                         )}
@@ -246,7 +331,7 @@ export default function Index({ histories, stats, filters }) {
                                                         onClick={() => { setStatusFilter(opt); setOpen(false) }}
                                                         className={`flex items-center gap-3 w-full px-3 py-2 text-sm hover:bg-[#D6E8F5] transition-colors ${statusFilter === opt ? "bg-[#D6E8F5]" : ""}`}
                                                     >
-                                                        <BadgeStatus status={opt} />
+                                                        <span className="text-sm text-gray-900">{opt === "returned" ? "Dikembalikan" : "Hilang"}</span>
                                                         {statusFilter === opt && (
                                                             <svg className="w-4 h-4 ml-auto text-[#0E4A73]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                                                 <polyline points="20 6 9 17 4 12" />
