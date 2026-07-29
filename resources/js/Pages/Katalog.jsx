@@ -260,8 +260,8 @@ function KartuGame({ game, tersedia }) {
                     <div className="flex justify-end mb-1.5">
                         <span className="whitespace-nowrap text-[11px] font-medium leading-4 text-gray-700">
                             {game.loans_count >= 1000
-                                ? '999+ Peminjaman'
-                                : `${game.loans_count} Peminjaman`}
+                                ? `999+ ${t.peminjaman}`
+                                : `${game.loans_count} ${t.peminjaman}`}
                         </span>
                     </div>
                     {tersedia ? (
@@ -583,8 +583,8 @@ function ProdukPopuler({ games }) {
                             </p>
                             <p className="text-[10px] font-medium text-slate-500 mt-0.5 text-center">
                                 {game.loans_count >= 1000
-                                    ? '999+ Peminjaman'
-                                    : `${game.loans_count} Peminjaman`}
+                                    ? `999+ ${t.peminjaman}`
+                                    : `${game.loans_count} ${t.peminjaman}`}
                             </p>
                         </div>
                         );
