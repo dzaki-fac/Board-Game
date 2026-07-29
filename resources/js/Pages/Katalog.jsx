@@ -188,7 +188,7 @@ function KartuGame({ game, tersedia }) {
                                             className="inline-block self-start truncate max-w-[45%] text-[9px] font-medium px-2 py-0.5 rounded-full"
                                             style={{ backgroundColor: kb, color: kw }}
                                         >
-                                            {k}
+                                            {t.kategoriMap?.[k] || k}
                                         </span>
                                     );
                                 })}
@@ -208,7 +208,7 @@ function KartuGame({ game, tersedia }) {
                                             className="inline-block self-start text-[11px] font-medium px-2.5 py-1 rounded-full"
                                             style={{ backgroundColor: kb, color: kw }}
                                         >
-                                            {k}
+                                            {t.kategoriMap?.[k] || k}
                                         </span>
                                     );
                                 })}
@@ -1130,7 +1130,7 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                                 <label className="text-xs text-slate-500 hidden sm:inline">{t.kategori}</label>
                                 <select value={kategoriAktif} onChange={(e) => setKategoriAktif(e.target.value)} className={kelasSelect}>
                                     {kategoriList.map((k) => (
-                                        <option key={k} value={k}>{k === "Semua" ? t.semua : k}</option>
+                                        <option key={k} value={k}>{k === "Semua" ? t.semua : (t.kategoriMap?.[k] || k)}</option>
                                     ))}
                                 </select>
                             </div>
@@ -1157,7 +1157,7 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                             <div className="w-px h-5 bg-slate-300" />
 
                             <div className="flex items-center gap-1">
-                                <label className="text-xs text-slate-500 hidden sm:inline">Urutkan</label>
+                                <label className="text-xs text-slate-500 hidden sm:inline">{t.urutkan}</label>
                                 <select
                                     value={sort}
                                     onChange={(e) => {
@@ -1171,10 +1171,10 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                                     }}
                                     className={kelasSelect}
                                 >
-                                    <option value="popular">Terpopuler</option>
-                                    <option value="rating">Rating Tertinggi</option>
-                                    <option value="name_asc">Nama A–Z</option>
-                                    <option value="name_desc">Nama Z–A</option>
+                                    <option value="popular">{t.terpopuler}</option>
+                                    <option value="rating">{t.ratingTertinggi}</option>
+                                    <option value="name_asc">{t.namaAsc}</option>
+                                    <option value="name_desc">{t.namaDesc}</option>
                                 </select>
                             </div>
 
@@ -1198,7 +1198,7 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                             <div className="flex items-center gap-1">
                                 <select value={kategoriAktif} onChange={(e) => setKategoriAktif(e.target.value)} className={kelasSelect}>
                                     {kategoriList.map((k) => (
-                                        <option key={k} value={k}>{k === "Semua" ? t.semua : k}</option>
+                                        <option key={k} value={k}>{k === "Semua" ? t.semua : (t.kategoriMap?.[k] || k)}</option>
                                     ))}
                                 </select>
                             </div>
@@ -1234,10 +1234,10 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                                     }}
                                     className={kelasSelect}
                                 >
-                                    <option value="popular">Terpopuler</option>
-                                    <option value="rating">Rating Tertinggi</option>
-                                    <option value="name_asc">Nama A–Z</option>
-                                    <option value="name_desc">Nama Z–A</option>
+                                    <option value="popular">{t.terpopuler}</option>
+                                    <option value="rating">{t.ratingTertinggi}</option>
+                                    <option value="name_asc">{t.namaAsc}</option>
+                                    <option value="name_desc">{t.namaDesc}</option>
                                 </select>
                             </div>
 
