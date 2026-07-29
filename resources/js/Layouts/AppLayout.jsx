@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Link, usePage, router } from "@inertiajs/react";
 import { baseUrl } from '@/lib/path';
+import { WARNA } from "../Components/theme";
 
 function Svg({ className, children }) {
     return (
@@ -173,12 +174,18 @@ export default function Layout({ children }) {
         <div className="min-h-screen">
             {/* Sidebar */}
             <aside
-                className={`fixed inset-y-0 left-0 z-40 bg-[#071E30] flex flex-col transition-[width] duration-300 ease-in-out ${
+                className={`fixed inset-y-0 left-0 z-40 flex flex-col transition-[width] duration-300 ease-in-out ${
                     sidebarExpanded ? "w-64" : "w-16"
                 }`}
+                style={{
+                    "--color-tua": WARNA.hijauUtama,
+                    "--color-utama": WARNA.hijauUtama,
+                    "--color-hover": WARNA.hijauHover,
+                    backgroundColor: WARNA.hijauUtama,
+                }}
             >
                 {/* Brand */}
-                <div className="px-6 py-6 border-b border-[#0A3A5C] flex items-center justify-center shrink-0">
+                <div className="px-6 py-6 border-b border-[var(--color-hover)] flex items-center justify-center shrink-0">
                     {sidebarExpanded ? (
                         <a href={baseUrl('/katalog')} className="flex items-center gap-3">
                             <img
@@ -236,8 +243,8 @@ export default function Layout({ children }) {
                                         sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
                                     } ${
                                         isActive
-                                            ? "bg-[#0E4A73] text-white"
-                                            : "text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white"
+                                            ? "bg-[var(--color-hover)] text-white"
+                                            : "text-white hover:bg-white/10 hover:text-white"
                                     }`}
                                 >
                                     <span className="shrink-0 w-5 h-5 flex items-center justify-center">
@@ -251,7 +258,7 @@ export default function Layout({ children }) {
                 </ul>
 
                 {/* Account Dropdown */}
-                <div className="relative px-3 py-4 border-t border-[#0A3A5C] shrink-0">
+                <div className="relative px-3 py-4 border-t border-[var(--color-hover)] shrink-0">
                     <button
                         onClick={() => {
                             if (!sidebarExpanded) {
@@ -263,7 +270,7 @@ export default function Layout({ children }) {
                         }}
                         className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors w-full ${
                             sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
-                        } text-[#FAF7F2]/70 hover:bg-[#0A3A5C] hover:text-white`}
+                        } text-white hover:bg-white/10 hover:text-white`}
                         ref={(el) => { itemRefs.current["account"] = el; }}
                         onMouseEnter={() => showTooltip("account", admin?.name || "Akun")}
                         onMouseLeave={hideTooltip}
@@ -337,6 +344,10 @@ export default function Layout({ children }) {
                 className={`min-h-screen flex flex-col transition-[margin-left] duration-300 ease-in-out ${
                     sidebarExpanded ? "ml-64" : "ml-16"
                 }`}
+                style={{
+                    "--color-btn": WARNA.hijauUtama,
+                    "--color-btn-hover": WARNA.hijauHover,
+                }}
             >
                 {/* Topbar */}
                 <div className="navbar bg-white shadow-sm border-b border-[#D6E8F5] px-4 lg:px-6 sticky top-0 z-30 h-16">

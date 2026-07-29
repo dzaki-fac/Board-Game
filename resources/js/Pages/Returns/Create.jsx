@@ -50,6 +50,19 @@ export default function Create({ loans }) {
     }, [selectedLoan])
 
     const [missingQty, setMissingQty] = useState([])
+    const [loanSearch, setLoanSearch] = useState("")
+    const [loanDropdownOpen, setLoanDropdownOpen] = useState(false)
+
+    const filteredLoans = useMemo(() => {
+        if (!loanSearch) return loans
+        const q = loanSearch.toLowerCase()
+        return loans.filter((loan) => {
+            const gameName = loan.game?.nama?.toLowerCase() || ""
+            const peminjamList = Array.isArray(loan.list_peminjam) ? loan.list_peminjam : []
+            const peminjamName = peminjamList[0]?.nama?.toLowerCase() || ""
+            return gameName.includes(q) || peminjamName.includes(q)
+        })
+    }, [loans, loanSearch])
 
     useEffect(() => {
         setMissingQty(components.map(() => null))
@@ -160,18 +173,69 @@ export default function Create({ loans }) {
                                         <legend className="fieldset-legend text-sm font-medium text-gray-700">
                                             Pinjaman
                                         </legend>
-                                        <select
-                                            value={data.loan_id}
-                                            onChange={(e) => setData("loan_id", e.target.value)}
-                                            className="select select-bordered w-full"
-                                        >
-                                            <option value="">Pilih pinjaman aktif</option>
-                                            {loans.map((loan) => (
-                                                <option key={loan.id} value={loan.id}>
-                                                    {loan.game.nama} — {Array.isArray(loan.list_peminjam) ? loan.list_peminjam[0].nama : loan.list_peminjam?.nama}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                value={loanSearch}
+                                                onChange={(e) => {
+                                                    setLoanSearch(e.target.value)
+                                                    setLoanDropdownOpen(true)
+                                                }}
+                                                onFocus={() => setLoanDropdownOpen(true)}
+                                                placeholder={selectedLoan ? `${selectedLoan.game.nama} — ${Array.isArray(selectedLoan.list_peminjam) ? selectedLoan.list_peminjam[0].nama : selectedLoan.list_peminjam?.nama}` : "Cari pinjaman aktif..."}
+                                                className="input input-bordered w-full"
+                                            />
+                                            {data.loan_id && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setData("loan_id", "")
+                                                        setLoanSearch("")
+                                                        setLoanDropdownOpen(false)
+                                                    }}
+                                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            )}
+                                            {loanDropdownOpen && (
+                                                <>
+                                                    <div className="fixed inset-0 z-10" onClick={() => setLoanDropdownOpen(false)} />
+                                                    <div className="absolute z-20 mt-1 w-full bg-white border border-[#D6E8F5] rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                                        {filteredLoans.length === 0 ? (
+                                                            <div className="px-3 py-4 text-sm text-gray-400 text-center">
+                                                                Tidak ada pinjaman yang cocok
+                                                            </div>
+                                                        ) : (
+                                                            filteredLoans.map((loan) => (
+                                                                <button
+                                                                    key={loan.id}
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                        setData("loan_id", loan.id)
+                                                                        setLoanSearch("")
+                                                                        setLoanDropdownOpen(false)
+                                                                    }}
+                                                                    className={`flex items-center gap-3 w-full px-3 py-2.5 text-sm hover:bg-[#D6E8F5] transition-colors text-left ${data.loan_id === loan.id ? "bg-[#D6E8F5]" : ""}`}
+                                                                >
+                                                                    <div className="flex-1 min-w-0">
+                                                                        <p className="text-sm font-medium text-gray-900 truncate">{loan.game.nama}</p>
+                                                                        <p className="text-xs text-gray-500 truncate">{Array.isArray(loan.list_peminjam) ? loan.list_peminjam[0].nama : loan.list_peminjam?.nama}</p>
+                                                                    </div>
+                                                                    {data.loan_id === loan.id && (
+                                                                        <svg className="w-4 h-4 text-[#0E4A73] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                                            <polyline points="20 6 9 17 4 12" />
+                                                                        </svg>
+                                                                    )}
+                                                                </button>
+                                                            ))
+                                                        )}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
                                         {errors.loan_id && (
                                             <p className="text-red-500 text-xs mt-1">{errors.loan_id}</p>
                                         )}

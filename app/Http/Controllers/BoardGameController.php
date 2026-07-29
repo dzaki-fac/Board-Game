@@ -53,34 +53,49 @@ class BoardGameController extends Controller
     /**
      * Katalog user
      */
-    public function katalog()
+    public function katalog(Request $request)
     {
-        $games = BoardGame::withAvg('reviews', 'rating')
+        $allowedSorts = ['popular', 'rating', 'name_asc', 'name_desc'];
+        $sort = in_array($request->input('sort'), $allowedSorts, true)
+            ? $request->input('sort')
+            : 'popular';
+
+        $query = BoardGame::withAvg('reviews', 'rating')
             ->withCount('reviews')
-            ->withCount('loans')
-            ->orderBy('available_copies', 'desc')
-            ->orderBy('nama')
-            ->get([
-                'id',
-                'kode',
-                'nama',
-                'penerbit',
-                'kategori',
-                'jumlah_pemain',
-                'durasi',
-                'lantai',
-                'link_foto',
-                'available_copies',
-                'populer'
-            ])
-            ->map(function ($game) {
-                $game->reviews_avg_rating = $game->reviews_avg_rating
-                    ? round($game->reviews_avg_rating, 1)
-                    : 0;
-                return $game;
-            })
-            ->sortByDesc('reviews_avg_rating')
-            ->values();
+            ->withCount(['loans as loans_count' => function ($q) {
+                $q->whereNotIn('status', ['ditolak', 'dibatalkan', 'draft', 'pending', 'menunggu']);
+            }]);
+
+        switch ($sort) {
+            case 'rating':
+                $query->orderByRaw('CASE WHEN reviews_count = 0 THEN 1 ELSE 0 END')
+                      ->orderByDesc('reviews_avg_rating')
+                      ->orderByDesc('reviews_count')
+                      ->orderBy('nama');
+                break;
+            case 'name_asc':
+                $query->orderBy('nama', 'asc');
+                break;
+            case 'name_desc':
+                $query->orderBy('nama', 'desc');
+                break;
+            case 'popular':
+            default:
+                $query->orderByDesc('loans_count')
+                      ->orderBy('nama');
+                break;
+        }
+
+        $games = $query->get([
+            'id', 'kode', 'nama', 'penerbit', 'kategori',
+            'jumlah_pemain', 'durasi', 'lantai', 'link_foto',
+            'available_copies', 'populer', 'created_at',
+        ])->map(function ($game) {
+            $game->reviews_avg_rating = $game->reviews_avg_rating
+                ? round($game->reviews_avg_rating, 1)
+                : 0;
+            return $game;
+        })->values();
 
         $carousels = Carousel::orderBy('sort_order')->get()->map(fn ($c) => [
             'id' => $c->id,
@@ -90,12 +105,15 @@ class BoardGameController extends Controller
             'detailDescription' => $c->detail_description,
             'points' => $c->points ?? [],
             'theme' => $c->theme,
-            'bgImage' => $c->bg_image,
+            'bgImage' => $c->bg_image_url,
         ]);
 
         return Inertia::render('Katalog', [
             'games' => $games,
             'carousels' => $carousels,
+            'filters' => [
+                'sort' => $sort,
+            ],
         ]);
     }
 

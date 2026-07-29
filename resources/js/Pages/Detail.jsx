@@ -55,6 +55,29 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                             </h1>
                             <p className="text-sm text-slate-500 mb-4">{game.penerbit}</p>
 
+                            {(() => {
+                                const kategoriArr = Array.isArray(game.kategori) && game.kategori.length > 0
+                                    ? game.kategori
+                                    : (game.kategori ? [game.kategori] : []);
+                                if (kategoriArr.length === 0) return null;
+                                return (
+                                    <div className="flex flex-wrap gap-1.5 mb-4">
+                                        {kategoriArr.map((k, i) => {
+                                            const [kw, kb] = warnaKategori(k);
+                                            return (
+                                                <span
+                                                    key={i}
+                                                    className="inline-block text-[11px] font-medium px-2.5 py-1 rounded-full"
+                                                    style={{ backgroundColor: kb, color: kw }}
+                                                >
+                                                    {k}
+                                                </span>
+                                            );
+                                        })}
+                                    </div>
+                                );
+                            })()}
+
                             <div className="mb-4">
                                 <RatingSummary
                                     averageRating={avgRating}
