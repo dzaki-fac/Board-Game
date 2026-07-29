@@ -97,10 +97,6 @@ export default function Show({ boardgame }) {
               <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Lantai</label>
               <p className="text-sm text-slate-900">Lt {boardgame.lantai}</p>
             </div>
-            <div>
-              <label className="block text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">Populer</label>
-              <p className="text-sm text-slate-900">{boardgame.populer ? 'Ya' : 'Tidak'}</p>
-            </div>
           </div>
 
           {/* Kategori */}

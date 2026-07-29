@@ -89,7 +89,7 @@ class BoardGameController extends Controller
         $games = $query->get([
             'id', 'kode', 'nama', 'penerbit', 'kategori',
             'jumlah_pemain', 'durasi', 'lantai', 'link_foto',
-            'available_copies', 'populer', 'created_at',
+            'available_copies', 'link_panduan', 'created_at',
         ])->map(function ($game) {
             $game->reviews_avg_rating = $game->reviews_avg_rating
                 ? round($game->reviews_avg_rating, 1)
@@ -214,7 +214,7 @@ class BoardGameController extends Controller
             'lantai' => 'required|integer',
             'deskripsi' => 'nullable|string',
             'link_tutorial' => 'nullable|string|max:255',
-            'populer' => 'boolean',
+            'link_panduan' => 'nullable|string|max:255',
         ]);
 
         $fotoPaths = [];
@@ -267,7 +267,7 @@ class BoardGameController extends Controller
             'lantai' => 'required|integer',
             'deskripsi' => 'nullable|string',
             'link_tutorial' => 'nullable|string|max:255',
-            'populer' => 'boolean',
+            'link_panduan' => 'nullable|string|max:255',
             'available_copies' => 'required|integer|max:' . $boardGame->jumlah,
         ]);
 
