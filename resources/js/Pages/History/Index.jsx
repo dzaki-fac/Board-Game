@@ -1,4 +1,5 @@
 import { Head, Link, router } from "@inertiajs/react"
+import { baseUrl } from '@/lib/path';
 import { useEffect, useRef, useState } from "react"
 import BadgeStatus from "../../Components/BadgeStatus"
 import BadgeCondition from "../../Components/BadgeCondition"
@@ -47,7 +48,7 @@ export default function Index({ histories, stats, filters }) {
                 if (year) params.year = year
             }
 
-            router.get("/admin/history", params, {
+            router.get(baseUrl("/admin/history"), params, {
                 preserveState: true,
                 preserveScroll: true,
                 replace: true,
@@ -514,7 +515,7 @@ export default function Index({ histories, stats, filters }) {
                                                     <td className="px-6 py-4 text-right">
                                                         <div className="flex items-center justify-end gap-1">
                                                             <Link
-                                                                href={`/admin/loans/${loan.id}`}
+                                                                href={baseUrl(`/admin/loans/${loan.id}`)}
                                                                 className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-[#0E4A73]"
                                                                 title="Detail"
                                                             >
@@ -540,7 +541,7 @@ export default function Index({ histories, stats, filters }) {
                                                                 </svg>
                                                             </Link>
                                                             <Link
-                                                                href={`/admin/loans/${loan.id}/print`}
+                                                                href={baseUrl(`/admin/loans/${loan.id}/print`)}
                                                                 className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-gray-700"
                                                                 title="Cetak"
                                                             >

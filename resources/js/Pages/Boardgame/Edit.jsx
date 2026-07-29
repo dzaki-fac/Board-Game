@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link, useForm } from "@inertiajs/react"
+import { baseUrl } from '@/lib/path';
 
 const KATEGORI_OPTIONS = [
     'Strategy',
@@ -120,14 +121,14 @@ export default function Edit({ boardgame }) {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        put(`/admin/games/${boardgame.id}`)
+        put(baseUrl(`/admin/games/${boardgame.id}`))
     }
 
     return (
         <div className="p-6 max-w-4xl mx-auto">
             <div className="flex items-center justify-between mb-6">
                 <h1 className="text-2xl font-bold text-slate-900">Edit Board Game</h1>
-                <Link href="/admin/games" className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm">
+                <Link href={baseUrl('/admin/games')} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     Kembali
                 </Link>
@@ -276,7 +277,7 @@ export default function Edit({ boardgame }) {
                                     {existingFotos.map((url, i) => (
                                         <div key={`existing-${i}`} className="relative group">
                                             <img
-                                                src={url}
+                                                src={baseUrl(url)}
                                                 alt={`Foto ${i + 1}`}
                                                 className="w-20 h-20 object-cover rounded-lg border border-slate-200 shadow-sm"
                                                 onError={(e) => { e.target.style.display = 'none' }}
@@ -408,7 +409,7 @@ export default function Edit({ boardgame }) {
                         <button type="submit" disabled={processing} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none btn-sm">
                             {processing ? 'Menyimpan...' : 'Simpan'}
                         </button>
-                        <Link href="/admin/games" className="btn btn-ghost btn-sm">Batal</Link>
+                        <Link href={baseUrl('/admin/games')} className="btn btn-ghost btn-sm">Batal</Link>
                     </div>
                 </div>
             </form>

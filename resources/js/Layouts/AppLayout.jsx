@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { Link, usePage, router } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 
 function Svg({ className, children }) {
     return (
@@ -179,14 +180,14 @@ export default function Layout({ children }) {
                 {/* Brand */}
                 <div className="px-6 py-6 border-b border-[#0A3A5C] flex items-center justify-center shrink-0">
                     {sidebarExpanded ? (
-                        <a href="/katalog" className="flex items-center gap-3">
+                        <a href={baseUrl('/katalog')} className="flex items-center gap-3">
                             <img
-                                src="/assets/logo_undip.png"
+                                src={baseUrl('/assets/logo_undip.png')}
                                 alt="Universitas Diponegoro"
                                 className="h-11 w-auto object-contain"
                             />
                             <img
-                                src="/images/logo-upt.png"
+                                src={baseUrl('/images/logo-upt.png')}
                                 alt="UPT Perpustakaan Undip"
                                 className="h-10 w-auto object-contain"
                             />
@@ -194,12 +195,12 @@ export default function Layout({ children }) {
                     ) : (
                         <div className="flex flex-col items-center gap-1">
                             <img
-                                src="/assets/logo_undip.png"
+                                src={baseUrl('/assets/logo_undip.png')}
                                 alt="Universitas Diponegoro"
                                 className="h-6 w-auto object-contain"
                             />
                             <img
-                                src="/favicon.ico"
+                                src={baseUrl('/favicon.ico')}
                                 alt=""
                                 className="w-5 h-5 object-contain"
                                 onError={(e) => { e.target.style.display = "none"; }}
@@ -214,11 +215,14 @@ export default function Layout({ children }) {
                         const Icon = item.icon;
                         const isActive =
                             typeof window !== "undefined" &&
-                            (item.href === "/admin"
-                                ? window.location.pathname === "/admin"
-                                : window.location.pathname.startsWith(
-                                      item.href,
-                                  ));
+                            (() => {
+                                const path = window.location.pathname;
+                                const base = import.meta.env.VITE_BASE_PATH || '';
+                                const relativePath = path.startsWith(base) ? path.slice(base.length) || '/' : path;
+                                return item.href === "/admin"
+                                    ? relativePath === "/admin"
+                                    : relativePath.startsWith(item.href);
+                            })();
                         return (
                             <li
                                 key={item.href}
@@ -227,7 +231,7 @@ export default function Layout({ children }) {
                                 onMouseLeave={hideTooltip}
                             >
                                 <Link
-                                    href={item.href}
+                                    href={baseUrl(item.href)}
                                     className={`flex items-center gap-3 rounded-lg text-sm font-medium transition-colors ${
                                         sidebarExpanded ? 'px-3 py-2.5' : 'justify-center py-2.5'
                                     } ${
@@ -289,7 +293,7 @@ export default function Layout({ children }) {
                                 <button
                                     onClick={() => {
                                         setAccountDropdown(false);
-                                        router.visit('/admin/accounts', { data: { edit: 'me' } });
+                                        router.visit(baseUrl('/admin/accounts'), { data: { edit: 'me' } });
                                     }}
                                     className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
                                 >
@@ -300,7 +304,7 @@ export default function Layout({ children }) {
                                 </button>
                                 <hr className="mx-3 my-1 border-gray-100" />
                                 <Link
-                                    href="/admin/logout"
+                                    href={baseUrl('/admin/logout')}
                                     method="post"
                                     as="button"
                                     className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"

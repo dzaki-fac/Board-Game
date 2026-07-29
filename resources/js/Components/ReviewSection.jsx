@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { router } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 import { StarRatingInput, StarRatingDisplay } from "./StarRating";
 import RatingSummary from "./RatingSummary";
 import RatingDetail from "./RatingDetail";
@@ -30,7 +31,7 @@ export default function ReviewSection({ boardgameId, reviews = { data: [] }, avg
         if (submitting) return;
         setSubmitting(true);
         router.post(
-            `/katalog/${boardgameId}/reviews`,
+            baseUrl(`/katalog/${boardgameId}/reviews`),
             { rating, comment },
             {
                 preserveScroll: true,
@@ -46,7 +47,7 @@ export default function ReviewSection({ boardgameId, reviews = { data: [] }, avg
 
     const handleFilterClick = (value) => {
         router.get(
-            `/katalog/${boardgameId}`,
+            baseUrl(`/katalog/${boardgameId}`),
             { review_rating: value, review_page: 1 },
             { preserveScroll: true }
         );

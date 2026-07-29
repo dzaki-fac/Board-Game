@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
 import { Link, router, usePage } from "@inertiajs/react"
+import { baseUrl } from '@/lib/path';
 import { StarRatingDisplay } from "../../Components/StarRating"
 
 const RATING_OPTIONS = [
@@ -68,7 +69,7 @@ export default function Reviews({ reviews, filters }) {
             sort: overrides.sort ?? sort,
             page: overrides.page ?? undefined,
         }
-        router.get("/admin/reviews", params, { preserveState: true, replace: true })
+        router.get(baseUrl("/admin/reviews"), params, { preserveState: true, replace: true })
     }, [search, rating, dateFilter, dateFrom, dateTo, sort])
 
     const handleSearch = (e) => {
@@ -80,7 +81,7 @@ export default function Reviews({ reviews, filters }) {
     const handleDelete = (reviewId) => {
         if (deleting) return
         setDeleting(reviewId)
-        router.delete(`/admin/reviews/${reviewId}`, {
+        router.delete(baseUrl(`/admin/reviews/${reviewId}`), {
             preserveScroll: true,
             onSuccess: () => {
                 setDeleting(null)

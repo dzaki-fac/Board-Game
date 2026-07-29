@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Head, router, usePage } from "@inertiajs/react"
+import { baseUrl } from '@/lib/path';
 
 function EditModal({ rules, onClose }) {
     const [sections, setSections] = useState(
@@ -47,7 +48,7 @@ function EditModal({ rules, onClose }) {
         let done = 0
         for (const s of sections) {
             router.put(
-                `/admin/rules/${s.id}`,
+                baseUrl(`/admin/rules/${s.id}`),
                 { title: s.title.trim(), items: s.items.map((it) => it.trim()) },
                 {
                     preserveScroll: true,

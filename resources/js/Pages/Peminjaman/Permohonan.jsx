@@ -1,4 +1,5 @@
 import { Link, router, usePage } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 import { useEffect, useRef, useState } from "react";
 import BadgeStatus from "../../Components/BadgeStatus";
 
@@ -34,7 +35,7 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
 
     clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
-      router.get("/admin/permohonan", { search, status: statusFilter, lantai: lantaiFilter }, {
+      router.get(baseUrl("/admin/permohonan"), { search, status: statusFilter, lantai: lantaiFilter }, {
         preserveState: true,
         preserveScroll: true,
         replace: true,
@@ -44,11 +45,11 @@ export default function Permohonan({ permohonan, total, total_pending, total_app
   }, [search, statusFilter, lantaiFilter]);
 
   function approve(id) {
-    router.patch(`/admin/permohonan/${id}/approve`, {}, { preserveScroll: true });
+    router.patch(baseUrl(`/admin/permohonan/${id}/approve`), {}, { preserveScroll: true });
   }
 
   function reject(id) {
-    router.patch(`/admin/permohonan/${id}/reject`, {}, { preserveScroll: true });
+    router.patch(baseUrl(`/admin/permohonan/${id}/reject`), {}, { preserveScroll: true });
   }
 
   return (

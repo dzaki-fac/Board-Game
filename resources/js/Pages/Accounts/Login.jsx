@@ -1,4 +1,5 @@
 import { useForm, usePage } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 
 export default function Login() {
     const { errors, flash } = usePage().props;
@@ -10,7 +11,7 @@ export default function Login() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        post("/admin/login");
+        post(baseUrl("/admin/login"));
     }
 
     return (

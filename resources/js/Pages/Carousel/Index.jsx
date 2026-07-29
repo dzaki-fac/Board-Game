@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Head, router, usePage } from "@inertiajs/react"
+import { baseUrl } from '@/lib/path';
 
 function EditModal({ carousel, onClose }) {
     const [form, setForm] = useState({
@@ -39,7 +40,7 @@ function EditModal({ carousel, onClose }) {
         if (saving) return
         setSaving(true)
         router.put(
-            `/admin/carousel/${carousel.id}`,
+            baseUrl(`/admin/carousel/${carousel.id}`),
             {
                 title: form.title.trim(),
                 description: form.description.trim(),
@@ -135,7 +136,7 @@ function EditModal({ carousel, onClose }) {
                         />
                         {form.bg_image && (
                             <img
-                                src={form.bg_image}
+                                src={baseUrl(form.bg_image)}
                                 alt="preview"
                                 className="mt-2 w-full max-h-40 object-cover rounded-lg"
                                 onError={(e) => { e.target.style.display = "none" }}

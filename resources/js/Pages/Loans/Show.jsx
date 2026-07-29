@@ -1,4 +1,5 @@
 import { Head, Link } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 import BadgeStatus from "../../Components/BadgeStatus";
 import BadgeCondition from "../../Components/BadgeCondition";
 
@@ -43,8 +44,8 @@ export default function Show({ loan }) {
                     <Link
                         href={
                             loan.status === "borrowed"
-                                ? "/admin/loans"
-                                : "/admin/history"
+                                ? baseUrl('/admin/loans')
+                                : baseUrl('/admin/history')
                         }
                         className="btn btn-ghost btn-sm gap-2 text-gray-600"
                     >
@@ -223,13 +224,13 @@ export default function Show({ loan }) {
                                 </h3>
                                 <div className="space-y-3">
                                     <Link
-                                        href="/admin/history"
+                                        href={baseUrl('/admin/history')}
                                         className="btn btn-outline btn-sm w-full"
                                     >
                                         Kembali ke Riwayat
                                     </Link>
                                     <Link
-                                        href="/admin/loans"
+                                        href={baseUrl('/admin/loans')}
                                         className="btn btn-outline btn-sm w-full"
                                     >
                                         Kembali ke Peminjaman

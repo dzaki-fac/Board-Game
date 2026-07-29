@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { WARNA } from "./theme";
 import { IkonDadu, IkonChevron } from "./icons";
 import { pipDariJumlahPemain } from "./format";
+import { baseUrl } from "@/lib/path";
 
 export default function GaleriGambar({ game, warna }) {
     const slides = useMemo(
@@ -59,7 +60,7 @@ export default function GaleriGambar({ game, warna }) {
                 slides.map((src, i) => (
                     <img
                         key={i}
-                        src={src}
+                        src={baseUrl(src)}
                         alt={game.nama}
                         className="absolute inset-0 m-auto max-w-[80%] max-h-[80%] object-contain transition-opacity duration-500 pointer-events-none"
                         style={{ opacity: i === index ? 1 : 0 }}

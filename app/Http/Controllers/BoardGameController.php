@@ -213,7 +213,7 @@ class BoardGameController extends Controller
 
         BoardGame::create($validated);
 
-        return redirect('/admin/games')
+        return redirect()->route('games.index')
             ->with('success', 'Board game berhasil ditambahkan.');
     }
 
@@ -270,7 +270,7 @@ class BoardGameController extends Controller
 
         $boardGame->update($validated);
 
-        return redirect('/admin/games')
+        return redirect()->route('games.index')
             ->with('success', 'Board game berhasil diperbarui.');
     }
 
@@ -278,7 +278,7 @@ class BoardGameController extends Controller
     {
         $boardGame->delete();
 
-        return redirect('/admin/games')
+        return redirect()->route('games.index')
             ->with('success', 'Board game berhasil dihapus.');
     }
 }

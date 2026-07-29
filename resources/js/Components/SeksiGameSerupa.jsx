@@ -1,6 +1,7 @@
 import { Link } from "@inertiajs/react";
 import { WARNA, warnaKategori } from "./theme";
 import { IkonDadu } from "./icons";
+import { baseUrl } from "@/lib/path";
 
 function KartuGameSerupa({ item }) {
     const [warnaKartu] = warnaKategori(item.kategori);
@@ -10,7 +11,7 @@ function KartuGameSerupa({ item }) {
         <Link href={`/katalog/${item.id}`} className="shrink-0 w-44 group">
             <div className="w-44 h-44 rounded-2xl overflow-hidden flex items-center justify-center mb-2.5 border border-slate-100 p-4 bg-white">
                 {item.link_foto?.[0] ? (
-                    <img src={item.link_foto[0]} alt={item.nama} className="max-w-full max-h-full object-contain" />
+                    <img src={baseUrl(item.link_foto[0])} alt={item.nama} className="max-w-full max-h-full object-contain" />
                 ) : (
                     <IkonDadu pip={2} color={warnaKartu} />
                 )}

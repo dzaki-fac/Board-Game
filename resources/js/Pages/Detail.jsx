@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Head, Link } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 import Footer from "../Components/Footer";
 import ReviewSection from "../Components/ReviewSection";
 import RatingSummary from "../Components/RatingSummary";
@@ -33,7 +34,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
 
             <div className="max-w-[1300px] mx-auto px-4 md:px-6 py-6">
                 <Link
-                    href="/katalog"
+                    href={baseUrl('/katalog')}
                     className="inline-flex items-center gap-2 text-sm font-medium hover:opacity-80 rounded-full px-4 py-2 transition-colors mb-4"
                     style={{ color: WARNA.hijauUtama }}
                 >
@@ -139,7 +140,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                             <div className={daftarKomponen.length > 0 ? "" : "mt-auto"}>
                                 {tersedia ? (
                                     <Link
-                                        href={`/peminjaman/create?boardgame_id=${game.id}`}
+                                        href={baseUrl(`/peminjaman/create?boardgame_id=${game.id}`)}
                                         className="block w-full rounded-full py-3 text-base font-semibold text-white text-center transition-colors"
                                         style={{ backgroundColor: WARNA.hijauUtama }}
                                         onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}

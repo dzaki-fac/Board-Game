@@ -1,6 +1,7 @@
 import { createPortal } from "react-dom";
 import { useMemo, useState, useRef, useEffect, useCallback, memo } from "react";
 import { Head, Link, router } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 import { motion } from "framer-motion";
 import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
@@ -122,8 +123,8 @@ function KartuGame({ game, tersedia }) {
         <div
             role="button"
             tabIndex={0}
-            onClick={() => router.visit(`/katalog/${game.id}`)}
-            onKeyDown={(e) => { if (e.key === 'Enter') router.visit(`/katalog/${game.id}`) }}
+            onClick={() => router.visit(baseUrl(`/katalog/${game.id}`))}
+            onKeyDown={(e) => { if (e.key === 'Enter') router.visit(baseUrl(`/katalog/${game.id}`)) }}
             className={`group h-full flex flex-col rounded-2xl border overflow-hidden cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${
                 tersedia
                     ? "bg-white border-slate-100 shadow-sm"
@@ -146,7 +147,7 @@ function KartuGame({ game, tersedia }) {
                 {game.link_foto?.[0] ? (
                     <div className="absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-105">
                         <img
-                            src={game.link_foto[0]}
+                            src={baseUrl(game.link_foto[0])}
                             alt={game.nama}
                             className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
                                 game.link_foto?.[1] ? "group-hover:opacity-0" : ""
@@ -154,7 +155,7 @@ function KartuGame({ game, tersedia }) {
                         />
                         {game.link_foto?.[1] && (
                             <img
-                                src={game.link_foto[1]}
+                                src={baseUrl(game.link_foto[1])}
                                 alt={`${game.nama} - tampilan lain`}
                                 className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                             />
@@ -248,7 +249,7 @@ function KartuGame({ game, tersedia }) {
                     {tersedia ? (
                         <div onClick={(e) => e.stopPropagation()}>
                             <Link
-                                href={`/katalog/${game.id}`}
+                                href={baseUrl(`/katalog/${game.id}`)}
                                 className="block w-full rounded-full py-2 text-sm font-semibold text-white text-center transition-all duration-200 active:scale-95 hover:scale-[1.02]"
                                 style={{ backgroundColor: WARNA.hijauUtama }}
                                 onMouseOver={(e) => (e.currentTarget.style.backgroundColor = WARNA.hijauHover)}
@@ -397,7 +398,7 @@ function CarouselModal({ item, onClose }) {
                             {item.bgImage && (
                                 <>
                                     <img
-                                        src={item.bgImage}
+                                        src={baseUrl(item.bgImage)}
                                         alt=""
                                         className="absolute inset-0 h-full w-full object-cover"
                                     />
@@ -530,12 +531,12 @@ function ProdukPopuler({ games }) {
                     {loopedPopuler.map((game, i) => (
                         <div
                             key={`${game.id}-${i}`}
-                            onClick={() => router.visit(`/katalog/${game.id}`)}
+                            onClick={() => router.visit(baseUrl(`/katalog/${game.id}`))}
                             className="shrink-0 w-40 cursor-pointer"
                         >
                             <div className="aspect-square rounded-xl overflow-hidden bg-slate-100">
                                 {game.link_foto?.[0] && (
-                                    <img src={game.link_foto[0]} alt={game.nama} className="w-full h-full object-cover" />
+                                    <img src={baseUrl(game.link_foto[0])} alt={game.nama} className="w-full h-full object-cover" />
                                 )}
                             </div>
                             <p className="text-xs font-medium text-slate-700 mt-2 line-clamp-2 text-center">
@@ -621,7 +622,7 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ carousels, onM
         [next, prev].forEach((it) => {
             if (it?.bgImage) {
                 const img = new Image();
-                img.src = it.bgImage;
+                img.src = baseUrl(it.bgImage);
             }
         });
     }, [index, items]);
@@ -745,7 +746,7 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ carousels, onM
                     {punyaFotoPopuler ? (
                         <ParallaxBg>
                             <img
-                                src={slideItem.bgImage}
+                                src={baseUrl(slideItem.bgImage)}
                                 alt=""
                                 className="absolute inset-0 h-full w-full object-cover pointer-events-none"
                             />
@@ -777,14 +778,14 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ carousels, onM
                                     key={game.id}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        router.visit(`/katalog/${game.id}`);
+                                        router.visit(baseUrl(`/katalog/${game.id}`));
                                     }}
                                     className="cursor-pointer w-20 md:w-32 shrink-0"
                                 >
                                     <div className="aspect-square rounded-xl overflow-hidden bg-white shadow-sm">
                                         {game.link_foto?.[0] && (
                                             <img
-                                                src={game.link_foto[0]}
+                                                src={baseUrl(game.link_foto[0])}
                                                 alt={game.nama}
                                                 className="w-full h-full object-cover"
                                             />
@@ -806,7 +807,7 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ carousels, onM
                 {punyaFoto ? (
                     <ParallaxBg>
                         <img
-                            src={slideItem.bgImage}
+                            src={baseUrl(slideItem.bgImage)}
                             alt=""
                             draggable={false}
                             onDragStart={(e) => e.preventDefault()}
@@ -1199,7 +1200,7 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa }) {
 
             {/* Floating Pinjam button */}
             <MotionLink
-                href={modalCarouselOpen ? undefined : "/peminjaman/create"}
+                href={modalCarouselOpen ? undefined : baseUrl("/peminjaman/create")}
                 className={`fixed bottom-4 left-4 right-4 md:bottom-8 md:left-auto md:right-8 md:w-auto z-50 inline-flex items-center justify-center gap-2 px-6 py-3.5 md:py-3 font-semibold text-white bg-sky-900 rounded-2xl md:rounded-full shadow-xl shadow-sky-900/25 ${
                     modalCarouselOpen
                         ? "pointer-events-none opacity-60"

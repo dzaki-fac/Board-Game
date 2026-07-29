@@ -1,4 +1,5 @@
 import { usePage, useForm, router, Link } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 import { useState, useEffect } from "react";
 
 export default function Account({ admins: { data: admins, links, from, to, total } }) {
@@ -53,7 +54,10 @@ export default function Account({ admins: { data: admins, links, from, to, total
 
     useEffect(() => {
         if (window.location.search.includes("edit=me") && currentAdmin) {
-            window.history.replaceState({}, "", window.location.pathname);
+            const path = window.location.pathname;
+            const base = import.meta.env.VITE_BASE_PATH || '';
+            const relativePath = path.startsWith(base) ? path.slice(base.length) || '/' : path;
+            window.history.replaceState({}, "", relativePath);
             openEditModal(currentAdmin);
         }
     }, []);
@@ -87,7 +91,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
 
     function handleCreate(e) {
         e.preventDefault();
-        create.post("/admin/accounts", {
+        create.post(baseUrl("/admin/accounts"), {
             preserveScroll: true,
             onSuccess: () => closeCreateModal(),
         });
@@ -95,7 +99,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
 
     function handleUpdate(e) {
         e.preventDefault();
-        edit.put(`/admin/accounts/${editingAdmin.id}`, {
+        edit.put(baseUrl(`/admin/accounts/${editingAdmin.id}`), {
             preserveScroll: true,
             onSuccess: () => closeEditModal(),
         });
@@ -103,7 +107,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
 
     function handleDelete() {
         if (!deleteTarget) return;
-        router.delete(`/admin/accounts/${deleteTarget.id}`, {
+        router.delete(baseUrl(`/admin/accounts/${deleteTarget.id}`), {
             preserveScroll: true,
             onSuccess: () => setDeleteTarget(null),
             onError: () => setDeleteTarget(null),

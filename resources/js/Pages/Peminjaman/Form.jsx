@@ -1,4 +1,5 @@
 import { Link, router, useForm, usePage } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 import { useEffect, useMemo, useState } from "react";
 import { Reveal } from "../../Components/animations";
 
@@ -111,7 +112,7 @@ export default function Form({ boardgames = [] }) {
             nomor_identitas: getAnggotaNomorIdentitas(a),
         }));
 
-        router.post("/peminjaman", {
+        router.post(baseUrl("/peminjaman"), {
             boardgame_id: data.boardgame_id,
             tanggal_pinjam: data.tanggal_pinjam,
             jam_pinjam: data.jam_pinjam,
@@ -127,7 +128,7 @@ export default function Form({ boardgames = [] }) {
         >
         <div className="max-w-xl mx-auto p-4">
             <Link
-                href="/katalog"
+                href={baseUrl('/katalog')}
                 className="inline-flex items-center gap-1.5 text-sm font-medium text-white bg-sky-800 hover:bg-sky-900 mb-4 px-3 py-1.5 rounded-full transition-transform active:scale-95 hover:scale-[1.03]"
             >
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4">

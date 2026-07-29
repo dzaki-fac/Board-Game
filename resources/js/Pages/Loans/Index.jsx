@@ -1,4 +1,5 @@
 import { Link, Head } from "@inertiajs/react"
+import { baseUrl } from '@/lib/path';
 import { useMemo, useState } from "react"
 import BadgeStatus from "../../Components/BadgeStatus"
 
@@ -142,7 +143,7 @@ export default function Index({ loans, stats }) {
                           <td className="px-6 py-4 text-right">
                             <div className="flex items-center justify-end gap-1">
                               <Link
-                                href={`/admin/loans/${loan.id}`}
+                                href={baseUrl(`/admin/loans/${loan.id}`)}
                                 className="btn btn-ghost btn-xs btn-square text-gray-400 hover:text-[#0E4A73]"
                                 title="Detail"
                               >

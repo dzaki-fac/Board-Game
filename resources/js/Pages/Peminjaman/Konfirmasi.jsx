@@ -1,4 +1,5 @@
 import { Head, Link } from "@inertiajs/react";
+import { baseUrl } from '@/lib/path';
 
 export default function Konfirmasi({ permohonan, gagal, error, peminjams, boardgame_nama }) {
     if (gagal) {
@@ -32,7 +33,7 @@ export default function Konfirmasi({ permohonan, gagal, error, peminjams, boardg
                     </div>
 
                     <Link
-                        href="/peminjaman/create"
+                        href={baseUrl('/peminjaman/create')}
                         className="inline-block w-full rounded-full py-3 text-base font-semibold text-white text-center transition-colors"
                         style={{ backgroundColor: "#0E4A73" }}
                         onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#0A3A5C")}
@@ -116,7 +117,7 @@ export default function Konfirmasi({ permohonan, gagal, error, peminjams, boardg
                 </div>
 
                 <Link
-                    href="/katalog"
+                    href={baseUrl('/katalog')}
                     className="inline-block w-full rounded-full py-3 text-base font-semibold text-white text-center transition-colors"
                     style={{ backgroundColor: "#0E4A73" }}
                     onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#0A3A5C")}

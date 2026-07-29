@@ -1,6 +1,7 @@
 import LanguageToggle from "./LanguageToggle";
 import { WARNA } from "./theme";
 import { useState } from "react";
+import { baseUrl } from '@/lib/path';
 
 /* Ikon media sosial — bentuk generik/monoline, bukan reproduksi logo resmi. */
 function IkonYoutube(props) {
@@ -62,15 +63,15 @@ export default function TopNavbar({ bahasa, setBahasa }) {
                 {/* Desktop (md+) */}
                 <div className="hidden md:flex items-center justify-between py-2">
                     {/* Kiri: Logo + Nama Institusi */}
-                    <a href="/katalog" className="flex items-center gap-4 shrink-0">
+                    <a href={baseUrl('/katalog')} className="flex items-center gap-4 shrink-0">
                         <img
-                            src="/assets/logo_undip.png"
+                            src={baseUrl('/assets/logo_undip.png')}
                             alt="Universitas Diponegoro"
                             className="h-11 w-auto object-contain"
                         />
                         {/* Jika logo UPT punya banyak whitespace bawaan, sesuaikan h-11 ini menjadi h-12 atau h-14 */}
                         <img
-                            src="/images/logo-upt.png"
+                            src={baseUrl('/images/logo-upt.png')}
                             alt="UPT Perpustakaan Undip"
                             className="h-10 w-auto object-contain"
                         />
@@ -124,14 +125,14 @@ export default function TopNavbar({ bahasa, setBahasa }) {
     <div className="flex items-center justify-between">
 
         {/* Logo */}
-        <a href="/katalog" className="flex items-center gap-3">
+        <a href={baseUrl('/katalog')} className="flex items-center gap-3">
             <img
-                src="/assets/logo_undip.png"
+                src={baseUrl('/assets/logo_undip.png')}
                 alt="Universitas Diponegoro"
                 className="h-9 w-auto object-contain"
             />
             <img
-                src="/images/logo-upt.png"
+                src={baseUrl('/images/logo-upt.png')}
                 alt="UPT Perpustakaan Undip"
                 className="h-8 w-auto object-contain"
             />
