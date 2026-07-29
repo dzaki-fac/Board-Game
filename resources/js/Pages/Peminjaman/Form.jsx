@@ -465,7 +465,6 @@ export default function Form({ boardgames = [] }) {
                 </div>
                 </Reveal>
 
-                <Reveal>
                 <div className="flex gap-3 pt-1">
                     <button
                         type="submit"
@@ -493,7 +492,6 @@ export default function Form({ boardgames = [] }) {
                         Atur Ulang
                     </button>
                 </div>
-                </Reveal>
             </form>
         </div>
         </div>
