@@ -6,6 +6,7 @@ import Footer from "../Components/Footer";
 import RatingSummary from "../Components/RatingSummary";
 import TopNavbar from "../Components/TopNavbar";
 import { WARNA, warnaKategori } from "../Components/theme";
+import { IkonBuku } from "../Components/icons";
 import { BahasaContext, TEKS, useTeks, useBahasaState } from "../Components/BahasaContext";
 import { AnimatedSection, Reveal, StaggerGrid, MotionButton, MotionLink } from "../Components/animations";
 
@@ -229,6 +230,11 @@ function KartuGame({ game, tersedia }) {
                 <div className="mb-2">
                     <p className="text-xs font-medium text-slate-700 mt-2 line-clamp-2">
                         {game.nama}
+                        {game.link_panduan && (
+                            <a href={game.link_panduan} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="inline-flex items-center gap-1 ml-1.5 text-[10px] font-normal text-blue-600 hover:text-blue-800 align-baseline" title={t.panduanBermain}>
+                                <IkonBuku className="w-3 h-3" />
+                            </a>
+                        )}
                     </p>
                     <p className="text-xs text-slate-500 mt-0.5 truncate">{game.penerbit ?? "\u00A0"}</p>
                     <div className="mt-1">

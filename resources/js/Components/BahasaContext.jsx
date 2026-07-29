@@ -102,6 +102,12 @@ export const TEKS = {
             "Board game rusak: wajib ganti unit yang sama",
             "Board game hilang: ganti unit baru atau denda sesuai ketentuan",
         ],
+        jamLayanan: "Jam Layanan",
+        footerMonThu: "Senin – Kamis: 07.30 – 19.00",
+        footerFri: "Jumat: 07.30 – 19.00",
+        footerSat: "Sabtu: 08.00 – 14.00",
+        footerSunHol: "Minggu & Hari Libur: TUTUP",
+        footerCopyright: "UPT Perpustakaan Universitas Diponegoro",
         carousel: [
             {
                 title: "Selamat Datang di\nUPT Perpustakaan dan UNDIP Press",
@@ -251,6 +257,12 @@ export const TEKS = {
             "Damaged game: must be replaced with the same unit",
             "Lost game: replace with a new unit or pay a fine per policy",
         ],
+        jamLayanan: "Service Hours",
+        footerMonThu: "Monday – Thursday: 07.30 – 19.00",
+        footerFri: "Friday: 07.30 – 19.00",
+        footerSat: "Saturday: 08.00 – 14.00",
+        footerSunHol: "Sunday & Public Holidays: CLOSED",
+        footerCopyright: "Diponegoro University Library",
         carousel: [
             {
                 title: "Welcome to\nUPT Perpustakaan and UNDIP Press",
