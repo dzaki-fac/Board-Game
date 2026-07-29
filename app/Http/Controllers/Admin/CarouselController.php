@@ -120,7 +120,14 @@ class CarouselController extends Controller
             Storage::disk('public')->delete($carousel->bg_image);
         }
 
+        $deletedOrder = $carousel->sort_order;
         $carousel->delete();
+
+        Carousel::where('sort_order', '>', $deletedOrder)
+            ->orderBy('sort_order')
+            ->each(function ($c) {
+                $c->update(['sort_order' => $c->sort_order - 1]);
+            });
 
         return back()->with('success', 'Carousel berhasil dihapus.');
     }
