@@ -171,18 +171,21 @@ function KartuGame({ game, tersedia }) {
                     const kategoriArr = Array.isArray(game.kategori) && game.kategori.length > 0
                         ? game.kategori
                         : [game.kategori ?? t.umum];
-                    const MAKS_MOBILE = 2;
-                    const sisa = kategoriArr.length - MAKS_MOBILE;
+                    const MAKS = 3;
+                    const sisa = kategoriArr.length - MAKS;
+                    const hiddenTooltip = sisa > 0
+                        ? kategoriArr.slice(MAKS).join(', ')
+                        : '';
 
                     return (
                         <>
-                            <div className="flex sm:hidden flex-nowrap gap-1 mb-2 overflow-hidden">
-                                {kategoriArr.slice(0, MAKS_MOBILE).map((k, i) => {
+                            <div className="flex sm:hidden flex-wrap gap-1 mb-2">
+                                {kategoriArr.slice(0, MAKS).map((k, i) => {
                                     const [kw, kb] = warnaKategori(k);
                                     return (
                                         <span
                                             key={i}
-                                            className="inline-block shrink self-start truncate max-w-[45%] text-[9px] font-medium px-2 py-0.5 rounded-full"
+                                            className="inline-block self-start truncate max-w-[45%] text-[9px] font-medium px-2 py-0.5 rounded-full"
                                             style={{ backgroundColor: kb, color: kw }}
                                         >
                                             {k}
@@ -190,14 +193,14 @@ function KartuGame({ game, tersedia }) {
                                     );
                                 })}
                                 {sisa > 0 && (
-                                    <span className="inline-block shrink-0 self-start whitespace-nowrap text-[9px] font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                                    <span className="inline-block shrink-0 self-start whitespace-nowrap text-[9px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
                                         +{sisa}
                                     </span>
                                 )}
                             </div>
 
                             <div className="hidden sm:flex flex-wrap gap-1 mb-2">
-                                {kategoriArr.map((k, i) => {
+                                {kategoriArr.slice(0, MAKS).map((k, i) => {
                                     const [kw, kb] = warnaKategori(k);
                                     return (
                                         <span
@@ -209,6 +212,15 @@ function KartuGame({ game, tersedia }) {
                                         </span>
                                     );
                                 })}
+                                {sisa > 0 && (
+                                    <span
+                                        className="inline-block shrink-0 self-start whitespace-nowrap text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600"
+                                        title={hiddenTooltip}
+                                        aria-label={hiddenTooltip}
+                                    >
+                                        +{sisa}
+                                    </span>
+                                )}
                             </div>
                         </>
                     );
@@ -245,6 +257,13 @@ function KartuGame({ game, tersedia }) {
                 </div>
 
                 <div className="mt-auto">
+                    <div className="flex justify-end mb-1.5">
+                        <span className="whitespace-nowrap text-[11px] font-medium leading-4 text-gray-700">
+                            {game.loans_count >= 1000
+                                ? '999+ Peminjaman'
+                                : `${game.loans_count} Peminjaman`}
+                        </span>
+                    </div>
                     {tersedia ? (
                         <div onClick={(e) => e.stopPropagation()}>
                             <Link
@@ -481,7 +500,11 @@ function ProdukPopuler({ games }) {
 
     const populer = useMemo(() => {
         return [...games]
-            .sort((a, b) => (b.loans_count ?? 0) - (a.loans_count ?? 0))
+            .sort((a, b) => {
+                const diff = (b.loans_count ?? 0) - (a.loans_count ?? 0);
+                if (diff !== 0) return diff;
+                return (a.nama ?? '').localeCompare(b.nama ?? '');
+            })
             .slice(0, 10);
     }, [games]);
 
@@ -527,13 +550,30 @@ function ProdukPopuler({ games }) {
                 className="overflow-hidden pb-2"
             >
                 <div ref={trackRef} className="flex gap-4 w-max will-change-transform">
-                    {loopedPopuler.map((game, i) => (
+                    {loopedPopuler.map((game, i) => {
+                        const rank = (i % populer.length) + 1;
+                        const rankColor =
+                            rank === 1 ? '#FFD700' :
+                            rank === 2 ? '#C0C0C0' :
+                            rank === 3 ? '#CD7F32' :
+                            '#0E4A73';
+                        const rankTextColor = rank <= 3 ? '#1a1a1a' : '#ffffff';
+                        return (
                         <div
                             key={`${game.id}-${i}`}
                             onClick={() => router.visit(`/katalog/${game.id}`)}
                             className="shrink-0 w-40 cursor-pointer"
                         >
-                            <div className="aspect-square rounded-xl overflow-hidden bg-slate-100">
+                            <div className="aspect-square rounded-xl overflow-hidden bg-slate-100 relative">
+                                <span
+                                    className="absolute top-2 left-2 z-10 w-8 h-8 rounded-full text-[11px] font-bold flex items-center justify-center"
+                                    style={{
+                                        backgroundColor: rankColor,
+                                        color: rankTextColor,
+                                    }}
+                                >
+                                    {rank}
+                                </span>
                                 {game.link_foto?.[0] && (
                                     <img src={game.link_foto[0]} alt={game.nama} className="w-full h-full object-cover" />
                                 )}
@@ -541,8 +581,14 @@ function ProdukPopuler({ games }) {
                             <p className="text-xs font-medium text-slate-700 mt-2 line-clamp-2 text-center">
                                 {game.nama}
                             </p>
+                            <p className="text-[10px] font-medium text-slate-500 mt-0.5 text-center">
+                                {game.loans_count >= 1000
+                                    ? '999+ Peminjaman'
+                                    : `${game.loans_count} Peminjaman`}
+                            </p>
                         </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </div>
@@ -729,6 +775,7 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ carousels, onM
         } else {
             startAutoplay();
         }
+        dragOccurredRef.current = false;
     }, [geser, startAutoplay]);
 
     // Render isi satu slide (background + teks). Dipakai untuk layer bawah
@@ -988,12 +1035,13 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ carousels, onM
 
 /* ========================= Halaman Katalog ========================= */
 
-function IsiKatalog({ games, carousels, bahasa, setBahasa }) {
+function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
     const t = useTeks();
     const [pencarian, setPencarian] = useState("");
     const [kategoriAktif, setKategoriAktif] = useState("Semua");
     const [lantaiAktif, setLantaiAktif] = useState("Semua");
     const [statusAktif, setStatusAktif] = useState("Semua");
+    const [sort, setSort] = useState(initialSort || "popular");
     const [modalCarouselOpen, setModalCarouselOpen] = useState(false);
 
     const kategoriList = useMemo(() => {
@@ -1107,6 +1155,30 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa }) {
                                 </select>
                             </div>
 
+                            <div className="w-px h-5 bg-slate-300" />
+
+                            <div className="flex items-center gap-1">
+                                <label className="text-xs text-slate-500 hidden sm:inline">Urutkan</label>
+                                <select
+                                    value={sort}
+                                    onChange={(e) => {
+                                        const newSort = e.target.value
+                                        setSort(newSort)
+                                        router.get('/katalog', { sort: newSort }, {
+                                            preserveState: true,
+                                            preserveScroll: true,
+                                            replace: true,
+                                        })
+                                    }}
+                                    className={kelasSelect}
+                                >
+                                    <option value="popular">Terpopuler</option>
+                                    <option value="rating">Rating Tertinggi</option>
+                                    <option value="name_asc">Nama A–Z</option>
+                                    <option value="name_desc">Nama Z–A</option>
+                                </select>
+                            </div>
+
                             <span className="text-xs text-slate-500 shrink-0">{filtered.length} {t.boardGame}</span>
                         </div>
                     </div>
@@ -1149,6 +1221,27 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa }) {
                                 </select>
                             </div>
 
+                            <div className="flex items-center gap-1">
+                                <select
+                                    value={sort}
+                                    onChange={(e) => {
+                                        const newSort = e.target.value
+                                        setSort(newSort)
+                                        router.get('/katalog', { sort: newSort }, {
+                                            preserveState: true,
+                                            preserveScroll: true,
+                                            replace: true,
+                                        })
+                                    }}
+                                    className={kelasSelect}
+                                >
+                                    <option value="popular">Terpopuler</option>
+                                    <option value="rating">Rating Tertinggi</option>
+                                    <option value="name_asc">Nama A–Z</option>
+                                    <option value="name_desc">Nama Z–A</option>
+                                </select>
+                            </div>
+
                             <span className="text-xs text-slate-500 ml-auto">{filtered.length} {t.boardGame}</span>
                         </div>
                 </div>
@@ -1157,23 +1250,27 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa }) {
             </AnimatedSection>
 
             <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-10">
-                <Reveal>
-                    <h2 className="text-lg font-semibold text-slate-800 mb-4">
-                        {t.tersediaDipinjam} ({tersedia.length})
-                    </h2>
-                </Reveal>
-                {tersedia.length > 0 ? (
-                    <StaggerGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5 mb-12">
-                        {tersedia.map((game) => (
-                            <KartuGame key={game.id} game={game} tersedia />
-                        ))}
-                    </StaggerGrid>
-                ) : (
-                    <Reveal>
-                        <p className="text-sm text-slate-500 mb-12">
-                            {t.tidakCocok}
-                        </p>
-                    </Reveal>
+                {statusAktif !== "Dipinjam" && (
+                    <>
+                        <Reveal>
+                            <h2 className="text-lg font-semibold text-slate-800 mb-4">
+                                {t.tersediaDipinjam} ({tersedia.length})
+                            </h2>
+                        </Reveal>
+                        {tersedia.length > 0 ? (
+                            <StaggerGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5 mb-12">
+                                {tersedia.map((game) => (
+                                    <KartuGame key={game.id} game={game} tersedia />
+                                ))}
+                            </StaggerGrid>
+                        ) : (
+                            <Reveal>
+                                <p className="text-sm text-slate-500 mb-12">
+                                    {t.tidakCocok}
+                                </p>
+                            </Reveal>
+                        )}
+                    </>
                 )}
 
                 {dipinjam.length > 0 && (
@@ -1221,13 +1318,13 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa }) {
     );
 }
 
-export default function Katalog({ games, carousels }) {
+export default function Katalog({ games, carousels, filters }) {
     const [bahasa, setBahasa] = useBahasaState();
 
     return (
         <BahasaContext.Provider value={TEKS[bahasa]}>
             <Head title="Katalog Board Game" />
-            <IsiKatalog games={games} carousels={carousels} bahasa={bahasa} setBahasa={setBahasa} />
+            <IsiKatalog games={games} carousels={carousels} bahasa={bahasa} setBahasa={setBahasa} initialSort={filters?.sort} />
         </BahasaContext.Provider>
     );
 }

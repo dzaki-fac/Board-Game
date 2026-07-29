@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BoardGame;
 use App\Models\Loan;
 use Illuminate\Http\Request;
 
@@ -9,6 +10,10 @@ class HistoryController extends Controller
 {
     public function index(Request $request)
     {
+        $validated = $request->validate([
+            'board_game_id' => ['nullable', 'integer', 'exists:board_games,id'],
+        ]);
+
         $search = $request->input('search');
         $statusFilter = $request->input('status');
         $period = $request->input('period', 'all');
@@ -16,6 +21,7 @@ class HistoryController extends Controller
         $dateTo = $request->input('date_to');
         $month = $request->input('month');
         $year = $request->input('year');
+        $boardGameId = $request->input('board_game_id');
 
         $query = Loan::with('game')->where('status', '!=', 'borrowed');
 
@@ -28,6 +34,10 @@ class HistoryController extends Controller
 
         if ($statusFilter) {
             $query->where('status', $statusFilter);
+        }
+
+        if ($boardGameId) {
+            $query->where('boardgame_id', $boardGameId);
         }
 
         match ($period) {
@@ -45,6 +55,11 @@ class HistoryController extends Controller
 
         $statsQuery = (clone $query)->whereIn('status', ['returned', 'lost']);
 
+        $boardGameOptions = BoardGame::select('id', 'nama')->orderBy('nama')->get()->map(fn ($bg) => [
+            'id' => $bg->id,
+            'name' => $bg->nama,
+        ]);
+
         return inertia('History/Index', [
             'histories' => $histories,
             'filters' => [
@@ -55,12 +70,14 @@ class HistoryController extends Controller
                 'date_to' => $dateTo,
                 'month' => $month,
                 'year' => $year,
+                'board_game_id' => $boardGameId,
             ],
             'stats' => [
                 'total' => (clone $statsQuery)->count(),
                 'returned' => (clone $statsQuery)->where('status', 'returned')->count(),
                 'lost' => (clone $statsQuery)->where('status', 'lost')->count(),
             ],
+            'boardGameOptions' => $boardGameOptions,
         ]);
     }
 }
