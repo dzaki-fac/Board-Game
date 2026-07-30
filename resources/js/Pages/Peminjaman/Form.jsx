@@ -85,6 +85,17 @@ export default function Form({ boardgames = [] }) {
         return a.nik;
     }
 
+    function scrollToError() {
+        const el = document.querySelector("[data-error]:not([data-error='']), .input-error, .textarea-error, .select-error");
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    useEffect(() => {
+        if (Object.keys(errors).length) {
+            setTimeout(scrollToError, 100);
+        }
+    }, [errors]);
+
     function handleSubmit(e) {
         e.preventDefault();
 
@@ -98,11 +109,12 @@ export default function Form({ boardgames = [] }) {
             else if (id.length !== expectedLen) err.identitas = a.jenis_jaminan === "ktm" ? "NIM harus 14 digit." : "NIK harus 16 digit.";
             if (Object.keys(err).length) newErrors[i] = err;
         });
+        if (!data.boardgame_id) {
+            newErrors.boardgame_id = "Pilih board game terlebih dahulu.";
+        }
         setLocalErrors(newErrors);
         if (Object.keys(newErrors).length) {
-            const firstIndex = Math.min(...Object.keys(newErrors).map(Number));
-            const el = document.querySelector(`[data-row="${firstIndex}"] .input-error`);
-            if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+            setTimeout(scrollToError, 100);
             return;
         }
 
@@ -279,17 +291,11 @@ export default function Form({ boardgames = [] }) {
                 </Reveal>
 
                 <Reveal>
-                <div className="card bg-base-100 border border-base-300 shadow-sm">
+                <div data-error={errors.boardgame_id || localErrors.boardgame_id ? "boardgame_id" : ""} className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
                         <h2 className="card-title text-base !mb-0">
                             Pilihan Board Game
                         </h2>
-
-                        {errors.boardgame_id && (
-                            <div className="alert alert-error py-2 text-sm mb-3">
-                                <span>{errors.boardgame_id}</span>
-                            </div>
-                        )}
 
                         <div className="form-control mb-3">
                             <label className="label !pt-0 !pb-1">
@@ -339,12 +345,14 @@ export default function Form({ boardgames = [] }) {
                                                             data.boardgame_id ==
                                                             bg.id
                                                         }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "boardgame_id",
-                                                                e.target.value,
-                                                            )
-                                                        }
+                                                        onChange={(e) => {
+                                                            setData("boardgame_id", e.target.value);
+                                                            setLocalErrors((prev) => {
+                                                                const next = { ...prev };
+                                                                delete next.boardgame_id;
+                                                                return next;
+                                                            });
+                                                        }}
                                                         disabled={!bg.is_available}
                                                     />
                                                     <div className="flex-1 min-w-0">
@@ -380,6 +388,9 @@ export default function Form({ boardgames = [] }) {
                                     ({selected.kode})
                                 </span>
                             </div>
+                        )}
+                        {(errors.boardgame_id || localErrors.boardgame_id) && (
+                            <p className="text-error text-xs mt-1">{errors.boardgame_id || localErrors.boardgame_id}</p>
                         )}
                     </div>
                 </div>

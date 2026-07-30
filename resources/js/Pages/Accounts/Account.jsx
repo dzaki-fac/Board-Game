@@ -182,8 +182,7 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                 </td>
                                 {isSuperAdmin && (
                                     <td>
-                                        {admin.role === "admin" && (
-                                            <div className="flex gap-2">
+                                        <div className="flex gap-2">
                                                 <button
                                                     onClick={() => openEditModal(admin)}
                                                     className="btn btn-sm btn-outline btn-warning"
@@ -199,7 +198,6 @@ export default function Account({ admins: { data: admins, links, from, to, total
                                                     </button>
                                                 )}
                                             </div>
-                                        )}
                                     </td>
                                 )}
                             </tr>

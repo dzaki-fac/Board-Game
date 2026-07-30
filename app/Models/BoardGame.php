@@ -25,7 +25,7 @@ use Illuminate\Database\Eloquent\Model;
     'barang_hilang',
     'deskripsi',
     'link_tutorial',
-    'populer',
+    'link_panduan',
 ])]
 class BoardGame extends Model
 {
@@ -53,7 +53,6 @@ class BoardGame extends Model
             'komponen' => 'array',
             'kategori' => 'array',
             'barang_hilang' => 'array',
-            'populer' => 'boolean',
         ];
     }
 }
