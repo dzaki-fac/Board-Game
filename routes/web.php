@@ -21,6 +21,8 @@ Route::get('/katalog', [BoardGameController::class, 'katalog'])->name('katalog')
 Route::get('/katalog/{boardGame}', [BoardGameController::class, 'detail'])->name('katalog.show');
 Route::post('/katalog/{boardGame}/reviews', [ReviewController::class, 'store'])->name('katalog.reviews.store');
 
+
+Route::get('/login', fn () => redirect()->route('admin.login'));
 Route::prefix('admin')->group(function () {
     Route::middleware('guest:admin')->group(function () {
         Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('admin.login');

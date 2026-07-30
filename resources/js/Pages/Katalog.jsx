@@ -1164,7 +1164,7 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                                     onChange={(e) => {
                                         const newSort = e.target.value
                                         setSort(newSort)
-                                        router.get('/katalog', { sort: newSort }, {
+                                        router.get(baseUrl('/katalog'), { sort: newSort }, {
                                             preserveState: true,
                                             preserveScroll: true,
                                             replace: true,
@@ -1227,7 +1227,7 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                                     onChange={(e) => {
                                         const newSort = e.target.value
                                         setSort(newSort)
-                                        router.get('/katalog', { sort: newSort }, {
+                                        router.get(baseUrl('/katalog'), { sort: newSort }, {
                                             preserveState: true,
                                             preserveScroll: true,
                                             replace: true,
