@@ -69,7 +69,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                                                     className="inline-block text-[11px] font-medium px-2.5 py-1 rounded-full"
                                                     style={{ backgroundColor: kb, color: kw }}
                                                 >
-                                                    {k}
+                                                    {t.kategoriMap?.[k] || k}
                                                 </span>
                                             );
                                         })}
