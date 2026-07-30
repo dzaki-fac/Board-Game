@@ -8,7 +8,7 @@ import TopNavbar from "../Components/TopNavbar";
 import { WARNA, warnaKategori } from "../Components/theme";
 import { IkonBuku } from "../Components/icons";
 import { BahasaContext, TEKS, useTeks, useBahasaState } from "../Components/BahasaContext";
-import { AnimatedSection, Reveal, StaggerGrid, MotionButton, MotionLink } from "../Components/animations";
+import { AnimatedSection, Reveal, MotionButton, MotionLink } from "../Components/animations";
 
 /* ========================= Ikon-ikon kecil ========================= */
 
@@ -296,7 +296,7 @@ function KartuGame({ game, tersedia }) {
 }
 
 /* ========================= Parallax Background (lightweight) ========================= */
-/* Single reveal on scroll, no continuous scroll-linked update */
+/* Static wrapper, tidak ada continuous scroll-linked update supaya ringan */
 
 function ParallaxBg({ children }) {
     return (
@@ -1065,6 +1065,35 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
     const [sort, setSort] = useState(initialSort || "popular");
     const [modalCarouselOpen, setModalCarouselOpen] = useState(false);
 
+    // Jumlah kartu yang ditampilkan per halaman pada bagian "Tersedia untuk Dipinjam".
+    // Dipersist ke localStorage supaya pilihan tetap sama walau halaman di-refresh.
+    const KUNCI_UKURAN_HALAMAN = "katalog_ukuran_halaman";
+    const [ukuranHalaman, setUkuranHalamanState] = useState(() => {
+        if (typeof window === "undefined") return 10;
+        const tersimpan = window.localStorage.getItem(KUNCI_UKURAN_HALAMAN);
+        if (tersimpan === "all") return "all";
+        const angka = Number(tersimpan);
+        return angka === 10 || angka === 30 ? angka : 10;
+    });
+    const [halamanAktif, setHalamanAktif] = useState(1);
+
+    const setUkuranHalaman = useCallback((nilaiBaru) => {
+        setUkuranHalamanState(nilaiBaru);
+        try {
+            window.localStorage.setItem(KUNCI_UKURAN_HALAMAN, String(nilaiBaru));
+        } catch {
+            // localStorage tidak tersedia (mis. private mode) — abaikan saja
+        }
+    }, []);
+
+    const gantiHalamanTersedia = useCallback((halamanBaru) => {
+        setHalamanAktif(halamanBaru);
+        document.getElementById("tersedia-section")?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+        });
+    }, []);
+
     const kategoriList = useMemo(() => {
         const set = new Set();
         games.forEach((g) => {
@@ -1108,8 +1137,34 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
     const tersedia = filtered.filter((g) => g.available_copies > 0);
     const dipinjam = filtered.filter((g) => g.available_copies <= 0);
 
+    // Reset ke halaman 1 setiap kali filter atau ukuran halaman berubah,
+    // supaya tidak "nyangkut" di halaman kosong.
+    useEffect(() => {
+        setHalamanAktif(1);
+    }, [pencarian, kategoriAktif, lantaiAktif, statusAktif, ukuranHalaman]);
+
+    const totalHalamanTersedia = ukuranHalaman === "all"
+        ? 1
+        : Math.max(1, Math.ceil(tersedia.length / ukuranHalaman));
+
+    const tersediaDitampilkan = ukuranHalaman === "all"
+        ? tersedia
+        : tersedia.slice((halamanAktif - 1) * ukuranHalaman, halamanAktif * ukuranHalaman);
+
     const kelasSelect =
         "rounded-md border border-slate-200 text-xs sm:text-sm px-2.5 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1B6FA8]/30";
+
+    // Class grid kartu. CATATAN PENTING: JANGAN pakai `auto-rows-fr` di sini.
+    // `grid-auto-rows: 1fr` pada grid bertinggi auto membuat browser meregangkan
+    // SEMUA baris implisit ke tinggi baris tertinggi di seluruh grid (bukan cuma
+    // barisnya sendiri). Karena tombol di KartuGame di-anchor pakai `mt-auto`,
+    // kelebihan tinggi itu muncul sebagai gap putih kosong di tengah kartu yang
+    // judulnya pendek. Makin banyak kartu ditampilkan (30 / Semua), makin besar
+    // peluang ada 1 kartu berjudul panjang yang "menulari" tinggi kartu lain.
+    // Tanpa auto-rows-fr, tiap baris grid otomatis mengikuti tinggi kontennya
+    // sendiri (default align-items: stretch + h-full di kartu sudah cukup untuk
+    // menyamakan tinggi antar kartu dalam satu baris).
+    const kelasGridKartu = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5";
 
     return (
         <motion.div
@@ -1270,18 +1325,56 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
 
             <div className="max-w-[1440px] mx-auto px-6 md:px-10 py-10">
                 {statusAktif !== "Dipinjam" && (
-                    <>
+                    <div id="tersedia-section" className="scroll-mt-28">
                         <Reveal>
-                            <h2 className="text-lg font-semibold text-slate-800 mb-4">
-                                {t.tersediaDipinjam} ({tersedia.length})
-                            </h2>
+                            <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                                <h2 className="text-lg font-semibold text-slate-800">
+                                    {t.tersediaDipinjam} ({tersedia.length})
+                                </h2>
+                                <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                                    <span>Tampilkan</span>
+                                    <select
+                                        value={ukuranHalaman}
+                                        onChange={(e) => setUkuranHalaman(e.target.value === "all" ? "all" : Number(e.target.value))}
+                                        className={kelasSelect}
+                                    >
+                                        <option value={10}>10</option>
+                                        <option value={30}>30</option>
+                                        <option value="all">Semua</option>
+                                    </select>
+                                </div>
+                            </div>
                         </Reveal>
-                        {tersedia.length > 0 ? (
-                            <StaggerGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5 mb-12">
-                                {tersedia.map((game) => (
-                                    <KartuGame key={game.id} game={game} tersedia />
-                                ))}
-                            </StaggerGrid>
+                        {tersediaDitampilkan.length > 0 ? (
+                            <>
+                                <div className={`${kelasGridKartu} mb-5`}>
+                                    {tersediaDitampilkan.map((game) => (
+                                        <KartuGame key={game.id} game={game} tersedia />
+                                    ))}
+                                </div>
+
+                                {ukuranHalaman !== "all" && totalHalamanTersedia > 1 && (
+                                    <div className="flex items-center justify-center gap-3 mb-12">
+                                        <button
+                                            onClick={() => gantiHalamanTersedia(Math.max(1, halamanAktif - 1))}
+                                            disabled={halamanAktif === 1}
+                                            className="px-3 py-1.5 text-sm rounded-md border border-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50"
+                                        >
+                                            Sebelumnya
+                                        </button>
+                                        <span className="text-sm text-slate-600">
+                                            Halaman {halamanAktif} / {totalHalamanTersedia}
+                                        </span>
+                                        <button
+                                            onClick={() => gantiHalamanTersedia(Math.min(totalHalamanTersedia, halamanAktif + 1))}
+                                            disabled={halamanAktif === totalHalamanTersedia}
+                                            className="px-3 py-1.5 text-sm rounded-md border border-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50"
+                                        >
+                                            Selanjutnya
+                                        </button>
+                                    </div>
+                                )}
+                            </>
                         ) : (
                             <Reveal>
                                 <p className="text-sm text-slate-500 mb-12">
@@ -1289,7 +1382,7 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                                 </p>
                             </Reveal>
                         )}
-                    </>
+                    </div>
                 )}
 
                 {dipinjam.length > 0 && (
@@ -1302,11 +1395,11 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                                 <div className="h-px flex-1 bg-slate-200" />
                             </div>
                         </Reveal>
-                        <StaggerGrid className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 auto-rows-fr gap-5">
+                        <div className={kelasGridKartu}>
                             {dipinjam.map((game) => (
                                 <KartuGame key={game.id} game={game} tersedia={false} />
                             ))}
-                        </StaggerGrid>
+                        </div>
                     </>
                 )}
             </div>
