@@ -16,8 +16,6 @@ use Illuminate\Database\Eloquent\Model;
     'jumlah',
     'available_copies',
     'satuan',
-    'tingkat_kesulitan',
-    'usia_minimum',
     'jumlah_pemain',
     'durasi',
     'link_foto',

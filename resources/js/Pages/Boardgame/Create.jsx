@@ -21,8 +21,6 @@ export default function Create() {
         kategori: [],
         jumlah: '',
         satuan: '',
-        tingkat_kesulitan: '',
-        usia_minimum: '',
         jumlah_pemain: '',
         durasi: '',
         link_foto: [],
@@ -182,16 +180,6 @@ export default function Create() {
                                 <input type="number" min="1" value={durasiMax} onChange={(e) => setDurasiMax(e.target.value)} className="input input-bordered w-full input-sm" placeholder="Maks" />
                             </div>
                             {errors.durasi && <p className="text-xs text-red-500 mt-1">{errors.durasi}</p>}
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Tingkat Kesulitan (1-5)</label>
-                            <input type="number" step="0.1" min="1" max="5" value={data.tingkat_kesulitan} onChange={(e) => setData('tingkat_kesulitan', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 3.5" />
-                            {errors.tingkat_kesulitan && <p className="text-xs text-red-500 mt-1">{errors.tingkat_kesulitan}</p>}
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Usia Minimum</label>
-                            <input type="text" value={data.usia_minimum} onChange={(e) => setData('usia_minimum', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 10+" />
-                            {errors.usia_minimum && <p className="text-xs text-red-500 mt-1">{errors.usia_minimum}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-1">Jumlah</label>
