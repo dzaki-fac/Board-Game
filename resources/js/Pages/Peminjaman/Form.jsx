@@ -1,6 +1,6 @@
 import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { useEffect, useMemo, useState } from "react";
-import { Reveal } from "../../Components/animations";
+import { AnimatedSection } from "../../Components/animations";
 
 export default function Form({ boardgames = [] }) {
     const { props } = usePage();
@@ -162,7 +162,7 @@ export default function Form({ boardgames = [] }) {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
-                <Reveal>
+                <AnimatedSection>
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
                         <h2 className="card-title text-base !mb-0">
@@ -287,9 +287,9 @@ export default function Form({ boardgames = [] }) {
                             </div>
                     </div>
                 </div>
-                </Reveal>
+                </AnimatedSection>
 
-                <Reveal>
+                <AnimatedSection>
                 <div data-error={errors.boardgame_id || localErrors.boardgame_id ? "boardgame_id" : ""} className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
                         <h2 className="card-title text-base !mb-0">
@@ -393,9 +393,9 @@ export default function Form({ boardgames = [] }) {
                         )}
                     </div>
                 </div>
-                </Reveal>
+                </AnimatedSection>
 
-                <Reveal>
+                <AnimatedSection>
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
                         <h2 className="card-title text-base !mb-0">
@@ -449,9 +449,9 @@ export default function Form({ boardgames = [] }) {
                         </div>
                     </div>
                 </div>
-                </Reveal>
+                </AnimatedSection>
 
-                <Reveal>
+                <AnimatedSection>
                 <div className="card bg-base-100 border border-base-300 shadow-sm">
                     <div className="card-body p-5">
                         <h2 className="card-title text-base !mb-0">Catatan</h2>
@@ -474,7 +474,7 @@ export default function Form({ boardgames = [] }) {
                         </div>
                     </div>
                 </div>
-                </Reveal>
+                </AnimatedSection>
 
                 <div className="flex gap-3 pt-1">
                     <button
