@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             RuleSeeder::class,
             CarouselSeeder::class,
             // LoanSeeder::class,
-            PermohonanSeeder::class,
+            // PermohonanSeeder::class,
         ]);
 
         // Loan::truncate();
