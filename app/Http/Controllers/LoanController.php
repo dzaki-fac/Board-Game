@@ -30,6 +30,13 @@ class LoanController extends Controller
         return inertia('Loans/Show', ['loan' => $loan]);
     }
 
+    public function print(Loan $loan)
+    {
+        $loan->load('game');
+
+        return inertia('Loans/Print', ['loan' => $loan]);
+    }
+
     public function return(Loan $loan)
     {
         if ($loan->status === 'returned') {

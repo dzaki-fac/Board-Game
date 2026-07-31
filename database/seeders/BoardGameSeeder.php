@@ -630,7 +630,7 @@ class BoardGameSeeder extends Seeder
                     ['nama' => 'Buku panduan', 'jumlah' => 1],
                 ],
                 'barang_hilang' => null,
-                'deskripsi' => 'Geistesblitz adalah permainan kata yang menguji kecepatan berpikir dan kosakata. Pemain harus menemukan kata yang mengandung dua huruf tertentu sesuai urutan yang ditampilkan di papan permainan. Setelah menemukan kata yang benar, pemain menempatkan huruf berikutnya di papan dan permainan berlanjut dengan huruf baru. Permainan berakhir ketika seluruh papan telah terisi, dan pemain yang memiliki sisa keping huruf paling sedikit menjadi pemenang.',
+                'deskripsi' => '**Geistes Blitz** adalah permainan papan bertema refleks dan kecepatan berpikir, di mana pemain harus secepat mungkin mengambil objek yang benar berdasarkan kartu yang dibuka. Pemain harus mengenali apakah kartu menampilkan objek dengan warna yang sesuai atau menentukan objek yang tidak memiliki warna maupun bentuk yang muncul pada kartu. Pemain yang paling banyak mengumpulkan kartu di akhir permainan menjadi pemenang.',
                 'link_tutorial' => 'https://youtu.be/sLiyeNpOXKQ?si=rN8R4iR7sb5JLjG3',
                 'populer' => false,
             ],

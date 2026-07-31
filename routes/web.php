@@ -35,6 +35,7 @@ Route::prefix('admin')->group(function () {
         Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
 
         Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
+        Route::get('loans/{loan}/print', [LoanController::class, 'print'])->name('loans.print');
         Route::patch('loans/{loan}/return', [LoanController::class, 'return'])->name('loans.return');
         Route::get('loans/{loan}', [LoanController::class, 'show'])->name('loans.show');
 
