@@ -108,6 +108,11 @@ export const TEKS = {
         footerSat: "Sabtu: 08.00 – 14.00",
         footerSunHol: "Minggu & Hari Libur: TUTUP",
         footerCopyright: "UPT Perpustakaan Universitas Diponegoro",
+        about: "Tentang",
+        aboutWebJudul: "Tentang Website",
+        aboutWebDesc: "Website ini adalah katalog digital board game milik UPT Perpustakaan dan UNDIP Press Universitas Diponegoro. Melalui website ini, pemustaka dapat mencari dan melihat detail board game, serta mengajukan peminjaman secara online.",
+        aboutTimJudul: "Tim Pengembang",
+        aboutTimDesc: "Situs web ini dikembangkan oleh mahasiswa Program Studi Informatika, Universitas Diponegoro, Angkatan 2024.",
         carousel: [
             {
                 title: "Selamat Datang di\nUPT Perpustakaan dan UNDIP Press",
@@ -263,6 +268,11 @@ export const TEKS = {
         footerSat: "Saturday: 08.00 – 14.00",
         footerSunHol: "Sunday & Public Holidays: CLOSED",
         footerCopyright: "Diponegoro University Library",
+        about: "About",
+        aboutWebJudul: "About This Website",
+        aboutWebDesc: "This website is a digital board game catalog owned by UPT Perpustakaan dan UNDIP Press, Diponegoro University. Through this website, library patrons can search and view board game details, as well as submit borrowing requests online.",
+        aboutTimJudul: "Development Team",
+        aboutTimDesc: "This website was developed by students of the Informatics Undergraduate Program, Universitas Diponegoro, Class of 2024.",
         carousel: [
             {
                 title: "Welcome to\nUPT Perpustakaan and UNDIP Press",

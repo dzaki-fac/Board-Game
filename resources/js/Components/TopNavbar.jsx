@@ -1,7 +1,9 @@
 import LanguageToggle from "./LanguageToggle";
 import { WARNA } from "./theme";
 import { useState } from "react";
+import { Link } from "@inertiajs/react";
 import { baseUrl } from '@/lib/path';
+import { useTeks } from "./BahasaContext";
 
 /* Ikon media sosial — bentuk generik/monoline, bukan reproduksi logo resmi. */
 function IkonYoutube(props) {
@@ -56,6 +58,7 @@ function IkonDigilib(props) {
 }
 
 export default function TopNavbar({ bahasa, setBahasa }) {
+    const t = useTeks();
     const [openMenu, setOpenMenu] = useState(false);
     return (
         <div className="bg-white border-b border-slate-200">
@@ -116,6 +119,18 @@ export default function TopNavbar({ bahasa, setBahasa }) {
                                 <IkonTiktok className="w-5 h-5" />
                                 <span className="text-xs hidden xl:inline">TikTok</span>
                             </a>
+                            <Link
+                                href={baseUrl('/about')}
+                                title={t.about}
+                                aria-label={t.about}
+                                className="flex items-center gap-1.5 hover:opacity-70 transition-opacity"
+                            >
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5">
+                                    <circle cx="12" cy="12" r="9" />
+                                    <circle cx="12" cy="8" r="1" fill="currentColor" stroke="none" />
+                                    <path d="M11 12h1v4h1" />
+                                </svg>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -167,6 +182,20 @@ export default function TopNavbar({ bahasa, setBahasa }) {
 
     {openMenu && (
         <div className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-slate-200 z-50">
+
+            <Link
+                href={baseUrl('/about')}
+                title={t.about}
+                aria-label={t.about}
+                className="flex items-center justify-center px-4 py-3 hover:bg-slate-50"
+                style={{ color: WARNA.hijauUtama }}
+            >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-5 h-5">
+                    <circle cx="12" cy="12" r="9" />
+                    <circle cx="12" cy="8" r="1" fill="currentColor" stroke="none" />
+                    <path d="M11 12h1v4h1" />
+                </svg>
+            </Link>
 
             <a
                 href="https://digilib.undip.ac.id/"

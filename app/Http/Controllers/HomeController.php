@@ -7,6 +7,11 @@ use Inertia\Inertia;
 
 class HomeController extends Controller
 {
+    public function about()
+    {
+        return Inertia::render('About');
+    }
+
     public function rules()
     {
         return Inertia::render('Rules/Index', [

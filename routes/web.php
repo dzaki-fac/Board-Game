@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [BoardGameController::class, 'katalog'])->name('katalog');
 Route::get('/katalog', [BoardGameController::class, 'katalog'])->name('katalog');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/katalog/{boardGame}', [BoardGameController::class, 'detail'])->name('katalog.show');
 Route::post('/katalog/{boardGame}/reviews', [ReviewController::class, 'store'])->name('katalog.reviews.store');
 

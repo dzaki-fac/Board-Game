@@ -1,4 +1,6 @@
+import { Link } from "@inertiajs/react";
 import { useTeks } from "./BahasaContext";
+import { baseUrl } from '@/lib/path';
 
 export default function Footer() {
     const t = useTeks();
@@ -35,9 +37,15 @@ export default function Footer() {
             </div>
 
             <div className="border-t border-white/10" />
-            <p className="text-center text-[10px] md:text-xs text-white/60 pb-6 pt-4 px-6">
+            <p className="text-center text-[10px] md:text-xs text-white/60 pb-1 pt-4 px-6">
                 &copy; {new Date().getFullYear()} {t.footerCopyright}
             </p>
+            <Link
+                href={baseUrl("/about")}
+                className="block text-center text-[9px] md:text-[11px] text-white/20 hover:text-white/60 transition-colors pb-6 pt-1 px-6"
+            >
+                {t.about}
+            </Link>
         </footer>
     );
 }
