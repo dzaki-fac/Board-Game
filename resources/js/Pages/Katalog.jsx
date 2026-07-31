@@ -302,15 +302,9 @@ function KartuGame({ game, tersedia }) {
 function ParallaxBg({ children }) {
     return (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <motion.div
-                className="absolute inset-0"
-                initial={{ y: 15 }}
-                whileInView={{ y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.2, ease: "easeOut" }}
-            >
+            <div className="absolute inset-0">
                 {children}
-            </motion.div>
+            </div>
         </div>
     );
 }
@@ -1010,26 +1004,47 @@ const AnnouncementCarousel = memo(function AnnouncementCarousel({ carousels, onM
                     )}
 
                     {items.length > 1 && (
-                        <div className="absolute bottom-2 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-1 md:gap-1.5">
-                            {items.map((_, i) => (
-                                <MotionButton
-                                    key={i}
-                                    type="button"
-                                    onClick={(e) => { e.stopPropagation(); goToSlide(i); }}
-                                    aria-label={`Slide ${i + 1}`}
-                                    className="h-1 md:h-1.5 rounded-full transition-all duration-300"
-                                    style={{
-                                        width: i === index ? 18 : 5,
-                                        backgroundColor: i === index
-                                            ? (punyaFotoAktif ? "#FFFFFF" : WARNA.hijauUtama)
-                                            : (punyaFotoAktif ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
-                                    }}
-                                    whileHover={{ scale: 1.3 }}
-                                    whileTap={{ scale: 0.9 }}
-                                />
-                            ))}
-                        </div>
-                    )}
+    <>
+        <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); geser(-1); }}
+            aria-label="Slide sebelumnya"
+            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-11 md:h-11 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
+        >
+            <IkonChevron arah="kiri" className="w-5 h-5 md:w-6 md:h-6" />
+        </button>
+        <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); geser(1); }}
+            aria-label="Slide berikutnya"
+            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-8 h-8 md:w-11 md:h-11 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center backdrop-blur-sm transition-colors"
+        >
+            <IkonChevron arah="kanan" className="w-5 h-5 md:w-6 md:h-6" />
+        </button>
+    </>
+)}
+
+                    {items.length > 1 && (
+    <div className="absolute bottom-2 md:bottom-12 left-1/2 -translate-x-1/2 flex gap-2 md:gap-3">
+        {items.map((_, i) => (
+            <MotionButton
+                key={i}
+                type="button"
+                onClick={(e) => { e.stopPropagation(); goToSlide(i); }}
+                aria-label={`Slide ${i + 1}`}
+                className="relative h-1 md:h-1.5 rounded-full transition-all duration-300 before:content-[''] before:absolute before:-inset-3"
+                style={{
+                    width: i === index ? 18 : 5,
+                    backgroundColor: i === index
+                        ? (punyaFotoAktif ? "#FFFFFF" : WARNA.hijauUtama)
+                        : (punyaFotoAktif ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.15)"),
+                }}
+                whileHover={{ scale: 1.3 }}
+                whileTap={{ scale: 0.9 }}
+            />
+        ))}
+    </div>
+)}
                 </motion.div>
             </div>
 
