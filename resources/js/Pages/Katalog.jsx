@@ -1152,6 +1152,23 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
         ? tersedia
         : tersedia.slice((halamanAktif - 1) * ukuranHalaman, halamanAktif * ukuranHalaman);
 
+    // Daftar halaman ala pagination admin (Laravel): halaman pertama & terakhir
+    // selalu tampil, jendela di sekitar halaman aktif, celah diberi "...".
+    const daftarHalaman = useMemo(() => {
+        const pages = new Set([1, totalHalamanTersedia]);
+        for (let i = Math.max(1, halamanAktif - 1); i <= Math.min(totalHalamanTersedia, halamanAktif + 1); i++) {
+            pages.add(i);
+        }
+        const hasil = [];
+        let prev = 0;
+        for (const p of Array.from(pages).sort((a, b) => a - b)) {
+            if (p - prev > 1) hasil.push({ type: "ellipsis", key: `e${prev}-${p}` });
+            hasil.push({ type: "page", page: p });
+            prev = p;
+        }
+        return hasil;
+    }, [totalHalamanTersedia, halamanAktif]);
+
     const kelasSelect =
         "rounded-md border border-slate-200 text-xs sm:text-sm px-2.5 py-1.5 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-[#1B6FA8]/30";
 
@@ -1355,24 +1372,47 @@ function IsiKatalog({ games, carousels, bahasa, setBahasa, initialSort }) {
                                 </div>
 
                                 {ukuranHalaman !== "all" && totalHalamanTersedia > 1 && (
-                                    <div className="flex items-center justify-center gap-3 mb-12">
-                                        <button
-                                            onClick={() => gantiHalamanTersedia(Math.max(1, halamanAktif - 1))}
-                                            disabled={halamanAktif === 1}
-                                            className="px-3 py-1.5 text-sm rounded-md border border-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50"
-                                        >
-                                            Sebelumnya
-                                        </button>
-                                        <span className="text-sm text-slate-600">
-                                            Halaman {halamanAktif} / {totalHalamanTersedia}
-                                        </span>
-                                        <button
-                                            onClick={() => gantiHalamanTersedia(Math.min(totalHalamanTersedia, halamanAktif + 1))}
-                                            disabled={halamanAktif === totalHalamanTersedia}
-                                            className="px-3 py-1.5 text-sm rounded-md border border-slate-200 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-slate-50"
-                                        >
-                                            Selanjutnya
-                                        </button>
+                                    <div className="flex justify-center mt-6 mb-12">
+                                        <div className="flex items-center gap-1">
+                                            <button
+                                                onClick={() => gantiHalamanTersedia(Math.max(1, halamanAktif - 1))}
+                                                disabled={halamanAktif === 1}
+                                                aria-label="Sebelumnya"
+                                                className="px-3 py-2 text-sm rounded-md border border-slate-200 text-gray-600 disabled:pointer-events-none disabled:opacity-40 hover:bg-slate-50"
+                                            >
+                                                <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: "&laquo;" }} />
+                                            </button>
+
+                                            {daftarHalaman.map((item) =>
+                                                item.type === "ellipsis" ? (
+                                                    <span key={item.key} className="px-1.5 text-sm text-gray-400 select-none">
+                                                        ...
+                                                    </span>
+                                                ) : (
+                                                    <button
+                                                        key={item.page}
+                                                        onClick={() => gantiHalamanTersedia(item.page)}
+                                                        aria-current={item.page === halamanAktif ? "page" : undefined}
+                                                        className={`min-w-9 px-2.5 py-2 text-sm rounded-md transition-colors ${
+                                                            item.page === halamanAktif
+                                                                ? "bg-[#0E4A73] text-white border-none"
+                                                                : "border border-slate-200 text-gray-600 hover:bg-slate-50"
+                                                        }`}
+                                                    >
+                                                        {item.page}
+                                                    </button>
+                                                )
+                                            )}
+
+                                            <button
+                                                onClick={() => gantiHalamanTersedia(Math.min(totalHalamanTersedia, halamanAktif + 1))}
+                                                disabled={halamanAktif === totalHalamanTersedia}
+                                                aria-label="Selanjutnya"
+                                                className="px-3 py-2 text-sm rounded-md border border-slate-200 text-gray-600 disabled:pointer-events-none disabled:opacity-40 hover:bg-slate-50"
+                                            >
+                                                <span aria-hidden="true" dangerouslySetInnerHTML={{ __html: "&raquo;" }} />
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                             </>
