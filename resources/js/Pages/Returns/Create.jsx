@@ -1,4 +1,4 @@
-import { Head, Link, useForm } from "@inertiajs/react"
+import { Head, Link, router, useForm, usePage } from "@inertiajs/react"
 import { useEffect, useMemo, useState } from "react"
 
 function formatDateTime(date) {
@@ -49,6 +49,7 @@ export default function Create({ loans }) {
     }, [selectedLoan])
 
     const [missingQty, setMissingQty] = useState([])
+    const [missingActive, setMissingActive] = useState([])
     const [loanSearch, setLoanSearch] = useState("")
     const [loanDropdownOpen, setLoanDropdownOpen] = useState(false)
 
@@ -65,13 +66,14 @@ export default function Create({ loans }) {
 
     useEffect(() => {
         setMissingQty(components.map(() => null))
+        setMissingActive(components.map(() => false))
     }, [components])
 
     const missingComponents = useMemo(() => {
         return components
-            .map((c, i) => (missingQty[i] ? { nama: c.nama, jumlah: missingQty[i] } : null))
+            .map((c, i) => (missingActive[i] && missingQty[i] ? { nama: c.nama, jumlah: missingQty[i] } : null))
             .filter(Boolean)
-    }, [components, missingQty])
+    }, [components, missingActive, missingQty])
 
     useEffect(() => {
         setData("missing_components", missingComponents.length > 0 ? missingComponents : [])
@@ -110,10 +112,25 @@ export default function Create({ loans }) {
         missing_parts: "Bagian Hilang",
     }
 
-    function setQty(index, qty) {
+    function toggleMissing(index) {
+        setMissingActive((prev) => {
+            const next = [...prev]
+            next[index] = !next[index]
+            return next
+        })
         setMissingQty((prev) => {
             const next = [...prev]
-            next[index] = qty > 0 ? qty : null
+            if (!missingActive[index]) next[index] = 1
+            return next
+        })
+    }
+
+    function setQty(index, raw) {
+        setMissingQty((prev) => {
+            const next = [...prev]
+            if (raw === "" || raw === null) { next[index] = null; return next }
+            const qty = parseInt(raw, 10)
+            next[index] = qty > 0 ? Math.min(qty, components[index]?.available ?? qty) : null
             return next
         })
     }
@@ -122,9 +139,89 @@ export default function Create({ loans }) {
     const returnedCount = totalCount - missingComponents.reduce((sum, m) => sum + m.jumlah, 0)
     const totalHilang = missingComponents.reduce((sum, m) => sum + m.jumlah, 0)
 
+    const { props: pageProps } = usePage()
+    const processedReturn = pageProps?.flash?.processed_return ?? null
+    const [showModal, setShowModal] = useState(!!processedReturn)
+
+    useEffect(() => {
+        if (processedReturn) setShowModal(true)
+    }, [processedReturn])
+
+    function closeModal() {
+        setShowModal(false)
+        router.reload({ preserveState: false })
+    }
+
     return (
         <>
             <Head title="Form Pengembalian" />
+
+            {showModal && processedReturn && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                    <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full mx-4 p-6 space-y-4">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                                <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-gray-900">Pengembalian Berhasil</h3>
+                                <p className="text-sm text-gray-500">Pengembalian board game berhasil diproses</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-gray-50 rounded-xl p-4 space-y-2.5 text-sm">
+                            <div className="flex justify-between">
+                                <span className="text-gray-500">Peminjam</span>
+                                <span className="font-medium text-gray-900">{processedReturn.peminjam}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-gray-500">Board Game</span>
+                                <span className="font-medium text-gray-900">{processedReturn.game_nama}</span>
+                            </div>
+                            <div className="flex justify-between">
+                                <span className="text-gray-500">Status</span>
+                                <span className={`font-medium capitalize ${processedReturn.status === "returned" ? "text-green-600" : "text-red-600"}`}>
+                                    {processedReturn.status === "returned" ? "Dikembalikan" : "Hilang"}
+                                </span>
+                            </div>
+                            {processedReturn.status === "returned" && processedReturn.return_condition && (
+                                <div className="flex justify-between">
+                                    <span className="text-gray-500">Kondisi</span>
+                                    <span className="font-medium text-gray-900 capitalize">{conditionLabel[processedReturn.return_condition] || processedReturn.return_condition}</span>
+                                </div>
+                            )}
+                            {processedReturn.missing_components?.length > 0 && (
+                                <div>
+                                    <span className="text-gray-500 text-xs block mb-1">Komponen Hilang</span>
+                                    <ul className="text-xs text-red-600 list-disc list-inside">
+                                        {processedReturn.missing_components.map((m, i) => (
+                                            <li key={i}>{m.nama} x{m.jumlah}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                            {processedReturn.fine_amount && (
+                                <div className="flex justify-between">
+                                    <span className="text-gray-500">Denda</span>
+                                    <span className="font-medium text-red-600">Rp {Number(processedReturn.fine_amount).toLocaleString("id-ID")}</span>
+                                </div>
+                            )}
+                            {processedReturn.return_notes && (
+                                <div className="flex justify-between">
+                                    <span className="text-gray-500">Catatan</span>
+                                    <span className="font-medium text-gray-900 text-right max-w-[60%]">{processedReturn.return_notes}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <button onClick={closeModal} className="btn bg-[#0E4A73] hover:bg-[#0A3A5C] text-white border-none w-full">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <div className="p-4 lg:p-6 space-y-6">
                 {/* Page Header */}
@@ -260,7 +357,7 @@ export default function Create({ loans }) {
                                                 }}
                                             >
                                                 {components.map((component, index) => {
-                                                    const isMissing = missingQty[index] > 0
+                                                    const isMissing = missingActive[index]
                                                     return (
                                                         <div key={index} className={`p-2 rounded-lg transition-colors ${
                                                             componentsDisabled
@@ -273,7 +370,7 @@ export default function Create({ loans }) {
                                                                 <input
                                                                     type="checkbox"
                                                                     checked={!isMissing}
-                                                                    onChange={() => setQty(index, isMissing ? null : 1)}
+                                                                    onChange={() => toggleMissing(index)}
                                                                     disabled={componentsDisabled}
                                                                     className="checkbox checkbox-sm"
                                                                 />
@@ -295,7 +392,7 @@ export default function Create({ loans }) {
                                     )}
 
                                     {/* Missing Components Summary Card */}
-                                    {missingComponents.length > 0 && (
+                                    {missingActive.some(Boolean) && (
                                         <div className="card bg-red-50 border border-red-200 rounded-xl shadow-sm">
                                             <div className="card-body p-4">
                                                 <h3 className="text-sm font-semibold text-red-800 flex items-center gap-2">
@@ -305,20 +402,21 @@ export default function Create({ loans }) {
                                                 <p className="text-xs text-red-600 mt-1">Atur jumlah masing-masing komponen yang hilang</p>
                                                 <div className="mt-3 space-y-2">
                                                     {components.map((component, index) => {
-                                                        if (!(missingQty[index] > 0)) return null
+                                                        if (!missingActive[index]) return null
                                                         return (
                                                             <div key={index} className="flex items-center justify-between bg-white rounded-lg px-3 py-2 border border-red-100">
                                                                 <span className="text-sm text-red-700">{component.nama}</span>
                                                                 <div className="flex items-center gap-2">
                                                                     <span className="text-xs text-red-500">Jumlah:</span>
-                                                                    <input
-                                                                        type="number"
-                                                                        value={missingQty[index]}
-                                                                        min={1}
-                                                                        max={component.available}
-                                                                        onChange={(e) => setQty(index, Math.min(parseInt(e.target.value) || 1, component.available))}
-                                                                        className="input input-bordered input-xs w-16 text-center"
-                                                                    />
+                                                                     <input
+                                                                         type="number"
+                                                                         value={missingQty[index] ?? ""}
+                                                                         min={1}
+                                                                         max={component.available}
+                                                                         onChange={(e) => setQty(index, e.target.value)}
+                                                                         onWheel={(e) => e.target.blur()}
+                                                                         className="input input-bordered input-xs w-16 text-center"
+                                                                     />
                                                                 </div>
                                                             </div>
                                                         )
@@ -384,10 +482,11 @@ export default function Create({ loans }) {
                                             type="number"
                                             value={data.fine_amount ?? ""}
                                             onChange={(e) => setData("fine_amount", e.target.value === "" ? null : e.target.value)}
+                                            onWheel={(e) => e.target.blur()}
                                             className="input input-bordered w-full"
-                                            placeholder="Masukkan denda jika ada"
+                                            placeholder="cth: 125000"
                                             min="0"
-                                            step="0.01"
+                                            step="1"
                                         />
                                         {errors.fine_amount && (
                                             <p className="text-red-500 text-xs mt-1">

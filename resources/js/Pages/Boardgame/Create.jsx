@@ -21,8 +21,6 @@ export default function Create() {
         kategori: [],
         jumlah: '',
         satuan: '',
-        tingkat_kesulitan: '',
-        usia_minimum: '',
         jumlah_pemain: '',
         durasi: '',
         link_foto: [],
@@ -31,9 +29,13 @@ export default function Create() {
         barang_hilang: [],
         deskripsi: '',
         link_tutorial: '',
-        populer: false,
+        link_panduan: '',
     })
 
+    const [pemainMin, setPemainMin] = useState('')
+    const [pemainMax, setPemainMax] = useState('')
+    const [durasiMin, setDurasiMin] = useState('')
+    const [durasiMax, setDurasiMax] = useState('')
     const [komponenList, setKomponenList] = useState([{ jumlah: '1', nama: '' }])
     const [linkFotoList, setLinkFotoList] = useState([{ file: null, preview: null }])
     const [barangHilangList, setBarangHilangList] = useState([])
@@ -111,7 +113,17 @@ export default function Create() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        post('/admin/games')
+        if (pemainMin || pemainMax) {
+            const min = pemainMin || pemainMax
+            const max = pemainMax || pemainMin
+            setData('jumlah_pemain', min === max ? `${min} Pemain` : `${min}-${max} Pemain`)
+        }
+        if (durasiMin || durasiMax) {
+            const min = durasiMin || durasiMax
+            const max = durasiMax || durasiMin
+            setData('durasi', min === max ? `${min} Menit` : `${min}-${max} Menit`)
+        }
+        post('/admin/games', { forceFormData: true })
     }
 
     return (
@@ -153,23 +165,21 @@ export default function Create() {
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-1">Jumlah Pemain</label>
-                            <input type="text" value={data.jumlah_pemain} onChange={(e) => setData('jumlah_pemain', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 2-4 Pemain" />
+                            <div className="flex gap-2 items-center">
+                                <input type="number" min="1" value={pemainMin} onChange={(e) => setPemainMin(e.target.value)} className="input input-bordered w-full input-sm" placeholder="Min" />
+                                <span className="text-slate-400 text-sm">–</span>
+                                <input type="number" min="1" value={pemainMax} onChange={(e) => setPemainMax(e.target.value)} className="input input-bordered w-full input-sm" placeholder="Maks" />
+                            </div>
                             {errors.jumlah_pemain && <p className="text-xs text-red-500 mt-1">{errors.jumlah_pemain}</p>}
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Durasi</label>
-                            <input type="text" value={data.durasi} onChange={(e) => setData('durasi', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 60-90 Menit" />
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Durasi (Menit)</label>
+                            <div className="flex gap-2 items-center">
+                                <input type="number" min="1" value={durasiMin} onChange={(e) => setDurasiMin(e.target.value)} className="input input-bordered w-full input-sm" placeholder="Min" />
+                                <span className="text-slate-400 text-sm">–</span>
+                                <input type="number" min="1" value={durasiMax} onChange={(e) => setDurasiMax(e.target.value)} className="input input-bordered w-full input-sm" placeholder="Maks" />
+                            </div>
                             {errors.durasi && <p className="text-xs text-red-500 mt-1">{errors.durasi}</p>}
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Tingkat Kesulitan (1-5)</label>
-                            <input type="number" step="0.1" min="1" max="5" value={data.tingkat_kesulitan} onChange={(e) => setData('tingkat_kesulitan', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 3.5" />
-                            {errors.tingkat_kesulitan && <p className="text-xs text-red-500 mt-1">{errors.tingkat_kesulitan}</p>}
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-slate-700 mb-1">Usia Minimum</label>
-                            <input type="text" value={data.usia_minimum} onChange={(e) => setData('usia_minimum', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: 10+" />
-                            {errors.usia_minimum && <p className="text-xs text-red-500 mt-1">{errors.usia_minimum}</p>}
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-slate-700 mb-1">Jumlah</label>
@@ -191,11 +201,10 @@ export default function Create() {
                             <input type="text" value={data.link_tutorial} onChange={(e) => setData('link_tutorial', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: https://youtube.com/..." />
                             {errors.link_tutorial && <p className="text-xs text-red-500 mt-1">{errors.link_tutorial}</p>}
                         </div>
-                        <div className="flex items-end pb-1">
-                            <label className="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" checked={data.populer} onChange={(e) => setData('populer', e.target.checked)} className="checkbox checkbox-sm border-slate-300" />
-                                <span className="text-sm font-medium text-slate-700">Populer</span>
-                            </label>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Link Panduan (Rulebook)</label>
+                            <input type="text" value={data.link_panduan} onChange={(e) => setData('link_panduan', e.target.value)} className="input input-bordered w-full input-sm" placeholder="cth: https://drive.google.com/..." />
+                            {errors.link_panduan && <p className="text-xs text-red-500 mt-1">{errors.link_panduan}</p>}
                         </div>
                     </div>
 

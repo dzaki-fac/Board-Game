@@ -95,6 +95,20 @@ class ReturnController extends Controller
             $boardgame->save();
         }
 
-        return to_route('loans.index');
+        $loan->load('game');
+
+        return redirect()->back()->with('flash', [
+            'success' => 'Pengembalian berhasil diproses.',
+            'processed_return' => [
+                'peminjam' => $loan->list_peminjam[0]['nama'] ?? '-',
+                'game_nama' => $loan->game->nama,
+                'status' => $validated['status'],
+                'return_condition' => $validated['return_condition'],
+                'fine_amount' => $validated['fine_amount'],
+                'return_notes' => $validated['return_notes'],
+                'missing_components' => $validated['missing_components'] ?? [],
+                'returned_at' => now()->toISOString(),
+            ],
+        ]);
     }
 }

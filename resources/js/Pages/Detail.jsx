@@ -5,8 +5,7 @@ import ReviewSection from "../Components/ReviewSection";
 import RatingSummary from "../Components/RatingSummary";
 import TopNavbar from "../Components/TopNavbar";
 import GaleriGambar from "../Components/GaleriGambar";
-import BadgeKesulitan from "../Components/BadgeKesulitan";
-import BadgeUsia from "../Components/BadgeUsia";
+
 import TautanEksternal from "../Components/TautanEksternal";
 import SeksiGameSerupa from "../Components/SeksiGameSerupa";
 import { WARNA, warnaKategori } from "../Components/theme";
@@ -21,8 +20,6 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
     const tersedia = game.available_copies > 0;
     const daftarKomponen = useMemo(() => game.komponen ?? [], [game.komponen]);
     const [tampilkanKomponen, setTampilkanKomponen] = useState(false);
-    const adaBadge = game.tingkat_kesulitan || game.usia_minimum;
-
     const deskripsiTampil = bahasa === "EN"
         ? (DESKRIPSI_EN[game.nama] ?? game.deskripsi)
         : game.deskripsi;
@@ -69,7 +66,7 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                                                     className="inline-block text-[11px] font-medium px-2.5 py-1 rounded-full"
                                                     style={{ backgroundColor: kb, color: kw }}
                                                 >
-                                                    {k}
+                                                    {t.kategoriMap?.[k] || k}
                                                 </span>
                                             );
                                         })}
@@ -84,13 +81,6 @@ function IsiDetail({ game, gameSerupa, reviews, avgRating, totalReviews, ratingD
                                     size="lg"
                                 />
                             </div>
-
-                            {adaBadge && (
-                                <div className="flex flex-wrap items-center gap-2 mb-5">
-                                    <BadgeKesulitan nilai={game.tingkat_kesulitan} warna={warna} t={t} />
-                                    <BadgeUsia usia={game.usia_minimum} t={t} />
-                                </div>
-                            )}
 
                             <div className="grid grid-cols-2 gap-x-4 gap-y-3 mb-6">
                                 <div className="flex items-center gap-2 text-sm text-slate-600">
