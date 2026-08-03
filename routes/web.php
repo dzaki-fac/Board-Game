@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AdminReviewController;
 use App\Http\Controllers\Admin\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\CarouselController;
+use App\Http\Controllers\Admin\StatisticsController;
 use App\Http\Controllers\BoardGameController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
@@ -14,7 +15,6 @@ use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', [PermohonanController::class, 'create']);
-
 
 Route::get('/', [BoardGameController::class, 'katalog'])->name('katalog');
 Route::get('/katalog', [BoardGameController::class, 'katalog'])->name('katalog');
@@ -29,7 +29,7 @@ Route::prefix('admin')->group(function () {
 
     Route::middleware('auth:admin')->group(function () {
         Route::get('/', fn () => redirect('/admin/rules'));
-        
+
         Route::resource('games', BoardGameController::class)->only(['index', 'create', 'store', 'show', 'edit', 'update', 'destroy'])->parameters(['games' => 'boardGame']);
 
         Route::get('loans', [LoanController::class, 'index'])->name('loans.index');
@@ -40,6 +40,9 @@ Route::prefix('admin')->group(function () {
         Route::post('returns', [ReturnController::class, 'store'])->name('returns.store');
 
         Route::get('history', [HistoryController::class, 'index'])->name('history.index');
+
+        Route::get('statistics', [StatisticsController::class, 'index'])->name('admin.statistics.index');
+        Route::get('statistics/export', [StatisticsController::class, 'export'])->name('admin.statistics.export');
 
         Route::get('permohonan', [PermohonanController::class, 'permohonan'])->name('admin.permohonan.index');
         Route::patch('permohonan/{permohonan}/approve', [PermohonanController::class, 'approve'])->name('admin.permohonan.approve');

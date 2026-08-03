@@ -133,6 +133,16 @@ function ImageIcon({ className }) {
     );
 }
 
+function BarChartIcon({ className }) {
+    return (
+        <Svg className={className}>
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+        </Svg>
+    );
+}
+
 const navItems = [
     { label: "Tata Tertib", href: "/admin/rules", icon: FileTextIcon },
     { label: "Board Game", href: "/admin/games", icon: Dice5Icon },
@@ -140,6 +150,7 @@ const navItems = [
     { label: "Permohonan", href: "/admin/permohonan", icon: ClipboardListIcon },
     { label: "Peminjaman", href: "/admin/loans", icon: HandHelpingIcon },
     { label: "Pengembalian", href: "/admin/returns", icon: RotateCwIcon },
+    { label: "Statistik Peminjaman", href: "/admin/statistics", icon: BarChartIcon },
     { label: "Riwayat", href: "/admin/history", icon: HistoryIcon },
     { label: "Carousel", href: "/admin/carousel", icon: ImageIcon },
     { label: "Akun", href: "/admin/accounts", icon: UsersIcon },
