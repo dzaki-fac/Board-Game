@@ -11,6 +11,7 @@ use App\Http\Controllers\LoanController;
 use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\StatisticsController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', [PermohonanController::class, 'create']);
@@ -44,6 +45,8 @@ Route::prefix('admin')->group(function () {
         Route::post('returns', [ReturnController::class, 'store'])->name('returns.store');
 
         Route::get('history', [HistoryController::class, 'index'])->name('history.index');
+
+        Route::get('statistics', [StatisticsController::class, 'index'])->name('statistics.index');
 
         Route::get('permohonan', [PermohonanController::class, 'permohonan'])->name('admin.permohonan.index');
         Route::patch('permohonan/{permohonan}/approve', [PermohonanController::class, 'approve'])->name('admin.permohonan.approve');

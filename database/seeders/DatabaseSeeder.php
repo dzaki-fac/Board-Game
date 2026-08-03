@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             BoardGameSeeder::class,
             RuleSeeder::class,
             CarouselSeeder::class,
+            // LoanLast30DaysSeeder::class,
             // LoanSeeder::class,
             // PermohonanSeeder::class,
         ]);
